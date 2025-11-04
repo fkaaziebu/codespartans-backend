@@ -1,0 +1,87 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: codespartans-db
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - codespartans-network
+
+  codespartans-backend:
+    image: fkaaziebu/codespartans-backend
+    container_name: codespartans-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - '4000:4000'
+    networks:
+      - codespartans-network
+
+  codespartans-organization-ui:
+    image: fkaaziebu/codespartans-organization-ui
+    container_name: codespartans-organization-ui
+    restart: unless-stopped
+    environment:
+      GRAPHQL_BASE_URL: http://localhost:4000/graphql
+      GRAPGQL_WS_BASE_URL: http://localhost:4000/graphql-ws
+    ports:
+      - '3000:3000'
+    networks:
+      - codespartans-network
+
+  codespartans-admin-ui:
+    image: fkaaziebu/codespartans-admin-ui
+    container_name: codespartans-admin-ui
+    restart: unless-stopped
+    environment:
+      GRAPHQL_BASE_URL: http://localhost:4000/graphql
+      GRAPGQL_WS_BASE_URL: http://localhost:4000/graphql-ws
+    ports:
+      - '3001:3000'
+    networks:
+      - codespartans-network
+
+  codespartans-instructor-ui:
+    image: fkaaziebu/codespartans-instructor-ui
+    container_name: codespartans-instructor-ui
+    restart: unless-stopped
+    environment:
+      GRAPHQL_BASE_URL: http://localhost:4000/graphql
+      GRAPGQL_WS_BASE_URL: http://localhost:4000/graphql-ws
+    ports:
+      - '3002:3000'
+    networks:
+      - codespartans-network
+
+  codespartans-student-ui:
+    image: fkaaziebu/codespartans-student-ui
+    container_name: codespartans-student-ui
+    restart: unless-stopped
+    environment:
+      GRAPHQL_BASE_URL: http://localhost:4000/graphql
+      GRAPGQL_WS_BASE_URL: http://localhost:4000/graphql-ws
+    ports:
+      - '3003:3000'
+    networks:
+      - codespartans-network
+
+networks:
+  codespartans-network:
+    driver: bridge
