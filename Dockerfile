@@ -56,7 +56,6 @@ FROM node:22 AS production
 # Copy the bundled code from the build stage to the production image
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-COPY --chown=node:node src/modules/queue/services/templates ./dist/modules/queue/services/templates
 
 # Start the server using the production build
 ENV STAGE=prod
