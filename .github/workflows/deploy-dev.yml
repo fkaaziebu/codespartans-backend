@@ -69,8 +69,8 @@ jobs:
             docker rm $(docker ps -a -q)
             docker rmi $(docker images -a -q)
             # remove if you need data to persist
-            docker system prune -af
-            docker volume prune -f
+            # docker system prune -af
+            # docker volume prune -f
 
             # Write .env
             echo "${{ secrets.ENV_FILE }}" > .env
