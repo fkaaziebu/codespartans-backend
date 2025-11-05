@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Cart, Organization, Student } from '../../../database/entities';
-import { HashHelper } from '../../../helpers';
+import { HashHelper, PaginateHelper } from '../../../helpers';
+import { PaginationInput } from '../../../helpers/inputs';
 import { StudentLoginResponse } from '../types';
 
 @Injectable()
@@ -13,6 +14,42 @@ export class StudentService {
     private studentRepository: Repository<Student>,
     private jwtService: JwtService,
   ) {}
+
+  async listOrganizationsPaginated({
+    searchTerm,
+    pagination,
+  }: {
+    searchTerm: string;
+    pagination?: PaginationInput;
+  }) {
+    const organizations = await this.listOrganizations({
+      searchTerm,
+    });
+
+    // Apply pagination and return in the connection format
+    return PaginateHelper.paginate<Organization>(
+      organizations,
+      pagination,
+      (organization) => organization.id.toString(),
+    );
+  }
+
+  async listOrganizations({ searchTerm }: { searchTerm: string }) {
+    return this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const organizations = await transactionalEntityManager.find(
+          Organization,
+          {
+            where: {
+              name: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
+            },
+          },
+        );
+
+        return organizations;
+      },
+    );
+  }
 
   async registerStudent({
     name,
