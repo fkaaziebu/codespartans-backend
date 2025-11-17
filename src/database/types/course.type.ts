@@ -84,4 +84,10 @@ export class CourseTypeClass {
 
   @Field(() => InstructorTypeClass, { nullable: true })
   instructor?: InstructorTypeClass;
+
+  @Field()
+  inserted_at: Date;
+
+  @Field()
+  updated_at: Date;
 }

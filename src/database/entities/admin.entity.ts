@@ -9,6 +9,11 @@ import {
 import { Organization } from './organization.entity';
 import { Version } from './version.entity';
 
+enum AdminStatusType {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
 @Entity('admins')
 export class Admin {
   @PrimaryGeneratedColumn('uuid')
@@ -23,6 +28,13 @@ export class Admin {
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: AdminStatusType,
+    default: AdminStatusType.ACTIVE,
+  })
+  status: AdminStatusType;
 
   @ManyToOne(() => Organization, (organization) => organization.admins)
   organization: Organization;

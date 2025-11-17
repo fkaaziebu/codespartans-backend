@@ -10,6 +10,11 @@ import {
 import { Course } from './course.entity';
 import { Organization } from './organization.entity';
 
+enum InstructorStatusType {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
 @Entity('instructors')
 export class Instructor {
   @PrimaryGeneratedColumn('uuid')
@@ -24,6 +29,13 @@ export class Instructor {
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: InstructorStatusType,
+    default: InstructorStatusType.ACTIVE,
+  })
+  status: InstructorStatusType;
 
   @ManyToMany(() => Organization, (organization) => organization.instructors)
   @JoinTable()

@@ -18,6 +18,7 @@ import { TestSuite } from './test_suite.entity';
 enum VersionStatusType {
   ARCHIVED = 'ARCHIVED',
   PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
 }

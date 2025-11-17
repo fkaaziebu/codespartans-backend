@@ -1,6 +1,16 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { CourseTypeClass } from './course.type';
 import { OrganizationTypeClass } from './organization.type';
+
+enum InstructorStatusType {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+registerEnumType(InstructorStatusType, {
+  name: 'InstructorStatusType',
+  description: 'Instructor status',
+});
 
 @ObjectType('Instructor')
 export class InstructorTypeClass {
@@ -12,6 +22,9 @@ export class InstructorTypeClass {
 
   @Field()
   email: string;
+
+  @Field(() => InstructorStatusType)
+  status: InstructorStatusType;
 
   @Field(() => [OrganizationTypeClass], { nullable: true })
   organizations?: OrganizationTypeClass[];

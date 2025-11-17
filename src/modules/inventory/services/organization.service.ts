@@ -13,7 +13,7 @@ import {
   ReviewRequest,
   Version,
 } from '../../../database/entities';
-import { CategoryTypeClass, VersionTypeClass } from '../../../database/types';
+import { CategoryTypeClass } from '../../../database/types';
 import { CategoryInfoInput, RequestedReviewFilterInput } from '../inputs';
 import { StatsResponse } from '../types';
 
@@ -22,6 +22,8 @@ export class OrganizationService {
   constructor(
     @InjectRepository(Organization)
     private organizationRepository: Repository<Organization>,
+    @InjectRepository(Course)
+    private courseRepository: Repository<Course>,
   ) {}
 
   async listInstructorsPaginated({
@@ -64,6 +66,56 @@ export class OrganizationService {
     return PaginateHelper.paginate<Admin>(admins, pagination, (admin) =>
       admin.id.toString(),
     );
+  }
+
+  async listCoursesPaginated({
+    email,
+    searchTerm,
+    pagination,
+  }: {
+    email: string;
+    searchTerm?: string;
+    pagination?: PaginationInput;
+  }) {
+    const courses = await this.listCourses({
+      email,
+      searchTerm,
+    });
+
+    // Apply pagination and return in the connection format
+    return PaginateHelper.paginate<Course>(courses, pagination, (course) =>
+      course.id.toString(),
+    );
+  }
+
+  async listCourses({
+    email,
+    searchTerm,
+  }: {
+    email: string;
+    searchTerm?: string;
+  }): Promise<Course[]> {
+    const organization = await this.organizationRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    const courses = await this.courseRepository.find({
+      where: {
+        organization: {
+          email,
+        },
+        title: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
+      },
+      relations: ['approved_version'],
+    });
+
+    return courses;
   }
 
   async listRequestedReviewsPaginated({
@@ -179,12 +231,13 @@ export class OrganizationService {
               email,
               requested_reviews: {
                 course_version: {
+                  status: filter?.status || undefined,
                   assigned_admin: {
-                    id: filter.adminId,
+                    id: filter?.adminId || undefined,
                   },
                   course: {
                     instructor: {
-                      id: filter.instructorId,
+                      id: filter?.instructorId || undefined,
                     },
                   },
                 },
@@ -257,7 +310,7 @@ export class OrganizationService {
     email: string;
     versionId: string;
     adminId: string;
-  }): Promise<VersionTypeClass> {
+  }) {
     return await this.organizationRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const organization = await transactionalEntityManager.findOne(
@@ -303,6 +356,7 @@ export class OrganizationService {
         }
 
         courseVersion.assigned_admin = admin;
+        courseVersion.status = VersionStatusType.IN_PROGRESS;
         return await transactionalEntityManager.save(Version, courseVersion);
       },
     );

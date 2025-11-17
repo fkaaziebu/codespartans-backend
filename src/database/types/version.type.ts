@@ -9,6 +9,7 @@ import { TestSuiteTypeClass } from './test_suite.type';
 export enum VersionStatusType {
   ARCHIVED = 'ARCHIVED',
   PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
 }

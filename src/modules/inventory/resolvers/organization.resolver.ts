@@ -3,6 +3,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CategoryTypeClass, VersionTypeClass } from 'src/database/types';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
+import { CourseConnection } from 'src/helpers/types';
 import { CategoryInfoInput, RequestedReviewFilterInput } from '../inputs';
 import { OrganizationService } from '../services';
 import {
@@ -70,6 +71,22 @@ export class OrganizationResolver {
     return this.organizationService.listRequestedReviewsPaginated({
       email,
       filter,
+      pagination,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => CourseConnection)
+  listCourses(
+    @Context() context,
+    @Args('searchTerm', { nullable: true }) searchTerm?: string,
+    @Args('pagination', { nullable: true }) pagination?: PaginationInput,
+  ) {
+    const { email } = context.req.user;
+
+    return this.organizationService.listCoursesPaginated({
+      email,
+      searchTerm,
       pagination,
     });
   }

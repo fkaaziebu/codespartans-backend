@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -8,6 +9,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { Coupon } from './coupon.entity';
@@ -97,4 +99,10 @@ export class Course {
 
   @ManyToOne(() => Instructor, (instructor) => instructor.created_courses)
   instructor: Instructor;
+
+  @CreateDateColumn()
+  inserted_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
