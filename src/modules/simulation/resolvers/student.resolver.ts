@@ -1,13 +1,13 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { StudentService } from '../services';
 import { UseGuards } from '@nestjs/common';
-import { GqlJwtAuthGuard } from 'src/helpers/guards';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   CourseTypeClass,
   QuestionTypeClass,
   SubmittedAnswerTypeClass,
   TestTypeClass,
 } from 'src/database/types';
+import { GqlJwtAuthGuard } from 'src/helpers/guards';
+import { StudentService } from '../services';
 
 @Resolver()
 export class StudentResolver {
@@ -102,5 +102,13 @@ export class StudentResolver {
       timeRange,
       answer,
     });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => TestTypeClass)
+  testStats(@Context() context, @Args('testId') testId: string) {
+    const { email } = context.req.user;
+
+    return this.studentService.testStats({ email, testId });
   }
 }

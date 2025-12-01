@@ -4,8 +4,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from 'src/database/entities';
 import { JwtStrategy } from 'src/helpers/strategies';
+import { StudentController } from './controllers/student.controller';
+import { StudentGateway } from './gateways/student.gateway';
 import { StudentResolver } from './resolvers';
 import { StudentService } from './services';
+import { TestTimerService } from './services/test-timer.service';
 
 @Module({
   imports: [
@@ -22,7 +25,13 @@ import { StudentService } from './services';
     }),
     TypeOrmModule.forFeature(entities),
   ],
-  controllers: [],
-  providers: [StudentService, JwtStrategy, StudentResolver],
+  controllers: [StudentController],
+  providers: [
+    StudentService,
+    TestTimerService,
+    JwtStrategy,
+    StudentResolver,
+    StudentGateway,
+  ],
 })
 export class SimulationModule {}

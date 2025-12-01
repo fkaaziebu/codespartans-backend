@@ -39,13 +39,11 @@ export class StudentResolver {
     @Args('name') name: string,
     @Args('email') email: string,
     @Args('password') password: string,
-    @Args('organizationId') organizationId: string,
   ) {
     return this.studentService.registerStudent({
       name,
       email,
       password,
-      organizationId,
     });
   }
 }

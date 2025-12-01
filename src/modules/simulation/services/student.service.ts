@@ -1,24 +1,32 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import {
   Student,
   SubmittedAnswer,
   Test,
   TimeEvent,
 } from '../../../database/entities';
-import { TestStatusType } from '../../../database/types/test.type';
 import { TimeEventType } from '../../../database/entities/time_event.entity';
+import { TestStatusType } from '../../../database/types/test.type';
+import { StudentGateway } from '../gateways/student.gateway';
+import { TestTimerService } from './test-timer.service';
 
 @Injectable()
 export class StudentService {
+  private readonly logger = new Logger(StudentService.name);
+
   constructor(
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
+    private timerService: TestTimerService,
+    private sseGateway: StudentGateway,
   ) {}
 
   async startTest({ email, suiteId }: { email: string; suiteId: string }) {
@@ -42,6 +50,19 @@ export class StudentService {
           throw new NotFoundException('You do not have access to this suite');
         }
 
+        const on_going_tests = await transactionalEntityManager.find(Test, {
+          where: {
+            student: {
+              id: student.id,
+            },
+            status: In([TestStatusType.ON_GOING, TestStatusType.PAUSED]),
+          },
+        });
+
+        if (on_going_tests.length) {
+          throw new ConflictException('You already have an ongoing test');
+        }
+
         const new_test = new Test();
         new_test.test_suite =
           student.subscribed_courses[0].versions[0].test_suites[0];
@@ -53,6 +74,21 @@ export class StudentService {
         time_event.recorded_at = new Date();
         time_event.test = new_test;
         await transactionalEntityManager.save(time_event);
+
+        const testId = new_test.id;
+        const studentId = student.id;
+        const remainingMs = time_event.recorded_at;
+
+        this.timerService.startTimer(
+          testId,
+          studentId,
+          remainingMs,
+          (remaining_ms) =>
+            this.handleTimerTick(testId, studentId, remaining_ms),
+          async () => await this.endTest({ email, testId: new_test.id }),
+        );
+
+        this.logger.log(`Test ${new_test.id} started for student ${studentId}`);
 
         return new_test;
       },
@@ -141,6 +177,13 @@ export class StudentService {
         await transactionalEntityManager.save(time_event);
 
         student.tests[0].status = TestStatusType.ENDED;
+
+        const studentId = student.id;
+        this.timerService.stopTimer(testId, studentId);
+
+        this.sseGateway.sendTestEnded(testId, studentId);
+
+        this.logger.log(`Test ${testId} ended for student ${studentId}`);
         return await transactionalEntityManager.save(student.tests[0]);
       },
     );
@@ -265,5 +308,162 @@ export class StudentService {
         }
       },
     );
+  }
+
+  async testStats({ email, testId }: { email: string; testId: string }) {
+    const student = await this.studentRepository.findOne({
+      where: {
+        email,
+        tests: {
+          id: testId,
+        },
+      },
+      relations: [
+        'tests.submitted_answers.question',
+        'tests.time_events',
+        'tests.recommendations',
+      ],
+    });
+
+    if (!student) {
+      throw new NotFoundException('You do not have access to this suite');
+    }
+
+    const test = student.tests[0];
+
+    if (test.status !== TestStatusType.ENDED) {
+      throw new BadRequestException('Test is not ended');
+    }
+
+    return test;
+  }
+
+  /**
+   * Handle student reconnection
+   * This is crucial for the edge case where a student disconnects
+   * and the test should have already ended
+   */
+  async handleStudentReconnection(
+    testId: string,
+    studentId: string,
+  ): Promise<{ test: Test; action: string }> {
+    const student = await this.studentRepository.findOne({
+      where: {
+        id: studentId,
+        tests: {
+          id: testId,
+        },
+      },
+      relations: ['tests.time_events'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('You do not have access to this suite');
+    }
+
+    const test = student.tests[0];
+
+    this.logger.log(
+      `Student ${studentId} reconnected to test ${testId}. Current status: ${test.status}`,
+    );
+
+    // Check if test is on_going
+    if (test.status === TestStatusType.ON_GOING) {
+      const remainingTime = this.timerService.getRemainingTime(
+        test.time_events.find((e) => e.type === TimeEventType.STARTED)
+          .recorded_at,
+      );
+
+      // Critical: Check if test should have ended
+      if (remainingTime <= 0) {
+        this.logger.warn(
+          `Test ${testId} for student ${studentId} has expired. Ending test.`,
+        );
+
+        const ended_test = await this.endTest({ email: student.email, testId });
+
+        // Send test ended event via SSE
+        this.sseGateway.sendTestEnded(testId, studentId);
+
+        return {
+          test: ended_test,
+          action: 'test_ended',
+        };
+      }
+
+      // Test is still ongoing, restart timer
+      this.timerService.startTimer(
+        testId,
+        studentId,
+        test.time_events.filter(
+          (e) =>
+            e.type === TimeEventType.RESUMED ||
+            e.type === TimeEventType.STARTED,
+        )[
+          test.time_events.filter(
+            (e) =>
+              e.type === TimeEventType.RESUMED ||
+              e.type === TimeEventType.STARTED,
+          ).length - 1
+        ].recorded_at,
+        (remainingMs) => this.handleTimerTick(testId, studentId, remainingMs),
+        async () => await this.endTest({ email: student.email, testId }),
+      );
+
+      // Send current remaining time to student
+      this.sseGateway.sendTimeUpdate(testId, studentId, remainingTime);
+
+      return {
+        test,
+        action: 'test_resumed',
+      };
+    }
+
+    // Test is paused, send current remaining time
+    if (
+      test.status === TestStatusType.PAUSED &&
+      this.timerService.getRemainingTime(
+        test.time_events.find((e) => e.type === TimeEventType.STARTED)
+          .recorded_at,
+      )
+    ) {
+      this.sseGateway.sendTestPaused(
+        testId,
+        studentId,
+        this.timerService.getRemainingTime(
+          test.time_events.find((e) => e.type === TimeEventType.STARTED)
+            .recorded_at,
+        ),
+      );
+      return {
+        test,
+        action: 'test_paused',
+      };
+    }
+
+    // Test has ended
+    if (test.status === TestStatusType.ENDED) {
+      this.sseGateway.sendTestEnded(testId, studentId);
+      return {
+        test,
+        action: 'test_ended',
+      };
+    }
+
+    return {
+      test,
+      action: 'test_not_started',
+    };
+  }
+
+  /**
+   * Private helper: Handle timer tick
+   */
+  private handleTimerTick(
+    testId: string,
+    studentId: string,
+    remainingMs: number,
+  ): void {
+    this.sseGateway.sendTimeUpdate(testId, studentId, remainingMs);
   }
 }

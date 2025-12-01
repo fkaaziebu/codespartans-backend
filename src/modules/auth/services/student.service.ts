@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
@@ -13,6 +14,7 @@ export class StudentService {
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async listOrganizationsPaginated({
@@ -55,12 +57,10 @@ export class StudentService {
     name,
     email,
     password,
-    organizationId,
   }: {
     name: string;
     email: string;
     password: string;
-    organizationId: string;
   }): Promise<{ message: string }> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
@@ -79,7 +79,7 @@ export class StudentService {
         const organization = await transactionalEntityManager.findOne(
           Organization,
           {
-            where: { id: organizationId },
+            where: { email: this.configService.get('GENPOP_EMAIL') },
           },
         );
 
