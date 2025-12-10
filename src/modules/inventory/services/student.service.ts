@@ -5,11 +5,13 @@ import { PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
 import {
+  Cart,
   Category,
   Checkout,
   Course,
   Student,
 } from '../../../database/entities';
+import { CourseFilterInput } from '../inputs';
 // import { CourseTypeClass } from 'src/database/types';
 
 @Injectable()
@@ -30,6 +32,17 @@ export class StudentService {
   }): Promise<Course> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
+        const student = await this.studentRepository.findOne({
+          where: {
+            email,
+          },
+          relations: ['subscribed_courses', 'cart.courses'],
+        });
+
+        if (!student) {
+          throw new NotFoundException('Student not found');
+        }
+
         const course = await transactionalEntityManager.findOne(Course, {
           where: {
             id: courseId,
@@ -44,10 +57,19 @@ export class StudentService {
             'approved_version.assigned_admin',
             'versions.questions',
             'versions.assigned_admin',
+            'instructor',
           ],
         });
 
-        return course;
+        return {
+          ...course,
+          is_subscribed: Boolean(
+            student.subscribed_courses.find((crs) => crs.id === course.id),
+          ),
+          is_course_in_cart: Boolean(
+            student.cart.courses.find((crs) => crs.id === course.id),
+          ),
+        };
       },
     );
   }
@@ -57,16 +79,19 @@ export class StudentService {
     organizationId,
     searchTerm,
     pagination,
+    filter,
   }: {
     email: string;
-    organizationId: string;
+    organizationId?: string;
     searchTerm?: string;
     pagination?: PaginationInput;
+    filter?: CourseFilterInput;
   }) {
     const courses = await this.listOrganizationCourses({
       email,
       organizationId,
       searchTerm,
+      filter,
     });
 
     // Apply pagination and return in the connection format
@@ -79,10 +104,12 @@ export class StudentService {
     email,
     organizationId,
     searchTerm,
+    filter,
   }: {
     email: string;
-    organizationId: string;
+    organizationId?: string;
     searchTerm?: string;
+    filter?: CourseFilterInput;
   }): Promise<Course[]> {
     const student = await this.studentRepository.findOne({
       where: {
@@ -98,7 +125,7 @@ export class StudentService {
     const courses = await this.courseRepository.find({
       where: {
         organization: {
-          id: organizationId,
+          id: organizationId ?? undefined,
           students: {
             email,
           },
@@ -120,7 +147,40 @@ export class StudentService {
           (acc, question) => acc + question.estimated_time_in_ms,
           0,
         ),
-      }));
+      }))
+      .filter((course) =>
+        filter ? filter.is_subscribed === course.is_subscribed : true,
+      );
+  }
+
+  async listCartCourses({ email }: { email: string }): Promise<Course[]> {
+    const student = await this.studentRepository.findOne({
+      where: {
+        email,
+      },
+      relations: ['cart.courses'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    return student.cart.courses || [];
+  }
+
+  async listCartCategories({ email }: { email: string }): Promise<Category[]> {
+    const student = await this.studentRepository.findOne({
+      where: {
+        email,
+      },
+      relations: ['cart.categories'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    return student.cart.categories || [];
   }
 
   async addCourseToCart({
@@ -157,6 +217,33 @@ export class StudentService {
         }
 
         student.cart.courses.push(course);
+
+        return await transactionalEntityManager.save(student.cart);
+      },
+    );
+  }
+
+  async removeCourseFromCart({
+    email,
+    courseId,
+  }: {
+    email: string;
+    courseId: string;
+  }): Promise<CartTypeClass> {
+    return await this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+          relations: ['cart.courses'],
+        });
+
+        if (!student) {
+          throw new Error('Student not found');
+        }
+
+        student.cart.courses = student.cart.courses.filter(
+          (crs) => crs.id !== courseId,
+        );
 
         return await transactionalEntityManager.save(student.cart);
       },

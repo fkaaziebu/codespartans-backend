@@ -4,3 +4,4 @@ export { InstructorConnection } from './instructor-connection.type';
 export { InstructorResponse } from './instructor-response.type';
 export { RequestedReviewConnection } from './requested-review-connection.type';
 export { StatsResponse } from './stats-response.type';
+export { StudentCourseResponse } from './student-course-response.type';

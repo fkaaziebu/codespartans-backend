@@ -8,13 +8,17 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import {
+  Question,
   Student,
   SubmittedAnswer,
   Test,
   TimeEvent,
 } from '../../../database/entities';
 import { TimeEventType } from '../../../database/entities/time_event.entity';
-import { TestStatusType } from '../../../database/types/test.type';
+import {
+  TestModeType,
+  TestStatusType,
+} from '../../../database/types/test.type';
 import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
 
@@ -29,7 +33,15 @@ export class StudentService {
     private sseGateway: StudentGateway,
   ) {}
 
-  async startTest({ email, suiteId }: { email: string; suiteId: string }) {
+  async startTest({
+    email,
+    suiteId,
+    mode = TestModeType.PROCTURED,
+  }: {
+    email: string;
+    suiteId: string;
+    mode?: TestModeType;
+  }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
@@ -43,11 +55,14 @@ export class StudentService {
               },
             },
           },
-          relations: ['subscribed_courses.versions.test_suites'],
+          relations: [
+            'subscribed_courses.versions.test_suites',
+            'subscribed_courses.versions.questions',
+          ],
         });
 
         if (!student) {
-          throw new NotFoundException('You do not have access to this suite');
+          throw new NotFoundException('You do not have access to this suite ');
         }
 
         const on_going_tests = await transactionalEntityManager.find(Test, {
@@ -67,6 +82,7 @@ export class StudentService {
         new_test.test_suite =
           student.subscribed_courses[0].versions[0].test_suites[0];
         new_test.student = student;
+        new_test.mode = mode;
 
         await transactionalEntityManager.save(new_test);
 
@@ -77,12 +93,20 @@ export class StudentService {
 
         const testId = new_test.id;
         const studentId = student.id;
-        const remainingMs = time_event.recorded_at;
+
+        const endTime = new Date(
+          new Date(time_event.recorded_at).setSeconds(
+            (student.subscribed_courses[0].versions[0].questions.reduce(
+              (acc, question) => acc + question.estimated_time_in_ms,
+              0,
+            ) || 0) / 1000,
+          ),
+        );
 
         this.timerService.startTimer(
           testId,
           studentId,
-          remainingMs,
+          endTime,
           (remaining_ms) =>
             this.handleTimerTick(testId, studentId, remaining_ms),
           async () => await this.endTest({ email, testId: new_test.id }),
@@ -105,7 +129,7 @@ export class StudentService {
               id: testId,
             },
           },
-          relations: ['tests'],
+          relations: ['tests.time_events'],
         });
 
         if (!student) {
@@ -119,7 +143,17 @@ export class StudentService {
         await transactionalEntityManager.save(time_event);
 
         student.tests[0].status = TestStatusType.PAUSED;
-        return await transactionalEntityManager.save(student.tests[0]);
+        student.tests[0].time_events.push(time_event);
+        const updated_test = await transactionalEntityManager.save(
+          student.tests[0],
+        );
+
+        this.timerService.pauseTimer(testId, student.id);
+
+        this.logger.log(
+          `Test ${updated_test.id} paused for student ${student.id}`,
+        );
+        return updated_test;
       },
     );
   }
@@ -134,7 +168,7 @@ export class StudentService {
               id: testId,
             },
           },
-          relations: ['tests'],
+          relations: ['tests.test_suite.questions', 'tests.time_events'],
         });
 
         if (!student) {
@@ -148,7 +182,36 @@ export class StudentService {
         await transactionalEntityManager.save(time_event);
 
         student.tests[0].status = TestStatusType.ON_GOING;
-        return await transactionalEntityManager.save(student.tests[0]);
+        student.tests[0].time_events.push(time_event);
+        const updated_test = await transactionalEntityManager.save(
+          student.tests[0],
+        );
+
+        const totalEstimatedMs =
+          updated_test.test_suite.questions.reduce(
+            (acc, question) => acc + question.estimated_time_in_ms,
+            0,
+          ) || 0;
+
+        const endTime = this.calculateEndTime(
+          updated_test.time_events,
+          totalEstimatedMs,
+        );
+
+        this.timerService.resumeTimer(
+          testId,
+          student.id,
+          endTime,
+          (remainingMs) =>
+            this.handleTimerTick(testId, student.id, remainingMs),
+          async () => await this.endTest({ email: student.email, testId }),
+        );
+
+        this.logger.log(
+          `Test ${updated_test.id} resumed for student ${student.id}`,
+        );
+
+        return updated_test;
       },
     );
   }
@@ -249,6 +312,7 @@ export class StudentService {
           },
           relations: [
             'subscribed_courses.approved_version.test_suites.questions',
+            'subscribed_courses.approved_version.questions',
             'subscribed_courses.instructor',
           ],
         });
@@ -264,12 +328,14 @@ export class StudentService {
     questionId,
     timeRange,
     answer,
+    isFlagged,
   }: {
     email: string;
     testId: string;
     questionId: string;
     timeRange: string;
     answer: string;
+    isFlagged: boolean;
   }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
@@ -287,20 +353,41 @@ export class StudentService {
           throw new NotFoundException('You do not have access to this suite');
         }
 
+        if (student.tests[0].status === TestStatusType.ENDED) {
+          throw new BadRequestException(
+            "Test has ended, you can't submit answers for an ended test",
+          );
+        }
+
+        if (student.tests[0].status === TestStatusType.PAUSED) {
+          throw new BadRequestException(
+            'Test is paused, resume to submit answer',
+          );
+        }
+
         const existingAnswer = student.tests[0].submitted_answers.find(
           (answer) => answer.question_id === questionId,
         );
 
         if (existingAnswer) {
           existingAnswer.answer_provided = answer;
+          existingAnswer.is_flagged = isFlagged;
           existingAnswer.time_ranges.push(timeRange);
           return await transactionalEntityManager.save(existingAnswer);
         } else {
+          const question = await transactionalEntityManager.findOne(Question, {
+            where: {
+              id: questionId,
+            },
+          });
+
           const newAnswer = new SubmittedAnswer();
           newAnswer.question_id = questionId;
           newAnswer.answer_provided = answer;
           newAnswer.time_ranges = [timeRange];
+          newAnswer.is_flagged = isFlagged;
           newAnswer.test = student.tests[0];
+          newAnswer.question = question;
 
           await transactionalEntityManager.save(newAnswer);
 
@@ -308,6 +395,40 @@ export class StudentService {
         }
       },
     );
+  }
+
+  async getAllAttemptedQuestions({
+    email,
+    testId,
+  }: {
+    email: string;
+    testId: string;
+  }) {
+    const student = await this.studentRepository.findOne({
+      where: {
+        email,
+        tests: {
+          id: testId,
+        },
+      },
+      relations: [
+        'tests.submitted_answers.question',
+        'tests.time_events',
+        'tests.recommendations',
+      ],
+    });
+
+    if (!student) {
+      throw new NotFoundException('You do not have access to this suite');
+    }
+
+    const test = student.tests[0];
+
+    if (test.status === TestStatusType.ENDED) {
+      throw new BadRequestException('Test has ended');
+    }
+
+    return test.submitted_answers;
   }
 
   async testStats({ email, testId }: { email: string; testId: string }) {
@@ -322,6 +443,7 @@ export class StudentService {
         'tests.submitted_answers.question',
         'tests.time_events',
         'tests.recommendations',
+        'tests.test_suite.questions',
       ],
     });
 
@@ -354,10 +476,12 @@ export class StudentService {
           id: testId,
         },
       },
-      relations: ['tests.time_events'],
+      relations: ['tests.time_events', 'tests.test_suite.questions'],
     });
 
-    if (!student) {
+    this.logger.log(`StudentId: ${studentId}, TestId: ${testId}`);
+
+    if (!student || !studentId || !testId) {
       throw new NotFoundException('You do not have access to this suite');
     }
 
@@ -367,15 +491,21 @@ export class StudentService {
       `Student ${studentId} reconnected to test ${testId}. Current status: ${test.status}`,
     );
 
+    const totalEstimatedMs =
+      student.tests[0].test_suite.questions.reduce(
+        (acc, question) => acc + question.estimated_time_in_ms,
+        0,
+      ) || 0;
+
+    const endTime = this.calculateEndTime(test.time_events, totalEstimatedMs);
+
+    const now = new Date();
+    const remainingMs = endTime.getTime() - now.getTime();
+
     // Check if test is on_going
     if (test.status === TestStatusType.ON_GOING) {
-      const remainingTime = this.timerService.getRemainingTime(
-        test.time_events.find((e) => e.type === TimeEventType.STARTED)
-          .recorded_at,
-      );
-
       // Critical: Check if test should have ended
-      if (remainingTime <= 0) {
+      if (remainingMs <= 0) {
         this.logger.warn(
           `Test ${testId} for student ${studentId} has expired. Ending test.`,
         );
@@ -395,23 +525,13 @@ export class StudentService {
       this.timerService.startTimer(
         testId,
         studentId,
-        test.time_events.filter(
-          (e) =>
-            e.type === TimeEventType.RESUMED ||
-            e.type === TimeEventType.STARTED,
-        )[
-          test.time_events.filter(
-            (e) =>
-              e.type === TimeEventType.RESUMED ||
-              e.type === TimeEventType.STARTED,
-          ).length - 1
-        ].recorded_at,
+        endTime,
         (remainingMs) => this.handleTimerTick(testId, studentId, remainingMs),
         async () => await this.endTest({ email: student.email, testId }),
       );
 
       // Send current remaining time to student
-      this.sseGateway.sendTimeUpdate(testId, studentId, remainingTime);
+      this.sseGateway.sendTimeUpdate(testId, studentId, remainingMs);
 
       return {
         test,
@@ -420,21 +540,8 @@ export class StudentService {
     }
 
     // Test is paused, send current remaining time
-    if (
-      test.status === TestStatusType.PAUSED &&
-      this.timerService.getRemainingTime(
-        test.time_events.find((e) => e.type === TimeEventType.STARTED)
-          .recorded_at,
-      )
-    ) {
-      this.sseGateway.sendTestPaused(
-        testId,
-        studentId,
-        this.timerService.getRemainingTime(
-          test.time_events.find((e) => e.type === TimeEventType.STARTED)
-            .recorded_at,
-        ),
-      );
+    if (test.status === TestStatusType.PAUSED && remainingMs) {
+      this.sseGateway.sendTestPaused(testId, studentId, remainingMs);
       return {
         test,
         action: 'test_paused',
@@ -456,6 +563,20 @@ export class StudentService {
     };
   }
 
+  async getActiveTest(studentId: string) {
+    const student = await this.studentRepository.findOne({
+      where: {
+        id: studentId,
+        tests: {
+          status: TestStatusType.ON_GOING || TestStatusType.PAUSED,
+        },
+      },
+      relations: ['tests'],
+    });
+
+    return student?.tests[0];
+  }
+
   /**
    * Private helper: Handle timer tick
    */
@@ -465,5 +586,72 @@ export class StudentService {
     remainingMs: number,
   ): void {
     this.sseGateway.sendTimeUpdate(testId, studentId, remainingMs);
+  }
+
+  private calculateEndTime(
+    timeEvents: TimeEvent[],
+    totalEstimatedMs: number,
+  ): Date {
+    const startedEvent = timeEvents.find(
+      (e) => e.type === TimeEventType.STARTED,
+    );
+    const resumedEvent = timeEvents[timeEvents.length - 1];
+    const timeUsedMs = this.calculateTimeUsed(timeEvents).getTime();
+    if (resumedEvent.type !== TimeEventType.RESUMED) {
+      const startTimeMs = new Date(startedEvent.recorded_at).getTime();
+      const initialEndTimeMs = startTimeMs + totalEstimatedMs;
+      // Calculate active time used
+      // End time shifts by the amount of active time used
+      const endTimeMs = initialEndTimeMs;
+      return new Date(endTimeMs);
+    } else {
+      const startTimeMs = new Date(resumedEvent.recorded_at).getTime();
+      const initialEndTimeMs = startTimeMs + totalEstimatedMs;
+      // Calculate active time used
+      // End time shifts by the amount of active time used
+      const endTimeMs = initialEndTimeMs - timeUsedMs;
+      return new Date(endTimeMs);
+    }
+  }
+
+  private calculateTimeUsed(timeEvents: TimeEvent[]): Date {
+    let totalMs = 0;
+
+    // Sort events chronologically
+    const sortedEvents = [...timeEvents].sort(
+      (a, b) =>
+        new Date(a.recorded_at).getTime() - new Date(b.recorded_at).getTime(),
+    );
+
+    // Find the STARTED event
+    const startedEvent = sortedEvents.find(
+      (e) => e.type === TimeEventType.STARTED,
+    );
+
+    let lastActiveTime = new Date(startedEvent.recorded_at).getTime();
+
+    // Process each event chronologically
+    for (let i = 1; i < sortedEvents.length; i++) {
+      const event = sortedEvents[i];
+
+      const eventTime = new Date(event.recorded_at).getTime();
+
+      if (event.type === TimeEventType.PAUSED) {
+        // Add elapsed time until pause
+        totalMs += eventTime - lastActiveTime;
+        lastActiveTime = 0; // Stop tracking
+      } else if (event.type === TimeEventType.RESUMED) {
+        // Resume tracking
+        lastActiveTime = eventTime;
+      }
+    }
+
+    // If still active (test was never paused at end), add time until now
+    if (lastActiveTime > 0) {
+      totalMs += Date.now() - lastActiveTime;
+    }
+
+    // Ensure totalMs is never negative
+    return new Date(Math.max(0, totalMs));
   }
 }

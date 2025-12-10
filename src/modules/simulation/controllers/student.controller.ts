@@ -1,12 +1,9 @@
 import {
-  Body,
+  BadRequestException,
   Controller,
   Get,
-  HttpCode,
-  HttpStatus,
   Logger,
   Param,
-  Post,
   Sse,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
@@ -82,5 +79,51 @@ export class StudentController {
           }) as MessageEvent,
       ),
     );
+  }
+
+  @Get(':studentId/stream')
+  @Sse()
+  async streamActiveTests(
+    @Param('studentId') studentId: string,
+  ): Promise<Observable<MessageEvent>> {
+    const subject = this.sseGateway.registerActiveTestConnection(studentId);
+    try {
+      // Register the SSE connection and get the subject
+
+      const activeTest = await this.studentService.getActiveTest(studentId);
+
+      if (!activeTest) {
+        throw new BadRequestException('No active test for this student');
+      }
+
+      // Handle reconnection: when a student reconnects via SSE, we need to check test status
+      this.studentService
+        .handleStudentReconnection(activeTest?.id, studentId)
+        .catch((error) => {
+          this.logger.error(
+            `Error handling reconnection for student ${studentId}`,
+            error,
+          );
+        });
+
+      // Convert the subject's data to MessageEvent format for SSE
+      return subject.pipe(
+        map(
+          (data) =>
+            ({
+              data,
+            }) as MessageEvent,
+        ),
+      );
+    } catch (error) {
+      return subject.pipe(
+        map(
+          (data) =>
+            ({
+              data,
+            }) as MessageEvent,
+        ),
+      );
+    }
   }
 }

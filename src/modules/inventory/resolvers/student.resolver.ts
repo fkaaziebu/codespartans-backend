@@ -2,13 +2,16 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   CartTypeClass,
+  CategoryTypeClass,
   CheckoutTypeClass,
   CourseTypeClass,
 } from 'src/database/types';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';
+import { CourseFilterInput } from '../inputs';
 import { StudentService } from '../services';
+import { StudentCourseResponse } from '../types';
 
 @Resolver()
 export class StudentResolver {
@@ -16,7 +19,7 @@ export class StudentResolver {
 
   // Queries
   @UseGuards(GqlJwtAuthGuard)
-  @Query(() => CourseTypeClass)
+  @Query(() => StudentCourseResponse)
   getOrganizationCourse(
     @Context() context,
     @Args('courseId') courseId: string,
@@ -33,10 +36,11 @@ export class StudentResolver {
   @Query(() => CourseConnection)
   listOrganizationCourses(
     @Context() context,
-    @Args('organizationId')
-    organizationId: string,
+    @Args('organizationId', { nullable: true })
+    organizationId?: string,
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
+    @Args('filter', { nullable: true }) filter?: CourseFilterInput,
   ) {
     const { email } = context.req.user;
 
@@ -45,6 +49,27 @@ export class StudentResolver {
       organizationId,
       searchTerm,
       pagination,
+      filter,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [CourseTypeClass])
+  listCartCourses(@Context() context) {
+    const { email } = context.req.user;
+
+    return this.studentService.listCartCourses({
+      email,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [CategoryTypeClass])
+  listCartCategories(@Context() context) {
+    const { email } = context.req.user;
+
+    return this.studentService.listCartCategories({
+      email,
     });
   }
 
@@ -55,6 +80,14 @@ export class StudentResolver {
     const { email } = context.req.user;
 
     return this.studentService.addCourseToCart({ email, courseId });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => CartTypeClass)
+  removeCourseFromCart(@Context() context, @Args('courseId') courseId: string) {
+    const { email } = context.req.user;
+
+    return this.studentService.removeCourseFromCart({ email, courseId });
   }
 
   @UseGuards(GqlJwtAuthGuard)

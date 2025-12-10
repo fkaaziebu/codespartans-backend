@@ -7,10 +7,16 @@ interface StudentSSEConnection {
   subject: Subject<any>;
 }
 
+interface StudentTestSSEConnection {
+  studentId: string;
+  subject: Subject<any>;
+}
+
 @Injectable()
 export class StudentGateway {
   private readonly logger = new Logger(StudentGateway.name);
   private activeConnections = new Map<string, StudentSSEConnection>();
+  private activeTestConnections = new Map<string, StudentTestSSEConnection>();
 
   /**
    * Register a student's SSE connection
@@ -49,6 +55,34 @@ export class StudentGateway {
     return subject;
   }
 
+  registerActiveTestConnection(studentId: string): Subject<any> {
+    const connectionId = `${studentId}`;
+
+    // Clean up any existing connection
+    const existingConnection = this.activeTestConnections.get(connectionId);
+    if (existingConnection) {
+      existingConnection.subject.complete();
+    }
+
+    const subject = new Subject<any>();
+    this.activeTestConnections.set(connectionId, {
+      studentId,
+      subject,
+    });
+
+    this.logger.log(`SSE connection registered for student ${studentId}`);
+
+    // Clean up when subject completes
+    subject.subscribe({
+      complete: () => {
+        this.logger.log(`SSE connection completed for student ${studentId}`);
+        this.activeTestConnections.delete(connectionId);
+      },
+    });
+
+    return subject;
+  }
+
   /**
    * Send a time update event to a student
    */
@@ -60,6 +94,18 @@ export class StudentGateway {
       const remainingSeconds = Math.ceil(remainingMs / 1000);
       connection.subject.next({
         type: 'time_update',
+        remainingSeconds,
+        remainingMs,
+        timestamp: new Date(),
+      });
+    }
+
+    const testConnection = this.activeTestConnections.get(studentId);
+    if (testConnection) {
+      const remainingSeconds = Math.ceil(remainingMs / 1000);
+      testConnection.subject.next({
+        type: 'time_update',
+        testId,
         remainingSeconds,
         remainingMs,
         timestamp: new Date(),
@@ -82,6 +128,17 @@ export class StudentGateway {
       // Complete the subject to close the connection
       connection.subject.complete();
     }
+
+    const testConnection = this.activeTestConnections.get(studentId);
+    if (testConnection) {
+      testConnection.subject.next({
+        type: 'test_ended',
+        testId,
+        timestamp: new Date(),
+      });
+      // Complete the subject to close the testConnection
+      testConnection.subject.complete();
+    }
   }
 
   /**
@@ -95,6 +152,18 @@ export class StudentGateway {
       const remainingSeconds = Math.ceil(remainingMs / 1000);
       connection.subject.next({
         type: 'test_paused',
+        remainingSeconds,
+        remainingMs,
+        timestamp: new Date(),
+      });
+    }
+
+    const testConnection = this.activeTestConnections.get(studentId);
+    if (testConnection) {
+      const remainingSeconds = Math.ceil(remainingMs / 1000);
+      testConnection.subject.next({
+        type: 'test_paused',
+        testId,
         remainingSeconds,
         remainingMs,
         timestamp: new Date(),
@@ -122,6 +191,18 @@ export class StudentGateway {
         timestamp: new Date(),
       });
     }
+
+    const testConnection = this.activeTestConnections.get(studentId);
+    if (testConnection) {
+      const remainingSeconds = Math.ceil(remainingMs / 1000);
+      testConnection.subject.next({
+        type: 'test_resumed',
+        testId,
+        remainingSeconds,
+        remainingMs,
+        timestamp: new Date(),
+      });
+    }
   }
 
   /**
@@ -134,6 +215,16 @@ export class StudentGateway {
     if (connection) {
       connection.subject.complete();
       this.activeConnections.delete(connectionId);
+      this.logger.log(
+        `SSE connection disconnected for test ${testId}, student ${studentId}`,
+      );
+    }
+
+    const testConnection = this.activeTestConnections.get(studentId);
+
+    if (testConnection) {
+      testConnection.subject.complete();
+      this.activeTestConnections.delete(studentId);
       this.logger.log(
         `SSE connection disconnected for test ${testId}, student ${studentId}`,
       );

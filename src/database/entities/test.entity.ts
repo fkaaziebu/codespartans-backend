@@ -1,22 +1,25 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TestSuite } from './test_suite.entity';
-import { SubmittedAnswer } from './sumitted_answer.entity';
-import { TimeEvent } from './time_event.entity';
 import { Recommendation } from './recommendation.entity';
 import { Student } from './student.entity';
+import { SubmittedAnswer } from './sumitted_answer.entity';
+import { TestSuite } from './test_suite.entity';
+import { TimeEvent } from './time_event.entity';
 
 enum TestStatusType {
   ON_GOING = 'ON_GOING',
   PAUSED = 'PAUSED',
   ENDED = 'ENDED',
+}
+
+enum TestModeType {
+  PROCTURED = 'PROCTURED',
+  UN_PROCTURED = 'UN_PROCTURED',
 }
 
 @Entity('tests')
@@ -31,8 +34,14 @@ export class Test {
   })
   status: TestStatusType;
 
-  @OneToOne(() => TestSuite)
-  @JoinColumn()
+  @Column({
+    type: 'enum',
+    enum: TestModeType,
+    default: TestModeType.PROCTURED,
+  })
+  mode: TestModeType;
+
+  @ManyToOne(() => TestSuite)
   test_suite: TestSuite;
 
   @OneToMany(() => SubmittedAnswer, (submittedAnswer) => submittedAnswer.test)

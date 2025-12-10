@@ -75,6 +75,7 @@ services:
     environment:
       GRAPHQL_BASE_URL: http://3.68.98.186:4000/graphql
       GRAPGQL_WS_BASE_URL: http://3.68.98.186:4000/graphql-ws
+      SSE_URL: http://3.68.98.186:4000
     ports:
       - '3003:3000'
     networks:

@@ -43,6 +43,7 @@ export class TestTimerService {
         onEnd();
       } else {
         // Still time remaining, send update
+
         onTick(remainingMs);
       }
     }, 1000); // Update every second
@@ -97,12 +98,13 @@ export class TestTimerService {
     const timer = this.activeTimers.get(timerId);
 
     if (timer) {
-      const remainingTime = this.getRemainingTime(timer.endTime);
+      const now = new Date();
+      const remainingMs = timer.endTime.getTime() - now.getTime();
       this.stopTimer(testId, studentId);
       this.logger.log(
-        `Timer paused for test ${testId}, student ${studentId}. Remaining: ${remainingTime}ms`,
+        `Timer paused for test ${testId}, student ${studentId}. Remaining: ${remainingMs}ms`,
       );
-      return remainingTime;
+      return remainingMs;
     }
 
     return null;
@@ -114,14 +116,13 @@ export class TestTimerService {
   resumeTimer(
     testId: string,
     studentId: string,
-    remainingMs: number,
+    endTime: Date,
     onTick: (remainingMs: number) => void,
     onEnd: () => void,
   ): void {
-    const newEndTime = new Date(Date.now() + remainingMs);
-    this.startTimer(testId, studentId, newEndTime, onTick, onEnd);
+    this.startTimer(testId, studentId, endTime, onTick, onEnd);
     this.logger.log(
-      `Timer resumed for test ${testId}, student ${studentId}. New end time: ${newEndTime}`,
+      `Timer resumed for test ${testId}, student ${studentId}. New end time: ${endTime}`,
     );
   }
 

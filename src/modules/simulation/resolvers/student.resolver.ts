@@ -6,6 +6,7 @@ import {
   SubmittedAnswerTypeClass,
   TestTypeClass,
 } from 'src/database/types';
+import { TestModeType } from 'src/database/types/test.type';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { StudentService } from '../services';
 
@@ -39,15 +40,36 @@ export class StudentResolver {
     });
   }
 
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => TestTypeClass)
+  testStats(@Context() context, @Args('testId') testId: string) {
+    const { email } = context.req.user;
+
+    return this.studentService.testStats({ email, testId });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [SubmittedAnswerTypeClass])
+  getAllAttemptedQuestions(@Context() context, @Args('testId') testId: string) {
+    const { email } = context.req.user;
+
+    return this.studentService.getAllAttemptedQuestions({ email, testId });
+  }
+
   // Mutations
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => TestTypeClass)
-  startTest(@Context() context, @Args('suiteId') suiteId: string) {
+  startTest(
+    @Context() context,
+    @Args('suiteId') suiteId: string,
+    @Args('mode', { nullable: true }) mode?: TestModeType,
+  ) {
     const { email } = context.req.user;
 
     return this.studentService.startTest({
       email,
       suiteId,
+      mode,
     });
   }
 
@@ -92,6 +114,7 @@ export class StudentResolver {
     @Args('questionId') questionId: string,
     @Args('timeRange') timeRange: string,
     @Args('answer') answer: string,
+    @Args('isFlagged') isFlagged: boolean,
   ) {
     const { email } = context.req.user;
 
@@ -101,14 +124,7 @@ export class StudentResolver {
       questionId,
       timeRange,
       answer,
+      isFlagged,
     });
-  }
-
-  @UseGuards(GqlJwtAuthGuard)
-  @Query(() => TestTypeClass)
-  testStats(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
-
-    return this.studentService.testStats({ email, testId });
   }
 }

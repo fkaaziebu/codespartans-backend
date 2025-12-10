@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -49,6 +53,24 @@ export class StudentService {
         );
 
         return organizations;
+      },
+    );
+  }
+
+  async studentProfile({ email }: { email: string }) {
+    return this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: {
+            email,
+          },
+        });
+
+        if (!student) {
+          throw new NotFoundException('Student does not exist');
+        }
+
+        return student;
       },
     );
   }

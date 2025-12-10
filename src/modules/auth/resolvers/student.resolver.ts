@@ -1,4 +1,7 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { StudentTypeClass } from 'src/database/types';
+import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { StudentService } from '../services/student.service';
 import {
@@ -20,6 +23,13 @@ export class StudentResolver {
       email,
       password,
     });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => StudentTypeClass)
+  async studentProfile(@Context() context) {
+    const { email } = context.req.user;
+    return this.studentService.studentProfile({ email });
   }
 
   @Query(() => OrganizationConnection)

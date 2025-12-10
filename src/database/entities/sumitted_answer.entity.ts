@@ -6,8 +6,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Test } from './test.entity';
 import { Question } from './question.entity';
+import { Test } from './test.entity';
 
 @Entity('submitted_answers')
 export class SubmittedAnswer {
@@ -29,8 +29,7 @@ export class SubmittedAnswer {
   @Column('text', { array: true })
   time_ranges: string[];
 
-  @OneToOne(() => Question)
-  @JoinColumn()
+  @ManyToOne(() => Question)
   question: Question;
 
   @ManyToOne(() => Test, (test) => test.submitted_answers)
