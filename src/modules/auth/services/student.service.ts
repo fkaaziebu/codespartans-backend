@@ -11,6 +11,9 @@ import { Cart, Organization, Student } from '../../../database/entities';
 import { HashHelper, PaginateHelper } from '../../../helpers';
 import { PaginationInput } from '../../../helpers/inputs';
 import { StudentLoginResponse } from '../types';
+import { v4 as uuidv4 } from 'uuid';
+import { EmailProducer } from './email.producer';
+import { LoginBodyDto } from '../dto/login-body.dto';
 
 @Injectable()
 export class StudentService {
@@ -19,6 +22,7 @@ export class StudentService {
     private studentRepository: Repository<Student>,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private readonly emailProducer: EmailProducer,
   ) {}
 
   async listOrganizationsPaginated({
@@ -172,6 +176,139 @@ export class StudentService {
           ...student,
           token: access_token,
         };
+      },
+    );
+  }
+
+  async requestStudentPasswordReset({ email }: { email: string }) {
+    return this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        // Get Student
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+        });
+
+        // If student does not exist, still return success
+        if (!student) {
+          return { message: 'Password reset link sent to your email' };
+        }
+
+        const resetCode = uuidv4();
+        student.reset_token = resetCode;
+        await transactionalEntityManager.save(student);
+
+        //Send email message into message queue
+        await this.emailProducer.sendPasswordResetEmail({
+          email,
+          name: student.name,
+          resetCode,
+        });
+
+        return {
+          message: 'Password reset link sent to your email',
+        };
+      },
+    );
+  }
+
+  async resetStudentPassword({
+    email,
+    password,
+    token,
+  }: {
+    email: string;
+    password: string;
+    token: string;
+  }) {
+    return this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        // Get Student
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+        });
+
+        // If student does not exist or reset_token not same, throw an invalid reset error
+        if (!student || student.reset_token !== token) {
+          throw new BadRequestException('Invalid Password reset details');
+        }
+
+        // Clean things up
+        student.reset_token = '';
+        student.password = await HashHelper.encrypt(password);
+
+        await transactionalEntityManager.save(student);
+
+        return {
+          message: 'Password reset is successful',
+        };
+      },
+    );
+  }
+
+  async validateGoogleUser(googleUser: LoginBodyDto) {
+    const user = await this.studentRepository.findOne({
+      where: { email: googleUser.email },
+      relations: ['organizations'],
+    });
+
+    return user;
+  }
+
+  async createGoogleUser({ firstName, lastName, email }) {
+    return await this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const name = firstName + ' ' + lastName;
+
+        // find if student already exist
+        const existingUser = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+        });
+
+        if (existingUser) {
+          throw new BadRequestException('Email already exist');
+        }
+
+        const organization = await transactionalEntityManager.findOne(
+          Organization,
+          {
+            where: { email: this.configService.get('GENPOP_EMAIL') },
+          },
+        );
+
+        if (!organization) {
+          throw new Error('Organization not found');
+        }
+
+        const cart = new Cart();
+
+        await transactionalEntityManager.save(cart);
+
+        const student = new Student();
+        student.name = name;
+        student.email = email;
+        student.password = await HashHelper.encrypt('password');
+        student.cart = cart;
+        student.organizations = [organization];
+
+        await transactionalEntityManager.save(student);
+
+        const savedUser = await transactionalEntityManager.save(student);
+
+        const payload: {
+          id: string;
+          organizationId: string;
+          name: string;
+          email: string;
+          role: 'STUDENT';
+        } = {
+          id: savedUser.id,
+          organizationId: organization.id,
+          name: savedUser.name,
+          email: savedUser.email,
+          role: 'STUDENT',
+        };
+
+        return payload;
       },
     );
   }

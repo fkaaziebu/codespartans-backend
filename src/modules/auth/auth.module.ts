@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from 'src/database/entities';
-import { JwtStrategy } from '../../helpers/strategies';
+import { GoogleStrategy, JwtStrategy } from '../../helpers/strategies';
 import {
   AdminResolver,
   InstructorResolver,
@@ -16,10 +16,18 @@ import {
   OrganizationService,
   StudentService,
 } from './services';
+import { BullModule } from '@nestjs/bullmq';
+import { EmailProducer } from './services/email.producer';
+import { EmailConsumer } from './services/email.consumer';
+import { EmailService } from './services/email.service';
+import { StudentController } from './controllers/student.controller';
 
 @Module({
   imports: [
     ConfigModule,
+    BullModule.registerQueue({
+      name: 'email-queue',
+    }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -32,13 +40,17 @@ import {
     }),
     TypeOrmModule.forFeature(entities),
   ],
-  controllers: [],
+  controllers: [StudentController],
   providers: [
+    EmailProducer,
+    EmailConsumer,
+    EmailService,
     AdminService,
     InstructorService,
     StudentService,
     OrganizationService,
     JwtStrategy,
+    GoogleStrategy,
     AdminResolver,
     InstructorResolver,
     StudentResolver,

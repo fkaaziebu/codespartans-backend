@@ -31,6 +31,9 @@ export class Student {
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  @Column({ nullable: true })
+  reset_token: string;
+
   @ManyToMany(() => Course)
   @JoinTable()
   subscribed_courses: Course[];

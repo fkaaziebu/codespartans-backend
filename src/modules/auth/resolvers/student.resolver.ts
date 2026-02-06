@@ -6,6 +6,7 @@ import { PaginationInput } from 'src/helpers/inputs';
 import { StudentService } from '../services/student.service';
 import {
   OrganizationConnection,
+  PasswordResetResponse,
   RegisterResponse,
   StudentLoginResponse,
 } from '../types';
@@ -53,6 +54,26 @@ export class StudentResolver {
     return this.studentService.registerStudent({
       name,
       email,
+      password,
+    });
+  }
+
+  @Mutation(() => PasswordResetResponse)
+  async requestStudentPasswordReset(@Args('email') email: string) {
+    return this.studentService.requestStudentPasswordReset({
+      email,
+    });
+  }
+
+  @Mutation(() => PasswordResetResponse)
+  async resetStudentPassword(
+    @Args('email') email: string,
+    @Args('token') token: string,
+    @Args('password') password: string,
+  ) {
+    return this.studentService.resetStudentPassword({
+      email,
+      token,
       password,
     });
   }

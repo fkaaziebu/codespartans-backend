@@ -12,4 +12,10 @@ export const configValidationSchema = Joi.object({
   DB_PORT: Joi.number().default(5432).required(),
   DB_NAME: Joi.string().required(),
   DB_NAME_TEST: Joi.string().required(),
+  GENPOP_EMAIL: Joi.string().required(),
+  EMAIL_FROM: Joi.string().required(),
+  GMAIL_APP_PASSWORD: Joi.string().required(),
+  GMAIL_USER: Joi.string().required(),
+  EMAIL_HOST: Joi.string().required(),
+  STUDENT_URL: Joi.string().required(),
 });
