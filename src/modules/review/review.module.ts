@@ -5,11 +5,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from 'src/database/entities';
 import { JwtStrategy } from 'src/helpers/strategies';
 import { AdminResolver, InstructorResolver } from './resolvers';
-import { AdminService, InstructorService } from './services';
+import {
+  AdminService,
+  InstructorService,
+  MeilisearchConsumer,
+  MeilisearchProducer,
+  MeilisearchService,
+} from './services';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
     ConfigModule,
+    BullModule.registerQueue({
+      name: 'meilisearch-queue',
+    }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -29,6 +39,9 @@ import { AdminService, InstructorService } from './services';
     JwtStrategy,
     AdminResolver,
     InstructorResolver,
+    MeilisearchConsumer,
+    MeilisearchProducer,
+    MeilisearchService,
   ],
 })
 export class ReviewModule {}

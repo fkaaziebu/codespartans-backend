@@ -20,12 +20,14 @@ import {
 import { IssueStatusType } from '../../../database/types/issue.type';
 import { ReviewStatusType } from '../../../database/types/review.type';
 import { IssueInfoInput, ReviewInfoInput } from '../inputs';
+import { MeilisearchProducer } from './meilisearch.producer';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectRepository(Admin)
     private adminRepository: Repository<Admin>,
+    private readonly meilisearchProducer: MeilisearchProducer,
   ) {}
 
   async listQuestionsForVersionPaginated({
@@ -409,6 +411,9 @@ export class AdminService {
         courseVersion.status = VersionStatusType.APPROVED;
         await transactionalEntityManager.save(Version, courseVersion);
         await transactionalEntityManager.save(Course, courseVersion.course);
+
+        // Update meilisearch documents
+        await this.meilisearchProducer.updateMeilisearchDocuments();
 
         return courseVersion;
       },
