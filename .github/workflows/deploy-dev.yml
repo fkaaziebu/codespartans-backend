@@ -28,7 +28,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker buildx build \
-            --platform linux/arm64 \
+            --platform linux/amd64 \
             --tag ${{ secrets.DOCKER_USERNAME }}/codespartans-backend:latest \
             --push \
             .
@@ -44,10 +44,10 @@ jobs:
             cd ~/codespartans || mkdir ~/codespartans && cd ~/codespartans
 
             # Update system
-            sudo dnf update -y
+            sudo apt-get update -y
 
             # Install Docker
-            sudo dnf install -y docker
+            sudo apt-get install -y docker.io
 
             # Start & enable Docker service
             sudo systemctl start docker
@@ -56,9 +56,10 @@ jobs:
             # Add ec2-user to docker group (so we can run docker without sudo)
             sudo usermod -aG docker ec2-user
 
-            # Install Docker Compose v2 (plugin-based in AL2023)
-            sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m) -o /usr/libexec/docker/cli-plugins/docker-compose
-            sudo chmod +x /usr/libexec/docker/cli-plugins/docker-compose
+            # Install Docker Compose v2 plugin
+            sudo mkdir -p /usr/local/lib/docker/cli-plugins
+            sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m) -o /usr/local/lib/docker/cli-plugins/docker-compose
+            sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
             # Verify installation
             docker --version
