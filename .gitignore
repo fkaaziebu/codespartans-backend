@@ -57,3 +57,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Meilisearch local data
 /meili_data
+
+# SSH key
+codespartans-key

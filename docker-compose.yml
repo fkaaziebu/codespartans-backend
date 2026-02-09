@@ -18,6 +18,19 @@ services:
     networks:
       - codespartans-network
 
+  meilisearch:
+    image: getmeili/meilisearch:v1.16
+    container_name: meilisearch
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: 'password'
+    ports:
+      - '7700:7700'
+    volumes:
+      - ./meili_data:/meili_data
+    networks:
+      - codespartans-network
+
   codespartans-backend:
     image: fkaaziebu/codespartans-backend
     container_name: codespartans-backend

@@ -77,7 +77,7 @@ export class OrganizationResolver {
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => CourseConnection)
-  listCourses(
+  listCoursesForOrganization(
     @Context() context,
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
