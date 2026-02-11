@@ -44,10 +44,10 @@ jobs:
             cd ~/codespartans || mkdir ~/codespartans && cd ~/codespartans
 
             # Update system
-            sudo apt-get update -y
+            sudo yum update -y
 
             # Install Docker
-            sudo apt-get install -y docker.io
+            sudo yum install -y docker
 
             # Start & enable Docker service
             sudo systemctl start docker
@@ -58,7 +58,7 @@ jobs:
 
             # Install Docker Compose v2 plugin
             sudo mkdir -p /usr/local/lib/docker/cli-plugins
-            sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m) -o /usr/local/lib/docker/cli-plugins/docker-compose
+            sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
             sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
             # Verify installation
@@ -66,9 +66,9 @@ jobs:
             docker compose version
 
             # Cleanup old containers/images
-            docker stop $(docker ps -a -q)
-            docker rm $(docker ps -a -q)
-            docker rmi $(docker images -a -q)
+            docker stop $(docker ps -a -q) 2>/dev/null || true
+            docker rm $(docker ps -a -q) 2>/dev/null || true
+            docker rmi $(docker images -a -q) 2>/dev/null || true
             # remove if you need data to persist
             # docker system prune -af
             # docker volume prune -f
