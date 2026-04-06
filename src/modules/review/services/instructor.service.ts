@@ -271,7 +271,7 @@ export class InstructorService {
         issue.status = issueStatus;
         issue.response = response;
 
-        return await transactionalEntityManager.save(Issue, issue);
+        return transactionalEntityManager.save(Issue, issue);
       },
     );
   }

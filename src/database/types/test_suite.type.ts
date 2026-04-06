@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { QuestionTypeClass } from './question.type';
+import { TestTypeClass } from './test.type';
 
 enum SuiteDifficultyType {
   BEGINNER = 'BEGINNER',
@@ -22,6 +23,9 @@ export class TestSuiteTypeClass {
 
   @Field()
   description: string;
+
+  @Field(() => [TestTypeClass], { nullable: true })
+  attempts?: TestTypeClass[];
 
   @Field(() => [String])
   keywords: string[];

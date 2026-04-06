@@ -8,6 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import {
+  Course,
   Question,
   Student,
   SubmittedAnswer,
@@ -21,6 +22,7 @@ import {
 } from '../../../database/types/test.type';
 import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
+import { CourseTypeClass } from 'src/database/types';
 
 @Injectable()
 export class StudentService {
@@ -300,7 +302,7 @@ export class StudentService {
   }: {
     email: string;
     courseId: string;
-  }) {
+  }): Promise<CourseTypeClass> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
@@ -317,7 +319,51 @@ export class StudentService {
           ],
         });
 
-        return student.subscribed_courses[0];
+        const test = await transactionalEntityManager.find(Test, {
+          where: {
+            student: {
+              email: email,
+            },
+            test_suite: In(
+              student.subscribed_courses[0].approved_version.test_suites.map(
+                (st) => st.id,
+              ),
+            ),
+          },
+          relations: [
+            'test_suite',
+            'submitted_answers.question',
+            'time_events',
+          ],
+        });
+
+        return {
+          ...student.subscribed_courses[0],
+          approved_version: {
+            ...student.subscribed_courses[0].approved_version,
+            test_suites:
+              student.subscribed_courses[0].approved_version.test_suites.map(
+                (suite) => ({
+                  ...suite,
+                  attempts: test
+                    .filter((tst) => tst.test_suite.id === suite.id)
+                    .sort(
+                      (a, b) =>
+                        new Date(
+                          a.time_events.find(
+                            (e) => e.type === TimeEventType.STARTED,
+                          ).recorded_at,
+                        ).valueOf() -
+                        new Date(
+                          b.time_events.find(
+                            (e) => e.type === TimeEventType.STARTED,
+                          ).recorded_at,
+                        ).valueOf(),
+                    ),
+                }),
+              ),
+          },
+        };
       },
     );
   }

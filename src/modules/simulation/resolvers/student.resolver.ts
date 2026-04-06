@@ -62,7 +62,8 @@ export class StudentResolver {
   startTest(
     @Context() context,
     @Args('suiteId') suiteId: string,
-    @Args('mode', { nullable: true }) mode?: TestModeType,
+    @Args('mode', { type: () => TestModeType, nullable: true })
+    mode?: TestModeType,
   ) {
     const { email } = context.req.user;
 
