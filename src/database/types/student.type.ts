@@ -16,6 +16,9 @@ export class StudentTypeClass {
   @Field()
   email: string;
 
+  @Field()
+  is_setup_completed: boolean;
+
   @Field(() => [CourseTypeClass], { nullable: true })
   subscribed_courses?: CourseTypeClass[];
 

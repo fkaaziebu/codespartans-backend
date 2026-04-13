@@ -1,6 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CartTypeClass, CheckoutTypeClass } from 'src/database/types';
+import {
+  CartTypeClass,
+  CheckoutTypeClass,
+  StudentTypeClass,
+} from 'src/database/types';
 import { PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
@@ -9,6 +17,7 @@ import {
   Category,
   Checkout,
   Course,
+  Organization,
   Student,
 } from '../../../database/entities';
 import { CourseFilterInput } from '../inputs';
@@ -21,6 +30,10 @@ export class StudentService {
     private studentRepository: Repository<Student>,
     @InjectRepository(Course)
     private courseRepository: Repository<Course>,
+    @InjectRepository(Organization)
+    private organizationRepository: Repository<Organization>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
   ) {}
 
   async getOrganizationCourse({
@@ -181,6 +194,39 @@ export class StudentService {
     }
 
     return student.cart.categories || [];
+  }
+
+  async listOrganizationCategories({
+    email,
+    searchTerm,
+  }: {
+    email: string;
+    searchTerm?: string;
+  }): Promise<Category[]> {
+    const student = await this.studentRepository.findOne({
+      where: {
+        email,
+      },
+      relations: ['organizations'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const organizationEmail = student.organizations.at(0).email;
+
+    const categories = await this.categoryRepository.find({
+      where: {
+        organization: {
+          email: organizationEmail,
+        },
+        name: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
+      },
+      relations: ['courses'],
+    });
+
+    return categories;
   }
 
   async addCourseToCart({
@@ -441,6 +487,73 @@ export class StudentService {
         checkout.courses = courseToSubscribeTo;
         checkout.categories = categories;
         return await transactionalEntityManager.save(checkout);
+      },
+    );
+  }
+
+  async completeSetup({
+    email,
+    categoryId,
+    courseIds,
+  }: {
+    email: string;
+    categoryId: string;
+    courseIds: string[];
+  }): Promise<StudentTypeClass> {
+    return await this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+          relations: [
+            'cart.courses',
+            'cart.categories.courses',
+            'subscribed_courses',
+            'subscribed_categories',
+          ],
+        });
+
+        if (!student) {
+          throw new Error('Student not found');
+        }
+
+        // Throw an error if category has been subscribed to
+        if (
+          student.subscribed_categories.find((cat) => cat.id === categoryId)
+        ) {
+          throw new BadRequestException(
+            'You have already subscribed to this category',
+          );
+        }
+
+        const category = await transactionalEntityManager.findOne(Category, {
+          where: {
+            id: categoryId,
+            organization: {
+              students: {
+                email,
+              },
+            },
+          },
+          relations: ['courses'],
+        });
+
+        if (!category) {
+          throw new Error('Category not found');
+        }
+
+        const subscribedCourseIds = new Set(
+          student.subscribed_courses.map((c) => c.id),
+        );
+
+        const newCourses = category.courses.filter(
+          (c) => courseIds.includes(c.id) && !subscribedCourseIds.has(c.id),
+        );
+
+        student.subscribed_categories.push(category);
+        student.subscribed_courses.push(...newCourses);
+        student.is_setup_completed = true;
+
+        return await transactionalEntityManager.save(student);
       },
     );
   }

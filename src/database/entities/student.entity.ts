@@ -34,6 +34,9 @@ export class Student {
   @Column({ nullable: true })
   reset_token: string;
 
+  @Column({ default: false })
+  is_setup_completed: boolean;
+
   @ManyToMany(() => Course)
   @JoinTable()
   subscribed_courses: Course[];

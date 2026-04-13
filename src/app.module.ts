@@ -9,6 +9,10 @@ import { InventoryModule } from './modules/inventory/inventory.module';
 import { MediaModule } from './modules/media/media.module';
 import { ReviewModule } from './modules/review/review.module';
 import { SimulationModule } from './modules/simulation/simulation.module';
+import { SetupDbService } from './setup-db.service';
+import { SetupDbResolver } from './setup-db.resolver';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { entities } from './database/entities';
 
 @Module({
   imports: [
@@ -27,6 +31,7 @@ import { SimulationModule } from './modules/simulation/simulation.module';
       driver: ApolloDriver,
       resolvers: {},
     }),
+    TypeOrmModule.forFeature(entities),
     DatabaseModule,
     AuthModule,
     ReviewModule,
@@ -35,7 +40,7 @@ import { SimulationModule } from './modules/simulation/simulation.module';
     SimulationModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [SetupDbService, SetupDbResolver],
   exports: [],
 })
 export class AppModule {}

@@ -24,6 +24,8 @@ export class OrganizationService {
     private organizationRepository: Repository<Organization>,
     @InjectRepository(Course)
     private courseRepository: Repository<Course>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
   ) {}
 
   async listInstructorsPaginated({

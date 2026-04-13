@@ -5,6 +5,7 @@ import {
   CategoryTypeClass,
   CheckoutTypeClass,
   CourseTypeClass,
+  StudentTypeClass,
 } from 'src/database/types';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
@@ -54,6 +55,20 @@ export class StudentResolver {
   }
 
   @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [CategoryTypeClass])
+  listOrganizationCategories(
+    @Context() context,
+    @Args('searchTerm', { nullable: true }) searchTerm?: string,
+  ) {
+    const { email } = context.req.user;
+
+    return this.studentService.listOrganizationCategories({
+      email,
+      searchTerm,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
   @Query(() => [CourseTypeClass])
   listCartCourses(@Context() context) {
     const { email } = context.req.user;
@@ -80,6 +95,19 @@ export class StudentResolver {
     const { email } = context.req.user;
 
     return this.studentService.addCourseToCart({ email, courseId });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => StudentTypeClass)
+  completeSetup(
+    @Context() context,
+    @Args('categoryId') categoryId: string,
+    @Args('courseIds', { type: () => [String!]!, nullable: false })
+    courseIds: string[],
+  ) {
+    const { email } = context.req.user;
+
+    return this.studentService.completeSetup({ email, categoryId, courseIds });
   }
 
   @UseGuards(GqlJwtAuthGuard)
