@@ -8,6 +8,7 @@ import {
   Organization,
   Question,
   Student,
+  TestSuite,
   Version,
 } from './database/entities';
 import { HashHelper } from './helpers';
@@ -47,6 +48,8 @@ export class SetupDbService {
     private questionRepository: Repository<Question>,
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
+    @InjectRepository(TestSuite)
+    private testSuiteRepository: Repository<TestSuite>,
   ) {}
 
   async setupDatabase() {
@@ -140,6 +143,7 @@ export class SetupDbService {
           version.version_number = 1;
           version.course = course;
           version.assigned_admin = admin;
+          await this.versionRepository.save(version);
 
           course.approved_version = version;
           await this.courseRepository.save(course);
@@ -148,11 +152,19 @@ export class SetupDbService {
         }),
       );
 
-      await this.versionRepository.save(new_wassce_course_versions);
+      // await this.versionRepository.save(new_wassce_course_versions);
 
       const new_wassce_course_version_questions: Question[][] =
         await Promise.all(
           new_wassce_course_versions.map(async (version) => {
+            const new_suite = new TestSuite();
+            new_suite.title = 'suiteTitle';
+            new_suite.description = 'suiteDescription';
+            new_suite.keywords = ['suiteKeywords'];
+            new_suite.course_version = version;
+
+            await this.testSuiteRepository.save(new_suite);
+
             // add questions to course version
             const questions: QuestionInput[] = [
               {
@@ -160,7 +172,12 @@ export class SetupDbService {
                 description: 'Heyyaaa test question 1.',
                 hints: ['hint one', 'hint two', 'hint three'],
                 solution_steps: ['step one', 'step two', 'step three'],
-                options: ['option one', 'option two', 'option three'],
+                options: [
+                  'option one',
+                  'option two',
+                  'option three',
+                  'option four',
+                ],
                 type: QuestionType.MULTIPLE_CHOICE,
                 tags: [QuestionTagType.TAG_ALGORITHM],
                 difficulty: QuestionDifficultyType.EASY,
@@ -172,7 +189,12 @@ export class SetupDbService {
                 description: 'Heyyaaa test question 2.',
                 hints: ['hint one', 'hint two', 'hint three'],
                 solution_steps: ['step one', 'step two', 'step three'],
-                options: ['option one', 'option two', 'option three'],
+                options: [
+                  'option one',
+                  'option two',
+                  'option three',
+                  'option four',
+                ],
                 type: QuestionType.MULTIPLE_CHOICE,
                 tags: [QuestionTagType.TAG_ALGORITHM],
                 difficulty: QuestionDifficultyType.EASY,
@@ -196,6 +218,7 @@ export class SetupDbService {
                 new_question.tags = question.tags;
                 new_question.type = question.type;
                 new_question.version = version;
+                new_question.test_suite = new_suite;
 
                 return new_question;
               }),

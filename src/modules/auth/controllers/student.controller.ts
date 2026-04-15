@@ -54,7 +54,7 @@ export class StudentController {
     const access_token = this.jwtService.sign(payload);
 
     res.redirect(
-      `${this.configService.get<string>('STUDENT_URL')}/oauth/redirect?token=${access_token}&organizationId=${user.organizations.at(0).id}&isSetupCompleted=${user.is_setup_completed}`,
+      `${this.configService.get<string>('STUDENT_URL')}/oauth/redirect?token=${access_token}&organizationId=${user.organizations.at(0).id}&isSetupCompleted=${Boolean(user.is_setup_completed)}`,
     );
   }
 

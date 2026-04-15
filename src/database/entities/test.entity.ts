@@ -11,13 +11,13 @@ import { SubmittedAnswer } from './sumitted_answer.entity';
 import { TestSuite } from './test_suite.entity';
 import { TimeEvent } from './time_event.entity';
 
-enum TestStatusType {
+export enum TestStatusType {
   ON_GOING = 'ON_GOING',
   PAUSED = 'PAUSED',
   ENDED = 'ENDED',
 }
 
-enum TestModeType {
+export enum TestModeType {
   PROCTURED = 'PROCTURED',
   UN_PROCTURED = 'UN_PROCTURED',
 }

@@ -6,13 +6,18 @@ import {
   CheckoutTypeClass,
   CourseTypeClass,
   StudentTypeClass,
+  TestTypeClass,
 } from 'src/database/types';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';
-import { CourseFilterInput } from '../inputs';
+import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import { StudentService } from '../services';
-import { StudentCourseResponse } from '../types';
+import {
+  AttemptConnection,
+  StudentCourseResponse,
+  StudentStatsResponse,
+} from '../types';
 
 @Resolver()
 export class StudentResolver {
@@ -76,6 +81,40 @@ export class StudentResolver {
     return this.studentService.listCartCourses({
       email,
     });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => AttemptConnection)
+  listAttempts(
+    @Context() context,
+    @Args('searchTerm', { nullable: true }) searchTerm?: string,
+    @Args('filter', { nullable: true }) filter?: AttemptFilterInput,
+    @Args('pagination', { nullable: true }) pagination?: PaginationInput,
+  ) {
+    const { email } = context.req.user;
+
+    return this.studentService.listAttempts({
+      email,
+      searchTerm,
+      filter,
+      pagination,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => TestTypeClass)
+  getActiveTest(@Context() context) {
+    const { email } = context.req.user;
+
+    return this.studentService.getActiveTest({ email });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => StudentStatsResponse)
+  getStudentStats(@Context() context) {
+    const { email } = context.req.user;
+
+    return this.studentService.getStats({ email });
   }
 
   @UseGuards(GqlJwtAuthGuard)

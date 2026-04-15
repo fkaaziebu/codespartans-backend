@@ -13,14 +13,17 @@ import { PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
 import {
-  Cart,
   Category,
   Checkout,
   Course,
   Organization,
   Student,
+  Test,
 } from '../../../database/entities';
-import { CourseFilterInput } from '../inputs';
+import { TimeEventType } from '../../../database/entities/time_event.entity';
+import { TestStatusType } from '../../../database/entities/test.entity';
+import { AttemptFilterInput, CourseFilterInput } from '../inputs';
+import { StudentStatsResponse } from '../types';
 // import { CourseTypeClass } from 'src/database/types';
 
 @Injectable()
@@ -145,7 +148,11 @@ export class StudentService {
         },
         title: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
       },
-      relations: ['instructor', 'approved_version.questions'],
+      relations: [
+        'instructor',
+        'approved_version.questions',
+        'approved_version.test_suites',
+      ],
     });
 
     return courses
@@ -556,5 +563,300 @@ export class StudentService {
         return await transactionalEntityManager.save(student);
       },
     );
+  }
+
+  async listAttempts({
+    email,
+    searchTerm,
+    filter,
+    pagination,
+  }: {
+    email: string;
+    searchTerm?: string;
+    filter?: AttemptFilterInput;
+    pagination?: PaginationInput;
+  }) {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: [
+        'tests.test_suite.course_version.course',
+        'tests.submitted_answers.question',
+        'tests.time_events',
+      ],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const computeScore = (test: Test): number => {
+      const { submitted_answers: answers } = test;
+      if (!answers.length) return 0;
+      const correct = answers.filter(
+        (a) => a.answer_provided === a.question?.correct_answer,
+      ).length;
+      return (correct / answers.length) * 100;
+    };
+
+    const computeStudyMs = (test: Test): number => {
+      const events = [...test.time_events].sort(
+        (a, b) =>
+          new Date(a.recorded_at).getTime() - new Date(b.recorded_at).getTime(),
+      );
+      let total = 0;
+      let sessionStart: Date | null = null;
+      for (const event of events) {
+        if (
+          event.type === TimeEventType.STARTED ||
+          event.type === TimeEventType.RESUMED
+        ) {
+          sessionStart = new Date(event.recorded_at);
+        } else if (
+          (event.type === TimeEventType.PAUSED ||
+            event.type === TimeEventType.ENDED) &&
+          sessionStart
+        ) {
+          total +=
+            new Date(event.recorded_at).getTime() - sessionStart.getTime();
+          sessionStart = null;
+        }
+      }
+      return total;
+    };
+
+    const endedTests = student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+
+    // Enrich all ended tests first so trend can look across the full history
+    const enriched = endedTests.map((test) => {
+      const answers = test.submitted_answers;
+      const correct = answers.filter(
+        (a) => a.answer_provided === a.question?.correct_answer,
+      ).length;
+      const wrong = answers.length - correct;
+      const score = computeScore(test);
+      const startEvent = test.time_events.find(
+        (e) => e.type === TimeEventType.STARTED,
+      );
+      const date_taken = startEvent
+        ? new Date(startEvent.recorded_at)
+        : new Date();
+      const time_taken = computeStudyMs(test);
+      const course_title = test.test_suite?.course_version?.course?.title ?? '';
+
+      return {
+        ...test,
+        course_title,
+        score,
+        date_taken,
+        correct,
+        wrong,
+        time_taken,
+        trend: null as number | null,
+      };
+    });
+
+    // Compute trend: compare each attempt against the previous attempt on the same course
+    const courseId = (t: (typeof enriched)[number]) =>
+      t.test_suite?.course_version?.course?.id;
+
+    for (const attempt of enriched) {
+      const cid = courseId(attempt);
+      if (!cid || !attempt.date_taken) continue;
+
+      const sameCourse = enriched
+        .filter((a) => courseId(a) === cid && a.date_taken)
+        .sort((a, b) => a.date_taken.getTime() - b.date_taken.getTime());
+
+      const idx = sameCourse.findIndex((a) => a.id === attempt.id);
+      if (idx > 0) {
+        const prevScore = sameCourse[idx - 1].score;
+        attempt.trend =
+          prevScore === 0
+            ? attempt.score > 0
+              ? 100
+              : 0
+            : ((attempt.score - prevScore) / prevScore) * 100;
+      }
+    }
+
+    // Sort most recent first
+    enriched.sort((a, b) => {
+      if (!a.date_taken) return 1;
+      if (!b.date_taken) return -1;
+      return b.date_taken.getTime() - a.date_taken.getTime();
+    });
+
+    let attempts = enriched;
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase().trim();
+      attempts = attempts.filter((t) => {
+        return (
+          t.course_title.toLowerCase().includes(term) ||
+          (t.test_suite?.title?.toLowerCase() ?? '').includes(term)
+        );
+      });
+    }
+
+    if (filter?.from || filter?.to) {
+      attempts = attempts.filter((t) => {
+        if (!t.date_taken) return false;
+        if (filter.from && t.date_taken < new Date(filter.from)) return false;
+        if (filter.to && t.date_taken > new Date(filter.to)) return false;
+        return true;
+      });
+    }
+
+    return PaginateHelper.paginate(attempts, pagination, (t) => t.id);
+  }
+
+  async getActiveTest({ email }: { email: string }) {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: [
+        'tests.submitted_answers.question',
+        'tests.test_suite.questions',
+        'tests.time_events',
+      ],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const activeTest = student.tests.find(
+      (t) =>
+        t.status === TestStatusType.ON_GOING ||
+        t.status === TestStatusType.PAUSED,
+    );
+
+    if (!activeTest) {
+      throw new NotFoundException('No active test found');
+    }
+
+    return activeTest;
+  }
+
+  async getStats({ email }: { email: string }): Promise<StudentStatsResponse> {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: ['tests.submitted_answers.question', 'tests.time_events'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const endedTests = student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+
+    const now = new Date();
+    const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = thisMonthStart;
+
+    const getTestStartTime = (test: Test): Date | null => {
+      const event = test.time_events.find(
+        (e) => e.type === TimeEventType.STARTED,
+      );
+      return event ? new Date(event.recorded_at) : null;
+    };
+
+    const thisMonthTests = endedTests.filter((t) => {
+      const start = getTestStartTime(t);
+      return start && start >= thisMonthStart;
+    });
+
+    const lastMonthTests = endedTests.filter((t) => {
+      const start = getTestStartTime(t);
+      return start && start >= lastMonthStart && start < lastMonthEnd;
+    });
+
+    const computeScore = (test: Test): number => {
+      const answers = test.submitted_answers;
+      if (!answers.length) return 0;
+      const correct = answers.filter(
+        (a) => a.answer_provided === a.question.correct_answer,
+      ).length;
+      return (correct / answers.length) * 100;
+    };
+
+    const computeAverage = (tests: Test[]): number => {
+      if (!tests.length) return 0;
+      return tests.reduce((sum, t) => sum + computeScore(t), 0) / tests.length;
+    };
+
+    const computePercentageChange = (
+      current: number,
+      previous: number,
+    ): number => {
+      if (previous === 0) return current > 0 ? 100 : 0;
+      return ((current - previous) / previous) * 100;
+    };
+
+    const computeStudyMs = (test: Test): number => {
+      const events = [...test.time_events].sort(
+        (a, b) =>
+          new Date(a.recorded_at).getTime() - new Date(b.recorded_at).getTime(),
+      );
+      let total = 0;
+      let sessionStart: Date | null = null;
+      for (const event of events) {
+        if (
+          event.type === TimeEventType.STARTED ||
+          event.type === TimeEventType.RESUMED
+        ) {
+          sessionStart = new Date(event.recorded_at);
+        } else if (
+          (event.type === TimeEventType.PAUSED ||
+            event.type === TimeEventType.ENDED) &&
+          sessionStart
+        ) {
+          total +=
+            new Date(event.recorded_at).getTime() - sessionStart.getTime();
+          sessionStart = null;
+        }
+      }
+      return total;
+    };
+
+    const thisMonthCount = thisMonthTests.length;
+    const lastMonthCount = lastMonthTests.length;
+    const thisMonthAvg = computeAverage(thisMonthTests);
+    const lastMonthAvg = computeAverage(lastMonthTests);
+
+    const totalStudyMs = endedTests.reduce(
+      (sum, t) => sum + computeStudyMs(t),
+      0,
+    );
+
+    const tagErrorCount = new Map<string, number>();
+    for (const test of endedTests) {
+      for (const answer of test.submitted_answers) {
+        if (answer.answer_provided !== answer.question.correct_answer) {
+          for (const tag of answer.question.tags) {
+            tagErrorCount.set(tag, (tagErrorCount.get(tag) ?? 0) + 1);
+          }
+        }
+      }
+    }
+
+    return {
+      total_test_taken: endedTests.length,
+      total_test_taken_percentage_change: computePercentageChange(
+        thisMonthCount,
+        lastMonthCount,
+      ),
+      average_score: computeAverage(endedTests),
+      average_score_percentage_change: computePercentageChange(
+        thisMonthAvg,
+        lastMonthAvg,
+      ),
+      study_hours: totalStudyMs / (1000 * 60 * 60),
+      weak_areas_count: tagErrorCount.size,
+    };
   }
 }
