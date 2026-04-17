@@ -17,6 +17,9 @@ import {
   AttemptConnection,
   StudentCourseResponse,
   StudentStatsResponse,
+  SubjectProgressResponse,
+  TestScoreHistoryResponse,
+  WeakSubjectAreaResponse,
 } from '../types';
 
 @Resolver()
@@ -115,6 +118,33 @@ export class StudentResolver {
     const { email } = context.req.user;
 
     return this.studentService.getStats({ email });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [SubjectProgressResponse])
+  studentSubjectProgress(
+    @Context() context,
+    @Args('testId', { nullable: true }) testId?: string,
+  ) {
+    const { email } = context.req.user;
+
+    return this.studentService.studentSubjectProgress({ email, testId });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [WeakSubjectAreaResponse])
+  weakSubjectAreas(@Context() context) {
+    const { email } = context.req.user;
+
+    return this.studentService.weakSubjectAreas({ email });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [TestScoreHistoryResponse])
+  getTestScoreHistory(@Context() context) {
+    const { email } = context.req.user;
+
+    return this.studentService.getTestScoreHistory({ email });
   }
 
   @UseGuards(GqlJwtAuthGuard)

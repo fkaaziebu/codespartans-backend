@@ -23,7 +23,12 @@ import {
 import { TimeEventType } from '../../../database/entities/time_event.entity';
 import { TestStatusType } from '../../../database/entities/test.entity';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
-import { StudentStatsResponse } from '../types';
+import {
+  StudentStatsResponse,
+  SubjectProgressResponse,
+  TestScoreHistoryResponse,
+  WeakSubjectAreaResponse,
+} from '../types';
 // import { CourseTypeClass } from 'src/database/types';
 
 @Injectable()
@@ -858,5 +863,159 @@ export class StudentService {
       study_hours: totalStudyMs / (1000 * 60 * 60),
       weak_areas_count: tagErrorCount.size,
     };
+  }
+
+  async studentSubjectProgress({
+    email,
+    testId,
+  }: {
+    email: string;
+    testId?: string;
+  }): Promise<SubjectProgressResponse[]> {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: ['tests.submitted_answers.question'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    let endedTests = student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+
+    if (testId) {
+      endedTests = endedTests.filter((t) => t.id === testId);
+      if (!endedTests.length) {
+        throw new NotFoundException('Test not found or not yet ended');
+      }
+    }
+
+    const tagStats = new Map<
+      string,
+      { total: number; correct: number; wrong: number }
+    >();
+
+    for (const test of endedTests) {
+      for (const answer of test.submitted_answers) {
+        const isCorrect =
+          answer.answer_provided === answer.question?.correct_answer;
+        for (const tag of answer.question?.tags ?? []) {
+          const stat = tagStats.get(tag) ?? { total: 0, correct: 0, wrong: 0 };
+          stat.total += 1;
+          if (isCorrect) stat.correct += 1;
+          else stat.wrong += 1;
+          tagStats.set(tag, stat);
+        }
+      }
+    }
+
+    return Array.from(tagStats.entries()).map(([subject, stat]) => ({
+      subject,
+      total: stat.total,
+      correct: stat.correct,
+      wrong: stat.wrong,
+      score: stat.total > 0 ? (stat.correct / stat.total) * 100 : 0,
+    }));
+  }
+
+  async weakSubjectAreas({
+    email,
+  }: {
+    email: string;
+  }): Promise<WeakSubjectAreaResponse[]> {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: ['tests.submitted_answers.question'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const endedTests = student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+
+    const tagStats = new Map<
+      string,
+      { error_count: number; total: number }
+    >();
+
+    for (const test of endedTests) {
+      for (const answer of test.submitted_answers) {
+        const isCorrect =
+          answer.answer_provided === answer.question?.correct_answer;
+        for (const tag of answer.question?.tags ?? []) {
+          const stat = tagStats.get(tag) ?? { error_count: 0, total: 0 };
+          stat.total += 1;
+          if (!isCorrect) stat.error_count += 1;
+          tagStats.set(tag, stat);
+        }
+      }
+    }
+
+    return Array.from(tagStats.entries())
+      .map(([subject, stat]) => ({
+        subject,
+        error_count: stat.error_count,
+        total: stat.total,
+        accuracy:
+          stat.total > 0
+            ? ((stat.total - stat.error_count) / stat.total) * 100
+            : 100,
+      }))
+      .sort((a, b) => a.accuracy - b.accuracy);
+  }
+
+  async getTestScoreHistory({
+    email,
+  }: {
+    email: string;
+  }): Promise<TestScoreHistoryResponse[]> {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: [
+        'tests.submitted_answers.question',
+        'tests.time_events',
+        'tests.test_suite.course_version.course',
+      ],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const endedTests = student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+
+    return endedTests
+      .map((test) => {
+        const answers = test.submitted_answers;
+        const correct = answers.filter(
+          (a) => a.answer_provided === a.question?.correct_answer,
+        ).length;
+        const score = answers.length > 0 ? (correct / answers.length) * 100 : 0;
+
+        const startEvent = test.time_events.find(
+          (e) => e.type === TimeEventType.STARTED,
+        );
+        const date_taken = startEvent
+          ? new Date(startEvent.recorded_at)
+          : new Date();
+
+        const course_title =
+          test.test_suite?.course_version?.course?.title ?? '';
+
+        return {
+          test_id: test.id,
+          course_title,
+          score,
+          date_taken,
+        };
+      })
+      .sort((a, b) => a.date_taken.getTime() - b.date_taken.getTime());
   }
 }

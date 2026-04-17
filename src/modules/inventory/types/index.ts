@@ -8,3 +8,6 @@ export { RequestedReviewConnection } from './requested-review-connection.type';
 export { StatsResponse } from './stats-response.type';
 export { StudentCourseResponse } from './student-course-response.type';
 export { StudentStatsResponse } from './student-stats-response.type';
+export { SubjectProgressResponse } from './subject-progress-response.type';
+export { WeakSubjectAreaResponse } from './weak-subject-area-response.type';
+export { TestScoreHistoryResponse } from './test-score-history-response.type';
