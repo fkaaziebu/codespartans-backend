@@ -117,7 +117,7 @@ export class SetupDbService {
       ];
 
       const new_wassce_courses: Course[] = await Promise.all(
-        wassce_courses.map(async (course_name) => {
+        wassce_courses.map(async (course_name, idx) => {
           const wassce_course = new Course();
           wassce_course.avatar_url = 'https://example.com/avatar.jpg';
           wassce_course.currency = CurrencyType.USD;
@@ -126,6 +126,7 @@ export class SetupDbService {
           wassce_course.level = LevelType.BEGINNER;
           wassce_course.price = 100;
           wassce_course.title = course_name;
+          wassce_course.is_mandatory = idx > 4 ? false : true;
           wassce_course.instructor = instructor;
           wassce_course.organization = organization;
 

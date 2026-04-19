@@ -52,6 +52,9 @@ export class CourseTypeClass {
   @Field()
   description: string;
 
+  @Field()
+  is_mandatory: boolean;
+
   @Field(() => [DomainType])
   domains: DomainType[];
 

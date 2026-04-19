@@ -49,6 +49,9 @@ export class Course {
   @Column()
   description: string;
 
+  @Column({ default: false })
+  is_mandatory: boolean;
+
   @Column({
     type: 'enum',
     enum: DomainType,
