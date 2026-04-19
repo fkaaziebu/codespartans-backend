@@ -6,6 +6,9 @@ export class AttemptResponse extends TestTypeClass {
   @Field()
   course_title: string;
 
+  @Field()
+  course_id: string;
+
   @Field(() => Float)
   score: number;
 

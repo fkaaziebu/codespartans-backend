@@ -649,10 +649,12 @@ export class StudentService {
         : new Date();
       const time_taken = computeStudyMs(test);
       const course_title = test.test_suite?.course_version?.course?.title ?? '';
+      const course_id = test.test_suite?.course_version?.course?.id ?? '';
 
       return {
         ...test,
         course_title,
+        course_id,
         score,
         date_taken,
         correct,
@@ -676,13 +678,7 @@ export class StudentService {
 
       const idx = sameCourse.findIndex((a) => a.id === attempt.id);
       if (idx > 0) {
-        const prevScore = sameCourse[idx - 1].score;
-        attempt.trend =
-          prevScore === 0
-            ? attempt.score > 0
-              ? 100
-              : 0
-            : ((attempt.score - prevScore) / prevScore) * 100;
+        attempt.trend = attempt.score - sameCourse[idx - 1].score;
       }
     }
 
@@ -938,10 +934,7 @@ export class StudentService {
       (t) => t.status === TestStatusType.ENDED,
     );
 
-    const tagStats = new Map<
-      string,
-      { error_count: number; total: number }
-    >();
+    const tagStats = new Map<string, { error_count: number; total: number }>();
 
     for (const test of endedTests) {
       for (const answer of test.submitted_answers) {
@@ -966,6 +959,7 @@ export class StudentService {
             ? ((stat.total - stat.error_count) / stat.total) * 100
             : 100,
       }))
+      .filter((item) => item.accuracy <= 65)
       .sort((a, b) => a.accuracy - b.accuracy);
   }
 
