@@ -70,7 +70,7 @@ export class EmailService {
     name: string,
     resetToken: string,
   ): Promise<void> {
-    const resetLink = `${this.configService.get<string>('APP_URL', 'http://localhost:3000')}/reset-password?token=${resetToken}&email=${to}`;
+    const resetLink = `${this.configService.get<string>('STUDENT_URL', 'http://localhost:3000')}/reset-password?token=${resetToken}&email=${to}`;
     const html = this.compileTemplate('password-reset', { name, resetLink });
 
     const mailOptions = {
