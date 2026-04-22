@@ -9,8 +9,14 @@
         "include": "**/*.hbs",
         "outDir": "dist",
         "watchAssets": true
+      },
+      {
+        "include": "**/*.{jpeg,png}",
+        "outDir": "dist",
+        "watchAssets": true
       }
     ],
+
     "watchAssets": true
   }
 }

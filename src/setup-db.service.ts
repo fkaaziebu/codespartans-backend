@@ -161,7 +161,8 @@ export class SetupDbService {
       );
 
       const getImageBuffer = (filename: string): Buffer => {
-        const filePath = path.resolve(process.cwd(), 'data', filename);
+        const imagePath = path.join(__dirname, '/data/', `${filename}`);
+        const filePath = path.resolve(imagePath);
         const imageBuffer = fs.readFileSync(filePath);
         return imageBuffer;
       };
@@ -172,15 +173,51 @@ export class SetupDbService {
         string,
         { filename: string; mime: string; ext: string }
       > = {
-        Mathematics: { filename: 'math_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        'English Language': { filename: 'english_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Physics: { filename: 'physics_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Chemistry: { filename: 'chemistry_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Biology: { filename: 'biology_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Economics: { filename: 'economics_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Geography: { filename: 'geography_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Literature: { filename: 'literature_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Government: { filename: 'government_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        Mathematics: {
+          filename: 'math_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        'English Language': {
+          filename: 'english_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        Physics: {
+          filename: 'physics_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        Chemistry: {
+          filename: 'chemistry_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        Biology: {
+          filename: 'biology_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        Economics: {
+          filename: 'economics_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        Geography: {
+          filename: 'geography_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        Literature: {
+          filename: 'literature_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        Government: {
+          filename: 'government_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
         History: { filename: 'history_1.png', mime: 'image/png', ext: 'png' },
       };
 
@@ -2327,8 +2364,7 @@ export class SetupDbService {
             const courseTitle = version.course.title;
             const suites = courseQuestionsMap[courseTitle];
             const subjectImageUrl =
-              subjectImageUrls[courseTitle] ||
-              subjectImageUrls['Mathematics'];
+              subjectImageUrls[courseTitle] || subjectImageUrls['Mathematics'];
 
             const allQuestions: Question[] = [];
 
