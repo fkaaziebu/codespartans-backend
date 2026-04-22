@@ -955,7 +955,10 @@ export class StudentService {
   }): Promise<WeakSubjectAreaResponse[]> {
     const student = await this.studentRepository.findOne({
       where: { email },
-      relations: ['tests.submitted_answers.question'],
+      relations: [
+        'tests.submitted_answers.question',
+        'tests.test_suite.questions',
+      ],
     });
 
     if (!student) {
@@ -976,6 +979,10 @@ export class StudentService {
     const tagStats = new Map<string, { error_count: number; total: number }>();
 
     for (const test of endedTests) {
+      const answeredQuestionIds = new Set(
+        test.submitted_answers.map((a) => a.question?.id).filter(Boolean),
+      );
+
       for (const answer of test.submitted_answers) {
         const isCorrect =
           answer.answer_provided === answer.question?.correct_answer;
@@ -983,6 +990,16 @@ export class StudentService {
           const stat = tagStats.get(tag) ?? { error_count: 0, total: 0 };
           stat.total += 1;
           if (!isCorrect) stat.error_count += 1;
+          tagStats.set(tag, stat);
+        }
+      }
+
+      for (const question of test.test_suite?.questions ?? []) {
+        if (answeredQuestionIds.has(question.id)) continue;
+        for (const tag of question.tags ?? []) {
+          const stat = tagStats.get(tag) ?? { error_count: 0, total: 0 };
+          stat.total += 1;
+          stat.error_count += 1;
           tagStats.set(tag, stat);
         }
       }
