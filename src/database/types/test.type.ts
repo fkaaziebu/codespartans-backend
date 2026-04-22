@@ -43,4 +43,7 @@ export class TestTypeClass {
 
   @Field(() => [RecommendationTypeClass], { nullable: true })
   recommendations?: RecommendationTypeClass[];
+
+  @Field(() => String, { nullable: true })
+  course_id?: string;
 }

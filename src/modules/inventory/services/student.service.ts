@@ -9,7 +9,7 @@ import {
   CheckoutTypeClass,
   StudentTypeClass,
 } from 'src/database/types';
-import { PaginateHelper } from 'src/helpers';
+import { HashHelper, PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
 import {
@@ -21,7 +21,10 @@ import {
   Test,
 } from '../../../database/entities';
 import { TimeEventType } from '../../../database/entities/time_event.entity';
-import { TestStatusType } from '../../../database/entities/test.entity';
+import {
+  TestModeType,
+  TestStatusType,
+} from '../../../database/entities/test.entity';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import {
   StudentStatsResponse,
@@ -42,6 +45,8 @@ export class StudentService {
     private organizationRepository: Repository<Organization>,
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
+    @InjectRepository(Test)
+    private testRepository: Repository<Test>,
   ) {}
 
   async getOrganizationCourse({
@@ -719,6 +724,7 @@ export class StudentService {
       relations: [
         'tests.submitted_answers.question',
         'tests.test_suite.questions',
+        'tests.test_suite.course_version.course',
         'tests.time_events',
       ],
     });
@@ -737,7 +743,31 @@ export class StudentService {
       throw new NotFoundException('No active test found');
     }
 
-    return activeTest;
+    return {
+      ...activeTest,
+      course_id: activeTest.test_suite?.course_version?.course?.id ?? null,
+    };
+  }
+
+  async getTest({ email, testId }: { email: string; testId: string }) {
+    const test = await this.testRepository.findOne({
+      where: { id: testId, student: { email } },
+      relations: [
+        'submitted_answers.question',
+        'test_suite.questions',
+        'test_suite.course_version.course',
+        'time_events',
+      ],
+    });
+
+    if (!test) {
+      throw new NotFoundException('Test not found');
+    }
+
+    return {
+      ...test,
+      course_id: test.test_suite?.course_version?.course?.id ?? null,
+    };
   }
 
   async getStats({ email }: { email: string }): Promise<StudentStatsResponse> {
@@ -918,8 +948,10 @@ export class StudentService {
 
   async weakSubjectAreas({
     email,
+    testId,
   }: {
     email: string;
+    testId?: string;
   }): Promise<WeakSubjectAreaResponse[]> {
     const student = await this.studentRepository.findOne({
       where: { email },
@@ -930,9 +962,16 @@ export class StudentService {
       throw new NotFoundException('Student not found');
     }
 
-    const endedTests = student.tests.filter(
+    let endedTests = student.tests.filter(
       (t) => t.status === TestStatusType.ENDED,
     );
+
+    if (testId) {
+      endedTests = endedTests.filter((t) => t.id === testId);
+      if (!endedTests.length) {
+        throw new NotFoundException('Test not found or not yet ended');
+      }
+    }
 
     const tagStats = new Map<string, { error_count: number; total: number }>();
 
@@ -965,8 +1004,10 @@ export class StudentService {
 
   async getTestScoreHistory({
     email,
+    testId,
   }: {
     email: string;
+    testId?: string;
   }): Promise<TestScoreHistoryResponse[]> {
     const student = await this.studentRepository.findOne({
       where: { email },
@@ -981,8 +1022,23 @@ export class StudentService {
       throw new NotFoundException('Student not found');
     }
 
+    let testMode: TestModeType | undefined;
+    let courseId: string | undefined;
+    if (testId) {
+      const test = student.tests.find((t) => t.id === testId);
+      if (!test) {
+        throw new NotFoundException('Test not found');
+      }
+      testMode = test.mode;
+      courseId = test.test_suite?.course_version?.course?.id;
+    }
+
     const endedTests = student.tests.filter(
-      (t) => t.status === TestStatusType.ENDED,
+      (t) =>
+        t.status === TestStatusType.ENDED &&
+        (testMode === undefined || t.mode === testMode) &&
+        (courseId === undefined ||
+          t.test_suite?.course_version?.course?.id === courseId),
     );
 
     return endedTests
@@ -1011,5 +1067,29 @@ export class StudentService {
         };
       })
       .sort((a, b) => a.date_taken.getTime() - b.date_taken.getTime());
+  }
+
+  async changeStudentPassword({
+    email,
+    currentPassword,
+    newPassword,
+  }: {
+    email: string;
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<StudentTypeClass> {
+    const student = await this.studentRepository.findOne({ where: { email } });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const isValid = await HashHelper.compare(currentPassword, student.password);
+    if (!isValid) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    student.password = await HashHelper.encrypt(newPassword);
+    return await this.studentRepository.save(student);
   }
 }

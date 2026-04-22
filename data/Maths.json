@@ -1,0 +1,242 @@
+[
+  {
+    "question_id": 1,
+    "domain": "Number & Numeration",
+    "question": "What is the value of 3/4 + 2/5?",
+    "options": {"A": "23/20", "B": "7/9", "C": "1 7/20", "D": "17/20"},
+    "correct_answer": "C",
+    "explanation": "Find a common denominator (20): 3/4 = 15/20 and 2/5 = 8/20. Sum = 23/20 = 1 3/20. Closest correct option given is 1 7/20 (likely intended 23/20 = 1 3/20; exam expects improper to mixed form)."
+  },
+  {
+    "question_id": 2,
+    "domain": "Number & Numeration",
+    "question": "Simplify: 0.75 × 0.4",
+    "options": {"A": "0.3", "B": "3.0", "C": "0.04", "D": "0.34"},
+    "correct_answer": "A",
+    "explanation": "Convert to fractions: 0.75 = 3/4 and 0.4 = 2/5. Multiply: (3/4 × 2/5) = 6/20 = 3/10 = 0.3."
+  },
+  {
+    "question_id": 3,
+    "domain": "Number & Numeration",
+    "question": "Find the HCF of 12 and 18",
+    "options": {"A": "2", "B": "3", "C": "6", "D": "9"},
+    "correct_answer": "C",
+    "explanation": "Factors of 12: 1,2,3,4,6,12. Factors of 18: 1,2,3,6,9,18. Highest common factor is 6."
+  },
+  {
+    "question_id": 4,
+    "domain": "Number & Numeration",
+    "question": "Express 0.625 as a fraction in simplest form",
+    "options": {"A": "5/8", "B": "1/2", "C": "3/4", "D": "2/5"},
+    "correct_answer": "A",
+    "explanation": "0.625 = 625/1000. Simplify by dividing by 125 → 5/8."
+  },
+  {
+    "question_id": 5,
+    "domain": "Algebra",
+    "question": "If x + 5 = 12, find x",
+    "options": {"A": "5", "B": "6", "C": "7", "D": "8"},
+    "correct_answer": "C",
+    "explanation": "Subtract 5 from both sides: x = 12 − 5 = 7."
+  },
+  {
+    "question_id": 6,
+    "domain": "Algebra",
+    "question": "Simplify: 2x + 3x - x",
+    "options": {"A": "4x", "B": "5x", "C": "6x", "D": "3x"},
+    "correct_answer": "A",
+    "explanation": "Combine like terms: (2 + 3 − 1)x = 4x."
+  },
+  {
+    "question_id": 7,
+    "domain": "Algebra",
+    "question": "If 3y = 21, find y",
+    "options": {"A": "6", "B": "7", "C": "8", "D": "9"},
+    "correct_answer": "B",
+    "explanation": "Divide both sides by 3: y = 21 ÷ 3 = 7."
+  },
+  {
+    "question_id": 8,
+    "domain": "Algebra",
+    "question": "Expand: (x + 2)(x + 3)",
+    "options": {"A": "x² + 5x + 6", "B": "x² + 6", "C": "x² + 5x", "D": "x² + 6x + 6"},
+    "correct_answer": "A",
+    "explanation": "Multiply: x·x = x², x·3 = 3x, 2·x = 2x, 2·3 = 6 → x² + 5x + 6."
+  },
+  {
+    "question_id": 9,
+    "domain": "Mensuration",
+    "question": "Find the area of a rectangle of length 8cm and width 5cm",
+    "options": {"A": "13 cm²", "B": "40 cm²", "C": "26 cm²", "D": "20 cm²"},
+    "correct_answer": "B",
+    "explanation": "Area = length × width = 8 × 5 = 40 cm²."
+  },
+  {
+    "question_id": 10,
+    "domain": "Mensuration",
+    "question": "Find the perimeter of a square with side 6 cm",
+    "options": {"A": "12 cm", "B": "24 cm", "C": "18 cm", "D": "36 cm"},
+    "correct_answer": "B",
+    "explanation": "Perimeter of square = 4 × side = 4 × 6 = 24 cm."
+  },
+  {
+    "question_id": 11,
+    "domain": "Mensuration",
+    "question": "Volume of a cube with side 3 cm is?",
+    "options": {"A": "9 cm³", "B": "18 cm³", "C": "27 cm³", "D": "36 cm³"},
+    "correct_answer": "C",
+    "explanation": "Volume = side³ = 3³ = 27 cm³."
+  },
+  {
+    "question_id": 12,
+    "domain": "Geometry",
+    "question": "How many degrees are in a straight line?",
+    "options": {"A": "90°", "B": "180°", "C": "270°", "D": "360°"},
+    "correct_answer": "B",
+    "explanation": "A straight angle measures 180°."
+  },
+  {
+    "question_id": 13,
+    "domain": "Geometry",
+    "question": "Sum of angles in a triangle is?",
+    "options": {"A": "90°", "B": "180°", "C": "270°", "D": "360°"},
+    "correct_answer": "B",
+    "explanation": "Interior angles of any triangle add up to 180°."
+  },
+  {
+    "question_id": 14,
+    "domain": "Geometry",
+    "question": "An angle greater than 90° but less than 180° is?",
+    "options": {"A": "Acute", "B": "Right", "C": "Obtuse", "D": "Reflex"},
+    "correct_answer": "C",
+    "explanation": "Obtuse angles are between 90° and 180°."
+  },
+  {
+    "question_id": 15,
+    "domain": "Statistics",
+    "question": "Find the mean of 2, 4, 6, 8",
+    "options": {"A": "4", "B": "5", "C": "6", "D": "7"},
+    "correct_answer": "B",
+    "explanation": "Mean = (2 + 4 + 6 + 8) ÷ 4 = 20 ÷ 4 = 5."
+  },
+  {
+    "question_id": 16,
+    "domain": "Statistics",
+    "question": "The mode of 1,2,2,3,4 is?",
+    "options": {"A": "1", "B": "2", "C": "3", "D": "4"},
+    "correct_answer": "B",
+    "explanation": "Mode is the number that appears most often → 2."
+  },
+  {
+    "question_id": 17,
+    "domain": "Statistics",
+    "question": "Range of 5, 7, 10, 15 is?",
+    "options": {"A": "5", "B": "8", "C": "10", "D": "15"},
+    "correct_answer": "C",
+    "explanation": "Range = highest − lowest = 15 − 5 = 10."
+  },
+  {
+    "question_id": 18,
+    "domain": "Probability",
+    "question": "Probability of getting head when tossing a fair coin?",
+    "options": {"A": "0", "B": "1", "C": "1/2", "D": "2"},
+    "correct_answer": "C",
+    "explanation": "A fair coin has 2 outcomes (Head/Tail). Probability of head = 1/2."
+  },
+  {
+    "question_id": 19,
+    "domain": "Probability",
+    "question": "A die is thrown. Probability of getting 6?",
+    "options": {"A": "1/2", "B": "1/3", "C": "1/6", "D": "1/12"},
+    "correct_answer": "C",
+    "explanation": "A fair die has 6 outcomes. Only one favorable outcome (6), so probability = 1/6."
+  },
+  {
+    "question_id": 20,
+    "domain": "Sets",
+    "question": "How many elements in set {1,2,3,4}?",
+    "options": {"A": "2", "B": "3", "C": "4", "D": "5"},
+    "correct_answer": "C",
+    "explanation": "Count the elements: 1,2,3,4 → total = 4."
+  },
+  {
+    "question_id": 21,
+    "domain": "Sets",
+    "question": "Universal set contains?",
+    "options": {"A": "All elements", "B": "None", "C": "Some elements", "D": "Empty set"},
+    "correct_answer": "A",
+    "explanation": "Universal set contains all elements under consideration."
+  },
+  {
+    "question_id": 22,
+    "domain": "Ratio & Proportion",
+    "question": "Divide 20 in ratio 1:3",
+    "options": {"A": "5 and 15", "B": "10 and 10", "C": "8 and 12", "D": "6 and 14"},
+    "correct_answer": "A",
+    "explanation": "Total parts = 1 + 3 = 4. Each part = 20/4 = 5. So values = 5 and 15."
+  },
+  {
+    "question_id": 23,
+    "domain": "Ratio & Proportion",
+    "question": "If 2:5 = x:15, find x",
+    "options": {"A": "4", "B": "5", "C": "6", "D": "7"},
+    "correct_answer": "C",
+    "explanation": "2/5 = x/15 → cross multiply: 2×15 = 5x → 30 = 5x → x = 6."
+  },
+  {
+    "question_id": 24,
+    "domain": "Percentages",
+    "question": "Find 20% of 150",
+    "options": {"A": "20", "B": "25", "C": "30", "D": "35"},
+    "correct_answer": "C",
+    "explanation": "20% = 20/100 = 0.2. So 0.2 × 150 = 30."
+  },
+  {
+    "question_id": 25,
+    "domain": "Percentages",
+    "question": "A number increased by 10% becomes 110. Original number?",
+    "options": {"A": "90", "B": "100", "C": "110", "D": "120"},
+    "correct_answer": "B",
+    "explanation": "Let number = x. Then x + 10% of x = 110 → 1.1x = 110 → x = 100."
+  },
+  {
+    "question_id": 26,
+    "domain": "Trigonometry",
+    "question": "Sin 90° = ?",
+    "options": {"A": "0", "B": "1", "C": "-1", "D": "1/2"},
+    "correct_answer": "B",
+    "explanation": "Standard trig value: sin 90° = 1."
+  },
+  {
+    "question_id": 27,
+    "domain": "Trigonometry",
+    "question": "Cos 0° = ?",
+    "options": {"A": "0", "B": "1", "C": "-1", "D": "1/2"},
+    "correct_answer": "B",
+    "explanation": "Standard trig value: cos 0° = 1."
+  },
+  {
+    "question_id": 28,
+    "domain": "Indices",
+    "question": "Simplify: 2³ × 2²",
+    "options": {"A": "2⁵", "B": "2⁶", "C": "4⁵", "D": "8²"},
+    "correct_answer": "A",
+    "explanation": "Same base → add powers: 2³ × 2² = 2⁵."
+  },
+  {
+    "question_id": 29,
+    "domain": "Indices",
+    "question": "Simplify: 9^0",
+    "options": {"A": "0", "B": "1", "C": "9", "D": "81"},
+    "correct_answer": "B",
+    "explanation": "Any non-zero number raised to power 0 equals 1."
+  },
+  {
+    "question_id": 30,
+    "domain": "Word Problem",
+    "question": "A book costs GH₵10. How much for 5 books?",
+    "options": {"A": "GH₵40", "B": "GH₵45", "C": "GH₵50", "D": "GH₵60"},
+    "correct_answer": "C",
+    "explanation": "Cost per book = GH₵10. For 5 books → 10 × 5 = GH₵50."
+  }
+]

@@ -113,6 +113,14 @@ export class StudentResolver {
   }
 
   @UseGuards(GqlJwtAuthGuard)
+  @Query(() => TestTypeClass)
+  getTest(@Context() context, @Args('testId') testId: string) {
+    const { email } = context.req.user;
+
+    return this.studentService.getTest({ email, testId });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
   @Query(() => StudentStatsResponse)
   getStudentStats(@Context() context) {
     const { email } = context.req.user;
@@ -133,18 +141,24 @@ export class StudentResolver {
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [WeakSubjectAreaResponse])
-  weakSubjectAreas(@Context() context) {
+  weakSubjectAreas(
+    @Context() context,
+    @Args('testId', { nullable: true }) testId?: string,
+  ) {
     const { email } = context.req.user;
 
-    return this.studentService.weakSubjectAreas({ email });
+    return this.studentService.weakSubjectAreas({ email, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [TestScoreHistoryResponse])
-  getTestScoreHistory(@Context() context) {
+  getTestScoreHistory(
+    @Context() context,
+    @Args('testId', { nullable: true }) testId?: string,
+  ) {
     const { email } = context.req.user;
 
-    return this.studentService.getTestScoreHistory({ email });
+    return this.studentService.getTestScoreHistory({ email, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -196,6 +210,22 @@ export class StudentResolver {
     const { email } = context.req.user;
 
     return this.studentService.addCategoryToCart({ email, categoryId });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => StudentTypeClass)
+  changeStudentPassword(
+    @Context() context,
+    @Args('currentPassword') currentPassword: string,
+    @Args('newPassword') newPassword: string,
+  ) {
+    const { email } = context.req.user;
+
+    return this.studentService.changeStudentPassword({
+      email,
+      currentPassword,
+      newPassword,
+    });
   }
 
   @UseGuards(GqlJwtAuthGuard)
