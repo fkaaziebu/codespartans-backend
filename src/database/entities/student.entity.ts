@@ -37,6 +37,12 @@ export class Student {
   @Column({ default: false })
   is_setup_completed: boolean;
 
+  @Column({ default: false })
+  is_account_validated: boolean;
+
+  @Column({ nullable: true })
+  validation_code: string;
+
   @ManyToMany(() => Course)
   @JoinTable()
   subscribed_courses: Course[];

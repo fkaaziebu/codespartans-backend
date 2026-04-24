@@ -13,4 +13,12 @@ export class EmailProducer {
   }) {
     await this.emailQueue.add('send-password-reset', data);
   }
+
+  async sendAccountValidationEmail(data: {
+    email: string;
+    name: string;
+    validationCode: string;
+  }) {
+    await this.emailQueue.add('send-account-validation', data);
+  }
 }

@@ -117,14 +117,26 @@ export class StudentService {
 
         await transactionalEntityManager.save(Cart, cart);
 
+        const validationCode = Math.floor(
+          100000 + Math.random() * 900000,
+        ).toString();
+
         const student = new Student();
         student.name = name;
         student.email = email;
         student.password = await HashHelper.encrypt(password);
         student.cart = cart;
         student.organizations = [organization];
+        student.is_account_validated = false;
+        student.validation_code = validationCode;
 
         await transactionalEntityManager.save(Student, student);
+
+        await this.emailProducer.sendAccountValidationEmail({
+          email,
+          name,
+          validationCode,
+        });
 
         return { message: 'Student registered successfully' };
       },
@@ -158,6 +170,12 @@ export class StudentService {
           throw new BadRequestException('Email or password is incorrect');
         }
 
+        if (!student.is_account_validated) {
+          throw new BadRequestException(
+            'Account not verified. Please check your email for the verification code.',
+          );
+        }
+
         const payload: {
           id: string;
           name: string;
@@ -171,13 +189,117 @@ export class StudentService {
         };
 
         const access_token = this.jwtService.sign(payload);
+        const refresh_token = this.jwtService.sign(
+          { ...payload, type: 'refresh' },
+          { expiresIn: '30d' },
+        );
 
         return {
           ...student,
           token: access_token,
+          refresh_token,
         };
       },
     );
+  }
+
+  async completeStudentAccountValidation({
+    email,
+    validation_code,
+  }: {
+    email: string;
+    validation_code: string;
+  }): Promise<{ message: string }> {
+    return this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+        });
+
+        if (!student) {
+          throw new NotFoundException('Student not found');
+        }
+
+        if (student.is_account_validated) {
+          return { message: 'Account already verified' };
+        }
+
+        if (student.validation_code !== validation_code) {
+          throw new BadRequestException('Invalid verification code');
+        }
+
+        student.is_account_validated = true;
+        student.validation_code = null;
+        await transactionalEntityManager.save(Student, student);
+
+        return { message: 'Account verified successfully' };
+      },
+    );
+  }
+
+  async resendAccountValidationCode({
+    email,
+  }: {
+    email: string;
+  }): Promise<{ message: string }> {
+    return this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+        });
+
+        if (!student) {
+          throw new NotFoundException('Student not found');
+        }
+
+        if (student.is_account_validated) {
+          throw new BadRequestException('Account is already verified');
+        }
+
+        const validationCode = Math.floor(
+          100000 + Math.random() * 900000,
+        ).toString();
+
+        student.validation_code = validationCode;
+        await transactionalEntityManager.save(Student, student);
+
+        await this.emailProducer.sendAccountValidationEmail({
+          email,
+          name: student.name,
+          validationCode,
+        });
+
+        return { message: 'Verification code resent successfully' };
+      },
+    );
+  }
+
+  async refreshStudentToken({
+    refresh_token,
+  }: {
+    refresh_token: string;
+  }): Promise<{ access_token: string }> {
+    let payload: {
+      id: string;
+      name: string;
+      email: string;
+      role: 'STUDENT';
+      type: string;
+    };
+
+    try {
+      payload = this.jwtService.verify(refresh_token);
+    } catch {
+      throw new BadRequestException('Invalid or expired refresh token');
+    }
+
+    if (payload.type !== 'refresh') {
+      throw new BadRequestException('Invalid token type');
+    }
+
+    const { type: _type, ...tokenPayload } = payload;
+    const access_token = this.jwtService.sign(tokenPayload);
+    return { access_token };
   }
 
   async requestStudentPasswordReset({ email }: { email: string }) {
@@ -283,16 +405,28 @@ export class StudentService {
 
         await transactionalEntityManager.save(cart);
 
+        const validationCode = Math.floor(
+          100000 + Math.random() * 900000,
+        ).toString();
+
         const student = new Student();
         student.name = name;
         student.email = email;
         student.password = await HashHelper.encrypt('password');
         student.cart = cart;
         student.organizations = [organization];
+        student.is_account_validated = false;
+        student.validation_code = validationCode;
 
         await transactionalEntityManager.save(student);
 
         const savedUser = await transactionalEntityManager.save(student);
+
+        await this.emailProducer.sendAccountValidationEmail({
+          email,
+          name,
+          validationCode,
+        });
 
         const payload: {
           id: string;

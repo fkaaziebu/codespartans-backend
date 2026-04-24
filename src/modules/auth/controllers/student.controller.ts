@@ -39,6 +39,12 @@ export class StudentController {
 
     const { user } = req;
 
+    if (!user.is_account_validated) {
+      return res.redirect(
+        `${this.configService.get<string>('STUDENT_URL')}/validate-account?email=${user.email}`,
+      );
+    }
+
     const payload: {
       id: string;
       name: string;
@@ -72,14 +78,10 @@ export class StudentController {
     const { consent, ...consentData } = consentInfo;
 
     if (consent === 'yes') {
-      // Create new user account
       const payload = await this.studentService.createGoogleUser(consentData);
 
-      // Generate JWT
-      const access_token = this.jwtService.sign(payload);
-
       return {
-        redirectUrl: `${this.configService.get<string>('STUDENT_URL')}/oauth/redirect?token=${access_token}&organizationId=${payload.organizationId}`,
+        redirectUrl: `${this.configService.get<string>('STUDENT_URL')}/validate-account?email=${payload.email}`,
       };
     }
 

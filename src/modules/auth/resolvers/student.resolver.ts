@@ -7,6 +7,7 @@ import { StudentService } from '../services/student.service';
 import {
   OrganizationConnection,
   PasswordResetResponse,
+  RefreshTokenResponse,
   RegisterResponse,
   StudentLoginResponse,
 } from '../types';
@@ -56,6 +57,27 @@ export class StudentResolver {
       email,
       password,
     });
+  }
+
+  @Mutation(() => RefreshTokenResponse)
+  async refreshStudentToken(@Args('refresh_token') refresh_token: string) {
+    return this.studentService.refreshStudentToken({ refresh_token });
+  }
+
+  @Mutation(() => PasswordResetResponse)
+  async completeStudentAccountValidation(
+    @Args('email') email: string,
+    @Args('validation_code') validation_code: string,
+  ) {
+    return this.studentService.completeStudentAccountValidation({
+      email,
+      validation_code,
+    });
+  }
+
+  @Mutation(() => PasswordResetResponse)
+  async resendAccountValidationCode(@Args('email') email: string) {
+    return this.studentService.resendAccountValidationCode({ email });
   }
 
   @Mutation(() => PasswordResetResponse)

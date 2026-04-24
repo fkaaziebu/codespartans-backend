@@ -91,6 +91,24 @@ export class EmailService {
     }
   }
 
+  async sendAccountValidationEmail(
+    to: string,
+    name: string,
+    validationCode: string,
+  ): Promise<void> {
+    const html = this.compileTemplate('account-validation', {
+      name,
+      validationCode,
+    });
+
+    try {
+      await this.sendMail(to, 'Verify Your Account', '', html);
+    } catch (error) {
+      console.error('Failed to send account validation email:', error);
+      throw new Error('Failed to send account validation email');
+    }
+  }
+
   async validateEmail(email: string): Promise<boolean> {
     const apiKey = this.configService.get<string>('ABSTRACT_API_KEY');
     const url = `https://emailvalidation.abstractapi.com/v1/?api_key=${apiKey}&email=${email}`;
