@@ -1,4 +1,5 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { Question } from 'src/database/entities/question.entity';
 
 @ObjectType('WeakSubjectAreaResponse')
 export class WeakSubjectAreaResponse {
@@ -13,4 +14,7 @@ export class WeakSubjectAreaResponse {
 
   @Field(() => Float)
   accuracy: number;
+
+  @Field(() => [Question])
+  questions: Question[];
 }

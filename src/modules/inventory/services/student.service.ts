@@ -15,6 +15,7 @@ import {
   Checkout,
   Course,
   Organization,
+  Question,
   Student,
   Test,
 } from '../../../database/entities';
@@ -974,7 +975,10 @@ export class StudentService {
       }
     }
 
-    const tagStats = new Map<string, { error_count: number; total: number }>();
+    const tagStats = new Map<
+      string,
+      { error_count: number; total: number; questions: Map<string, Question> }
+    >();
 
     for (const test of endedTests) {
       const answeredQuestionIds = new Set(
@@ -985,9 +989,16 @@ export class StudentService {
         const isCorrect =
           answer.answer_provided === answer.question?.correct_answer;
         for (const tag of answer.question?.tags ?? []) {
-          const stat = tagStats.get(tag) ?? { error_count: 0, total: 0 };
+          const stat = tagStats.get(tag) ?? {
+            error_count: 0,
+            total: 0,
+            questions: new Map(),
+          };
           stat.total += 1;
-          if (!isCorrect) stat.error_count += 1;
+          if (!isCorrect) {
+            stat.error_count += 1;
+            if (answer.question) stat.questions.set(answer.question.id, answer.question);
+          }
           tagStats.set(tag, stat);
         }
       }
@@ -995,9 +1006,14 @@ export class StudentService {
       for (const question of test.test_suite?.questions ?? []) {
         if (answeredQuestionIds.has(question.id)) continue;
         for (const tag of question.tags ?? []) {
-          const stat = tagStats.get(tag) ?? { error_count: 0, total: 0 };
+          const stat = tagStats.get(tag) ?? {
+            error_count: 0,
+            total: 0,
+            questions: new Map(),
+          };
           stat.total += 1;
           stat.error_count += 1;
+          stat.questions.set(question.id, question);
           tagStats.set(tag, stat);
         }
       }
@@ -1012,6 +1028,7 @@ export class StudentService {
           stat.total > 0
             ? ((stat.total - stat.error_count) / stat.total) * 100
             : 100,
+        questions: Array.from(stat.questions.values()),
       }))
       .filter((item) => item.accuracy <= 65)
       .sort((a, b) => a.accuracy - b.accuracy);
