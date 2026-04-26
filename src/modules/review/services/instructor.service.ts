@@ -11,8 +11,7 @@ import {
   Review,
   Version,
 } from '../../../database/entities';
-import { IssueTypeClass } from '../../../database/types';
-import { IssueStatusType } from '../../../database/types/issue.type';
+import { Issue as IssueTypeClass, IssueStatusType } from '../../../database/entities/issue.entity';
 
 @Injectable()
 export class InstructorService {

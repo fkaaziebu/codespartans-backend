@@ -1,5 +1,5 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
-import { TestTypeClass } from 'src/database/types';
+import { Test as TestTypeClass } from 'src/database/entities/test.entity';
 
 @ObjectType('AttemptResponse')
 export class AttemptResponse extends TestTypeClass {

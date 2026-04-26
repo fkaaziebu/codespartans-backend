@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { VersionTypeClass } from 'src/database/types';
+import { Version as VersionTypeClass } from 'src/database/entities/version.entity';
 import { ReviewResponse } from './review-response.type';
 
 @ObjectType('VersionResponse')

@@ -18,13 +18,13 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from '../../../database/types/course.type';
-import { IssueStatusType } from '../../../database/types/issue.type';
+} from '../../../database/entities/course.entity';
+import { IssueStatusType } from '../../../database/entities/issue.entity';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from '../../../database/types/question.type';
+} from '../../../database/entities/question.entity';
 import { HashHelper } from '../../../helpers';
 import { QuestionInput } from '../../../modules/inventory/inputs';
 import { InstructorService } from './instructor.service';

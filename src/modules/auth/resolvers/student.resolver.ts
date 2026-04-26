@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { StudentTypeClass } from 'src/database/types';
+import { Student as StudentTypeClass } from 'src/database/entities/student.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { StudentService } from '../services/student.service';

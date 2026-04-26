@@ -1,3 +1,4 @@
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -22,11 +23,24 @@ export enum TestModeType {
   UN_PROCTURED = 'UN_PROCTURED',
 }
 
+registerEnumType(TestStatusType, {
+  name: 'TestStatusType',
+  description: 'Test status',
+});
+
+registerEnumType(TestModeType, {
+  name: 'TestModeType',
+  description: 'Test mode',
+});
+
+@ObjectType('Test')
 @Entity('tests')
 export class Test {
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field(() => TestStatusType)
   @Column({
     type: 'enum',
     enum: TestStatusType,
@@ -34,6 +48,7 @@ export class Test {
   })
   status: TestStatusType;
 
+  @Field(() => TestModeType)
   @Column({
     type: 'enum',
     enum: TestModeType,
@@ -41,17 +56,24 @@ export class Test {
   })
   mode: TestModeType;
 
+  @Field(() => TestSuite, { nullable: true })
   @ManyToOne(() => TestSuite)
   test_suite: TestSuite;
 
+  @Field(() => [SubmittedAnswer], { nullable: true })
   @OneToMany(() => SubmittedAnswer, (submittedAnswer) => submittedAnswer.test)
   submitted_answers: SubmittedAnswer[];
 
+  @Field(() => [TimeEvent], { nullable: true })
   @OneToMany(() => TimeEvent, (time_event) => time_event.test)
   time_events: TimeEvent[];
 
+  @Field(() => [Recommendation], { nullable: true })
   @OneToMany(() => Recommendation, (recommendation) => recommendation.test)
   recommendations: Recommendation[];
+
+  @Field(() => String, { nullable: true })
+  course_id?: string;
 
   @ManyToOne(() => Student, (student) => student.tests)
   student: Student;

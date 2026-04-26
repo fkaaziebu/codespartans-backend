@@ -10,7 +10,8 @@ import {
   TestSuite,
   Version,
 } from '../../../database/entities';
-import { CourseTypeClass, VersionTypeClass } from '../../../database/types';
+import { Course as CourseTypeClass } from '../../../database/entities/course.entity';
+import { Version as VersionTypeClass } from '../../../database/entities/version.entity';
 import { CourseInfoInput, QuestionInput } from '../inputs';
 
 @Injectable()

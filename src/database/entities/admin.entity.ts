@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -9,19 +10,28 @@ import {
 import { Organization } from './organization.entity';
 import { Version } from './version.entity';
 
-enum AdminStatusType {
+export enum AdminStatusType {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
 
+registerEnumType(AdminStatusType, {
+  name: 'AdminStatusType',
+  description: 'Admin status',
+});
+
+@ObjectType('Admin')
 @Entity('admins')
 export class Admin {
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field()
   @Column()
   name: string;
 
+  @Field()
   @Column({ unique: true })
   email: string;
 
@@ -29,6 +39,7 @@ export class Admin {
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  @Field(() => AdminStatusType)
   @Column({
     type: 'enum',
     enum: AdminStatusType,
@@ -36,9 +47,11 @@ export class Admin {
   })
   status: AdminStatusType;
 
+  @Field(() => Organization, { nullable: true })
   @ManyToOne(() => Organization, (organization) => organization.admins)
   organization: Organization;
 
+  @Field(() => [Version], { nullable: true })
   @OneToMany(() => Version, (version) => version.assigned_admin)
   assigned_course_versions_for_review: Version[];
 }

@@ -1,13 +1,11 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import {
-  CartTypeClass,
-  CategoryTypeClass,
-  CheckoutTypeClass,
-  CourseTypeClass,
-  StudentTypeClass,
-  TestTypeClass,
-} from 'src/database/types';
+import { Cart as CartTypeClass } from 'src/database/entities/cart.entity';
+import { Category as CategoryTypeClass } from 'src/database/entities/category.entity';
+import { Checkout as CheckoutTypeClass } from 'src/database/entities/checkout.entity';
+import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
+import { Student as StudentTypeClass } from 'src/database/entities/student.entity';
+import { Test as TestTypeClass } from 'src/database/entities/test.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';

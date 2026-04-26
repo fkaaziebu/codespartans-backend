@@ -4,11 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  CartTypeClass,
-  CheckoutTypeClass,
-  StudentTypeClass,
-} from 'src/database/types';
+import { Cart as CartTypeClass } from 'src/database/entities/cart.entity';
+import { Checkout as CheckoutTypeClass } from 'src/database/entities/checkout.entity';
+import { Student as StudentTypeClass } from 'src/database/entities/student.entity';
 import { HashHelper, PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
@@ -32,7 +30,7 @@ import {
   TestScoreHistoryResponse,
   WeakSubjectAreaResponse,
 } from '../types';
-// import { CourseTypeClass } from 'src/database/types';
+// import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
 
 @Injectable()
 export class StudentService {
@@ -1083,7 +1081,8 @@ export class StudentService {
           date_taken,
         };
       })
-      .sort((a, b) => a.date_taken.getTime() - b.date_taken.getTime());
+      .sort((a, b) => b.date_taken.getTime() - a.date_taken.getTime())
+      .slice(0, 10);
   }
 
   async changeStudentPassword({

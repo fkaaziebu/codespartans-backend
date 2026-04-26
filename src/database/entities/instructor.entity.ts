@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -10,19 +11,28 @@ import {
 import { Course } from './course.entity';
 import { Organization } from './organization.entity';
 
-enum InstructorStatusType {
+export enum InstructorStatusType {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
 
+registerEnumType(InstructorStatusType, {
+  name: 'InstructorStatusType',
+  description: 'Instructor status',
+});
+
+@ObjectType('Instructor')
 @Entity('instructors')
 export class Instructor {
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field()
   @Column()
   name: string;
 
+  @Field()
   @Column({ unique: true })
   email: string;
 
@@ -30,6 +40,7 @@ export class Instructor {
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  @Field(() => InstructorStatusType)
   @Column({
     type: 'enum',
     enum: InstructorStatusType,
@@ -37,10 +48,12 @@ export class Instructor {
   })
   status: InstructorStatusType;
 
+  @Field(() => [Organization], { nullable: true })
   @ManyToMany(() => Organization, (organization) => organization.instructors)
   @JoinTable()
   organizations: Organization[];
 
+  @Field(() => [Course], { nullable: true })
   @OneToMany(() => Course, (course) => course.instructor)
   created_courses: Course[];
 }

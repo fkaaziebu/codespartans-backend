@@ -1,5 +1,5 @@
 import { ObjectType } from '@nestjs/graphql';
-import { QuestionTypeClass } from 'src/database/types';
+import { Question as QuestionTypeClass } from 'src/database/entities/question.entity';
 import { Paginated } from '../../../helpers/types';
 
 @ObjectType('QuestionConnection')

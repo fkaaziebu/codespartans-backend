@@ -1,5 +1,5 @@
 import { ObjectType } from '@nestjs/graphql';
-import { OrganizationTypeClass } from 'src/database/types';
+import { Organization as OrganizationTypeClass } from 'src/database/entities/organization.entity';
 import { Paginated } from '../../../helpers/types';
 
 @ObjectType('OrganizationConnection')

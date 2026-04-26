@@ -18,15 +18,15 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from '../../../database/types/course.type';
+} from '../../../database/entities/course.entity';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from '../../../database/types/question.type';
+} from '../../../database/entities/question.entity';
 import { HashHelper } from '../../../helpers';
 import { StudentService } from './student.service';
-import { TestStatusType } from '../../../database/types/test.type';
+import { TestStatusType } from '../../../database/entities/test.entity';
 import { TimeEventType } from '../../../database/entities/time_event.entity';
 
 describe('StudentService', () => {

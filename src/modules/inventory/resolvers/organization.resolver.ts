@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CategoryTypeClass, VersionTypeClass } from 'src/database/types';
+import { Category as CategoryTypeClass } from 'src/database/entities/category.entity';
+import { Version as VersionTypeClass } from 'src/database/entities/version.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';

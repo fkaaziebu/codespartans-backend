@@ -5,7 +5,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AdminTypeClass, InstructorTypeClass } from 'src/database/types';
+import { Admin as AdminTypeClass } from 'src/database/entities/admin.entity';
+import { Instructor as InstructorTypeClass } from 'src/database/entities/instructor.entity';
 import { Repository } from 'typeorm';
 import { Admin, Instructor, Organization } from '../../../database/entities';
 import { HashHelper } from '../../../helpers';

@@ -1,14 +1,15 @@
+import { Field, ID, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Version } from './version.entity';
 import { TestSuite } from './test_suite.entity';
 
-enum QuestionType {
+export enum QuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   MULTIPLE_SELECT = 'MULTIPLE_SELECT',
   FILL_IN = 'FILL_IN',
 }
 
-enum QuestionTagType {
+export enum QuestionTagType {
   TAG_GENERAL = 'TAG_GENERAL',
 
   // Mathematics topics
@@ -117,32 +118,55 @@ enum QuestionTagType {
   TAG_AFRICAN_TRADITIONAL_RELIGION = 'TAG_AFRICAN_TRADITIONAL_RELIGION',
 }
 
-enum QuestionDifficultyType {
+export enum QuestionDifficultyType {
   EASY = 'EASY',
   MEDIUM = 'MEDIUM',
   HARD = 'HARD',
 }
 
+registerEnumType(QuestionType, {
+  name: 'QuestionType',
+  description: 'Question types',
+});
+
+registerEnumType(QuestionTagType, {
+  name: 'QuestionTagType',
+  description: 'Question tag types',
+});
+
+registerEnumType(QuestionDifficultyType, {
+  name: 'QuestionDifficultyType',
+  description: 'Question difficulty types',
+});
+
+@ObjectType('Question')
 @Entity('questions')
 export class Question {
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field(() => Int)
   @Column()
   question_number: number;
 
+  @Field()
   @Column()
   description: string;
 
+  @Field(() => [String])
   @Column('text', { array: true })
   hints: string[];
 
+  @Field(() => [String])
   @Column('text', { array: true })
   solution_steps: string[];
 
+  @Field(() => [String], { nullable: true })
   @Column('text', { array: true, nullable: true })
   options?: string[];
 
+  @Field(() => QuestionType)
   @Column({
     type: 'enum',
     enum: QuestionType,
@@ -150,6 +174,7 @@ export class Question {
   })
   type: QuestionType;
 
+  @Field(() => [QuestionTagType])
   @Column({
     type: 'enum',
     enum: QuestionTagType,
@@ -158,9 +183,11 @@ export class Question {
   })
   tags: QuestionTagType[];
 
+  @Field()
   @Column()
   correct_answer: string;
 
+  @Field(() => QuestionDifficultyType)
   @Column({
     type: 'enum',
     enum: QuestionDifficultyType,
@@ -168,9 +195,11 @@ export class Question {
   })
   difficulty: QuestionDifficultyType;
 
+  @Field(() => Int)
   @Column()
   estimated_time_in_ms: number;
 
+  @Field(() => Version, { nullable: true })
   @ManyToOne(() => Version, (version) => version.questions)
   version: Version;
 

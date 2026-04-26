@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AdminTypeClass, InstructorTypeClass } from 'src/database/types';
+import { Admin as AdminTypeClass } from 'src/database/entities/admin.entity';
+import { Instructor as InstructorTypeClass } from 'src/database/entities/instructor.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { OrganizationService } from '../services';
 import { OrganizationLoginResponse, RegisterResponse } from '../types';

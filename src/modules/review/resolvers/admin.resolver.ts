@@ -1,10 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import {
-  IssueTypeClass,
-  ReviewTypeClass,
-  VersionTypeClass,
-} from 'src/database/types';
+import { Issue as IssueTypeClass } from 'src/database/entities/issue.entity';
+import { Review as ReviewTypeClass } from 'src/database/entities/review.entity';
+import { Version as VersionTypeClass } from 'src/database/entities/version.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { IssueInfoInput, ReviewInfoInput } from '../inputs';

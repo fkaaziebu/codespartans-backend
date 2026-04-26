@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -16,14 +17,18 @@ import { Course } from './course.entity';
 import { Organization } from './organization.entity';
 import { Test } from './test.entity';
 
+@ObjectType('Student')
 @Entity('students')
 export class Student {
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field()
   @Column()
   name: string;
 
+  @Field()
   @Column({ unique: true })
   email: string;
 
@@ -34,6 +39,7 @@ export class Student {
   @Column({ nullable: true })
   reset_token: string;
 
+  @Field()
   @Column({ default: false })
   is_setup_completed: boolean;
 
@@ -43,21 +49,26 @@ export class Student {
   @Column({ nullable: true })
   validation_code: string;
 
+  @Field(() => [Course], { nullable: true })
   @ManyToMany(() => Course)
   @JoinTable()
   subscribed_courses: Course[];
 
+  @Field(() => [Category], { nullable: true })
   @ManyToMany(() => Category)
   @JoinTable()
   subscribed_categories: Category[];
 
+  @Field(() => [Organization], { nullable: true })
   @ManyToMany(() => Organization, (organization) => organization.students)
   @JoinTable()
   organizations: Organization[];
 
+  @Field(() => [Checkout], { nullable: true })
   @OneToMany(() => Checkout, (payment) => payment.student)
   checkouts: Checkout[];
 
+  @Field(() => Cart, { nullable: true })
   @OneToOne(() => Cart, (cart) => cart.student)
   @JoinColumn()
   cart: Cart;

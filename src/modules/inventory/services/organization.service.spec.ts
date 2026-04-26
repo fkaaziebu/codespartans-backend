@@ -19,14 +19,14 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from '../../../database/types/course.type';
-import { IssueStatusType } from '../../../database/types/issue.type';
+} from '../../../database/entities/course.entity';
+import { IssueStatusType } from '../../../database/entities/issue.entity';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from '../../../database/types/question.type';
-import { ReviewStatusType } from '../../../database/types/review.type';
+} from '../../../database/entities/question.entity';
+import { ReviewStatusType } from '../../../database/entities/review.entity';
 import { HashHelper } from '../../../helpers';
 import { QuestionInput } from '../inputs';
 import { OrganizationService } from './organization.service';

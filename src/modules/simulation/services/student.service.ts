@@ -19,10 +19,10 @@ import { TimeEventType } from '../../../database/entities/time_event.entity';
 import {
   TestModeType,
   TestStatusType,
-} from '../../../database/types/test.type';
+} from '../../../database/entities/test.entity';
 import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
-import { CourseTypeClass } from 'src/database/types';
+import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
 
 @Injectable()
 export class StudentService {

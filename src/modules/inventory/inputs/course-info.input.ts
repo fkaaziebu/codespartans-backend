@@ -3,7 +3,7 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from 'src/database/types/course.type';
+} from 'src/database/entities/course.entity';
 
 @InputType()
 export class CourseInfoInput {

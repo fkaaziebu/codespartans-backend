@@ -22,14 +22,14 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from './database/types/course.type';
+} from './database/entities/course.entity';
 import { QuestionInput } from './modules/inventory/inputs';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from './database/types/question.type';
-import { VersionStatusType } from './database/types/version.type';
+} from './database/entities/question.entity';
+import { VersionStatusType } from './database/entities/version.entity';
 
 @Injectable()
 export class SetupDbService {

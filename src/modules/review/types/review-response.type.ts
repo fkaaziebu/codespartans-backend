@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ReviewTypeClass } from 'src/database/types';
+import { Review as ReviewTypeClass } from 'src/database/entities/review.entity';
 
 @ObjectType('ReviewResponse')
 export class ReviewResponse extends ReviewTypeClass {

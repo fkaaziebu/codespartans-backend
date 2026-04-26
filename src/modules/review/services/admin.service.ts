@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VersionStatusType } from 'src/database/types/version.type';
+import { VersionStatusType } from 'src/database/entities/version.entity';
 import { PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
@@ -12,13 +12,9 @@ import {
   Review,
   Version,
 } from '../../../database/entities';
-import {
-  IssueTypeClass,
-  ReviewTypeClass,
-  VersionTypeClass,
-} from '../../../database/types';
-import { IssueStatusType } from '../../../database/types/issue.type';
-import { ReviewStatusType } from '../../../database/types/review.type';
+import { Issue as IssueTypeClass, IssueStatusType } from '../../../database/entities/issue.entity';
+import { Review as ReviewTypeClass, ReviewStatusType } from '../../../database/entities/review.entity';
+import { Version as VersionTypeClass } from '../../../database/entities/version.entity';
 import { IssueInfoInput, ReviewInfoInput } from '../inputs';
 import { MeilisearchProducer } from './meilisearch.producer';
 

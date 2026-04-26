@@ -1,5 +1,5 @@
 import { Mutation, Resolver } from '@nestjs/graphql';
-import { CourseTypeClass } from 'src/database/types';
+import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
 import { SetupDbService } from './setup-db.service';
 
 @Resolver()

@@ -1,11 +1,9 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import {
-  CourseTypeClass,
-  QuestionTypeClass,
-  ReviewRequestTypeClass,
-  VersionTypeClass,
-} from 'src/database/types';
+import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
+import { Question as QuestionTypeClass } from 'src/database/entities/question.entity';
+import { ReviewRequest as ReviewRequestTypeClass } from 'src/database/entities/review_request.entity';
+import { Version as VersionTypeClass } from 'src/database/entities/version.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import {
   CourseInfoInput,

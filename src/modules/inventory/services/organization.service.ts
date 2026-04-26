@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VersionStatusType } from 'src/database/types/version.type';
+import { VersionStatusType } from 'src/database/entities/version.entity';
 import { PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
@@ -13,7 +13,7 @@ import {
   ReviewRequest,
   Version,
 } from '../../../database/entities';
-import { CategoryTypeClass } from '../../../database/types';
+import { Category as CategoryTypeClass } from '../../../database/entities/category.entity';
 import { CategoryInfoInput, RequestedReviewFilterInput } from '../inputs';
 import { StatsResponse } from '../types';
 
