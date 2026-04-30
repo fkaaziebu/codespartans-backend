@@ -43,14 +43,6 @@ export class ParentService {
     private parentRepository: Repository<Parent>,
     @InjectRepository(Child)
     private childRepository: Repository<Child>,
-    @InjectRepository(Student)
-    private studentRepository: Repository<Student>,
-    @InjectRepository(Category)
-    private categoryRepository: Repository<Category>,
-    @InjectRepository(Organization)
-    private organizationRepository: Repository<Organization>,
-    @InjectRepository(Cart)
-    private cartRepository: Repository<Cart>,
     private jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailProducer: EmailProducer,

@@ -9,7 +9,9 @@ import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Cart } from 'src/modules/inventory/entities/cart.entity';
 import { Category } from 'src/modules/inventory/entities/category.entity';
 import { Test } from 'src/modules/simulation/entities/test.entity';
+import { EmailConsumer } from '../auth/services/email.consumer';
 import { EmailProducer } from '../auth/services/email.producer';
+import { EmailService } from '../auth/services/email.service';
 import { Child } from './entities/child.entity';
 import { Parent } from './entities/parent.entity';
 import { ParentResolver } from './resolvers/parent.resolver';
@@ -33,7 +35,7 @@ import { ParentService } from './services/parent.service';
     }),
     TypeOrmModule.forFeature([Parent, Child, Student, Organization, Cart, Category, Test]),
   ],
-  providers: [ParentService, ParentResolver, JwtStrategy, EmailProducer],
+  providers: [ParentService, ParentResolver, JwtStrategy, EmailProducer, EmailConsumer, EmailService],
   exports: [TypeOrmModule],
 })
 export class ParentModule {}
