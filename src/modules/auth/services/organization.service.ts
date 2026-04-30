@@ -5,10 +5,12 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Admin as AdminTypeClass } from 'src/database/entities/admin.entity';
-import { Instructor as InstructorTypeClass } from 'src/database/entities/instructor.entity';
+import { Admin as AdminTypeClass } from 'src/modules/auth/entities/admin.entity';
+import { Instructor as InstructorTypeClass } from 'src/modules/auth/entities/instructor.entity';
 import { Repository } from 'typeorm';
-import { Admin, Instructor, Organization } from '../../../database/entities';
+import { Admin } from '../entities/admin.entity';
+import { Instructor } from '../entities/instructor.entity';
+import { Organization } from '../entities/organization.entity';
 import { HashHelper } from '../../../helpers';
 import { OrganizationLoginResponse } from '../types';
 

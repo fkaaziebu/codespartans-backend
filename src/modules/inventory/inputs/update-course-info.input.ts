@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { CurrencyType, DomainType } from 'src/database/entities/course.entity';
+import { CurrencyType, DomainType } from 'src/modules/inventory/entities/course.entity';
 
 @InputType()
 export class UpdateCourseInfoInput {

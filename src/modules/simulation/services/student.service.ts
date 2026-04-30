@@ -7,22 +7,21 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import {
-  Course,
-  Question,
-  Student,
-  SubmittedAnswer,
-  Test,
-  TimeEvent,
-} from '../../../database/entities';
-import { TimeEventType } from '../../../database/entities/time_event.entity';
+import { Student } from '../../auth/entities/student.entity';
+import { Course } from '../../inventory/entities/course.entity';
+import { Question } from '../../review/entities/question.entity';
+import { Recommendation } from '../entities/recommendation.entity';
+import { SubmittedAnswer } from '../entities/sumitted_answer.entity';
+import { Test } from '../entities/test.entity';
+import { TimeEvent } from '../entities/time_event.entity';
+import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
 import {
   TestModeType,
   TestStatusType,
-} from '../../../database/entities/test.entity';
+} from 'src/modules/simulation/entities/test.entity';
 import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
-import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
+import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
 
 @Injectable()
 export class StudentService {

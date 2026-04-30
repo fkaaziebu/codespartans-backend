@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { entities } from 'src/database/entities';
+import { Admin } from './entities/admin.entity';
+import { Instructor } from './entities/instructor.entity';
+import { Organization } from './entities/organization.entity';
+import { Student } from './entities/student.entity';
 import { GoogleStrategy, JwtStrategy } from '../../helpers/strategies';
 import {
   AdminResolver,
@@ -38,7 +41,7 @@ import { StudentController } from './controllers/student.controller';
         },
       }),
     }),
-    TypeOrmModule.forFeature(entities),
+    TypeOrmModule.forFeature([Admin, Instructor, Organization, Student]),
   ],
   controllers: [StudentController],
   providers: [
@@ -56,5 +59,6 @@ import { StudentController } from './controllers/student.controller';
     StudentResolver,
     OrganizationResolver,
   ],
+  exports: [TypeOrmModule],
 })
 export class AuthModule {}

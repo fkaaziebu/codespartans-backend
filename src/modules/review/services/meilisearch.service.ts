@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course } from 'src/database/entities';
+import { Course } from 'src/modules/inventory/entities/course.entity';
 import { Repository } from 'typeorm';
 import { Meilisearch } from 'meilisearch';
 import { ConfigService } from '@nestjs/config';

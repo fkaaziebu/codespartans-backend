@@ -1,9 +1,9 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
-import { Question as QuestionTypeClass } from 'src/database/entities/question.entity';
-import { SubmittedAnswer as SubmittedAnswerTypeClass } from 'src/database/entities/sumitted_answer.entity';
-import { Test as TestTypeClass, TestModeType } from 'src/database/entities/test.entity';
+import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
+import { Question as QuestionTypeClass } from 'src/modules/review/entities/question.entity';
+import { SubmittedAnswer as SubmittedAnswerTypeClass } from 'src/modules/simulation/entities/sumitted_answer.entity';
+import { Test as TestTypeClass, TestModeType } from 'src/modules/simulation/entities/test.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { StudentService } from '../services';
 

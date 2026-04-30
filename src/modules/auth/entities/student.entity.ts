@@ -10,12 +10,12 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Cart } from './cart.entity';
-import { Category } from './category.entity';
-import { Checkout } from './checkout.entity';
-import { Course } from './course.entity';
+import { Cart } from '../../inventory/entities/cart.entity';
+import { Category } from '../../inventory/entities/category.entity';
+import { Checkout } from '../../inventory/entities/checkout.entity';
+import { Course } from '../../inventory/entities/course.entity';
 import { Organization } from './organization.entity';
-import { Test } from './test.entity';
+import { Test } from '../../simulation/entities/test.entity';
 
 @ObjectType('Student')
 @Entity('students')

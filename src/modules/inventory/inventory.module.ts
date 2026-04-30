@@ -2,7 +2,15 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { entities } from 'src/database/entities';
+import { Student } from 'src/modules/auth/entities/student.entity';
+import { Organization } from 'src/modules/auth/entities/organization.entity';
+import { Instructor } from 'src/modules/auth/entities/instructor.entity';
+import { Cart } from './entities/cart.entity';
+import { Category } from './entities/category.entity';
+import { Checkout } from './entities/checkout.entity';
+import { Coupon } from './entities/coupon.entity';
+import { Course } from './entities/course.entity';
+import { Test } from 'src/modules/simulation/entities/test.entity';
 import { JwtStrategy } from 'src/helpers/strategies';
 import {
   InstructorResolver,
@@ -28,7 +36,17 @@ import {
         },
       }),
     }),
-    TypeOrmModule.forFeature(entities),
+    TypeOrmModule.forFeature([
+      Cart,
+      Category,
+      Checkout,
+      Coupon,
+      Course,
+      Instructor,
+      Organization,
+      Student,
+      Test,
+    ]),
   ],
   controllers: [],
   providers: [
@@ -40,5 +58,6 @@ import {
     StudentResolver,
     OrganizationResolver,
   ],
+  exports: [TypeOrmModule],
 })
 export class InventoryModule {}

@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Recommendation } from './recommendation.entity';
-import { Student } from './student.entity';
+import { Student } from '../../auth/entities/student.entity';
 import { SubmittedAnswer } from './sumitted_answer.entity';
-import { TestSuite } from './test_suite.entity';
+import { TestSuite } from '../../review/entities/test_suite.entity';
 import { TimeEvent } from './time_event.entity';
 
 export enum TestStatusType {

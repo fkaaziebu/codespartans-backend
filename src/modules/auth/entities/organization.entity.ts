@@ -8,11 +8,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Admin } from './admin.entity';
-import { Category } from './category.entity';
-import { Coupon } from './coupon.entity';
-import { Course } from './course.entity';
+import { Category } from '../../inventory/entities/category.entity';
+import { Coupon } from '../../inventory/entities/coupon.entity';
+import { Course } from '../../inventory/entities/course.entity';
 import { Instructor } from './instructor.entity';
-import { ReviewRequest } from './review_request.entity';
+import { ReviewRequest } from '../../review/entities/review_request.entity';
 import { Student } from './student.entity';
 
 @ObjectType('Organization')

@@ -2,8 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { entities } from 'src/database/entities';
+import { Student } from 'src/modules/auth/entities/student.entity';
 import { JwtStrategy } from 'src/helpers/strategies';
+import { Recommendation } from './entities/recommendation.entity';
+import { SubmittedAnswer } from './entities/sumitted_answer.entity';
+import { Test } from './entities/test.entity';
+import { TimeEvent } from './entities/time_event.entity';
 import { StudentController } from './controllers/student.controller';
 import { StudentGateway } from './gateways/student.gateway';
 import { StudentResolver } from './resolvers';
@@ -23,7 +27,13 @@ import { TestTimerService } from './services/test-timer.service';
         },
       }),
     }),
-    TypeOrmModule.forFeature(entities),
+    TypeOrmModule.forFeature([
+      Recommendation,
+      Student,
+      SubmittedAnswer,
+      Test,
+      TimeEvent,
+    ]),
   ],
   controllers: [StudentController],
   providers: [
@@ -33,5 +43,6 @@ import { TestTimerService } from './services/test-timer.service';
     StudentResolver,
     StudentGateway,
   ],
+  exports: [TypeOrmModule],
 })
 export class SimulationModule {}

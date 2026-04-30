@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Course } from './course.entity';
-import { Organization } from './organization.entity';
-import { Student } from './student.entity';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Student } from '../../auth/entities/student.entity';
 
 @ObjectType('Category')
 @Entity('categories')

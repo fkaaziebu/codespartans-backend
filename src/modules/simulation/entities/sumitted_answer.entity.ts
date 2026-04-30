@@ -2,12 +2,10 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Question } from './question.entity';
+import { Question } from '../../review/entities/question.entity';
 import { Test } from './test.entity';
 
 @ObjectType('SubmittedAnswer')

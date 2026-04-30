@@ -4,26 +4,24 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cart as CartTypeClass } from 'src/database/entities/cart.entity';
-import { Checkout as CheckoutTypeClass } from 'src/database/entities/checkout.entity';
-import { Student as StudentTypeClass } from 'src/database/entities/student.entity';
+import { Cart as CartTypeClass } from 'src/modules/inventory/entities/cart.entity';
+import { Checkout as CheckoutTypeClass } from 'src/modules/inventory/entities/checkout.entity';
+import { Student as StudentTypeClass } from 'src/modules/auth/entities/student.entity';
 import { HashHelper, PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
-import {
-  Category,
-  Checkout,
-  Course,
-  Organization,
-  Question,
-  Student,
-  Test,
-} from '../../../database/entities';
-import { TimeEventType } from '../../../database/entities/time_event.entity';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Student } from '../../auth/entities/student.entity';
+import { Category } from '../entities/category.entity';
+import { Checkout } from '../entities/checkout.entity';
+import { Course } from '../entities/course.entity';
+import { Question } from '../../review/entities/question.entity';
+import { Test } from '../../simulation/entities/test.entity';
+import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
 import {
   TestModeType,
   TestStatusType,
-} from '../../../database/entities/test.entity';
+} from 'src/modules/simulation/entities/test.entity';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import {
   StudentStatsResponse,
@@ -31,7 +29,7 @@ import {
   TestScoreHistoryResponse,
   WeakSubjectAreaResponse,
 } from '../types';
-// import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
+// import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
 
 @Injectable()
 export class StudentService {

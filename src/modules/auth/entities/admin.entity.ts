@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Organization } from './organization.entity';
-import { Version } from './version.entity';
+import { Version } from '../../review/entities/version.entity';
 
 export enum AdminStatusType {
   ACTIVE = 'ACTIVE',

@@ -1,19 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VersionStatusType } from 'src/database/entities/version.entity';
+import { VersionStatusType } from 'src/modules/review/entities/version.entity';
 import { PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
-import {
-  Admin,
-  Category,
-  Course,
-  Instructor,
-  Organization,
-  ReviewRequest,
-  Version,
-} from '../../../database/entities';
-import { Category as CategoryTypeClass } from '../../../database/entities/category.entity';
+import { Admin } from '../../auth/entities/admin.entity';
+import { Instructor } from '../../auth/entities/instructor.entity';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Category } from '../entities/category.entity';
+import { Course } from '../entities/course.entity';
+import { ReviewRequest } from '../../review/entities/review_request.entity';
+import { Version } from '../../review/entities/version.entity';
+import { Category as CategoryTypeClass } from 'src/modules/inventory/entities/category.entity';
 import { CategoryInfoInput, RequestedReviewFilterInput } from '../inputs';
 import { StatsResponse } from '../types';
 

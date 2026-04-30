@@ -18,16 +18,16 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from '../../../database/entities/course.entity';
+} from 'src/modules/inventory/entities/course.entity';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from '../../../database/entities/question.entity';
+} from 'src/modules/review/entities/question.entity';
 import { HashHelper } from '../../../helpers';
 import { StudentService } from './student.service';
-import { TestStatusType } from '../../../database/entities/test.entity';
-import { TimeEventType } from '../../../database/entities/time_event.entity';
+import { TestStatusType } from 'src/modules/simulation/entities/test.entity';
+import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
 
 describe('StudentService', () => {
   let module: TestingModule;

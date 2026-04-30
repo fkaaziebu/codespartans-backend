@@ -2,7 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Admin, Organization } from '../../../database/entities';
+import { Admin } from '../entities/admin.entity';
+import { Organization } from '../entities/organization.entity';
 import { HashHelper } from '../../../helpers';
 import { AdminLoginResponse } from '../types';
 

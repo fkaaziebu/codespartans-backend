@@ -9,8 +9,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Admin } from './admin.entity';
-import { Course } from './course.entity';
+import { Admin } from '../../auth/entities/admin.entity';
+import { Course } from '../../inventory/entities/course.entity';
 import { Question } from './question.entity';
 import { Review } from './review.entity';
 import { ReviewRequest } from './review_request.entity';

@@ -19,12 +19,12 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from '../../../database/entities/course.entity';
+} from 'src/modules/inventory/entities/course.entity';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from '../../../database/entities/question.entity';
+} from 'src/modules/review/entities/question.entity';
 import { HashHelper } from '../../../helpers';
 import { QuestionInput } from '../inputs';
 import { StudentService } from './student.service';

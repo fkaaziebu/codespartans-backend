@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Instructor as InstructorTypeClass } from 'src/database/entities/instructor.entity';
+import { Instructor as InstructorTypeClass } from 'src/modules/auth/entities/instructor.entity';
 
 @ObjectType('InstructorResponse')
 export class InstructorResponse extends InstructorTypeClass {

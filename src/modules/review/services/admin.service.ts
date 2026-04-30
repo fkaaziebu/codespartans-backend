@@ -1,20 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VersionStatusType } from 'src/database/entities/version.entity';
+import { VersionStatusType } from 'src/modules/review/entities/version.entity';
 import { PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
-import {
-  Admin,
-  Course,
-  Issue,
-  Question,
-  Review,
-  Version,
-} from '../../../database/entities';
-import { Issue as IssueTypeClass, IssueStatusType } from '../../../database/entities/issue.entity';
-import { Review as ReviewTypeClass, ReviewStatusType } from '../../../database/entities/review.entity';
-import { Version as VersionTypeClass } from '../../../database/entities/version.entity';
+import { Admin } from '../../auth/entities/admin.entity';
+import { Course } from '../../inventory/entities/course.entity';
+import { Issue } from '../entities/issue.entity';
+import { Question } from '../entities/question.entity';
+import { Review } from '../entities/review.entity';
+import { Version } from '../entities/version.entity';
+import { Issue as IssueTypeClass, IssueStatusType } from 'src/modules/review/entities/issue.entity';
+import { Review as ReviewTypeClass, ReviewStatusType } from 'src/modules/review/entities/review.entity';
+import { Version as VersionTypeClass } from 'src/modules/review/entities/version.entity';
 import { IssueInfoInput, ReviewInfoInput } from '../inputs';
 import { MeilisearchProducer } from './meilisearch.producer';
 

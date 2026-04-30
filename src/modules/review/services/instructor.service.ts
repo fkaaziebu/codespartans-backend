@@ -3,15 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { ILike, Repository } from 'typeorm';
-import {
-  Course,
-  Instructor,
-  Issue,
-  Question,
-  Review,
-  Version,
-} from '../../../database/entities';
-import { Issue as IssueTypeClass, IssueStatusType } from '../../../database/entities/issue.entity';
+import { Instructor } from '../../auth/entities/instructor.entity';
+import { Course } from '../../inventory/entities/course.entity';
+import { Issue } from '../entities/issue.entity';
+import { Question } from '../entities/question.entity';
+import { Review } from '../entities/review.entity';
+import { Version } from '../entities/version.entity';
+import { Issue as IssueTypeClass, IssueStatusType } from 'src/modules/review/entities/issue.entity';
 
 @Injectable()
 export class InstructorService {

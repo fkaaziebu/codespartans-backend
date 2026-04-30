@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { VersionStatusType } from 'src/database/entities/version.entity';
+import { VersionStatusType } from 'src/modules/review/entities/version.entity';
 
 @InputType()
 export class RequestedReviewFilterInput {

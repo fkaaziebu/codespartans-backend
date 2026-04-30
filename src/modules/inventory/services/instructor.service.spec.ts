@@ -13,13 +13,13 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from '../../../database/entities/course.entity';
+} from 'src/modules/inventory/entities/course.entity';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from '../../../database/entities/question.entity';
-import { VersionStatusType } from '../../../database/entities/version.entity';
+} from 'src/modules/review/entities/question.entity';
+import { VersionStatusType } from 'src/modules/review/entities/version.entity';
 import { HashHelper } from '../../../helpers';
 import { CourseInfoInput, QuestionInput } from '../inputs';
 import { InstructorService } from './instructor.service';

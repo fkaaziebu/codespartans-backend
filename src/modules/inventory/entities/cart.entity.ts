@@ -3,22 +3,22 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { Course } from './course.entity';
-import { Student } from './student.entity';
+import { Student } from '../../auth/entities/student.entity';
 
-@ObjectType('Checkout')
-@Entity('checkouts')
-export class Checkout {
+@ObjectType('Cart')
+@Entity('carts')
+export class Cart {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Field(() => Student, { nullable: true })
-  @ManyToOne(() => Student, (student) => student.checkouts)
+  @OneToOne(() => Student, (student) => student.cart)
   student: Student;
 
   @Field(() => [Course], { nullable: true })

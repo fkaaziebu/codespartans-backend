@@ -1,17 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  Course,
-  Instructor,
-  Organization,
-  Question,
-  ReviewRequest,
-  TestSuite,
-  Version,
-} from '../../../database/entities';
-import { Course as CourseTypeClass } from '../../../database/entities/course.entity';
-import { Version as VersionTypeClass } from '../../../database/entities/version.entity';
+import { Instructor } from '../../auth/entities/instructor.entity';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Course } from '../entities/course.entity';
+import { Question } from '../../review/entities/question.entity';
+import { ReviewRequest } from '../../review/entities/review_request.entity';
+import { TestSuite } from '../../review/entities/test_suite.entity';
+import { Version } from '../../review/entities/version.entity';
+import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
+import { Version as VersionTypeClass } from 'src/modules/review/entities/version.entity';
 import { CourseInfoInput, QuestionInput } from '../inputs';
 
 @Injectable()

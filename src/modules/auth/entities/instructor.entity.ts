@@ -8,7 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Course } from './course.entity';
+import { Course } from '../../inventory/entities/course.entity';
 import { Organization } from './organization.entity';
 
 export enum InstructorStatusType {

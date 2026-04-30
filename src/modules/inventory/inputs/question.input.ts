@@ -3,7 +3,7 @@ import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from 'src/database/entities/question.entity';
+} from 'src/modules/review/entities/question.entity';
 
 @InputType()
 export class QuestionInput {

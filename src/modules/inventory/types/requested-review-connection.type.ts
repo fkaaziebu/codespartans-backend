@@ -1,5 +1,5 @@
 import { ObjectType } from '@nestjs/graphql';
-import { ReviewRequest as ReviewRequestTypeClass } from 'src/database/entities/review_request.entity';
+import { ReviewRequest as ReviewRequestTypeClass } from 'src/modules/review/entities/review_request.entity';
 import { Paginated } from '../../../helpers/types';
 
 @ObjectType('RequestedReviewConnection')

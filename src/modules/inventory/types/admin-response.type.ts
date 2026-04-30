@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Admin as AdminTypeClass } from 'src/database/entities/admin.entity';
+import { Admin as AdminTypeClass } from 'src/modules/auth/entities/admin.entity';
 
 @ObjectType('AdminResponse')
 export class AdminResponse extends AdminTypeClass {

@@ -1,5 +1,5 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
-import { Question } from 'src/database/entities/question.entity';
+import { Question } from 'src/modules/review/entities/question.entity';
 
 @ObjectType('WeakSubjectAreaResponse')
 export class WeakSubjectAreaResponse {

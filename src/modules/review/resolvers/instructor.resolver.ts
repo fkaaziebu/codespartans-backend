@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Course as CourseTypeClass } from 'src/database/entities/course.entity';
-import { Issue as IssueTypeClass, IssueStatusType } from 'src/database/entities/issue.entity';
-import { Review as ReviewTypeClass } from 'src/database/entities/review.entity';
+import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
+import { Issue as IssueTypeClass, IssueStatusType } from 'src/modules/review/entities/issue.entity';
+import { Review as ReviewTypeClass } from 'src/modules/review/entities/review.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';

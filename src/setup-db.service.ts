@@ -1,19 +1,17 @@
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
-import {
-  Admin,
-  Cart,
-  Category,
-  Course,
-  Image,
-  Instructor,
-  Organization,
-  Question,
-  Student,
-  TestSuite,
-  Version,
-} from './database/entities';
+import { Admin } from './modules/auth/entities/admin.entity';
+import { Instructor } from './modules/auth/entities/instructor.entity';
+import { Organization } from './modules/auth/entities/organization.entity';
+import { Student } from './modules/auth/entities/student.entity';
+import { Cart } from './modules/inventory/entities/cart.entity';
+import { Category } from './modules/inventory/entities/category.entity';
+import { Course } from './modules/inventory/entities/course.entity';
+import { Image } from './modules/media/entities/image.entity';
+import { Question } from './modules/review/entities/question.entity';
+import { TestSuite } from './modules/review/entities/test_suite.entity';
+import { Version } from './modules/review/entities/version.entity';
 import { HashHelper } from './helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
@@ -22,14 +20,14 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from './database/entities/course.entity';
+} from './modules/inventory/entities/course.entity';
 import { QuestionInput } from './modules/inventory/inputs';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from './database/entities/question.entity';
-import { VersionStatusType } from './database/entities/version.entity';
+} from './modules/review/entities/question.entity';
+import { VersionStatusType } from './modules/review/entities/version.entity';
 
 @Injectable()
 export class SetupDbService {

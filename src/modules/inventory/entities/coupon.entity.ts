@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Course } from './course.entity';
-import { Organization } from './organization.entity';
+import { Organization } from '../../auth/entities/organization.entity';
 
 @ObjectType('Coupon')
 @Entity('coupons')

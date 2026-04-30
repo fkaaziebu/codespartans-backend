@@ -14,10 +14,10 @@ import {
 } from 'typeorm';
 import { Category } from './category.entity';
 import { Coupon } from './coupon.entity';
-import { Instructor } from './instructor.entity';
-import { Organization } from './organization.entity';
-import { Student } from './student.entity';
-import { Version } from './version.entity';
+import { Instructor } from '../../auth/entities/instructor.entity';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Student } from '../../auth/entities/student.entity';
+import { Version } from '../../review/entities/version.entity';
 
 export enum DomainType {
   SCIENCE = 'SCIENCE',

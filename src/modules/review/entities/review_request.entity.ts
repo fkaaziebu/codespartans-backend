@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Organization } from './organization.entity';
+import { Organization } from '../../auth/entities/organization.entity';
 import { Version } from './version.entity';
 
 @ObjectType('ReviewRequest')
