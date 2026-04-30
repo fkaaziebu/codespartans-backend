@@ -3,6 +3,7 @@ import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { RefreshTokenResponse } from 'src/modules/auth/types';
+import { Category } from 'src/modules/inventory/entities/category.entity';
 import { AttemptConnection } from 'src/modules/inventory/types';
 import { SubjectProgressResponse } from 'src/modules/inventory/types/subject-progress-response.type';
 import { WeakSubjectAreaResponse } from 'src/modules/inventory/types/weak-subject-area-response.type';
@@ -82,6 +83,14 @@ export class ParentResolver {
   ) {
     const { email } = context.req.user;
     return this.parentService.resetChildPin(email, childId);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [Category])
+  async listParentOrganizationCategories(
+    @Args('searchTerm', { nullable: true }) searchTerm?: string,
+  ) {
+    return this.parentService.listOrganizationCategories(searchTerm);
   }
 
   @UseGuards(GqlJwtAuthGuard)

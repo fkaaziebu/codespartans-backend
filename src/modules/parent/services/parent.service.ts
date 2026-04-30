@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { HashHelper, PaginateHelper } from 'src/helpers';
 import { PaginationInput } from 'src/helpers/inputs';
 import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
@@ -43,6 +43,14 @@ export class ParentService {
     private parentRepository: Repository<Parent>,
     @InjectRepository(Child)
     private childRepository: Repository<Child>,
+    @InjectRepository(Student)
+    private studentRepository: Repository<Student>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+    @InjectRepository(Organization)
+    private organizationRepository: Repository<Organization>,
+    @InjectRepository(Cart)
+    private cartRepository: Repository<Cart>,
     private jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailProducer: EmailProducer,
@@ -466,6 +474,18 @@ export class ParentService {
         return { message: 'Pin reset successfully', pin: rawPin };
       },
     );
+  }
+
+  async listOrganizationCategories(searchTerm?: string): Promise<Category[]> {
+    return this.categoryRepository.find({
+      where: {
+        organization: {
+          email: this.configService.get('GENPOP_EMAIL'),
+        },
+        ...(searchTerm ? { name: ILike(`%${searchTerm.trim()}%`) } : {}),
+      },
+      relations: ['courses'],
+    });
   }
 
   async listChildren(parentEmail: string, pagination?: PaginationInput) {
