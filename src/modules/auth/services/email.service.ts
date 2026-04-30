@@ -58,7 +58,11 @@ export class EmailService {
       `${templateName}.hbs`,
     );
 
+    console.log('templatePath', templatePath);
+
     const templateSource = fs.readFileSync(templatePath, 'utf-8');
+
+    console.log('templateSource', templateSource);
     const template = handlebars.compile(templateSource);
     return template(context);
   }
