@@ -86,6 +86,16 @@ export class ParentResolver {
   }
 
   @UseGuards(GqlJwtAuthGuard)
+  @Query(() => RegisterParentResponse)
+  async shareChildLogin(
+    @Args('childId') childId: string,
+    @Context() context,
+  ) {
+    const { email } = context.req.user;
+    return this.parentService.shareChildLogin(email, childId);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
   @Query(() => [Category])
   async listParentOrganizationCategories(
     @Args('searchTerm', { nullable: true }) searchTerm?: string,

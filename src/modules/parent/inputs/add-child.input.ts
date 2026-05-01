@@ -12,6 +12,6 @@ export class AddChildInput {
   @Field()
   target_exam: string;
 
-  @Field()
-  school_name: string;
+  @Field({ nullable: true })
+  school_name?: string;
 }

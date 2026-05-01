@@ -262,7 +262,7 @@ export class ParentService {
       full_name: string;
       class_level: ClassLevel;
       target_exam: string;
-      school_name: string;
+      school_name?: string;
     }>,
   ): Promise<SetupChildResult[]> {
     return this.parentRepository.manager.transaction(
@@ -364,7 +364,7 @@ export class ParentService {
       full_name: string;
       class_level: ClassLevel;
       target_exam: string;
-      school_name: string;
+      school_name?: string;
     },
   ): Promise<{ message: string; pin: string }> {
     return this.parentRepository.manager.transaction(
@@ -472,6 +472,43 @@ export class ParentService {
         }
 
         return { message: 'Pin reset successfully', pin: rawPin };
+      },
+    );
+  }
+
+  async shareChildLogin(
+    parentEmail: string,
+    childId: string,
+  ): Promise<{ message: string }> {
+    return this.childRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const child = await transactionalEntityManager.findOne(Child, {
+          where: { id: childId, parent: { email: parentEmail } },
+          relations: ['student'],
+        });
+
+        if (!child) {
+          throw new NotFoundException('Child not found');
+        }
+
+        const rawPin = Math.floor(100000 + Math.random() * 900000).toString();
+        const hashed = await HashHelper.encrypt(rawPin);
+
+        child.pin = hashed;
+        await transactionalEntityManager.save(Child, child);
+
+        if (child.student) {
+          child.student.password = hashed;
+          await transactionalEntityManager.save(Student, child.student);
+        }
+
+        const studentUrl = this.configService.get<string>(
+          'STUDENT_URL',
+          'http://localhost:3000',
+        );
+        const message = `Hi! Here are ${child.full_name}'s ExamForge login details: Username: ${child.username} PIN: ${rawPin} Login at: ${studentUrl}/child-login`;
+
+        return { message };
       },
     );
   }

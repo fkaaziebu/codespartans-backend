@@ -47,8 +47,8 @@ export class Child {
   @Column({ type: 'uuid' })
   target_exam: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   school_name: string;
 
   @Field({ nullable: true })
