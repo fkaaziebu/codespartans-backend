@@ -59,6 +59,6 @@ import { StudentController } from './controllers/student.controller';
     StudentResolver,
     OrganizationResolver,
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, EmailProducer],
 })
 export class AuthModule {}

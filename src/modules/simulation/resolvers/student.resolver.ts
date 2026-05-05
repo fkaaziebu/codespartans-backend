@@ -4,7 +4,7 @@ import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course
 import { Question as QuestionTypeClass } from 'src/modules/review/entities/question.entity';
 import { SubmittedAnswer as SubmittedAnswerTypeClass } from 'src/modules/simulation/entities/sumitted_answer.entity';
 import { Test as TestTypeClass, TestModeType } from 'src/modules/simulation/entities/test.entity';
-import { GqlJwtAuthGuard } from 'src/helpers/guards';
+import { GqlJwtAuthGuard, SubscriptionGuard } from 'src/helpers/guards';
 import { StudentService } from '../services';
 
 @Resolver()
@@ -12,7 +12,7 @@ export class StudentResolver {
   constructor(private readonly studentService: StudentService) {}
 
   // Queries
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Query(() => CourseTypeClass)
   getSubscribedCourseDetails(
     @Context() context,
@@ -26,7 +26,7 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Query(() => QuestionTypeClass)
   getQuestion(@Context() context, @Args('testId') testId: string) {
     const { email } = context.req.user;
@@ -54,7 +54,7 @@ export class StudentResolver {
   }
 
   // Mutations
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => TestTypeClass)
   startTest(
     @Context() context,
@@ -71,7 +71,7 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => TestTypeClass)
   pauseTest(@Context() context, @Args('testId') testId: string) {
     const { email } = context.req.user;
@@ -82,7 +82,7 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => TestTypeClass)
   resumeTest(@Context() context, @Args('testId') testId: string) {
     const { email } = context.req.user;
@@ -93,7 +93,7 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => TestTypeClass)
   endTest(@Context() context, @Args('testId') testId: string) {
     const { email } = context.req.user;
@@ -104,7 +104,7 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => SubmittedAnswerTypeClass)
   submitAnswer(
     @Context() context,

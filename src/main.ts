@@ -34,7 +34,7 @@ async function bootstrap() {
   // Create test database
   await createDatabase(process.env.DB_NAME_TEST);
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   app.useGlobalPipes(new ValidationPipe());
 

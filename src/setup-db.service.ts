@@ -4,7 +4,6 @@ import * as path from 'path';
 import { Admin } from './modules/auth/entities/admin.entity';
 import { Instructor } from './modules/auth/entities/instructor.entity';
 import { Organization } from './modules/auth/entities/organization.entity';
-import { Student } from './modules/auth/entities/student.entity';
 import { Cart } from './modules/inventory/entities/cart.entity';
 import { Category } from './modules/inventory/entities/category.entity';
 import { Course } from './modules/inventory/entities/course.entity';
@@ -12,6 +11,10 @@ import { Image } from './modules/media/entities/image.entity';
 import { Question } from './modules/review/entities/question.entity';
 import { TestSuite } from './modules/review/entities/test_suite.entity';
 import { Version } from './modules/review/entities/version.entity';
+import {
+  PlanInterval,
+  SubscriptionPlan,
+} from './modules/demo/entities/subscription-plan.entity';
 import { HashHelper } from './helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
@@ -54,6 +57,8 @@ export class SetupDbService implements OnModuleInit {
     private testSuiteRepository: Repository<TestSuite>,
     @InjectRepository(Image)
     private imageRepository: Repository<Image>,
+    @InjectRepository(SubscriptionPlan)
+    private planRepository: Repository<SubscriptionPlan>,
     private configService: ConfigService,
   ) {}
 
@@ -2432,9 +2437,108 @@ export class SetupDbService implements OnModuleInit {
 
       await this.categoryRepository.save([...new_categories]);
 
+      /** Step Four
+       * Seed subscription plans
+       */
+      await this.setupSubscriptionPlans();
+
       return 'Done!';
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  async setupSubscriptionPlans() {
+    const plans = [
+      {
+        plan_key: 'student_free',
+        name: 'Student Free',
+        tagline: 'Individual learners getting started',
+        price: 0,
+        currency: 'GHS',
+        interval: PlanInterval.MONTHLY,
+        duration_days: 30,
+        is_custom: false,
+        billing_label: null,
+        max_students: null,
+        features: [
+          '1 subject access',
+          '10 questions/day',
+          'Basic progress dashboard',
+          'Mobile app access',
+        ],
+      },
+      {
+        plan_key: 'student_pro',
+        name: 'Student Pro',
+        tagline: 'Serious WASSCE/BECE candidates',
+        price: 39,
+        currency: 'GHS',
+        interval: PlanInterval.MONTHLY,
+        duration_days: 30,
+        is_custom: false,
+        billing_label: 'per student / month',
+        max_students: null,
+        features: [
+          'All subjects unlocked',
+          'Unlimited practice questions',
+          'Weak area analysis',
+          'Timed exam simulation',
+          'Answer explanations',
+          'Parent visibility included',
+        ],
+      },
+      {
+        plan_key: 'institution',
+        name: 'Institution',
+        tagline: 'Schools, SHS, tutorial centers',
+        price: 499,
+        currency: 'GHS',
+        interval: PlanInterval.MONTHLY,
+        duration_days: 30,
+        is_custom: false,
+        billing_label: 'per month · up to 100 students',
+        max_students: 100,
+        features: [
+          'Everything in Student Pro',
+          'Admin & teacher console',
+          'Class performance analytics',
+          'Monthly PDF reports',
+          'Branded school portal',
+          'Priority WhatsApp support',
+          'Founding rate locked in for 12 months',
+        ],
+      },
+      {
+        plan_key: 'enterprise',
+        name: 'Enterprise',
+        tagline: '500+ students, multi-campus',
+        price: 0,
+        currency: 'GHS',
+        interval: PlanInterval.MONTHLY,
+        duration_days: 30,
+        is_custom: true,
+        billing_label: 'tailored to your institution',
+        max_students: null,
+        features: [
+          'Everything in Institution',
+          'Unlimited student accounts',
+          'Multi-campus management',
+          'Dedicated account manager',
+          'Custom integrations available',
+          'SLA and uptime guarantee',
+        ],
+      },
+    ];
+
+    for (const planData of plans) {
+      const existing = await this.planRepository.findOne({
+        where: { plan_key: planData.plan_key },
+      });
+      if (!existing) {
+        const plan = this.planRepository.create(planData);
+        await this.planRepository.save(plan);
+      }
     }
   }
 }

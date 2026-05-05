@@ -18,4 +18,7 @@ export const configValidationSchema = Joi.object({
   GMAIL_USER: Joi.string().required(),
   EMAIL_HOST: Joi.string().required(),
   STUDENT_URL: Joi.string().required(),
+  PAYSTACK_SECRET_KEY: Joi.string().required(),
+  SCHOOL_DEMO_URL: Joi.string().default('http://localhost:3000'),
+  PARENT_URL: Joi.string().default('http://localhost:3000'),
 });

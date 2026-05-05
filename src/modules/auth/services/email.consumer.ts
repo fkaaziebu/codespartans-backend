@@ -24,6 +24,73 @@ export class EmailConsumer extends WorkerHost {
         );
         break;
       }
+      case 'send-demo-invitation': {
+        const { email, name, school_name, registrationUrl, trial_duration_days } =
+          job.data;
+        await this.emailService.sendDemoInvitationEmail(
+          email,
+          name,
+          school_name,
+          registrationUrl,
+          trial_duration_days,
+        );
+        break;
+      }
+      case 'send-demo-admin-notification': {
+        const {
+          name,
+          school_name,
+          role,
+          approximate_students,
+          email,
+          whatsapp_number,
+          registrationUrl,
+          trial_duration_days,
+        } = job.data;
+        await this.emailService.sendDemoAdminNotificationEmail(
+          name,
+          school_name,
+          role,
+          approximate_students,
+          email,
+          whatsapp_number,
+          registrationUrl,
+          trial_duration_days,
+        );
+        break;
+      }
+      case 'send-parent-demo-invitation': {
+        const { email, full_name, target_exams, registrationUrl } = job.data;
+        await this.emailService.sendParentDemoInvitationEmail(
+          email,
+          full_name,
+          target_exams,
+          registrationUrl,
+        );
+        break;
+      }
+      case 'send-student-demo-invitation': {
+        const { email, full_name, target_exam, registrationUrl } = job.data;
+        await this.emailService.sendStudentDemoInvitationEmail(
+          email,
+          full_name,
+          target_exam,
+          registrationUrl,
+        );
+        break;
+      }
+      case 'send-lead-admin-notification': {
+        const { lead_type, full_name, email, target_exams_display, registrationUrl } =
+          job.data;
+        await this.emailService.sendLeadAdminNotificationEmail(
+          lead_type,
+          full_name,
+          email,
+          target_exams_display,
+          registrationUrl,
+        );
+        break;
+      }
     }
   }
 }

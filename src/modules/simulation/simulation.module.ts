@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DemoModule } from 'src/modules/demo/demo.module';
 import { Student } from 'src/modules/auth/entities/student.entity';
 import { JwtStrategy } from 'src/helpers/strategies';
 import { Recommendation } from './entities/recommendation.entity';
@@ -17,6 +18,7 @@ import { TestTimerService } from './services/test-timer.service';
 @Module({
   imports: [
     ConfigModule,
+    DemoModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

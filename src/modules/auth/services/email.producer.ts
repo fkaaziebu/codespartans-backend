@@ -21,4 +21,55 @@ export class EmailProducer {
   }) {
     await this.emailQueue.add('send-account-validation', data);
   }
+
+  async sendDemoInvitationEmail(data: {
+    email: string;
+    name: string;
+    school_name: string;
+    registrationUrl: string;
+    trial_duration_days: number;
+  }) {
+    await this.emailQueue.add('send-demo-invitation', data);
+  }
+
+  async sendDemoAdminNotificationEmail(data: {
+    name: string;
+    school_name: string;
+    role: string;
+    approximate_students: string;
+    email: string;
+    whatsapp_number: string;
+    registrationUrl: string;
+    trial_duration_days: number;
+  }) {
+    await this.emailQueue.add('send-demo-admin-notification', data);
+  }
+
+  async sendParentDemoInvitationEmail(data: {
+    email: string;
+    full_name: string;
+    target_exams: string[];
+    registrationUrl: string;
+  }) {
+    await this.emailQueue.add('send-parent-demo-invitation', data);
+  }
+
+  async sendStudentDemoInvitationEmail(data: {
+    email: string;
+    full_name: string;
+    target_exam: string;
+    registrationUrl: string;
+  }) {
+    await this.emailQueue.add('send-student-demo-invitation', data);
+  }
+
+  async sendLeadAdminNotificationEmail(data: {
+    lead_type: string;
+    full_name: string;
+    email: string;
+    target_exams_display: string;
+    registrationUrl: string;
+  }) {
+    await this.emailQueue.add('send-lead-admin-notification', data);
+  }
 }

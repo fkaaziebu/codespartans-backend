@@ -6,7 +6,7 @@ import { Checkout as CheckoutTypeClass } from 'src/modules/inventory/entities/ch
 import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
 import { Student as StudentTypeClass } from 'src/modules/auth/entities/student.entity';
 import { Test as TestTypeClass } from 'src/modules/simulation/entities/test.entity';
-import { GqlJwtAuthGuard } from 'src/helpers/guards';
+import { GqlJwtAuthGuard, SubscriptionGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
@@ -25,7 +25,7 @@ export class StudentResolver {
   constructor(private readonly studentService: StudentService) {}
 
   // Queries
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Query(() => StudentCourseResponse)
   getOrganizationCourse(
     @Context() context,
@@ -39,7 +39,7 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Query(() => CourseConnection)
   listOrganizationCourses(
     @Context() context,
@@ -60,7 +60,7 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Query(() => [CategoryTypeClass])
   listOrganizationCategories(
     @Context() context,

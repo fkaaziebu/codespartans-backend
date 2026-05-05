@@ -109,6 +109,134 @@ export class EmailService {
     }
   }
 
+  async sendDemoInvitationEmail(
+    to: string,
+    name: string,
+    school_name: string,
+    registrationUrl: string,
+    trial_duration_days: number,
+  ): Promise<void> {
+    const html = this.compileTemplate('demo-invitation', {
+      name,
+      school_name,
+      registrationUrl,
+      trial_duration_days,
+    });
+
+    try {
+      await this.sendMail(to, 'Your Free Demo Access – Codespartans', '', html);
+    } catch (error) {
+      console.error('Failed to send demo invitation email:', error);
+      throw new Error('Failed to send demo invitation email');
+    }
+  }
+
+  async sendDemoAdminNotificationEmail(
+    name: string,
+    school_name: string,
+    role: string,
+    approximate_students: string,
+    email: string,
+    whatsapp_number: string,
+    registrationUrl: string,
+    trial_duration_days: number,
+  ): Promise<void> {
+    const adminEmail = this.configService.get<string>('EMAIL_FROM');
+    const html = this.compileTemplate('demo-admin-notification', {
+      name,
+      school_name,
+      role,
+      approximate_students,
+      email,
+      whatsapp_number,
+      registrationUrl,
+      trial_duration_days,
+    });
+
+    try {
+      await this.sendMail(
+        adminEmail,
+        `New Demo Request – ${school_name}`,
+        '',
+        html,
+      );
+    } catch (error) {
+      console.error('Failed to send demo admin notification email:', error);
+      throw new Error('Failed to send demo admin notification email');
+    }
+  }
+
+  async sendParentDemoInvitationEmail(
+    to: string,
+    full_name: string,
+    target_exams: string[],
+    registrationUrl: string,
+  ): Promise<void> {
+    const target_exams_display = target_exams.join(', ');
+    const html = this.compileTemplate('parent-demo-invitation', {
+      full_name,
+      target_exams_display,
+      multipleExams: target_exams.length > 1,
+      registrationUrl,
+    });
+
+    try {
+      await this.sendMail(to, 'Get started for free – Codespartans', '', html);
+    } catch (error) {
+      console.error('Failed to send parent demo invitation email:', error);
+      throw new Error('Failed to send parent demo invitation email');
+    }
+  }
+
+  async sendStudentDemoInvitationEmail(
+    to: string,
+    full_name: string,
+    target_exam: string,
+    registrationUrl: string,
+  ): Promise<void> {
+    const html = this.compileTemplate('student-demo-invitation', {
+      full_name,
+      target_exam,
+      registrationUrl,
+    });
+
+    try {
+      await this.sendMail(to, 'Get started for free – Codespartans', '', html);
+    } catch (error) {
+      console.error('Failed to send student demo invitation email:', error);
+      throw new Error('Failed to send student demo invitation email');
+    }
+  }
+
+  async sendLeadAdminNotificationEmail(
+    lead_type: string,
+    full_name: string,
+    email: string,
+    target_exams_display: string,
+    registrationUrl: string,
+  ): Promise<void> {
+    const adminEmail = this.configService.get<string>('EMAIL_FROM');
+    const html = this.compileTemplate('lead-admin-notification', {
+      lead_type,
+      full_name,
+      email,
+      target_exams_display,
+      registrationUrl,
+    });
+
+    try {
+      await this.sendMail(
+        adminEmail,
+        `New Demo Lead – ${lead_type}: ${full_name}`,
+        '',
+        html,
+      );
+    } catch (error) {
+      console.error('Failed to send lead admin notification email:', error);
+      throw new Error('Failed to send lead admin notification email');
+    }
+  }
+
   async validateEmail(email: string): Promise<boolean> {
     const apiKey = this.configService.get<string>('ABSTRACT_API_KEY');
     const url = `https://emailvalidation.abstractapi.com/v1/?api_key=${apiKey}&email=${email}`;

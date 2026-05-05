@@ -3,14 +3,17 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Admin } from './admin.entity';
 import { Category } from '../../inventory/entities/category.entity';
 import { Coupon } from '../../inventory/entities/coupon.entity';
 import { Course } from '../../inventory/entities/course.entity';
+import { SchoolDemo } from '../../demo/entities/school-demo.entity';
 import { Instructor } from './instructor.entity';
 import { ReviewRequest } from '../../review/entities/review_request.entity';
 import { Student } from './student.entity';
@@ -61,4 +64,9 @@ export class Organization {
   @Field(() => [ReviewRequest], { nullable: true })
   @OneToMany(() => ReviewRequest, (review_req) => review_req.organization)
   requested_reviews: ReviewRequest[];
+
+  @Field(() => SchoolDemo, { nullable: true })
+  @OneToOne(() => SchoolDemo, { nullable: true, eager: false })
+  @JoinColumn()
+  school_demo: SchoolDemo;
 }
