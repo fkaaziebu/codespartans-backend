@@ -7,10 +7,14 @@ import {
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DemoStatus } from 'src/modules/demo/entities/school-demo.entity';
-import { OrgSubscription, SubscriptionStatus } from 'src/modules/demo/entities/organization-subscription.entity';
+import {
+  OrgSubscription,
+  SubscriptionStatus,
+} from 'src/modules/demo/entities/organization-subscription.entity';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Student } from 'src/modules/auth/entities/student.entity';
 import { Repository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SubscriptionGuard implements CanActivate {
@@ -21,6 +25,7 @@ export class SubscriptionGuard implements CanActivate {
     private readonly orgRepo: Repository<Organization>,
     @InjectRepository(OrgSubscription)
     private readonly orgSubscriptionRepo: Repository<OrgSubscription>,
+    private configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -86,6 +91,11 @@ export class SubscriptionGuard implements CanActivate {
   private async orgHasValidAccess(org: Organization): Promise<boolean> {
     const now = new Date();
 
+    // Test organization
+    if (org.email === this.configService.get('GENPOP_EMAIL')) {
+      return true;
+    }
+
     // Active demo that hasn't expired
     if (
       org.school_demo &&
@@ -97,7 +107,10 @@ export class SubscriptionGuard implements CanActivate {
 
     // Active paid subscription that hasn't expired
     const activeSub = await this.orgSubscriptionRepo.findOne({
-      where: { organization: { id: org.id }, status: SubscriptionStatus.ACTIVE },
+      where: {
+        organization: { id: org.id },
+        status: SubscriptionStatus.ACTIVE,
+      },
       order: { expires_at: 'DESC' },
     });
 
