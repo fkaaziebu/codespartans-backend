@@ -14,7 +14,7 @@ import { TestSuite } from './modules/review/entities/test_suite.entity';
 import { Version } from './modules/review/entities/version.entity';
 import { HashHelper } from './helpers';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   CurrencyType,
@@ -30,7 +30,9 @@ import {
 import { VersionStatusType } from './modules/review/entities/version.entity';
 
 @Injectable()
-export class SetupDbService {
+export class SetupDbService implements OnModuleInit {
+  private readonly logger = new Logger(SetupDbService.name);
+
   constructor(
     @InjectRepository(Instructor)
     private instructorRepository: Repository<Instructor>,
@@ -40,8 +42,6 @@ export class SetupDbService {
     private adminRepository: Repository<Admin>,
     @InjectRepository(Cart)
     private cartRepository: Repository<Cart>,
-    @InjectRepository(Student)
-    private studentRepository: Repository<Student>,
     @InjectRepository(Course)
     private courseRepository: Repository<Course>,
     @InjectRepository(Version)
@@ -57,16 +57,20 @@ export class SetupDbService {
     private configService: ConfigService,
   ) {}
 
+  async onModuleInit() {
+    this.logger.log('Running database setup on startup...');
+    await this.setupDatabase();
+  }
+
   async setupDatabase() {
     try {
       /** Step One
        * (1) Create Organization with genpop email (knust@st.edu.gh)
        * (2) Create an instructor and an admin for the genpop organization
-       * (3) Create a student under the organization
        */
       const organization = new Organization();
       organization.name = 'Kwame Nkrumah Senior High School';
-      organization.email = 'knust@st.edu.gh';
+      organization.email = this.configService.get<string>('GENPOP_EMAIL');
       organization.password = await HashHelper.encrypt('password');
 
       await this.organizationRepository.save(organization);
@@ -90,15 +94,6 @@ export class SetupDbService {
       const cart = new Cart();
 
       await this.cartRepository.save(cart);
-
-      const student = new Student();
-      student.name = 'Frederick Aziebu';
-      student.email = 'frederickaziebu1998@gmail.com';
-      student.password = await HashHelper.encrypt('password');
-      student.cart = cart;
-      student.organizations = [organization];
-
-      await this.studentRepository.save(student);
 
       /** Step Two
        * (1) Instructor should create a course
