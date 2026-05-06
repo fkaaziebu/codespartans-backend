@@ -25,14 +25,11 @@ export class EmailConsumer extends WorkerHost {
         break;
       }
       case 'send-demo-invitation': {
-        const { email, name, school_name, registrationUrl, trial_duration_days } =
-          job.data;
+        const { email, name, school_name } = job.data;
         await this.emailService.sendDemoInvitationEmail(
           email,
           name,
           school_name,
-          registrationUrl,
-          trial_duration_days,
         );
         break;
       }
@@ -44,8 +41,6 @@ export class EmailConsumer extends WorkerHost {
           approximate_students,
           email,
           whatsapp_number,
-          registrationUrl,
-          trial_duration_days,
         } = job.data;
         await this.emailService.sendDemoAdminNotificationEmail(
           name,
@@ -54,8 +49,6 @@ export class EmailConsumer extends WorkerHost {
           approximate_students,
           email,
           whatsapp_number,
-          registrationUrl,
-          trial_duration_days,
         );
         break;
       }
@@ -80,8 +73,13 @@ export class EmailConsumer extends WorkerHost {
         break;
       }
       case 'send-lead-admin-notification': {
-        const { lead_type, full_name, email, target_exams_display, registrationUrl } =
-          job.data;
+        const {
+          lead_type,
+          full_name,
+          email,
+          target_exams_display,
+          registrationUrl,
+        } = job.data;
         await this.emailService.sendLeadAdminNotificationEmail(
           lead_type,
           full_name,
