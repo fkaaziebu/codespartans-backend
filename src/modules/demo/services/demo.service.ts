@@ -12,6 +12,7 @@ import { randomUUID } from 'crypto';
 import { HashHelper } from 'src/helpers';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Student } from 'src/modules/auth/entities/student.entity';
+import { Cart } from 'src/modules/inventory/entities/cart.entity';
 import { Parent } from 'src/modules/parent/entities/parent.entity';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { Repository } from 'typeorm';
@@ -40,6 +41,8 @@ export class DemoService {
     private readonly studentDemoRepository: Repository<StudentDemoRequest>,
     @InjectRepository(Organization)
     private readonly orgRepository: Repository<Organization>,
+    @InjectRepository(Cart)
+    private readonly cartRepository: Repository<Cart>,
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
     @InjectRepository(Parent)
@@ -269,14 +272,25 @@ export class DemoService {
       );
     }
 
+    const organization = await this.orgRepository.findOne({
+      where: { email: this.configService.get('GENPOP_EMAIL') },
+    });
+
+    if (!organization) {
+      throw new NotFoundException('Genpop organization not found.');
+    }
+
     const now = new Date();
     const expiresAt = new Date(now);
     expiresAt.setDate(expiresAt.getDate() + demo.trial_duration_days);
 
+    const cart = this.cartRepository.create();
     const student = this.studentRepository.create({
       name: demo.full_name,
       email: demo.email,
       password: await HashHelper.encrypt(input.password),
+      is_account_validated: true,
+      organizations: [organization],
     });
 
     demo.status = DemoStatus.ACTIVE;
@@ -284,6 +298,8 @@ export class DemoService {
     demo.expires_at = expiresAt;
 
     await this.studentRepository.manager.transaction(async (em) => {
+      await em.save(Cart, cart);
+      student.cart = cart;
       await em.save(StudentDemoRequest, demo);
       await em.save(Student, student);
     });

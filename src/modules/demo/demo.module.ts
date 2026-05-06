@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Cart } from '../inventory/entities/cart.entity';
 import { Organization } from '../auth/entities/organization.entity';
 import { AuthModule } from '../auth/auth.module';
 import { SubscriptionGuard } from 'src/helpers/guards/subscription.guard';
@@ -41,6 +42,7 @@ import { BullModule } from '@nestjs/bullmq';
       StudentDemoRequest,
       SubscriptionPlan,
       OrgSubscription,
+      Cart,
       Organization,
       Student,
       Parent,
