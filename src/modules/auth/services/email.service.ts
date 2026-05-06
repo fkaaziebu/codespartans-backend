@@ -113,14 +113,10 @@ export class EmailService {
     to: string,
     name: string,
     school_name: string,
-    registrationUrl: string,
-    trial_duration_days: number,
   ): Promise<void> {
     const html = this.compileTemplate('demo-invitation', {
       name,
       school_name,
-      registrationUrl,
-      trial_duration_days,
     });
 
     try {
@@ -138,8 +134,6 @@ export class EmailService {
     approximate_students: string,
     email: string,
     whatsapp_number: string,
-    registrationUrl: string,
-    trial_duration_days: number,
   ): Promise<void> {
     const adminEmail = this.configService.get<string>('EMAIL_FROM');
     const html = this.compileTemplate('demo-admin-notification', {
@@ -149,8 +143,6 @@ export class EmailService {
       approximate_students,
       email,
       whatsapp_number,
-      registrationUrl,
-      trial_duration_days,
     });
 
     try {

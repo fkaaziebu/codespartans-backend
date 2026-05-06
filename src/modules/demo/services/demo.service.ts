@@ -65,11 +65,6 @@ export class DemoService {
     }
 
     const demo_code = randomUUID();
-    const baseUrl = this.configService.get<string>(
-      'SCHOOL_DEMO_URL',
-      'http://localhost:3000',
-    );
-    const registrationUrl = `${baseUrl}/demo/register?demoCode=${demo_code}`;
 
     const demo = this.schoolDemoRepository.create({ ...input, demo_code });
     await this.schoolDemoRepository.save(demo);
@@ -78,8 +73,6 @@ export class DemoService {
       email: input.email,
       name: input.name,
       school_name: input.school_name,
-      registrationUrl,
-      trial_duration_days: demo.trial_duration_days,
     });
 
     await this.emailProducer.sendDemoAdminNotificationEmail({
@@ -89,8 +82,6 @@ export class DemoService {
       approximate_students: input.approximate_students,
       email: input.email,
       whatsapp_number: input.whatsapp_number,
-      registrationUrl,
-      trial_duration_days: demo.trial_duration_days,
     });
 
     return {

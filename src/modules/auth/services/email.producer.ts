@@ -26,8 +26,6 @@ export class EmailProducer {
     email: string;
     name: string;
     school_name: string;
-    registrationUrl: string;
-    trial_duration_days: number;
   }) {
     await this.emailQueue.add('send-demo-invitation', data);
   }
@@ -39,8 +37,6 @@ export class EmailProducer {
     approximate_students: string;
     email: string;
     whatsapp_number: string;
-    registrationUrl: string;
-    trial_duration_days: number;
   }) {
     await this.emailQueue.add('send-demo-admin-notification', data);
   }
