@@ -11,9 +11,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
 import { HashHelper } from 'src/helpers';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
+import { Student } from 'src/modules/auth/entities/student.entity';
+import { Parent } from 'src/modules/parent/entities/parent.entity';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { Repository } from 'typeorm';
+import { ActivateParentDemoInput } from '../inputs/activate-parent-demo.input';
 import { ActivateSchoolDemoInput } from '../inputs/activate-school-demo.input';
+import { ActivateStudentDemoInput } from '../inputs/activate-student-demo.input';
 import { BookParentFreeDemoInput } from '../inputs/book-parent-free-demo.input';
 import { BookSchoolFreeDemoInput } from '../inputs/book-school-free-demo.input';
 import { BookStudentFreeDemoInput } from '../inputs/book-student-free-demo.input';
@@ -36,6 +40,10 @@ export class DemoService {
     private readonly studentDemoRepository: Repository<StudentDemoRequest>,
     @InjectRepository(Organization)
     private readonly orgRepository: Repository<Organization>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
+    @InjectRepository(Parent)
+    private readonly parentRepository: Repository<Parent>,
     private readonly emailProducer: EmailProducer,
     private readonly paymentService: PaymentService,
     private readonly configService: ConfigService,
@@ -58,7 +66,7 @@ export class DemoService {
       'SCHOOL_DEMO_URL',
       'http://localhost:3000',
     );
-    const registrationUrl = `${baseUrl}/register?demo_code=${demo_code}`;
+    const registrationUrl = `${baseUrl}/demo/register?demoCode=${demo_code}`;
 
     const demo = this.schoolDemoRepository.create({ ...input, demo_code });
     await this.schoolDemoRepository.save(demo);
@@ -85,6 +93,92 @@ export class DemoService {
     return {
       message:
         'Your free demo has been booked! Check your email for the registration link.',
+    };
+  }
+
+  async bookParentFreeDemo(input: BookParentFreeDemoInput) {
+    const existing = await this.parentDemoRepository.findOne({
+      where: { email: input.email },
+    });
+
+    if (existing) {
+      throw new ConflictException(
+        'A demo has already been requested for this email address.',
+      );
+    }
+
+    const demo_code = randomUUID();
+    const record = this.parentDemoRepository.create({ ...input, demo_code });
+    await this.parentDemoRepository.save(record);
+
+    const registrationUrl =
+      this.configService.get<string>(
+        'PARENT_DEMO_URL',
+        'http://localhost:3000',
+      ) + `/demo/register?demoCode=${demo_code}`;
+
+    const target_exams_display = input.target_exams.join(', ');
+
+    await this.emailProducer.sendParentDemoInvitationEmail({
+      email: input.email,
+      full_name: input.full_name,
+      target_exams: input.target_exams,
+      registrationUrl,
+    });
+
+    await this.emailProducer.sendLeadAdminNotificationEmail({
+      lead_type: 'Parent',
+      full_name: input.full_name,
+      email: input.email,
+      target_exams_display,
+      registrationUrl,
+    });
+
+    return {
+      message:
+        'Your free demo has been booked! Check your email to get started.',
+    };
+  }
+
+  async bookStudentFreeDemo(input: BookStudentFreeDemoInput) {
+    const existing = await this.studentDemoRepository.findOne({
+      where: { email: input.email },
+    });
+
+    if (existing) {
+      throw new ConflictException(
+        'A demo has already been requested for this email address.',
+      );
+    }
+
+    const demo_code = randomUUID();
+    const record = this.studentDemoRepository.create({ ...input, demo_code });
+    await this.studentDemoRepository.save(record);
+
+    const registrationUrl =
+      this.configService.get<string>(
+        'STUDENT_DEMO_URL',
+        'http://localhost:3000',
+      ) + `/demo/register?demoCode=${demo_code}`;
+
+    await this.emailProducer.sendStudentDemoInvitationEmail({
+      email: input.email,
+      full_name: input.full_name,
+      target_exam: input.target_exam,
+      registrationUrl,
+    });
+
+    await this.emailProducer.sendLeadAdminNotificationEmail({
+      lead_type: 'Student',
+      full_name: input.full_name,
+      email: input.email,
+      target_exams_display: input.target_exam,
+      registrationUrl,
+    });
+
+    return {
+      message:
+        'Your free demo has been booked! Check your email to get started.',
     };
   }
 
@@ -150,83 +244,139 @@ export class DemoService {
     };
   }
 
-  async bookParentFreeDemo(input: BookParentFreeDemoInput) {
-    const existing = await this.parentDemoRepository.findOne({
-      where: { email: input.email },
+  async activateStudentDemo(input: ActivateStudentDemoInput) {
+    const demo = await this.studentDemoRepository.findOne({
+      where: { demo_code: input.demo_code },
     });
 
-    if (existing) {
-      throw new ConflictException(
-        'A demo has already been requested for this email address.',
+    if (!demo) {
+      throw new NotFoundException('Invalid demo code.');
+    }
+
+    if (demo.status !== DemoStatus.PENDING) {
+      throw new BadRequestException(
+        'This demo code has already been used or has expired.',
       );
     }
 
-    const record = this.parentDemoRepository.create(input);
-    await this.parentDemoRepository.save(record);
-
-    const registrationUrl =
-      this.configService.get<string>('PARENT_URL', 'http://localhost:3000') +
-      '/register';
-
-    const target_exams_display = input.target_exams.join(', ');
-
-    await this.emailProducer.sendParentDemoInvitationEmail({
-      email: input.email,
-      full_name: input.full_name,
-      target_exams: input.target_exams,
-      registrationUrl,
+    const existingStudent = await this.studentRepository.findOne({
+      where: { email: demo.email },
     });
 
-    await this.emailProducer.sendLeadAdminNotificationEmail({
-      lead_type: 'Parent',
-      full_name: input.full_name,
-      email: input.email,
-      target_exams_display,
-      registrationUrl,
+    if (existingStudent) {
+      throw new ConflictException(
+        'An account already exists for this email address.',
+      );
+    }
+
+    const now = new Date();
+    const expiresAt = new Date(now);
+    expiresAt.setDate(expiresAt.getDate() + demo.trial_duration_days);
+
+    const student = this.studentRepository.create({
+      name: demo.full_name,
+      email: demo.email,
+      password: await HashHelper.encrypt(input.password),
     });
+
+    demo.status = DemoStatus.ACTIVE;
+    demo.activated_at = now;
+    demo.expires_at = expiresAt;
+
+    await this.studentRepository.manager.transaction(async (em) => {
+      await em.save(StudentDemoRequest, demo);
+      await em.save(Student, student);
+    });
+
+    const payload = {
+      id: student.id,
+      name: student.name,
+      email: student.email,
+      role: 'STUDENT',
+    };
+
+    const access_token = this.jwtService.sign(payload);
+    const refresh_token = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      { expiresIn: '30d' },
+    );
 
     return {
-      message:
-        'Your free demo has been booked! Check your email to get started.',
+      ...student,
+      token: access_token,
+      refresh_token,
+      expires_at: expiresAt.toISOString(),
     };
   }
 
-  async bookStudentFreeDemo(input: BookStudentFreeDemoInput) {
-    const existing = await this.studentDemoRepository.findOne({
-      where: { email: input.email },
+  async activateParentDemo(input: ActivateParentDemoInput) {
+    const demo = await this.parentDemoRepository.findOne({
+      where: { demo_code: input.demo_code },
     });
 
-    if (existing) {
-      throw new ConflictException(
-        'A demo has already been requested for this email address.',
+    if (!demo) {
+      throw new NotFoundException('Invalid demo code.');
+    }
+
+    if (demo.status !== DemoStatus.PENDING) {
+      throw new BadRequestException(
+        'This demo code has already been used or has expired.',
       );
     }
 
-    const record = this.studentDemoRepository.create(input);
-    await this.studentDemoRepository.save(record);
-
-    const registrationUrl =
-      this.configService.get<string>('STUDENT_URL', 'http://localhost:3000') +
-      '/register';
-
-    await this.emailProducer.sendStudentDemoInvitationEmail({
-      email: input.email,
-      full_name: input.full_name,
-      target_exam: input.target_exam,
-      registrationUrl,
+    const existingParent = await this.parentRepository.findOne({
+      where: { email: demo.email },
     });
 
-    await this.emailProducer.sendLeadAdminNotificationEmail({
-      lead_type: 'Student',
-      full_name: input.full_name,
-      email: input.email,
-      target_exams_display: input.target_exam,
-      registrationUrl,
+    if (existingParent) {
+      throw new ConflictException(
+        'An account already exists for this email address.',
+      );
+    }
+
+    const now = new Date();
+    const expiresAt = new Date(now);
+    expiresAt.setDate(expiresAt.getDate() + demo.trial_duration_days);
+
+    const [first_name, ...rest] = demo.full_name.trim().split(' ');
+    const last_name = rest.join(' ') || first_name;
+
+    const parent = this.parentRepository.create({
+      first_name,
+      last_name,
+      email: demo.email,
+      password: await HashHelper.encrypt(input.password),
+      is_account_validated: true,
+      is_setup_completed: false,
     });
+
+    demo.status = DemoStatus.ACTIVE;
+    demo.activated_at = now;
+    demo.expires_at = expiresAt;
+
+    await this.parentRepository.manager.transaction(async (em) => {
+      await em.save(ParentDemoRequest, demo);
+      await em.save(Parent, parent);
+    });
+
+    const payload = {
+      id: parent.id,
+      name: `${parent.first_name} ${parent.last_name}`,
+      email: parent.email,
+      role: 'PARENT' as const,
+    };
+
+    const token = this.jwtService.sign(payload);
+    const refresh_token = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      { expiresIn: '30d' },
+    );
 
     return {
-      message:
-        'Your free demo has been booked! Check your email to get started.',
+      ...parent,
+      token,
+      refresh_token,
+      expires_at: expiresAt.toISOString(),
     };
   }
 

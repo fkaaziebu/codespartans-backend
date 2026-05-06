@@ -27,8 +27,8 @@ export class Parent {
   @Column({ unique: true })
   email: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   whatsapp_number: string;
 
   @Column()

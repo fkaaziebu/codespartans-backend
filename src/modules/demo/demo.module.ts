@@ -15,6 +15,7 @@ import { DemoResolver } from './resolvers/demo.resolver';
 import { DemoService } from './services/demo.service';
 import { PaymentService } from './services/payment.service';
 import { Student } from '../auth/entities/student.entity';
+import { Parent } from '../parent/entities/parent.entity';
 import { EmailConsumer } from '../auth/services/email.consumer';
 import { EmailProducer } from '../auth/services/email.producer';
 import { EmailService } from '../auth/services/email.service';
@@ -42,6 +43,7 @@ import { BullModule } from '@nestjs/bullmq';
       OrgSubscription,
       Organization,
       Student,
+      Parent,
     ]),
     AuthModule,
   ],

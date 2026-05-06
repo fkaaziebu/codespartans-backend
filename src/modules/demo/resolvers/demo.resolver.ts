@@ -1,15 +1,20 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
+import { ActivateParentDemoInput } from '../inputs/activate-parent-demo.input';
 import { ActivateSchoolDemoInput } from '../inputs/activate-school-demo.input';
+import { ActivateStudentDemoInput } from '../inputs/activate-student-demo.input';
 import { BookParentFreeDemoInput } from '../inputs/book-parent-free-demo.input';
 import { BookSchoolFreeDemoInput } from '../inputs/book-school-free-demo.input';
 import { BookStudentFreeDemoInput } from '../inputs/book-student-free-demo.input';
 import { SubscriptionPlan } from '../entities/subscription-plan.entity';
 import { DemoService } from '../services/demo.service';
 import { ActivateDemoResponse } from '../types/activate-demo-response.type';
+import { ActivateUserDemoResponse } from '../types/activate-user-demo-response.type';
 import { BookDemoResponse } from '../types/book-demo-response.type';
 import { InitiatePaymentResponse } from '../types/initiate-payment-response.type';
+import { LoginParentResponse } from 'src/modules/parent/types';
+import { StudentLoginResponse } from 'src/modules/auth/types';
 
 @Resolver()
 export class DemoResolver {
@@ -35,6 +40,16 @@ export class DemoResolver {
     return this.demoService.activateSchoolDemo(input);
   }
 
+  @Mutation(() => StudentLoginResponse)
+  async activateStudentDemo(@Args('input') input: ActivateStudentDemoInput) {
+    return this.demoService.activateStudentDemo(input);
+  }
+
+  @Mutation(() => LoginParentResponse)
+  async activateParentDemo(@Args('input') input: ActivateParentDemoInput) {
+    return this.demoService.activateParentDemo(input);
+  }
+
   @Query(() => [SubscriptionPlan])
   async listSubscriptionPlans() {
     return this.demoService.listPlans();
@@ -42,10 +57,7 @@ export class DemoResolver {
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => InitiatePaymentResponse)
-  async initiatePayment(
-    @Args('planId') planId: string,
-    @Context() context,
-  ) {
+  async initiatePayment(@Args('planId') planId: string, @Context() context) {
     const { email } = context.req.user;
     return this.demoService.initiatePayment(email, planId);
   }
