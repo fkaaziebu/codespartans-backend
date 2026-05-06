@@ -124,6 +124,15 @@ export enum QuestionDifficultyType {
   HARD = 'HARD',
 }
 
+export enum QuestionClassLevel {
+  JHS_1 = 'jhs_1',
+  JHS_2 = 'jhs_2',
+  JHS_3 = 'jhs_3',
+  SHS_1 = 'shs_1',
+  SHS_2 = 'shs_2',
+  SHS_3 = 'shs_3',
+}
+
 registerEnumType(QuestionType, {
   name: 'QuestionType',
   description: 'Question types',
@@ -137,6 +146,11 @@ registerEnumType(QuestionTagType, {
 registerEnumType(QuestionDifficultyType, {
   name: 'QuestionDifficultyType',
   description: 'Question difficulty types',
+});
+
+registerEnumType(QuestionClassLevel, {
+  name: 'QuestionClassLevel',
+  description: 'Syllabus class level the question originates from',
 });
 
 @ObjectType('Question')
@@ -198,6 +212,14 @@ export class Question {
   @Field(() => Int)
   @Column()
   estimated_time_in_ms: number;
+
+  @Field(() => QuestionClassLevel, { nullable: true })
+  @Column({ type: 'enum', enum: QuestionClassLevel, nullable: true })
+  class_level?: QuestionClassLevel;
+
+  @Field(() => Int, { nullable: true })
+  @Column({ nullable: true })
+  exam_year?: number;
 
   @Field(() => Version, { nullable: true })
   @ManyToOne(() => Version, (version) => version.questions)

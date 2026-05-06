@@ -1,5 +1,6 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import {
+  QuestionClassLevel,
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
@@ -33,6 +34,12 @@ export class QuestionInput {
 
   @Field()
   estimated_time_in_ms: number;
+
+  @Field(() => QuestionClassLevel, { nullable: true })
+  class_level?: QuestionClassLevel;
+
+  @Field(() => Int, { nullable: true })
+  exam_year?: number;
 
   @Field()
   correct_answer: string;

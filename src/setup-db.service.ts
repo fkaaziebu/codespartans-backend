@@ -26,6 +26,7 @@ import {
 } from './modules/inventory/entities/course.entity';
 import { QuestionInput } from './modules/inventory/inputs';
 import {
+  QuestionClassLevel,
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
@@ -262,6 +263,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1 7/20',
               },
               {
@@ -274,6 +277,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '0.3',
               },
               {
@@ -293,6 +298,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '6',
               },
               {
@@ -310,6 +317,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '5/8',
               },
               {
@@ -323,6 +332,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ALGEBRA],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '7',
               },
               {
@@ -335,6 +346,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ALGEBRA],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '4x',
               },
               {
@@ -347,6 +360,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ALGEBRA],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '7',
               },
               {
@@ -365,6 +380,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ALGEBRA],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'x² + 5x + 6',
               },
             ],
@@ -387,6 +404,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MENSURATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '40 cm²',
               },
               {
@@ -400,6 +419,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MENSURATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '24 cm',
               },
               {
@@ -412,6 +433,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MENSURATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '27 cm³',
               },
               {
@@ -424,6 +447,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GEOMETRY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '180°',
               },
               {
@@ -438,6 +463,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GEOMETRY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '180°',
               },
               {
@@ -452,6 +479,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GEOMETRY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Obtuse',
               },
               {
@@ -464,6 +493,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_STATISTICS_AND_PROBABILITY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '5',
               },
               {
@@ -476,6 +507,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_STATISTICS_AND_PROBABILITY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '2',
               },
               {
@@ -488,6 +521,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_STATISTICS_AND_PROBABILITY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '10',
               },
               {
@@ -500,6 +535,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_STATISTICS_AND_PROBABILITY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1/2',
               },
               {
@@ -512,6 +549,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_STATISTICS_AND_PROBABILITY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1/6',
               },
               {
@@ -524,6 +563,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_SETS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '4',
               },
               {
@@ -538,6 +579,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_SETS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'All elements',
               },
               {
@@ -550,6 +593,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '5 and 15',
               },
               {
@@ -562,6 +607,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '6',
               },
               {
@@ -574,6 +621,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '30',
               },
               {
@@ -586,6 +635,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '100',
               },
               {
@@ -598,6 +649,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_TRIGONOMETRY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1',
               },
               {
@@ -610,6 +663,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_TRIGONOMETRY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1',
               },
               {
@@ -624,6 +679,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ALGEBRA],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '2⁵',
               },
               {
@@ -636,6 +693,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ALGEBRA],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1',
               },
               {
@@ -648,6 +707,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'GH₵50',
               },
             ],
@@ -677,6 +738,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Each of the boys has a book.',
               },
               {
@@ -696,6 +759,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_VOCABULARY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Using more words than necessary',
               },
               {
@@ -710,6 +775,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Personification',
               },
               {
@@ -722,6 +789,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'criteria',
               },
               {
@@ -737,6 +806,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_VOCABULARY],
                 difficulty: QuestionDifficultyType.HARD,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Concise',
               },
             ],
@@ -763,6 +834,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'are',
               },
               {
@@ -778,6 +851,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ORAL_ENGLISH],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '/tʃ/',
               },
               {
@@ -792,6 +867,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_VOCABULARY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Malevolent',
               },
               {
@@ -811,6 +888,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'The letter was written by Ama.',
               },
               {
@@ -828,6 +907,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ORAL_ENGLISH],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 're-CORD',
               },
             ],
@@ -851,6 +932,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MECHANICS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '4 m/s²',
               },
               {
@@ -864,6 +947,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MECHANICS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '60 km/h',
               },
               {
@@ -883,6 +968,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_WAVES_AND_OPTICS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Longitudinal',
               },
               {
@@ -898,6 +985,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ELECTRICITY_AND_MAGNETISM],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '2 Ω',
               },
               {
@@ -910,6 +999,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_HEAT_AND_THERMODYNAMICS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '373 K',
               },
             ],
@@ -930,6 +1021,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MECHANICS],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '20 m',
               },
               {
@@ -943,6 +1036,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ELECTRICITY_AND_MAGNETISM],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '3 A',
               },
               {
@@ -960,6 +1055,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ATOMIC_AND_NUCLEAR_PHYSICS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Proton',
               },
               {
@@ -972,6 +1069,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MEASUREMENT],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Watt',
               },
               {
@@ -985,6 +1084,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_WAVES_AND_OPTICS],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '200 m/s',
               },
             ],
@@ -1010,6 +1111,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ATOMIC_STRUCTURE],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '6',
               },
               {
@@ -1025,6 +1128,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PERIODIC_TABLE],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Group 18',
               },
               {
@@ -1045,6 +1150,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_CHEMICAL_BONDING],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Covalent bond',
               },
               {
@@ -1057,6 +1164,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ACIDS_BASES_AND_SALTS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '7',
               },
               {
@@ -1072,6 +1181,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_STOICHIOMETRY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '2',
               },
             ],
@@ -1100,6 +1211,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ORGANIC_CHEMISTRY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '−OH',
               },
               {
@@ -1118,6 +1231,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ELECTROCHEMISTRY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Anode',
               },
               {
@@ -1130,6 +1245,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_AIR_AND_WATER],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '78%',
               },
               {
@@ -1143,6 +1260,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ATOMIC_STRUCTURE],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '23',
               },
               {
@@ -1157,6 +1276,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_STOICHIOMETRY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1',
               },
             ],
@@ -1185,6 +1306,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_CELL_BIOLOGY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Mitochondrion',
               },
               {
@@ -1208,6 +1331,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_CELL_BIOLOGY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Ribosome',
               },
               {
@@ -1226,6 +1351,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GENETICS_AND_EVOLUTION],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Gene',
               },
               {
@@ -1249,6 +1376,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_HUMAN_PHYSIOLOGY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer:
                   'They contain haemoglobin that binds oxygen,They are biconcave to maximise surface area for gas exchange,They are produced in the red bone marrow',
               },
@@ -1273,6 +1402,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PLANT_BIOLOGY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Photosynthesis',
               },
             ],
@@ -1297,6 +1428,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ECOLOGY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Autotrophs',
               },
               {
@@ -1313,6 +1446,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MICROORGANISMS_AND_DISEASE],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Plasmodium',
               },
               {
@@ -1337,6 +1472,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_CLASSIFICATION],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer:
                   'Kingdom is the broadest classification level,Species is the most specific classification level,Genus and Species form binomial nomenclature',
               },
@@ -1352,6 +1489,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_HUMAN_PHYSIOLOGY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Pancreas',
               },
               {
@@ -1376,6 +1515,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GENETICS_AND_EVOLUTION],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer:
                   'All F₁ offspring have genotype Tt,All F₁ offspring express the dominant phenotype',
               },
@@ -1404,6 +1545,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_DEMAND_AND_SUPPLY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Law of Demand',
               },
               {
@@ -1418,6 +1561,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_DEMAND_AND_SUPPLY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Rise',
               },
               {
@@ -1433,6 +1578,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PRODUCTION_AND_COSTS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Fixed cost',
               },
               {
@@ -1452,6 +1599,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NATIONAL_INCOME],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Gross Domestic Product',
               },
               {
@@ -1471,6 +1620,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MONEY_AND_BANKING],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Medium of exchange',
               },
             ],
@@ -1495,6 +1646,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_INTERNATIONAL_TRADE],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Protectionism',
               },
               {
@@ -1515,6 +1668,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PUBLIC_FINANCE],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Progressive tax',
               },
               {
@@ -1536,6 +1691,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PRODUCTION_AND_COSTS],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Cost advantages gained by increased output',
               },
               {
@@ -1551,6 +1708,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_NATIONAL_INCOME],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Depreciation',
               },
               {
@@ -1572,6 +1731,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MONEY_AND_BANKING],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Bank of Ghana',
               },
             ],
@@ -1601,6 +1762,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PHYSICAL_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Sahara Desert',
               },
               {
@@ -1616,6 +1779,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PHYSICAL_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Weathering',
               },
               {
@@ -1636,6 +1801,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_HUMAN_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Rural-urban migration',
               },
               {
@@ -1657,6 +1824,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_REGIONAL_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Algeria',
               },
               {
@@ -1674,6 +1843,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ECONOMIC_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Cocoa',
               },
             ],
@@ -1700,6 +1871,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_MAP_READING],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 90000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1 km',
               },
               {
@@ -1717,6 +1890,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PHYSICAL_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Convectional rainfall',
               },
               {
@@ -1736,6 +1911,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PHYSICAL_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Pacific Ocean',
               },
               {
@@ -1753,6 +1930,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_REGIONAL_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Akosombo Dam',
               },
               {
@@ -1765,6 +1944,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_ECONOMIC_GEOGRAPHY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Gold',
               },
             ],
@@ -1791,6 +1972,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PROSE],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Fiction',
               },
               {
@@ -1808,6 +1991,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_POETRY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Alliteration',
               },
               {
@@ -1823,6 +2008,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_DRAMA],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Tragedy',
               },
               {
@@ -1842,6 +2029,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PROSE],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'First-person narrator',
               },
               {
@@ -1857,6 +2046,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_POETRY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Sonnet',
               },
             ],
@@ -1883,6 +2074,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_DRAMA],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Climax',
               },
               {
@@ -1898,6 +2091,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_POETRY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Simile',
               },
               {
@@ -1913,6 +2108,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PROSE],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Protagonist',
               },
               {
@@ -1927,6 +2124,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_DRAMA],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Soliloquy',
               },
               {
@@ -1944,6 +2143,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_POETRY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Assonance',
               },
             ],
@@ -1969,6 +2170,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_CONSTITUTION_AND_LAW],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'The Constitution',
               },
               {
@@ -1988,6 +2191,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_DEMOCRATIC_INSTITUTIONS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'The President',
               },
               {
@@ -2011,6 +2216,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GOVERNMENT_AND_CITIZENSHIP],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'The Legislature,The Executive,The Judiciary',
               },
               {
@@ -2027,6 +2234,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_CONSTITUTION_AND_LAW],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1992',
               },
               {
@@ -2043,6 +2252,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GHANA_POLITICAL_HISTORY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1957',
               },
               {
@@ -2063,6 +2274,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_DEMOCRATIC_INSTITUTIONS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Electoral Commission',
               },
             ],
@@ -2092,6 +2305,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GOVERNMENT_AND_CITIZENSHIP],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Federalism',
               },
               {
@@ -2106,6 +2321,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_CONSTITUTION_AND_LAW],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '18',
               },
               {
@@ -2127,6 +2344,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GHANA_POLITICAL_HISTORY],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Kwame Nkrumah',
               },
               {
@@ -2143,6 +2362,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_DEMOCRATIC_INSTITUTIONS],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '16',
               },
             ],
@@ -2175,6 +2396,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PRECOLONIAL_AFRICA],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Osei Tutu I',
               },
               {
@@ -2195,6 +2418,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_COLONIAL_PERIOD],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Berlin, 1884–1885',
               },
               {
@@ -2209,6 +2434,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_COLONIAL_PERIOD],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Britain',
               },
               {
@@ -2225,6 +2452,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_INDEPENDENCE_MOVEMENTS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '6th March 1957',
               },
               {
@@ -2245,6 +2474,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_INDEPENDENCE_MOVEMENTS],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Kwame Nkrumah',
               },
             ],
@@ -2269,6 +2500,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_GHANA_POLITICAL_HISTORY],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: '1966',
               },
               {
@@ -2284,6 +2517,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_CULTURE_AND_VALUES],
                 difficulty: QuestionDifficultyType.EASY,
                 estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Golden Stool',
               },
               {
@@ -2305,6 +2540,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PRECOLONIAL_AFRICA],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'North Africa and West Africa',
               },
               {
@@ -2327,6 +2564,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_COLONIAL_PERIOD],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Forced labour',
               },
               {
@@ -2349,6 +2588,8 @@ export class SetupDbService implements OnModuleInit {
                 tags: [QuestionTagType.TAG_PRECOLONIAL_AFRICA],
                 difficulty: QuestionDifficultyType.MEDIUM,
                 estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
                 correct_answer: 'Songhai Empire',
               },
             ],
@@ -2392,6 +2633,8 @@ export class SetupDbService implements OnModuleInit {
                   new_question.solution_steps = question.solution_steps;
                   new_question.tags = question.tags;
                   new_question.type = question.type;
+                  new_question.class_level = question.class_level;
+                  new_question.exam_year = question.exam_year;
                   new_question.version = version;
                   new_question.test_suite = new_suite;
 
