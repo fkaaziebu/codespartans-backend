@@ -19,6 +19,11 @@ import {
   AttemptResponse,
 } from 'src/modules/inventory/types';
 import { Test } from 'src/modules/simulation/entities/test.entity';
+import {
+  TestAssignment,
+  TestAssignmentStatus,
+} from 'src/modules/simulation/entities/test_assignment.entity';
+import { TestSuite } from 'src/modules/review/entities/test_suite.entity';
 import { Student } from 'src/modules/auth/entities/student.entity';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Cart } from 'src/modules/inventory/entities/cart.entity';
@@ -45,6 +50,10 @@ export class ParentService {
     private childRepository: Repository<Child>,
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
+    @InjectRepository(TestAssignment)
+    private testAssignmentRepository: Repository<TestAssignment>,
+    @InjectRepository(TestSuite)
+    private testSuiteRepository: Repository<TestSuite>,
     private jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailProducer: EmailProducer,
@@ -515,7 +524,7 @@ export class ParentService {
         },
         ...(searchTerm ? { name: ILike(`%${searchTerm.trim()}%`) } : {}),
       },
-      relations: ['courses'],
+      relations: ['courses.approved_version.test_suites'],
     });
   }
 
@@ -664,10 +673,14 @@ export class ParentService {
   async getChildSubjectProgress(
     parentEmail: string,
     childId: string,
+    courseId?: string,
   ): Promise<SubjectProgressResponse[]> {
     const child = await this.childRepository.findOne({
       where: { id: childId, parent: { email: parentEmail } },
-      relations: ['student.tests.submitted_answers.question'],
+      relations: [
+        'student.tests.submitted_answers.question',
+        'student.tests.test_suite.course_version.course',
+      ],
     });
 
     if (!child) {
@@ -676,9 +689,13 @@ export class ParentService {
 
     if (!child.student) return [];
 
-    const endedTests = child.student.tests.filter(
-      (t) => t.status === TestStatusType.ENDED,
-    );
+    const endedTests = child.student.tests.filter((t) => {
+      if (t.status !== TestStatusType.ENDED) return false;
+      if (courseId) {
+        return t.test_suite?.course_version?.course?.id === courseId;
+      }
+      return true;
+    });
 
     const tagStats = new Map<
       string,
@@ -1126,6 +1143,60 @@ export class ParentService {
     );
 
     return { ...child, token, refresh_token };
+  }
+
+  async assignTestToChild(
+    parentEmail: string,
+    childId: string,
+    suiteId: string,
+  ): Promise<TestAssignment> {
+    return this.parentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const child = await transactionalEntityManager.findOne(Child, {
+          where: { id: childId, parent: { email: parentEmail } },
+          relations: ['parent'],
+        });
+
+        if (!child) {
+          throw new NotFoundException('Child not found');
+        }
+
+        const testSuite = await transactionalEntityManager.findOne(TestSuite, {
+          where: { id: suiteId },
+        });
+
+        if (!testSuite) {
+          throw new NotFoundException('Test suite not found');
+        }
+
+        const assignment = new TestAssignment();
+        assignment.parent = child.parent;
+        assignment.child = child;
+        assignment.test_suite = testSuite;
+        assignment.status = TestAssignmentStatus.PENDING;
+
+        return transactionalEntityManager.save(TestAssignment, assignment);
+      },
+    );
+  }
+
+  async listChildAssignments(
+    parentEmail: string,
+    childId: string,
+  ): Promise<TestAssignment[]> {
+    const child = await this.childRepository.findOne({
+      where: { id: childId, parent: { email: parentEmail } },
+    });
+
+    if (!child) {
+      throw new NotFoundException('Child not found');
+    }
+
+    return this.testAssignmentRepository.find({
+      where: { child: { id: childId } },
+      relations: ['test_suite', 'test'],
+      order: { assigned_at: 'DESC' },
+    });
   }
 
   private async generateUniqueUsername(

@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { RefreshTokenResponse } from 'src/modules/auth/types';
@@ -125,9 +126,10 @@ export class ParentResolver {
   async getChildSubjectProgress(
     @Args('childId') childId: string,
     @Context() context,
+    @Args('courseId', { nullable: true }) courseId?: string,
   ) {
     const { email } = context.req.user;
-    return this.parentService.getChildSubjectProgress(email, childId);
+    return this.parentService.getChildSubjectProgress(email, childId, courseId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -189,5 +191,26 @@ export class ParentResolver {
   @Mutation(() => LoginChildResponse)
   async loginChild(@Args('input') input: LoginChildInput) {
     return this.parentService.loginChild(input.temp_token, input.pin);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => TestAssignment)
+  async assignTestToChild(
+    @Args('childId') childId: string,
+    @Args('suiteId') suiteId: string,
+    @Context() context,
+  ) {
+    const { email } = context.req.user;
+    return this.parentService.assignTestToChild(email, childId, suiteId);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [TestAssignment])
+  async listChildAssignments(
+    @Args('childId') childId: string,
+    @Context() context,
+  ) {
+    const { email } = context.req.user;
+    return this.parentService.listChildAssignments(email, childId);
   }
 }

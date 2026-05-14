@@ -31,6 +31,14 @@ export class SubmittedAnswer {
   @Column({ default: false })
   is_flagged: boolean;
 
+  @Field(() => Boolean, { nullable: true })
+  @Column({ type: 'boolean', nullable: true, default: null })
+  is_correct: boolean | null;
+
+  @Field()
+  @Column({ default: false })
+  is_marked: boolean;
+
   @Column('text', { array: true })
   time_ranges: string[];
 

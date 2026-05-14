@@ -752,7 +752,7 @@ export class StudentService {
       relations: [
         'submitted_answers.question',
         'test_suite.questions',
-        'test_suite.course_version.course',
+        'test_suite.course_version.course.categories',
         'time_events',
       ],
     });
@@ -761,9 +761,13 @@ export class StudentService {
       throw new NotFoundException('Test not found');
     }
 
+    const categories = test.test_suite?.course_version?.course?.categories ?? [];
+    const course_category = categories.length > 0 ? categories[0].name : null;
+
     return {
       ...test,
       course_id: test.test_suite?.course_version?.course?.id ?? null,
+      course_category,
     };
   }
 

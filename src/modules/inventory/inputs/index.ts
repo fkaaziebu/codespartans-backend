@@ -1,4 +1,5 @@
 export { AttemptFilterInput } from './attempt-filter.input';
+export { SuiteFilterInput } from './suite-filter.input';
 export { CategoryInfoInput } from './category-info.input';
 export { CheckoutInfoInput } from './checkout-info.input';
 export { CourseFilterInput } from './course-filter.input';

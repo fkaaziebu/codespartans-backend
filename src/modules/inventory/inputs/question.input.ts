@@ -43,4 +43,7 @@ export class QuestionInput {
 
   @Field()
   correct_answer: string;
+
+  @Field(() => Int, { nullable: true })
+  marks?: number;
 }

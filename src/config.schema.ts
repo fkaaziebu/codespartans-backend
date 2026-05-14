@@ -21,4 +21,5 @@ export const configValidationSchema = Joi.object({
   PAYSTACK_SECRET_KEY: Joi.string().required(),
   SCHOOL_DEMO_URL: Joi.string().default('http://localhost:3000'),
   PARENT_URL: Joi.string().default('http://localhost:3000'),
+  ANTHROPIC_API_KEY: Joi.string().required(),
 });

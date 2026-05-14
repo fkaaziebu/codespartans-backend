@@ -190,6 +190,9 @@ export class InstructorService {
             new_question.solution_steps = question.solution_steps;
             new_question.tags = question.tags;
             new_question.type = question.type;
+            if (question.marks !== undefined) {
+              new_question.marks = question.marks;
+            }
             new_question.version = courseVersion;
             new_question.test_suite = new_suite;
 

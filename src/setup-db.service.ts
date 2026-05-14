@@ -9,7 +9,10 @@ import { Category } from './modules/inventory/entities/category.entity';
 import { Course } from './modules/inventory/entities/course.entity';
 import { Image } from './modules/media/entities/image.entity';
 import { Question } from './modules/review/entities/question.entity';
-import { TestSuite } from './modules/review/entities/test_suite.entity';
+import {
+  TestSuite,
+  SuiteType,
+} from './modules/review/entities/test_suite.entity';
 import { Version } from './modules/review/entities/version.entity';
 import {
   PlanInterval,
@@ -239,6 +242,7 @@ export class SetupDbService implements OnModuleInit {
           suiteTitle: string;
           suiteDescription: string;
           suiteKeywords: string[];
+          suiteType?: SuiteType;
           questions: QuestionInput[];
         }>
       > = {
@@ -713,6 +717,173 @@ export class SetupDbService implements OnModuleInit {
               },
             ],
           },
+          {
+            suiteTitle: 'SHS 1 Mathematics — Foundations',
+            suiteDescription:
+              '5 introductory questions covering basic algebra, number theory, and simple geometry for SHS 1 students.',
+            suiteKeywords: ['SHS 1', 'Mathematics', 'Foundations', 'Algebra'],
+            suiteType: SuiteType.CLASS,
+            questions: [
+              {
+                question_number: 1,
+                description: 'Simplify: 3x + 2x = ___',
+                hints: ['Add the coefficients of x.'],
+                solution_steps: ['3x + 2x = (3+2)x = 5x'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_ALGEBRA],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_1,
+                exam_year: 2023,
+                correct_answer: '5x',
+              },
+              {
+                question_number: 2,
+                description: 'What is the value of 2³?',
+                hints: ['2³ means 2 multiplied by itself 3 times.'],
+                solution_steps: ['2³ = 2 × 2 × 2 = 8'],
+                options: ['4', '6', '8', '9'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_1,
+                exam_year: 2023,
+                correct_answer: '8',
+              },
+              {
+                question_number: 3,
+                description: 'The perimeter of a square with side 6 cm is ___ cm.',
+                hints: ['A square has 4 equal sides.'],
+                solution_steps: ['Perimeter = 4 × 6 = 24 cm'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_MENSURATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_1,
+                exam_year: 2023,
+                correct_answer: '24',
+              },
+              {
+                question_number: 4,
+                description: 'Solve for x: 2x = 14',
+                hints: ['Divide both sides by 2.'],
+                solution_steps: ['x = 14 ÷ 2 = 7'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_ALGEBRA],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_1,
+                exam_year: 2023,
+                correct_answer: '7',
+              },
+              {
+                question_number: 5,
+                description: 'The LCM of 4 and 6 is ___.',
+                hints: ['List multiples of each number and find the smallest common one.'],
+                solution_steps: [
+                  'Multiples of 4: 4, 8, 12, 16...',
+                  'Multiples of 6: 6, 12, 18...',
+                  'LCM = 12',
+                ],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_1,
+                exam_year: 2023,
+                correct_answer: '12',
+              },
+            ],
+          },
+          {
+            suiteTitle: 'Mathematics — Trigonometry',
+            suiteDescription:
+              '5 questions focused on trigonometric ratios, identities, and applications.',
+            suiteKeywords: ['Mathematics', 'Trigonometry', 'SOH-CAH-TOA'],
+            suiteType: SuiteType.TOPIC,
+            questions: [
+              {
+                question_number: 1,
+                description:
+                  'In a right-angled triangle, sin θ = opposite/hypotenuse. If the opposite side is 3 and hypotenuse is 5, what is sin θ?',
+                hints: ['Use the SOH ratio directly.'],
+                solution_steps: ['sin θ = 3/5 = 0.6'],
+                options: ['0.4', '0.5', '0.6', '0.75'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_TRIGONOMETRY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.SHS_2,
+                exam_year: 2023,
+                correct_answer: '0.6',
+              },
+              {
+                question_number: 2,
+                description: 'What is the value of cos 0°?',
+                hints: ['Recall standard trigonometric values.'],
+                solution_steps: ['cos 0° = 1'],
+                options: ['0', '1', '0.5', '√2/2'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_TRIGONOMETRY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_2,
+                exam_year: 2023,
+                correct_answer: '1',
+              },
+              {
+                question_number: 3,
+                description: 'tan 45° = ___',
+                hints: ['tan θ = sin θ / cos θ. At 45°, sin = cos.'],
+                solution_steps: ['tan 45° = sin 45° / cos 45° = 1'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_TRIGONOMETRY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_2,
+                exam_year: 2023,
+                correct_answer: '1',
+              },
+              {
+                question_number: 4,
+                description:
+                  'A ladder leans against a wall. The ladder is 10 m long and makes an angle of 60° with the ground. How high up the wall does it reach? (in metres, round to 1 decimal place)',
+                hints: ['Use sin 60° = √3/2 ≈ 0.866.'],
+                solution_steps: [
+                  'height = 10 × sin 60°',
+                  'height = 10 × 0.866 = 8.66 ≈ 8.7 m',
+                ],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_TRIGONOMETRY],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 60000,
+                class_level: QuestionClassLevel.SHS_2,
+                exam_year: 2023,
+                correct_answer: '8.7',
+              },
+              {
+                question_number: 5,
+                description: 'Which of the following is equal to sin²θ + cos²θ?',
+                hints: ['This is a fundamental Pythagorean identity.'],
+                solution_steps: ['sin²θ + cos²θ = 1 (Pythagorean identity)'],
+                options: ['0', '1', '2', 'tan²θ'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_TRIGONOMETRY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.SHS_2,
+                exam_year: 2023,
+                correct_answer: '1',
+              },
+            ],
+          },
         ],
         'English Language': [
           {
@@ -910,6 +1081,113 @@ export class SetupDbService implements OnModuleInit {
                 class_level: QuestionClassLevel.SHS_3,
                 exam_year: 2023,
                 correct_answer: 're-CORD',
+              },
+            ],
+          },
+          {
+            suiteTitle: 'WASSCE English Language — Essay & Comprehension',
+            suiteDescription:
+              '4 open-ended questions requiring elaborated written responses, marked by AI.',
+            suiteKeywords: [
+              'WASSCE',
+              'English',
+              'Essay',
+              'Comprehension',
+              'Short Answer',
+            ],
+            questions: [
+              {
+                question_number: 1,
+                description:
+                  'Explain what is meant by "subject-verb agreement" and give one example of a sentence that violates it, then correct the sentence.',
+                hints: [
+                  'The subject and verb must match in number (singular or plural).',
+                ],
+                solution_steps: [
+                  'Subject-verb agreement means the verb form must match whether the subject is singular or plural.',
+                  'Violation: "The boys was late." — "boys" is plural but "was" is singular.',
+                  'Corrected: "The boys were late."',
+                ],
+                options: [],
+                type: QuestionType.SHORT_ANSWER,
+                tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 180000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
+                correct_answer:
+                  'Subject-verb agreement means the subject and verb must match in number. Example of violation: "The boys was late." Corrected: "The boys were late."',
+                marks: 3,
+              },
+              {
+                question_number: 2,
+                description:
+                  'In your own words, explain the difference between a simile and a metaphor. Give one original example of each.',
+                hints: [
+                  'A simile uses "like" or "as"; a metaphor states one thing is another.',
+                ],
+                solution_steps: [
+                  'A simile compares two things using "like" or "as" (e.g. "She runs like the wind").',
+                  'A metaphor equates two things directly without "like" or "as" (e.g. "She is the wind").',
+                ],
+                options: [],
+                type: QuestionType.SHORT_ANSWER,
+                tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 180000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
+                correct_answer:
+                  'A simile compares using "like" or "as" (e.g. "brave as a lion"). A metaphor directly equates two things (e.g. "He is a lion in battle").',
+                marks: 4,
+              },
+              {
+                question_number: 3,
+                description:
+                  'Read the following passage and summarise the main idea in two or three sentences:\n\n"Education is not merely the acquisition of knowledge; it is the development of the whole person. A truly educated individual can think critically, communicate effectively, and contribute meaningfully to society. Schools that focus only on examinations miss the broader purpose of learning."',
+                hints: [
+                  'Identify what the author believes education should achieve.',
+                  'Focus on the contrast between memorisation and holistic development.',
+                ],
+                solution_steps: [
+                  'The passage argues that education should develop the whole person, not just transfer knowledge.',
+                  'Critical thinking, communication, and social contribution are highlighted as goals.',
+                  'The author criticises exam-focused schooling as too narrow.',
+                ],
+                options: [],
+                type: QuestionType.SHORT_ANSWER,
+                tags: [QuestionTagType.TAG_READING_COMPREHENSION],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 240000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
+                correct_answer:
+                  'The passage argues that true education develops the whole person — including critical thinking and communication skills — rather than focusing solely on knowledge acquisition or exam performance.',
+                marks: 5,
+              },
+              {
+                question_number: 4,
+                description:
+                  'Write a short paragraph (4–6 sentences) arguing for or against the following statement: "Social media has done more harm than good to young people."',
+                hints: [
+                  'Pick one side and support it with at least two reasons.',
+                  'Use connectives like "furthermore", "however", and "therefore".',
+                ],
+                solution_steps: [
+                  'State your position clearly in the first sentence.',
+                  'Provide two or more supporting reasons.',
+                  'Conclude by reinforcing your stance.',
+                ],
+                options: [],
+                type: QuestionType.SHORT_ANSWER,
+                tags: [QuestionTagType.TAG_ESSAY_WRITING],
+                difficulty: QuestionDifficultyType.HARD,
+                estimated_time_in_ms: 300000,
+                class_level: QuestionClassLevel.SHS_3,
+                exam_year: 2023,
+                correct_answer:
+                  'A well-structured paragraph that clearly states a position (for or against), supports it with at least two coherent reasons, uses appropriate connectives, and ends with a strong conclusion.',
+                marks: 6,
               },
             ],
           },
@@ -2612,6 +2890,7 @@ export class SetupDbService implements OnModuleInit {
               new_suite.title = suiteData.suiteTitle;
               new_suite.description = suiteData.suiteDescription;
               new_suite.keywords = suiteData.suiteKeywords;
+              new_suite.suite_type = suiteData.suiteType ?? SuiteType.YEAR;
               new_suite.course_version = version;
 
               await this.testSuiteRepository.save(new_suite);
@@ -2635,6 +2914,9 @@ export class SetupDbService implements OnModuleInit {
                   new_question.type = question.type;
                   new_question.class_level = question.class_level;
                   new_question.exam_year = question.exam_year;
+                  if (question.marks !== undefined) {
+                    new_question.marks = question.marks;
+                  }
                   new_question.version = version;
                   new_question.test_suite = new_suite;
 
@@ -2653,32 +2935,1193 @@ export class SetupDbService implements OnModuleInit {
         new_wassce_course_version_questions.flat(),
       );
 
-      /** Step Three
-       * (1) Admin should create a category
-       * (2) Admin should add course to category
+      /** Step Two-B
+       * BECE courses, versions, and questions
        */
-      const categories = [
-        'WAEC / WASSCE',
-        'JAMB / UTME',
-        'BECE',
-        'SAT / A-Levels',
-        'University Exams',
-        'General Study',
+      const bece_course_names = [
+        'Mathematics',
+        'English Language',
+        'Social Studies',
+        'Integrated Science',
+        'Religious and Moral Education',
+        'ICT',
       ];
 
-      const new_categories: Category[] = await Promise.all(
-        categories.map(async (category_name) => {
+      const new_bece_courses: Course[] = await Promise.all(
+        bece_course_names.map(async (course_name, idx) => {
+          const bece_course = new Course();
+          bece_course.avatar_url = 'https://example.com/avatar.jpg';
+          bece_course.currency = CurrencyType.USD;
+          bece_course.description = `BECE ${course_name} course for JHS students`;
+          bece_course.domains = [DomainType.SCIENCE];
+          bece_course.level = LevelType.BEGINNER;
+          bece_course.price = 100;
+          bece_course.title = course_name;
+          bece_course.is_mandatory = idx < 4;
+          bece_course.instructor = instructor;
+          bece_course.organization = organization;
+          return bece_course;
+        }),
+      );
+
+      await this.courseRepository.save(new_bece_courses);
+
+      const new_bece_course_versions: Version[] = await Promise.all(
+        new_bece_courses.map(async (course) => {
+          const version = new Version();
+          version.status = VersionStatusType.APPROVED;
+          version.version_number = 1;
+          version.course = course;
+          version.assigned_admin = admin;
+          await this.versionRepository.save(version);
+          course.approved_version = version;
+          await this.courseRepository.save(course);
+          return version;
+        }),
+      );
+
+      const beceCourseQuestionsMap: Record<
+        string,
+        Array<{
+          suiteTitle: string;
+          suiteDescription: string;
+          suiteKeywords: string[];
+          suiteType?: SuiteType;
+          questions: QuestionInput[];
+        }>
+      > = {
+        Mathematics: [
+          {
+            suiteTitle: 'BECE Mathematics — Number & Algebra',
+            suiteDescription:
+              '5 questions covering Number Operations and Basic Algebra.',
+            suiteKeywords: ['BECE', 'Mathematics', 'Number', 'Algebra'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'Simplify: 3/4 + 1/2',
+                hints: ['Find the LCM of 4 and 2.', 'LCM = 4.'],
+                solution_steps: [
+                  '3/4 + 1/2 = 3/4 + 2/4 = 5/4 = 1¼',
+                ],
+                options: ['5/6', '1¼', '1½', '7/4'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '1¼',
+              },
+              {
+                question_number: 2,
+                description: 'The Lowest Common Multiple (LCM) of 6 and 8 is ___.',
+                hints: ['List the multiples of 6 and 8 and find the smallest common one.'],
+                solution_steps: [
+                  'Multiples of 6: 6, 12, 18, 24…',
+                  'Multiples of 8: 8, 16, 24…',
+                  'LCM = 24',
+                ],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '24',
+              },
+              {
+                question_number: 3,
+                description: 'Solve for x: 2x + 5 = 13',
+                hints: ['Subtract 5 from both sides first.'],
+                solution_steps: [
+                  '2x + 5 = 13',
+                  '2x = 13 − 5 = 8',
+                  'x = 8 ÷ 2 = 4',
+                ],
+                options: ['2', '3', '4', '5'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_ALGEBRA],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '4',
+              },
+              {
+                question_number: 4,
+                description: 'What is 15% of 200?',
+                hints: ['Percentage means per hundred.', '15% = 15/100.'],
+                solution_steps: [
+                  '15/100 × 200 = 15 × 2 = 30',
+                ],
+                options: ['25', '30', '35', '40'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '30',
+              },
+              {
+                question_number: 5,
+                description: 'Express 0.75 as a fraction in its lowest terms.',
+                hints: ['0.75 = 75/100. Simplify by dividing by the HCF.'],
+                solution_steps: [
+                  '0.75 = 75/100',
+                  'HCF of 75 and 100 = 25',
+                  '75/100 = 3/4',
+                ],
+                options: ['7/10', '3/4', '4/5', '1/4'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_NUMBER_AND_NUMERATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '3/4',
+              },
+            ],
+          },
+          {
+            suiteTitle: 'BECE Mathematics — Geometry & Statistics',
+            suiteDescription:
+              '5 questions covering Geometry, Measurement, and Basic Statistics.',
+            suiteKeywords: ['BECE', 'Mathematics', 'Geometry', 'Statistics'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'The sum of angles in a triangle is ___ degrees.',
+                hints: ['Think about what happens when you tear the corners of a triangle and place them together.'],
+                solution_steps: ['The interior angles of any triangle always add up to 180°.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_GEOMETRY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '180',
+              },
+              {
+                question_number: 2,
+                description: 'Find the perimeter of a rectangle with length 8 cm and width 5 cm.',
+                hints: ['Perimeter = 2 × (length + width).'],
+                solution_steps: [
+                  'P = 2 × (8 + 5) = 2 × 13 = 26 cm',
+                ],
+                options: ['13 cm', '26 cm', '40 cm', '20 cm'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_MENSURATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '26 cm',
+              },
+              {
+                question_number: 3,
+                description: 'What is the area of a square with side 6 cm?',
+                hints: ['Area of a square = side × side.'],
+                solution_steps: ['Area = 6 × 6 = 36 cm²'],
+                options: ['24 cm²', '30 cm²', '36 cm²', '42 cm²'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_MENSURATION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '36 cm²',
+              },
+              {
+                question_number: 4,
+                description: 'Find the mean of the numbers: 4, 6, 8, 10.',
+                hints: ['Mean = Sum ÷ Count.'],
+                solution_steps: [
+                  'Sum = 4 + 6 + 8 + 10 = 28',
+                  'Count = 4',
+                  'Mean = 28 ÷ 4 = 7',
+                ],
+                options: ['6', '6.5', '7', '8'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_STATISTICS_AND_PROBABILITY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '7',
+              },
+              {
+                question_number: 5,
+                description: 'A pie chart has 360°. A sector representing 25% of the data has an angle of ___ degrees.',
+                hints: ['25% of 360° = ?'],
+                solution_steps: ['25/100 × 360 = 90°'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_STATISTICS_AND_PROBABILITY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '90',
+              },
+            ],
+          },
+        ],
+        'English Language': [
+          {
+            suiteTitle: 'BECE English Language — Grammar & Vocabulary',
+            suiteDescription:
+              '5 questions covering Grammar, Vocabulary, and Word Usage.',
+            suiteKeywords: ['BECE', 'English', 'Grammar', 'Vocabulary'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'The plural of the word "leaf" is ___.',
+                hints: ['Words ending in -f or -fe often change to -ves in the plural.'],
+                solution_steps: ['"leaf" → "leaves" (the f changes to v before -es).'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'leaves',
+              },
+              {
+                question_number: 2,
+                description: 'Choose the correct verb: She ___ to school every day.',
+                hints: ['She is a third-person singular subject (he/she/it).'],
+                solution_steps: ['Third-person singular present tense takes -s: goes.'],
+                options: ['go', 'goes', 'gone', 'going'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'goes',
+              },
+              {
+                question_number: 3,
+                description: 'What does the word "benevolent" mean?',
+                hints: ['Think of words like "benefit" and "volunteer".'],
+                solution_steps: ['"Benevolent" means well-wishing or generous/kind.'],
+                options: ['Cruel', 'Generous and kind', 'Intelligent', 'Lazy'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_VOCABULARY],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Generous and kind',
+              },
+              {
+                question_number: 4,
+                description: 'The opposite (antonym) of "ancient" is ___.',
+                hints: ['Think of a word meaning new or recent.'],
+                solution_steps: ['"Ancient" means very old, so its antonym is "modern".'],
+                options: ['Old', 'Modern', 'Historic', 'Aged'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_VOCABULARY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Modern',
+              },
+              {
+                question_number: 5,
+                description: 'Which of the following sentences is grammatically correct?',
+                hints: ['Check for subject-verb agreement.'],
+                solution_steps: [
+                  '"They are going to the market" — "They" (plural) correctly pairs with "are".',
+                ],
+                options: [
+                  'He don\'t like rice.',
+                  'They is going to the market.',
+                  'They are going to the market.',
+                  'She have a book.',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'They are going to the market.',
+              },
+            ],
+          },
+          {
+            suiteTitle: 'BECE English Language — Comprehension & Writing',
+            suiteDescription:
+              '5 questions covering Reading Comprehension, Figures of Speech, and Writing Skills.',
+            suiteKeywords: ['BECE', 'English', 'Comprehension', 'Writing'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'Which of the following is an example of a simile?',
+                hints: ['A simile compares two things using "like" or "as".'],
+                solution_steps: [
+                  '"She runs like the wind" uses "like" to compare, making it a simile.',
+                ],
+                options: [
+                  'The sun is a golden coin.',
+                  'She runs like the wind.',
+                  'The trees whispered to each other.',
+                  'His anger erupted.',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_READING_COMPREHENSION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'She runs like the wind.',
+              },
+              {
+                question_number: 2,
+                description: 'The tense used in the sentence "I was eating" is the ___ tense.',
+                hints: ['The action was ongoing in the past.'],
+                solution_steps: [
+                  '"Was eating" = past continuous tense (ongoing action in the past).',
+                ],
+                options: ['Simple past', 'Past continuous', 'Present continuous', 'Past perfect'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Past continuous',
+              },
+              {
+                question_number: 3,
+                description: 'A topic sentence in a paragraph ___.',
+                hints: ['Think about what introduces the main idea of a paragraph.'],
+                solution_steps: [
+                  'A topic sentence introduces the main idea of the paragraph.',
+                ],
+                options: [
+                  'Concludes the paragraph',
+                  'Provides supporting details',
+                  'Introduces the main idea of the paragraph',
+                  'Gives examples only',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_ESSAY_WRITING],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Introduces the main idea of the paragraph',
+              },
+              {
+                question_number: 4,
+                description: 'The proverb "A stitch in time saves nine" means ___.',
+                hints: ['Think about acting early to prevent bigger problems.'],
+                solution_steps: [
+                  'It means dealing with a problem early prevents it from getting worse.',
+                ],
+                options: [
+                  'Sewing is important',
+                  'Nine stitches are better than one',
+                  'Acting early prevents bigger problems later',
+                  'Time is always wasted',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_VOCABULARY],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Acting early prevents bigger problems later',
+              },
+              {
+                question_number: 5,
+                description: 'Choose the correctly punctuated sentence.',
+                hints: ['Every sentence ends with a punctuation mark; names start with capitals.'],
+                solution_steps: [
+                  '"Kofi, please bring me the book." uses a comma after a direct address and ends with a period.',
+                ],
+                options: [
+                  'kofi please bring me the book',
+                  'Kofi please bring me the book.',
+                  'Kofi, please bring me the book.',
+                  'kofi, Please bring me the Book.',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_GRAMMAR_AND_USAGE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Kofi, please bring me the book.',
+              },
+            ],
+          },
+        ],
+        'Social Studies': [
+          {
+            suiteTitle: 'BECE Social Studies — Ghana History & Culture',
+            suiteDescription:
+              '5 questions covering Ghana\'s history, culture, and national identity.',
+            suiteKeywords: ['BECE', 'Social Studies', 'Ghana History', 'Culture'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'Who was the first President of Ghana?',
+                hints: ["He founded the Convention People's Party (CPP)."],
+                solution_steps: [
+                  "Dr. Kwame Nkrumah became Ghana's first President on 1 July 1960.",
+                ],
+                options: ['J.B. Danquah', 'Kwame Nkrumah', 'K.A. Busia', 'Hilla Limann'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_GHANA_HISTORY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Kwame Nkrumah',
+              },
+              {
+                question_number: 2,
+                description: 'Ghana gained independence on ___.',
+                hints: ['It was the first sub-Saharan African country to gain independence.'],
+                solution_steps: ['Ghana gained independence from Britain on 6th March 1957.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_GHANA_HISTORY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '6th March 1957',
+              },
+              {
+                question_number: 3,
+                description: 'The capital city of Ghana is ___.',
+                hints: ['It is also the largest city in Ghana.'],
+                solution_steps: ['Accra is the capital and largest city of Ghana.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_GHANA_HISTORY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Accra',
+              },
+              {
+                question_number: 4,
+                description: 'The official language of Ghana is ___.',
+                hints: ['It is inherited from the colonial power.'],
+                solution_steps: ['English is the official language of Ghana, inherited from British colonial rule.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_CULTURE_AND_VALUES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'English',
+              },
+              {
+                question_number: 5,
+                description: 'The Golden Stool is the sacred symbol of which Ghanaian ethnic group?',
+                hints: ["Legend says it descended from the sky at the request of Okomfo Anokye."],
+                solution_steps: [
+                  'The Golden Stool (Sika Dwa) is the supreme symbol of the soul and sovereignty of the Ashanti people.',
+                ],
+                options: ['Ga-Adangbe', 'Ewe', 'Ashanti', 'Fante'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_CULTURE_AND_VALUES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Ashanti',
+              },
+            ],
+          },
+          {
+            suiteTitle: 'BECE Social Studies — Government, Citizenship & Environment',
+            suiteDescription:
+              '5 questions covering the arms of government, citizenship rights, and environmental issues.',
+            suiteKeywords: ['BECE', 'Social Studies', 'Government', 'Environment'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'The three arms of government in Ghana are ___.',
+                hints: ['They are the Legislature, Judiciary, and one more.'],
+                solution_steps: [
+                  'The three arms are: Executive (President & Cabinet), Legislature (Parliament), and Judiciary (Courts).',
+                ],
+                options: [
+                  'Executive, Military, Judiciary',
+                  'Executive, Legislature, Judiciary',
+                  'Parliament, Police, Army',
+                  'President, Speaker, Chief Justice',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_GOVERNMENT_AND_CITIZENSHIP],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Executive, Legislature, Judiciary',
+              },
+              {
+                question_number: 2,
+                description: 'The head of the Executive arm of government in Ghana is ___.',
+                hints: ['This person is elected by Ghanaian citizens every four years.'],
+                solution_steps: ['The President of Ghana heads the Executive arm of government.'],
+                options: ['The Speaker of Parliament', 'The Chief Justice', 'The President', 'The Inspector General of Police'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_GOVERNMENT_AND_CITIZENSHIP],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'The President',
+              },
+              {
+                question_number: 3,
+                description: 'Which of the following is a right of a Ghanaian citizen?',
+                hints: ['Rights are protections guaranteed by the Constitution.'],
+                solution_steps: [
+                  'Freedom of speech is a fundamental right guaranteed by the 1992 Constitution of Ghana.',
+                ],
+                options: ['Freedom of speech', 'Evading taxes', 'Ignoring national service', 'Disobeying court orders'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_GOVERNMENT_AND_CITIZENSHIP],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Freedom of speech',
+              },
+              {
+                question_number: 4,
+                description: 'The main cause of deforestation in Ghana is ___.',
+                hints: ['Think about human activities that destroy forests.'],
+                solution_steps: [
+                  'Illegal logging and the expansion of farming (slash-and-burn) are the leading causes of deforestation in Ghana.',
+                ],
+                options: [
+                  'Heavy rainfall',
+                  'Illegal logging and farming',
+                  'Volcanic eruptions',
+                  'Flooding',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_ENVIRONMENT_AND_SOCIETY],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Illegal logging and farming',
+              },
+              {
+                question_number: 5,
+                description: 'Which of the following human activities contributes most to air pollution?',
+                hints: ['Think about burning and industrial processes.'],
+                solution_steps: [
+                  'Burning of fossil fuels (in vehicles and industries) releases harmful gases, making it the biggest contributor to air pollution.',
+                ],
+                options: [
+                  'Planting trees',
+                  'Burning of fossil fuels',
+                  'Fishing in rivers',
+                  'Solar energy use',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_ENVIRONMENT_AND_SOCIETY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Burning of fossil fuels',
+              },
+            ],
+          },
+        ],
+        'Integrated Science': [
+          {
+            suiteTitle: 'BECE Integrated Science — Life Processes & Health',
+            suiteDescription:
+              '5 questions covering Life Processes, Human Health, and Basic Biology.',
+            suiteKeywords: ['BECE', 'Integrated Science', 'Life Processes', 'Health'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'The process by which green plants make their own food using sunlight is called ___.',
+                hints: ['The process uses sunlight, water, and carbon dioxide.'],
+                solution_steps: [
+                  'Photosynthesis: 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂',
+                ],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_LIFE_PROCESSES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Photosynthesis',
+              },
+              {
+                question_number: 2,
+                description: 'The organ responsible for pumping blood around the body is the ___.',
+                hints: ['It is located in the chest cavity, slightly to the left.'],
+                solution_steps: ['The heart is a muscular organ that pumps blood through the circulatory system.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_LIFE_PROCESSES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Heart',
+              },
+              {
+                question_number: 3,
+                description: 'Which of the following is needed by plants for photosynthesis?',
+                hints: ['Plants need energy, a source of hydrogen, and carbon for making glucose.'],
+                solution_steps: [
+                  'Plants need sunlight (energy), water (H₂O), and carbon dioxide (CO₂) for photosynthesis.',
+                ],
+                options: [
+                  'Oxygen, nitrogen, sunlight',
+                  'Sunlight, water, carbon dioxide',
+                  'Minerals, oxygen, glucose',
+                  'Soil, water, nitrogen',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_LIFE_PROCESSES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Sunlight, water, carbon dioxide',
+              },
+              {
+                question_number: 4,
+                description: 'Mosquitoes are vectors that transmit which disease?',
+                hints: ['This disease is common in tropical countries and causes fever.'],
+                solution_steps: ['The female Anopheles mosquito transmits Plasmodium parasites, causing malaria.'],
+                options: ['Cholera', 'Malaria', 'Tuberculosis', 'Typhoid'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_LIFE_PROCESSES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Malaria',
+              },
+              {
+                question_number: 5,
+                description: 'The process by which living organisms produce offspring is called ___.',
+                hints: ['Without this process, a species would become extinct.'],
+                solution_steps: ['Reproduction is the biological process by which new individual organisms are produced.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_LIFE_PROCESSES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Reproduction',
+              },
+            ],
+          },
+          {
+            suiteTitle: 'BECE Integrated Science — Physical Processes & Earth Science',
+            suiteDescription:
+              '5 questions covering Forces, Sound, the Solar System, and Matter.',
+            suiteKeywords: ['BECE', 'Integrated Science', 'Physics', 'Earth Science'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'What is the SI unit of force?',
+                hints: ['It is named after a famous scientist who discovered gravity.'],
+                solution_steps: ['The SI unit of force is the Newton (N), named after Sir Isaac Newton.'],
+                options: ['Joule', 'Watt', 'Newton', 'Pascal'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_PHYSICAL_PROCESSES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Newton',
+              },
+              {
+                question_number: 2,
+                description: 'The layer of gases surrounding the Earth is called the ___.',
+                hints: ['It protects us from harmful radiation and allows us to breathe.'],
+                solution_steps: ['The atmosphere is the layer of gases (mainly nitrogen and oxygen) that surrounds the Earth.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_EARTH_AND_SPACE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Atmosphere',
+              },
+              {
+                question_number: 3,
+                description: 'Sound cannot travel through a ___.',
+                hints: ['Sound needs a medium (particles) to travel through.'],
+                solution_steps: ['Sound requires a material medium to propagate; it cannot travel through a vacuum (empty space).'],
+                options: ['Solid', 'Liquid', 'Vacuum', 'Gas'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_PHYSICAL_PROCESSES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Vacuum',
+              },
+              {
+                question_number: 4,
+                description: 'Which planet is closest to the Sun?',
+                hints: ['It has no moons and is the smallest planet in the solar system.'],
+                solution_steps: ['Mercury is the closest planet to the Sun.'],
+                options: ['Venus', 'Earth', 'Mars', 'Mercury'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_EARTH_AND_SPACE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Mercury',
+              },
+              {
+                question_number: 5,
+                description: 'Which of the following is a good conductor of electricity?',
+                hints: ['Metals are generally good conductors.'],
+                solution_steps: ['Copper is a metal and an excellent conductor of electricity, used widely in electrical wiring.'],
+                options: ['Rubber', 'Wood', 'Copper', 'Glass'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_PHYSICAL_PROCESSES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Copper',
+              },
+            ],
+          },
+        ],
+        'Religious and Moral Education': [
+          {
+            suiteTitle: 'BECE RME — Christianity & Islam',
+            suiteDescription:
+              '5 questions covering the core beliefs and practices of Christianity and Islam.',
+            suiteKeywords: ['BECE', 'RME', 'Christianity', 'Islam'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'The holy book of Christians is the ___.',
+                hints: ['It is divided into the Old and New Testaments.'],
+                solution_steps: ['The Bible is the sacred text of Christianity.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_CHRISTIANITY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Bible',
+              },
+              {
+                question_number: 2,
+                description: 'Muslims are required to pray ___ times a day.',
+                hints: ['These prayers are called Salah (Salat) and are one of the Five Pillars of Islam.'],
+                solution_steps: ['Muslims pray five (5) times daily: Fajr, Dhuhr, Asr, Maghrib, and Isha.'],
+                options: ['3', '4', '5', '6'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_ISLAM],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: '5',
+              },
+              {
+                question_number: 3,
+                description: 'The founder of Christianity is ___.',
+                hints: ['He is also known as the Son of God in Christian belief.'],
+                solution_steps: ['Jesus Christ is regarded as the founder of Christianity.'],
+                options: ['Prophet Muhammad', 'Jesus Christ', 'Moses', 'Abraham'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_CHRISTIANITY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Jesus Christ',
+              },
+              {
+                question_number: 4,
+                description: 'The holiest city in Islam, located in Saudi Arabia, is ___.',
+                hints: ['Muslims face this city when they pray and pilgrimage here (Hajj).'],
+                solution_steps: ['Mecca (Makkah) is the holiest city in Islam.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_ISLAM],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Mecca',
+              },
+              {
+                question_number: 5,
+                description: 'The Christian sacrament that involves the use of water to welcome a new member into the faith is ___.',
+                hints: ['It is often performed on infants or new converts.'],
+                solution_steps: ['Baptism is the sacrament of initiation into the Christian faith, using water.'],
+                options: ['Confirmation', 'Baptism', 'Communion', 'Confession'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_CHRISTIANITY],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Baptism',
+              },
+            ],
+          },
+          {
+            suiteTitle: 'BECE RME — African Traditional Religion & Moral Values',
+            suiteDescription:
+              '5 questions covering African Traditional Religion beliefs and core moral values.',
+            suiteKeywords: ['BECE', 'RME', 'African Traditional Religion', 'Moral Values'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'In African Traditional Religion, the Supreme Being is generally regarded as ___.',
+                hints: ['This Being is above all other spirits and deities.'],
+                solution_steps: [
+                  'In African Traditional Religion, the Supreme Being is the omnipotent Creator who is above all lesser gods and spirits.',
+                ],
+                options: [
+                  'An ancestor',
+                  'The Sun',
+                  'The omnipotent Creator',
+                  'A river deity',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_AFRICAN_TRADITIONAL_RELIGION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'The omnipotent Creator',
+              },
+              {
+                question_number: 2,
+                description: 'The pouring of liquid (usually drink or water) to honour ancestors in African Traditional Religion is called ___.',
+                hints: ['This ritual is performed at important ceremonies to call on the ancestors.'],
+                solution_steps: ['Libation is the ritual of pouring a liquid as an offering to deities or in memory of ancestors.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_AFRICAN_TRADITIONAL_RELIGION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Libation',
+              },
+              {
+                question_number: 3,
+                description: 'Which of the following is a moral value that promotes good relationships in society?',
+                hints: ['Think about values that build trust between people.'],
+                solution_steps: ['Honesty builds trust and is a foundational moral value in society.'],
+                options: ['Dishonesty', 'Selfishness', 'Honesty', 'Greed'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_AFRICAN_TRADITIONAL_RELIGION],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Honesty',
+              },
+              {
+                question_number: 4,
+                description: 'Respect for elders in Ghanaian culture is considered ___.',
+                hints: ['Think about how this behaviour is viewed in Ghanaian communities.'],
+                solution_steps: [
+                  'In Ghanaian culture, respect for elders is a deeply held moral obligation and a mark of good upbringing.',
+                ],
+                options: [
+                  'Optional',
+                  'A moral obligation and virtue',
+                  'Old-fashioned and unnecessary',
+                  'Only for children',
+                ],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_CULTURE_AND_VALUES],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'A moral obligation and virtue',
+              },
+              {
+                question_number: 5,
+                description: 'The Five Pillars of Islam include Shahada, Salah, Zakat, Sawm, and ___.',
+                hints: ['The fifth pillar is a pilgrimage to Mecca.'],
+                solution_steps: ['The Five Pillars are: Shahada (faith), Salah (prayer), Zakat (charity), Sawm (fasting), and Hajj (pilgrimage).'],
+                options: ['Jihad', 'Hajj', 'Sadaqah', 'Wudu'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_ISLAM],
+                difficulty: QuestionDifficultyType.MEDIUM,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Hajj',
+              },
+            ],
+          },
+        ],
+        ICT: [
+          {
+            suiteTitle: 'BECE ICT — Computer Hardware & Software',
+            suiteDescription:
+              '5 questions covering Computer Hardware components and Software types.',
+            suiteKeywords: ['BECE', 'ICT', 'Hardware', 'Software'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'The "brain" of a computer that processes all instructions is the ___.',
+                hints: ['It is abbreviated as CPU.'],
+                solution_steps: ['The Central Processing Unit (CPU) is the brain of the computer that processes all instructions.'],
+                options: ['RAM', 'Hard Drive', 'CPU', 'Monitor'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_COMPUTER_HARDWARE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'CPU',
+              },
+              {
+                question_number: 2,
+                description: 'RAM stands for ___.',
+                hints: ['It is temporary memory used while the computer is running.'],
+                solution_steps: ['RAM = Random Access Memory. It temporarily stores data that the CPU is currently using.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_COMPUTER_HARDWARE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Random Access Memory',
+              },
+              {
+                question_number: 3,
+                description: 'Which of the following is an input device?',
+                hints: ['An input device sends data INTO the computer.'],
+                solution_steps: ['A keyboard is used to enter data into a computer, making it an input device.'],
+                options: ['Monitor', 'Printer', 'Speaker', 'Keyboard'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_COMPUTER_HARDWARE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Keyboard',
+              },
+              {
+                question_number: 4,
+                description: 'An operating system (e.g. Windows, Linux) is an example of ___ software.',
+                hints: ['It manages the hardware and provides a platform for other programs.'],
+                solution_steps: ['An operating system is system software — it manages hardware resources and enables application software to run.'],
+                options: ['Application software', 'System software', 'Malware', 'Utility software'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_SOFTWARE_AND_APPLICATIONS],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 45000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'System software',
+              },
+              {
+                question_number: 5,
+                description: 'Which device is used to produce a printed copy of a document?',
+                hints: ['This device outputs hard copies on paper.'],
+                solution_steps: ['A printer is an output device that produces a physical (hard) copy of documents.'],
+                options: ['Scanner', 'Keyboard', 'Printer', 'Webcam'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_COMPUTER_HARDWARE],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Printer',
+              },
+            ],
+          },
+          {
+            suiteTitle: 'BECE ICT — Internet & Data Management',
+            suiteDescription:
+              '5 questions covering the Internet, Email, Web Browsers, and Data.',
+            suiteKeywords: ['BECE', 'ICT', 'Internet', 'Data'],
+            questions: [
+              {
+                question_number: 1,
+                description: 'WWW stands for ___.',
+                hints: ['It is the system of interlinked web pages accessed via the Internet.'],
+                solution_steps: ['WWW = World Wide Web — a system of interlinked hypertext documents accessed over the Internet.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_INTERNET_AND_NETWORKING],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'World Wide Web',
+              },
+              {
+                question_number: 2,
+                description: 'Which of the following is a web browser?',
+                hints: ['A web browser is used to access websites on the Internet.'],
+                solution_steps: ['Google Chrome is a web browser used to navigate the Internet.'],
+                options: ['Microsoft Word', 'Google Chrome', 'VLC Media Player', 'Notepad'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_INTERNET_AND_NETWORKING],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Google Chrome',
+              },
+              {
+                question_number: 3,
+                description: 'Email stands for ___.',
+                hints: ['It is a method of sending messages digitally over the Internet.'],
+                solution_steps: ['Email = Electronic Mail — messages sent and received over the Internet.'],
+                options: [],
+                type: QuestionType.FILL_IN,
+                tags: [QuestionTagType.TAG_INTERNET_AND_NETWORKING],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Electronic Mail',
+              },
+              {
+                question_number: 4,
+                description: 'The process of arranging data in a specific order (e.g. A–Z or 1–10) is called ___.',
+                hints: ['Think of organising names alphabetically.'],
+                solution_steps: ['Sorting is the process of arranging data in ascending or descending order.'],
+                options: ['Filtering', 'Searching', 'Sorting', 'Deleting'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_DATA_MANAGEMENT],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Sorting',
+              },
+              {
+                question_number: 5,
+                description: 'A harmful program designed to damage or gain unauthorised access to a computer system is called ___.',
+                hints: ['It can come through email attachments or infected USB drives.'],
+                solution_steps: ['Malware (malicious software) is any software intentionally designed to cause damage or gain unauthorised access.'],
+                options: ['Antivirus', 'Firewall', 'Malware', 'Spreadsheet'],
+                type: QuestionType.MULTIPLE_CHOICE,
+                tags: [QuestionTagType.TAG_SOFTWARE_AND_APPLICATIONS],
+                difficulty: QuestionDifficultyType.EASY,
+                estimated_time_in_ms: 30000,
+                class_level: QuestionClassLevel.JHS_3,
+                exam_year: 2023,
+                correct_answer: 'Malware',
+              },
+            ],
+          },
+        ],
+      };
+
+      const new_bece_course_version_questions: Question[][] =
+        await Promise.all(
+          new_bece_course_versions.map(async (version) => {
+            const courseTitle = version.course.title;
+            const suites = beceCourseQuestionsMap[courseTitle];
+            const allQuestions: Question[] = [];
+
+            for (const suiteData of suites) {
+              const new_suite = new TestSuite();
+              new_suite.title = suiteData.suiteTitle;
+              new_suite.description = suiteData.suiteDescription;
+              new_suite.keywords = suiteData.suiteKeywords;
+              new_suite.suite_type = suiteData.suiteType ?? SuiteType.YEAR;
+              new_suite.course_version = version;
+              await this.testSuiteRepository.save(new_suite);
+
+              const new_questions: Question[] = await Promise.all(
+                suiteData.questions.map(async (question) => {
+                  const new_question = new Question();
+                  new_question.correct_answer = question.correct_answer;
+                  new_question.description = question.description;
+                  new_question.difficulty = question.difficulty;
+                  new_question.estimated_time_in_ms = question.estimated_time_in_ms;
+                  new_question.hints = question.hints;
+                  new_question.options = question.options;
+                  new_question.question_number = question.question_number;
+                  new_question.solution_steps = question.solution_steps;
+                  new_question.tags = question.tags;
+                  new_question.type = question.type;
+                  new_question.class_level = question.class_level;
+                  new_question.exam_year = question.exam_year;
+                  new_question.version = version;
+                  new_question.test_suite = new_suite;
+                  return new_question;
+                }),
+              );
+
+              allQuestions.push(...new_questions);
+            }
+
+            return allQuestions;
+          }),
+        );
+
+      await this.questionRepository.save(
+        new_bece_course_version_questions.flat(),
+      );
+
+      /** Step Three
+       * (1) Admin should create categories
+       * (2) Assign WASSCE courses to 'WAEC / WASSCE' and BECE courses to 'BECE'
+       */
+      const categoryCoursesMap: Record<string, Course[]> = {
+        'WAEC / WASSCE': new_wassce_courses,
+        'BECE': new_bece_courses,
+        'JAMB / UTME': [],
+        'SAT / A-Levels': [],
+        'University Exams': [],
+        'General Study': [...new_wassce_courses, ...new_bece_courses],
+      };
+
+      const new_categories: Category[] = Object.entries(categoryCoursesMap).map(
+        ([category_name, courses]) => {
           const category = new Category();
           category.avatar_url = 'https://example.com/avatar.jpg';
           category.name = category_name;
           category.organization = organization;
-          category.courses = new_wassce_courses;
-
+          category.courses = courses;
           return category;
-        }),
+        },
       );
 
-      await this.categoryRepository.save([...new_categories]);
+      await this.categoryRepository.save(new_categories);
 
       /** Step Four
        * Seed subscription plans

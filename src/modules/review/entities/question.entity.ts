@@ -7,6 +7,7 @@ export enum QuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   MULTIPLE_SELECT = 'MULTIPLE_SELECT',
   FILL_IN = 'FILL_IN',
+  SHORT_ANSWER = 'SHORT_ANSWER',
 }
 
 export enum QuestionTagType {
@@ -220,6 +221,10 @@ export class Question {
   @Field(() => Int, { nullable: true })
   @Column({ nullable: true })
   exam_year?: number;
+
+  @Field(() => Int)
+  @Column({ default: 1 })
+  marks: number;
 
   @Field(() => Version, { nullable: true })
   @ManyToOne(() => Version, (version) => version.questions)

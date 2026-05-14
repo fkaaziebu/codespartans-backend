@@ -9,6 +9,8 @@ import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Cart } from 'src/modules/inventory/entities/cart.entity';
 import { Category } from 'src/modules/inventory/entities/category.entity';
 import { Test } from 'src/modules/simulation/entities/test.entity';
+import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
+import { TestSuite } from 'src/modules/review/entities/test_suite.entity';
 import { EmailConsumer } from '../auth/services/email.consumer';
 import { EmailProducer } from '../auth/services/email.producer';
 import { EmailService } from '../auth/services/email.service';
@@ -33,7 +35,7 @@ import { ParentService } from './services/parent.service';
         },
       }),
     }),
-    TypeOrmModule.forFeature([Parent, Child, Student, Organization, Cart, Category, Test]),
+    TypeOrmModule.forFeature([Parent, Child, Student, Organization, Cart, Category, Test, TestAssignment, TestSuite]),
   ],
   providers: [ParentService, ParentResolver, JwtStrategy, EmailProducer, EmailConsumer, EmailService],
   exports: [TypeOrmModule],

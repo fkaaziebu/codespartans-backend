@@ -4,6 +4,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Recommendation } from './recommendation.entity';
@@ -11,6 +12,7 @@ import { Student } from '../../auth/entities/student.entity';
 import { SubmittedAnswer } from './sumitted_answer.entity';
 import { TestSuite } from '../../review/entities/test_suite.entity';
 import { TimeEvent } from './time_event.entity';
+import { TestAssignment } from './test_assignment.entity';
 
 export enum TestStatusType {
   ON_GOING = 'ON_GOING',
@@ -75,6 +77,15 @@ export class Test {
   @Field(() => String, { nullable: true })
   course_id?: string;
 
+  @Field(() => String, { nullable: true })
+  course_category?: string;
+
   @ManyToOne(() => Student, (student) => student.tests)
   student: Student;
+
+  @Field(() => TestAssignment, { nullable: true })
+  @OneToOne(() => TestAssignment, (assignment) => assignment.test, {
+    nullable: true,
+  })
+  assignment: TestAssignment;
 }

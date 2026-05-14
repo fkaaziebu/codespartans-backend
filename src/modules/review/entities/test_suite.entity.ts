@@ -20,6 +20,17 @@ registerEnumType(SuiteDifficultyType, {
   description: 'Suite difficulty',
 });
 
+export enum SuiteType {
+  YEAR = 'YEAR',
+  CLASS = 'CLASS',
+  TOPIC = 'TOPIC',
+}
+
+registerEnumType(SuiteType, {
+  name: 'SuiteType',
+  description: 'Suite type — Year-based exam prep, Class level, or Topic focused',
+});
+
 @ObjectType('TestSuite')
 @Entity('test_suites')
 export class TestSuite {
@@ -46,6 +57,14 @@ export class TestSuite {
     default: SuiteDifficultyType.BEGINNER,
   })
   difficulty: SuiteDifficultyType;
+
+  @Field(() => SuiteType, { nullable: true })
+  @Column({
+    type: 'enum',
+    enum: SuiteType,
+    nullable: true,
+  })
+  suite_type: SuiteType;
 
   @Field(() => [Question], { nullable: true })
   @OneToMany(() => Question, (question) => question.test_suite)

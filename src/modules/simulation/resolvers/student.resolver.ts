@@ -1,9 +1,11 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
+import { SuiteFilterInput } from 'src/modules/inventory/inputs';
 import { Question as QuestionTypeClass } from 'src/modules/review/entities/question.entity';
 import { SubmittedAnswer as SubmittedAnswerTypeClass } from 'src/modules/simulation/entities/sumitted_answer.entity';
 import { Test as TestTypeClass, TestModeType } from 'src/modules/simulation/entities/test.entity';
+import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
 import { GqlJwtAuthGuard, SubscriptionGuard } from 'src/helpers/guards';
 import { StudentService } from '../services';
 
@@ -17,12 +19,15 @@ export class StudentResolver {
   getSubscribedCourseDetails(
     @Context() context,
     @Args('courseId') courseId: string,
+    @Args('filter', { type: () => SuiteFilterInput, nullable: true })
+    filter?: SuiteFilterInput,
   ) {
     const { email } = context.req.user;
 
     return this.studentService.getSubscribedCourseDetails({
       email,
       courseId,
+      filter,
     });
   }
 
@@ -124,5 +129,24 @@ export class StudentResolver {
       answer,
       isFlagged,
     });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [TestAssignment])
+  listMyAssignments(@Context() context) {
+    const { email } = context.req.user;
+    return this.studentService.listMyAssignments({ email });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => TestTypeClass)
+  startAssignedTest(
+    @Context() context,
+    @Args('assignmentId') assignmentId: string,
+    @Args('mode', { type: () => TestModeType, nullable: true })
+    mode?: TestModeType,
+  ) {
+    const { email } = context.req.user;
+    return this.studentService.startAssignedTest({ email, assignmentId, mode });
   }
 }

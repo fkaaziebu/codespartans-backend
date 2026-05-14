@@ -9,19 +9,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Student } from '../../auth/entities/student.entity';
 import { Course } from '../../inventory/entities/course.entity';
-import { Question } from '../../review/entities/question.entity';
+import {
+  Question,
+  QuestionType,
+} from '../../review/entities/question.entity';
 import { Recommendation } from '../entities/recommendation.entity';
 import { SubmittedAnswer } from '../entities/sumitted_answer.entity';
 import { Test } from '../entities/test.entity';
+import {
+  TestAssignment,
+  TestAssignmentStatus,
+} from '../entities/test_assignment.entity';
 import { TimeEvent } from '../entities/time_event.entity';
 import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
 import {
   TestModeType,
   TestStatusType,
 } from 'src/modules/simulation/entities/test.entity';
+import { Child } from '../../parent/entities/child.entity';
 import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
+import { MarkAnswerProducer } from './mark-answer.producer';
 import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
+import { SuiteFilterInput } from 'src/modules/inventory/inputs';
+import { SuiteType } from 'src/modules/review/entities/test_suite.entity';
 
 @Injectable()
 export class StudentService {
@@ -30,8 +41,11 @@ export class StudentService {
   constructor(
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
+    @InjectRepository(TestAssignment)
+    private testAssignmentRepository: Repository<TestAssignment>,
     private timerService: TestTimerService,
     private sseGateway: StudentGateway,
+    private markAnswerProducer: MarkAnswerProducer,
   ) {}
 
   async startTest({
@@ -247,8 +261,21 @@ export class StudentService {
 
         this.sseGateway.sendTestEnded(testId, studentId);
 
+        const savedTest = await transactionalEntityManager.save(student.tests[0]);
+
+        const linkedAssignment = await transactionalEntityManager.findOne(
+          TestAssignment,
+          { where: { test: { id: testId } } },
+        );
+
+        if (linkedAssignment) {
+          linkedAssignment.status = TestAssignmentStatus.COMPLETED;
+          linkedAssignment.completed_at = new Date();
+          await transactionalEntityManager.save(TestAssignment, linkedAssignment);
+        }
+
         this.logger.log(`Test ${testId} ended for student ${studentId}`);
-        return await transactionalEntityManager.save(student.tests[0]);
+        return savedTest;
       },
     );
   }
@@ -298,9 +325,11 @@ export class StudentService {
   async getSubscribedCourseDetails({
     email,
     courseId,
+    filter,
   }: {
     email: string;
     courseId: string;
+    filter?: SuiteFilterInput;
   }): Promise<CourseTypeClass> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
@@ -336,31 +365,36 @@ export class StudentService {
           ],
         });
 
+        const allSuites =
+          student.subscribed_courses[0].approved_version.test_suites;
+        const suitesToReturn = filter?.suite_type
+          ? allSuites.filter(
+              (suite) => suite.suite_type === filter.suite_type,
+            )
+          : allSuites;
+
         return {
           ...student.subscribed_courses[0],
           approved_version: {
             ...student.subscribed_courses[0].approved_version,
-            test_suites:
-              student.subscribed_courses[0].approved_version.test_suites.map(
-                (suite) => ({
-                  ...suite,
-                  attempts: test
-                    .filter((tst) => tst.test_suite.id === suite.id)
-                    .sort(
-                      (a, b) =>
-                        new Date(
-                          a.time_events.find(
-                            (e) => e.type === TimeEventType.STARTED,
-                          ).recorded_at,
-                        ).valueOf() -
-                        new Date(
-                          b.time_events.find(
-                            (e) => e.type === TimeEventType.STARTED,
-                          ).recorded_at,
-                        ).valueOf(),
-                    ),
-                }),
-              ),
+            test_suites: suitesToReturn.map((suite) => ({
+              ...suite,
+              attempts: test
+                .filter((tst) => tst.test_suite.id === suite.id)
+                .sort(
+                  (a, b) =>
+                    new Date(
+                      a.time_events.find(
+                        (e) => e.type === TimeEventType.STARTED,
+                      ).recorded_at,
+                    ).valueOf() -
+                    new Date(
+                      b.time_events.find(
+                        (e) => e.type === TimeEventType.STARTED,
+                      ).recorded_at,
+                    ).valueOf(),
+                ),
+            })),
           },
         };
       },
@@ -410,22 +444,41 @@ export class StudentService {
           );
         }
 
+        const question = await transactionalEntityManager.findOne(Question, {
+          where: { id: questionId },
+        });
+
+        const isNonDeterministic =
+          question?.type === QuestionType.SHORT_ANSWER ||
+          question?.type === QuestionType.FILL_IN;
+
         const existingAnswer = student.tests[0].submitted_answers.find(
-          (answer) => answer.question_id === questionId,
+          (ans) => ans.question_id === questionId,
         );
 
         if (existingAnswer) {
           existingAnswer.answer_provided = answer;
           existingAnswer.is_flagged = isFlagged;
           existingAnswer.time_ranges.push(timeRange);
-          return await transactionalEntityManager.save(existingAnswer);
-        } else {
-          const question = await transactionalEntityManager.findOne(Question, {
-            where: {
-              id: questionId,
-            },
-          });
 
+          if (isNonDeterministic) {
+            existingAnswer.is_correct = null;
+            existingAnswer.is_marked = false;
+          } else {
+            existingAnswer.is_correct = answer === question?.correct_answer;
+            existingAnswer.is_marked = true;
+          }
+
+          const saved = await transactionalEntityManager.save(existingAnswer);
+
+          if (isNonDeterministic) {
+            await this.markAnswerProducer.markShortAnswer({
+              submittedAnswerId: saved.id,
+            });
+          }
+
+          return saved;
+        } else {
           const newAnswer = new SubmittedAnswer();
           newAnswer.question_id = questionId;
           newAnswer.answer_provided = answer;
@@ -434,9 +487,23 @@ export class StudentService {
           newAnswer.test = student.tests[0];
           newAnswer.question = question;
 
-          await transactionalEntityManager.save(newAnswer);
+          if (isNonDeterministic) {
+            newAnswer.is_correct = null;
+            newAnswer.is_marked = false;
+          } else {
+            newAnswer.is_correct = answer === question?.correct_answer;
+            newAnswer.is_marked = true;
+          }
 
-          return newAnswer;
+          const saved = await transactionalEntityManager.save(newAnswer);
+
+          if (isNonDeterministic) {
+            await this.markAnswerProducer.markShortAnswer({
+              submittedAnswerId: saved.id,
+            });
+          }
+
+          return saved;
         }
       },
     );
@@ -606,6 +673,128 @@ export class StudentService {
       test,
       action: 'test_not_started',
     };
+  }
+
+  async listMyAssignments({ email }: { email: string }): Promise<TestAssignment[]> {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const child = await this.studentRepository.manager.findOne(Child, {
+      where: { student: { id: student.id } },
+    });
+
+    if (!child) {
+      return [];
+    }
+
+    return this.testAssignmentRepository.find({
+      where: { child: { id: child.id } },
+      relations: ['test_suite', 'test', 'parent'],
+      order: { assigned_at: 'DESC' },
+    });
+  }
+
+  async startAssignedTest({
+    email,
+    assignmentId,
+    mode = TestModeType.PROCTURED,
+  }: {
+    email: string;
+    assignmentId: string;
+    mode?: TestModeType;
+  }) {
+    return await this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+        });
+
+        if (!student) {
+          throw new NotFoundException('Student not found');
+        }
+
+        const child = await transactionalEntityManager.findOne(Child, {
+          where: { student: { id: student.id } },
+        });
+
+        if (!child) {
+          throw new NotFoundException('Child profile not found');
+        }
+
+        const assignment = await transactionalEntityManager.findOne(
+          TestAssignment,
+          {
+            where: { id: assignmentId, child: { id: child.id } },
+            relations: ['test_suite.questions', 'test'],
+          },
+        );
+
+        if (!assignment) {
+          throw new NotFoundException('Assignment not found');
+        }
+
+        if (assignment.status === TestAssignmentStatus.COMPLETED) {
+          throw new BadRequestException('This assignment has already been completed');
+        }
+
+        const on_going_tests = await transactionalEntityManager.find(Test, {
+          where: {
+            student: { id: student.id },
+            status: In([TestStatusType.ON_GOING, TestStatusType.PAUSED]),
+          },
+        });
+
+        if (on_going_tests.length) {
+          throw new ConflictException('You already have an ongoing test');
+        }
+
+        const new_test = new Test();
+        new_test.test_suite = assignment.test_suite;
+        new_test.student = student;
+        new_test.mode = mode;
+
+        await transactionalEntityManager.save(new_test);
+
+        assignment.test = new_test;
+        await transactionalEntityManager.save(TestAssignment, assignment);
+
+        const time_event = new TimeEvent();
+        time_event.recorded_at = new Date();
+        time_event.test = new_test;
+        await transactionalEntityManager.save(time_event);
+
+        const testId = new_test.id;
+        const studentId = student.id;
+
+        const endTime = new Date(
+          new Date(time_event.recorded_at).setSeconds(
+            (assignment.test_suite.questions.reduce(
+              (acc, question) => acc + question.estimated_time_in_ms,
+              0,
+            ) || 0) / 1000,
+          ),
+        );
+
+        this.timerService.startTimer(
+          testId,
+          studentId,
+          endTime,
+          (remaining_ms) => this.handleTimerTick(testId, studentId, remaining_ms),
+          async () => await this.endTest({ email, testId: new_test.id }),
+        );
+
+        this.logger.log(
+          `Assigned test ${new_test.id} started for student ${studentId}`,
+        );
+
+        return new_test;
+      },
+    );
   }
 
   async getActiveTest(studentId: string) {
