@@ -65,13 +65,11 @@ jobs:
             docker --version
             docker compose version
 
-            # Cleanup old containers/images
-            docker stop $(docker ps -a -q) 2>/dev/null || true
-            docker rm $(docker ps -a -q) 2>/dev/null || true
-            docker rmi $(docker images -a -q) 2>/dev/null || true
-            # remove if you need data to persist
-            # docker system prune -af
-            # docker volume prune -f
+            # Pull latest images without restarting running containers
+            docker compose pull
+
+            # Remove unused images to free disk space (leaves volumes intact)
+            docker image prune -f
 
             # Write .env
             echo "${{ secrets.ENV_FILE }}" > .env

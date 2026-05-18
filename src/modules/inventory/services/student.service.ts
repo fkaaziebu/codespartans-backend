@@ -599,9 +599,7 @@ export class StudentService {
     const computeScore = (test: Test): number => {
       const { submitted_answers: answers } = test;
       if (!answers.length) return 0;
-      const correct = answers.filter(
-        (a) => a.answer_provided === a.question?.correct_answer,
-      ).length;
+      const correct = answers.filter((a) => a.is_correct === true).length;
       return (correct / answers.length) * 100;
     };
 
@@ -638,9 +636,7 @@ export class StudentService {
     // Enrich all ended tests first so trend can look across the full history
     const enriched = endedTests.map((test) => {
       const answers = test.submitted_answers;
-      const correct = answers.filter(
-        (a) => a.answer_provided === a.question?.correct_answer,
-      ).length;
+      const correct = answers.filter((a) => a.is_correct === true).length;
       const wrong = answers.length - correct;
       const score = computeScore(test);
       const startEvent = test.time_events.find(
@@ -810,9 +806,7 @@ export class StudentService {
     const computeScore = (test: Test): number => {
       const answers = test.submitted_answers;
       if (!answers.length) return 0;
-      const correct = answers.filter(
-        (a) => a.answer_provided === a.question.correct_answer,
-      ).length;
+      const correct = answers.filter((a) => a.is_correct === true).length;
       return (correct / answers.length) * 100;
     };
 
@@ -868,7 +862,7 @@ export class StudentService {
     const tagErrorCount = new Map<string, number>();
     for (const test of endedTests) {
       for (const answer of test.submitted_answers) {
-        if (answer.answer_provided !== answer.question.correct_answer) {
+        if (answer.is_correct !== true) {
           for (const tag of answer.question.tags) {
             tagErrorCount.set(tag, (tagErrorCount.get(tag) ?? 0) + 1);
           }
@@ -926,8 +920,7 @@ export class StudentService {
 
     for (const test of endedTests) {
       for (const answer of test.submitted_answers) {
-        const isCorrect =
-          answer.answer_provided === answer.question?.correct_answer;
+        const isCorrect = answer.is_correct === true;
         for (const tag of answer.question?.tags ?? []) {
           const stat = tagStats.get(tag) ?? { total: 0, correct: 0, wrong: 0 };
           stat.total += 1;
@@ -988,8 +981,7 @@ export class StudentService {
       );
 
       for (const answer of test.submitted_answers) {
-        const isCorrect =
-          answer.answer_provided === answer.question?.correct_answer;
+        const isCorrect = answer.is_correct === true;
         for (const tag of answer.question?.tags ?? []) {
           const stat = tagStats.get(tag) ?? {
             error_count: 0,
@@ -1078,9 +1070,7 @@ export class StudentService {
     return endedTests
       .map((test) => {
         const answers = test.submitted_answers;
-        const correct = answers.filter(
-          (a) => a.answer_provided === a.question?.correct_answer,
-        ).length;
+        const correct = answers.filter((a) => a.is_correct === true).length;
         const score = answers.length > 0 ? (correct / answers.length) * 100 : 0;
 
         const startEvent = test.time_events.find(

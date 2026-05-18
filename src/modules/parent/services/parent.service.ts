@@ -591,9 +591,7 @@ export class ParentService {
     const computeScore = (test: Test): number => {
       const answers = test.submitted_answers;
       if (!answers.length) return 0;
-      const correct = answers.filter(
-        (a) => a.answer_provided === a.question?.correct_answer,
-      ).length;
+      const correct = answers.filter((a) => a.is_correct === true).length;
       return (correct / answers.length) * 100;
     };
 
@@ -704,8 +702,7 @@ export class ParentService {
 
     for (const test of endedTests) {
       for (const answer of test.submitted_answers) {
-        const isCorrect =
-          answer.answer_provided === answer.question?.correct_answer;
+        const isCorrect = answer.is_correct === true;
         for (const tag of answer.question?.tags ?? []) {
           const stat = tagStats.get(tag) ?? {
             total: 0,
@@ -762,9 +759,7 @@ export class ParentService {
     const computeScore = (test: Test): number => {
       const answers = test.submitted_answers;
       if (!answers.length) return 0;
-      const correct = answers.filter(
-        (a) => a.answer_provided === a.question?.correct_answer,
-      ).length;
+      const correct = answers.filter((a) => a.is_correct === true).length;
       return (correct / answers.length) * 100;
     };
 
@@ -796,9 +791,7 @@ export class ParentService {
 
     const enriched = endedTests.map((test) => {
       const answers = test.submitted_answers;
-      const correct = answers.filter(
-        (a) => a.answer_provided === a.question?.correct_answer,
-      ).length;
+      const correct = answers.filter((a) => a.is_correct === true).length;
       const wrong = answers.length - correct;
       const score = computeScore(test);
       const startEvent = test.time_events.find(
@@ -889,8 +882,7 @@ export class ParentService {
       );
 
       for (const answer of test.submitted_answers) {
-        const isCorrect =
-          answer.answer_provided === answer.question?.correct_answer;
+        const isCorrect = answer.is_correct === true;
         for (const tag of answer.question?.tags ?? []) {
           const stat = tagStats.get(tag) ?? {
             error_count: 0,
@@ -975,9 +967,7 @@ export class ParentService {
         if (!startEvent) return null;
 
         const answers = test.submitted_answers;
-        const correct = answers.filter(
-          (a) => a.answer_provided === a.question?.correct_answer,
-        ).length;
+        const correct = answers.filter((a) => a.is_correct === true).length;
         const score = answers.length > 0 ? (correct / answers.length) * 100 : 0;
         const course_title =
           test.test_suite?.course_version?.course?.title ?? undefined;
