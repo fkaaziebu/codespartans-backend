@@ -676,8 +676,9 @@ export class ParentService {
     const child = await this.childRepository.findOne({
       where: { id: childId, parent: { email: parentEmail } },
       relations: [
-        'student.tests.submitted_answers.question',
+        'student.tests.submitted_answers',
         'student.tests.test_suite.course_version.course',
+        'student.tests.time_events',
       ],
     });
 
@@ -687,6 +688,8 @@ export class ParentService {
 
     if (!child.student) return [];
 
+    const RECENT_TEST_CAP = 10;
+
     const endedTests = child.student.tests.filter((t) => {
       if (t.status !== TestStatusType.ENDED) return false;
       if (courseId) {
@@ -695,35 +698,51 @@ export class ParentService {
       return true;
     });
 
-    const tagStats = new Map<
+    const recentTests = endedTests
+      .map((t) => {
+        const startEvent = t.time_events?.find(
+          (e) => e.type === TimeEventType.STARTED,
+        );
+        return { test: t, startedAt: startEvent?.recorded_at ?? new Date(0) };
+      })
+      .sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime())
+      .slice(0, RECENT_TEST_CAP)
+      .map((x) => x.test);
+
+    const courseStats = new Map<
       string,
-      { total: number; correct: number; wrong: number }
+      { sessions: number; correct: number; wrong: number }
     >();
 
-    for (const test of endedTests) {
+    for (const test of recentTests) {
+      const courseTitle = test.test_suite?.course_version?.course?.title;
+      if (!courseTitle) continue;
+
+      const stat = courseStats.get(courseTitle) ?? {
+        sessions: 0,
+        correct: 0,
+        wrong: 0,
+      };
+      stat.sessions += 1;
+
       for (const answer of test.submitted_answers) {
-        const isCorrect = answer.is_correct === true;
-        for (const tag of answer.question?.tags ?? []) {
-          const stat = tagStats.get(tag) ?? {
-            total: 0,
-            correct: 0,
-            wrong: 0,
-          };
-          stat.total += 1;
-          if (isCorrect) stat.correct += 1;
-          else stat.wrong += 1;
-          tagStats.set(tag, stat);
-        }
+        if (answer.is_correct === true) stat.correct += 1;
+        else stat.wrong += 1;
       }
+
+      courseStats.set(courseTitle, stat);
     }
 
-    return Array.from(tagStats.entries()).map(([subject, stat]) => ({
-      subject,
-      total: stat.total,
-      correct: stat.correct,
-      wrong: stat.wrong,
-      score: stat.total > 0 ? (stat.correct / stat.total) * 100 : 0,
-    }));
+    return Array.from(courseStats.entries()).map(([subject, stat]) => {
+      const totalAnswers = stat.correct + stat.wrong;
+      return {
+        subject,
+        total: stat.sessions,
+        correct: stat.correct,
+        wrong: stat.wrong,
+        score: totalAnswers > 0 ? (stat.correct / totalAnswers) * 100 : 0,
+      };
+    });
   }
 
   async getChildTestsHistory(
@@ -854,6 +873,7 @@ export class ParentService {
       relations: [
         'student.tests.submitted_answers.question',
         'student.tests.test_suite.questions',
+        'student.tests.time_events',
       ],
     });
 
@@ -863,9 +883,17 @@ export class ParentService {
 
     if (!child.student) return [];
 
-    const endedTests = child.student.tests.filter(
-      (t) => t.status === TestStatusType.ENDED,
-    );
+    const fourWeeksAgo = new Date();
+    fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
+
+    const endedTests = child.student.tests.filter((t) => {
+      if (t.status !== TestStatusType.ENDED) return false;
+      const startEvent = t.time_events?.find(
+        (e) => e.type === TimeEventType.STARTED,
+      );
+      if (!startEvent) return false;
+      return new Date(startEvent.recorded_at) >= fourWeeksAgo;
+    });
 
     const tagStats = new Map<
       string,
@@ -1187,6 +1215,295 @@ export class ParentService {
       relations: ['test_suite', 'test'],
       order: { assigned_at: 'DESC' },
     });
+  }
+
+  async listParentAlerts(
+    parentEmail: string,
+  ): Promise<
+    {
+      id: string;
+      alert_type: string;
+      icon: string;
+      icon_bg: string;
+      title: string;
+      description: string;
+      time_label: string;
+      is_unread: boolean;
+      actions: { label: string; variant: string; href: string }[];
+    }[]
+  > {
+    const parent = await this.parentRepository.findOne({
+      where: { email: parentEmail },
+      relations: [
+        'children.student.tests.submitted_answers.question',
+        'children.student.tests.time_events',
+        'children.student.tests.test_suite.course_version.course',
+      ],
+    });
+
+    if (!parent) throw new NotFoundException('Parent not found');
+
+    const now = new Date();
+    const alerts: {
+      id: string;
+      alert_type: string;
+      icon: string;
+      icon_bg: string;
+      title: string;
+      description: string;
+      time_label: string;
+      is_unread: boolean;
+      actions: { label: string; variant: string; href: string }[];
+      sort_ts: number;
+    }[] = [];
+
+    const formatTimeLabel = (date: Date): string => {
+      const diffMs = now.getTime() - date.getTime();
+      const diffH = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffD = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      if (diffH < 1) return 'Just now';
+      if (diffH < 24) return `${diffH} hour${diffH > 1 ? 's' : ''} ago`;
+      if (diffD === 1) {
+        const hhmm = date.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+        });
+        return `Yesterday, ${hhmm}`;
+      }
+      return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    };
+
+    const getTestStartTime = (test: Test): Date | null => {
+      const event = test.time_events.find(
+        (e) => e.type === TimeEventType.STARTED,
+      );
+      return event ? new Date(event.recorded_at) : null;
+    };
+
+    const computeScore = (test: Test): number => {
+      const answers = test.submitted_answers;
+      if (!answers.length) return 0;
+      return (
+        (answers.filter((a) => a.is_correct === true).length / answers.length) *
+        100
+      );
+    };
+
+    for (const child of parent.children) {
+      const firstName = child.full_name.split(' ')[0];
+      const endedTests = (child.student?.tests ?? []).filter(
+        (t) => t.status === TestStatusType.ENDED,
+      );
+
+      const testsByTime = [...endedTests]
+        .map((t) => ({ test: t, start: getTestStartTime(t) }))
+        .filter((x) => x.start !== null)
+        .sort((a, b) => b.start!.getTime() - a.start!.getTime());
+
+      const lastActivity = testsByTime[0]?.start ?? null;
+      const daysSinceActivity = lastActivity
+        ? Math.floor(
+            (now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24),
+          )
+        : null;
+
+      if (daysSinceActivity !== null && daysSinceActivity >= 2) {
+        const alertDate = lastActivity!;
+        const isNew = daysSinceActivity < 3;
+        alerts.push({
+          id: `inactivity-${child.id}`,
+          alert_type: 'warning',
+          icon: '📉',
+          icon_bg: '#FAEEDA',
+          title: `${firstName} hasn't studied in ${daysSinceActivity} day${daysSinceActivity > 1 ? 's' : ''}`,
+          description: `Their study streak is at risk. A gentle reminder could help them get back on track today.`,
+          time_label: formatTimeLabel(alertDate),
+          is_unread: isNew,
+          actions: [
+            { label: 'Remind via WhatsApp', variant: 'primary', href: 'whatsapp' },
+            { label: 'Dismiss', variant: 'secondary', href: 'dismiss' },
+          ],
+          sort_ts: alertDate.getTime(),
+        });
+      }
+
+      if (testsByTime.length > 0) {
+        const { test: latestTest, start: latestStart } = testsByTime[0];
+        const score = computeScore(latestTest);
+
+        if (score < 60 && score > 0) {
+          const courseName =
+            latestTest.test_suite?.course_version?.course?.title ?? 'last test';
+          const isNew =
+            latestStart !== null &&
+            now.getTime() - latestStart!.getTime() < 2 * 24 * 60 * 60 * 1000;
+          alerts.push({
+            id: `low-score-${child.id}-${latestTest.id}`,
+            alert_type: 'warning',
+            icon: '⚠️',
+            icon_bg: '#FAEEDA',
+            title: `${firstName}'s ${courseName} score dropped to ${Math.round(score)}%`,
+            description: `This is below their usual average. ExamForge has automatically queued more practice for the next session.`,
+            time_label: formatTimeLabel(latestStart!),
+            is_unread: isNew,
+            actions: [
+              { label: 'See weak areas', variant: 'primary', href: '/dashboard' },
+              { label: 'Dismiss', variant: 'secondary', href: 'dismiss' },
+            ],
+            sort_ts: latestStart!.getTime(),
+          });
+        }
+      }
+
+      if (
+        testsByTime.length >= 1 &&
+        testsByTime[0].start !== null &&
+        now.getTime() - testsByTime[0].start!.getTime() < 48 * 60 * 60 * 1000
+      ) {
+        const recentTest = testsByTime[0];
+        const courseName =
+          recentTest.test.test_suite?.course_version?.course?.title ??
+          'a subject';
+        const score = computeScore(recentTest.test);
+        if (score >= 60) {
+          alerts.push({
+            id: `completed-${child.id}-${recentTest.test.id}`,
+            alert_type: 'info',
+            icon: '🏆',
+            icon_bg: '#E1F5EE',
+            title: `${firstName} completed a ${courseName} session`,
+            description: `${firstName} scored ${Math.round(score)}% — great work! Keep up the momentum.`,
+            time_label: formatTimeLabel(recentTest.start!),
+            is_unread:
+              now.getTime() - recentTest.start!.getTime() <
+              24 * 60 * 60 * 1000,
+            actions: [
+              {
+                label: 'View progress',
+                variant: 'primary',
+                href: '/dashboard',
+              },
+            ],
+            sort_ts: recentTest.start!.getTime(),
+          });
+        }
+      }
+    }
+
+    const prevMonth = now.getMonth() === 0 ? 12 : now.getMonth();
+    const prevMonthYear =
+      now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
+    const reportDate = new Date(prevMonthYear, prevMonth, 1, 9, 0, 0);
+    const monthName = reportDate.toLocaleString('en-US', { month: 'long' });
+
+    if (parent.children.length > 0) {
+      const hasLastMonthData = parent.children.some((child) => {
+        const tests = child.student?.tests ?? [];
+        return tests.some((t) => {
+          if (t.status !== TestStatusType.ENDED) return false;
+          const start = getTestStartTime(t);
+          return (
+            start &&
+            start.getFullYear() === prevMonthYear &&
+            start.getMonth() + 1 === prevMonth
+          );
+        });
+      });
+
+      if (hasLastMonthData) {
+        alerts.push({
+          id: `report-${prevMonthYear}-${prevMonth}`,
+          alert_type: 'info',
+          icon: '📅',
+          icon_bg: '#E1F5EE',
+          title: `${monthName} report is ready`,
+          description: `Monthly performance reports for your children are ready to view.`,
+          time_label: formatTimeLabel(reportDate),
+          is_unread: false,
+          actions: [
+            { label: 'Download reports', variant: 'primary', href: '/reports' },
+          ],
+          sort_ts: reportDate.getTime(),
+        });
+      }
+    }
+
+    return alerts
+      .sort((a, b) => b.sort_ts - a.sort_ts)
+      .map(({ sort_ts: _sort_ts, ...rest }) => rest);
+  }
+
+  async listChildMonthlyReports(
+    parentEmail: string,
+    childId: string,
+  ): Promise<
+    { month: number; year: number; avg_score: number; total_questions: number; streak_days: number }[]
+  > {
+    const child = await this.childRepository.findOne({
+      where: { id: childId, parent: { email: parentEmail } },
+      relations: [
+        'student.tests.submitted_answers.question',
+        'student.tests.time_events',
+      ],
+    });
+
+    if (!child) {
+      throw new NotFoundException('Child not found');
+    }
+
+    if (!child.student) return [];
+
+    const endedTests = child.student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+
+    const getTestStartTime = (test: Test): Date | null => {
+      const event = test.time_events.find(
+        (e) => e.type === TimeEventType.STARTED,
+      );
+      return event ? new Date(event.recorded_at) : null;
+    };
+
+    const monthlyMap = new Map<
+      string,
+      { total_score: number; count: number; questions: number; days: Set<string> }
+    >();
+
+    for (const test of endedTests) {
+      const start = getTestStartTime(test);
+      if (!start) continue;
+
+      const key = `${start.getFullYear()}-${start.getMonth() + 1}`;
+      const entry = monthlyMap.get(key) ?? {
+        total_score: 0,
+        count: 0,
+        questions: 0,
+        days: new Set<string>(),
+      };
+
+      const answers = test.submitted_answers;
+      const correct = answers.filter((a) => a.is_correct === true).length;
+      const score = answers.length > 0 ? (correct / answers.length) * 100 : 0;
+
+      entry.total_score += score;
+      entry.count += 1;
+      entry.questions += answers.length;
+      entry.days.add(start.toISOString().split('T')[0]);
+      monthlyMap.set(key, entry);
+    }
+
+    return Array.from(monthlyMap.entries())
+      .map(([key, entry]) => {
+        const [year, month] = key.split('-').map(Number);
+        return {
+          month,
+          year,
+          avg_score: entry.count > 0 ? entry.total_score / entry.count : 0,
+          total_questions: entry.questions,
+          streak_days: entry.days.size,
+        };
+      })
+      .sort((a, b) => b.year - a.year || b.month - a.month);
   }
 
   private async generateUniqueUsername(

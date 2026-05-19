@@ -19,10 +19,12 @@ import { ParentService } from '../services/parent.service';
 import {
   ActivityConnection,
   AddChildResponse,
+  AlertResponse,
   ChildConnection,
   ChildStatsResponse,
   LoginChildResponse,
   LoginParentResponse,
+  MonthlyReportResponse,
   RegisterParentResponse,
   SetupChildResult,
   DayStreakResponse,
@@ -202,6 +204,23 @@ export class ParentResolver {
   ) {
     const { email } = context.req.user;
     return this.parentService.assignTestToChild(email, childId, suiteId);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [AlertResponse])
+  async listParentAlerts(@Context() context) {
+    const { email } = context.req.user;
+    return this.parentService.listParentAlerts(email);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [MonthlyReportResponse])
+  async listChildMonthlyReports(
+    @Args('childId') childId: string,
+    @Context() context,
+  ) {
+    const { email } = context.req.user;
+    return this.parentService.listChildMonthlyReports(email, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)

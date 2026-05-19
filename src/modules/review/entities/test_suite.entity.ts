@@ -66,6 +66,10 @@ export class TestSuite {
   })
   suite_type: SuiteType;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  image_url: string;
+
   @Field(() => [Question], { nullable: true })
   @OneToMany(() => Question, (question) => question.test_suite)
   questions: Question[];

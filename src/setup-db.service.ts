@@ -111,57 +111,8 @@ export class SetupDbService implements OnModuleInit {
        * (4) Organization should assign course to admin
        * (5) Admin should approve course
        */
-      // create course
-      const wassce_courses = [
-        'Mathematics',
-        'English Language',
-        'Physics',
-        'Chemistry',
-        'Biology',
-        'Economics',
-        'Geography',
-        'Literature',
-        'Government',
-        'History',
-      ];
 
-      const new_wassce_courses: Course[] = await Promise.all(
-        wassce_courses.map(async (course_name, idx) => {
-          const wassce_course = new Course();
-          wassce_course.avatar_url = 'https://example.com/avatar.jpg';
-          wassce_course.currency = CurrencyType.USD;
-          wassce_course.description = 'This is a test course';
-          wassce_course.domains = [DomainType.ENGLISH];
-          wassce_course.level = LevelType.BEGINNER;
-          wassce_course.price = 100;
-          wassce_course.title = course_name;
-          wassce_course.is_mandatory = idx > 4 ? false : true;
-          wassce_course.instructor = instructor;
-          wassce_course.organization = organization;
-
-          return wassce_course;
-        }),
-      );
-
-      await this.courseRepository.save(new_wassce_courses);
-
-      // create course versions
-      const new_wassce_course_versions: Version[] = await Promise.all(
-        new_wassce_courses.map(async (course) => {
-          const version = new Version();
-          version.status = VersionStatusType.APPROVED;
-          version.version_number = 1;
-          version.course = course;
-          version.assigned_admin = admin;
-          await this.versionRepository.save(version);
-
-          course.approved_version = version;
-          await this.courseRepository.save(course);
-
-          return version;
-        }),
-      );
-
+      // Upload course thumbnail images first so avatar_url can be set on courses
       const getImageBuffer = (filename: string): Buffer => {
         const imagePath = path.join(__dirname, '/data/', `${filename}`);
         const filePath = path.resolve(imagePath);
@@ -221,6 +172,26 @@ export class SetupDbService implements OnModuleInit {
           ext: 'jpeg',
         },
         History: { filename: 'history_1.png', mime: 'image/png', ext: 'png' },
+        'Social Studies': {
+          filename: 'social_studies_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        'Integrated Science': {
+          filename: 'integrated_science_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        'Religious and Moral Education': {
+          filename: 'religious_moral_education_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
+        ICT: {
+          filename: 'ict_1.jpeg',
+          mime: 'image/jpeg',
+          ext: 'jpeg',
+        },
       };
 
       const subjectImageUrls: Record<string, string> = {};
@@ -235,6 +206,58 @@ export class SetupDbService implements OnModuleInit {
         await this.imageRepository.save(img);
         subjectImageUrls[subject] = `${studentUrl}/api/images/${img.path}`;
       }
+
+      // create course
+      const wassce_courses = [
+        'Mathematics',
+        'English Language',
+        'Physics',
+        'Chemistry',
+        'Biology',
+        'Economics',
+        'Geography',
+        'Literature',
+        'Government',
+        'History',
+      ];
+
+      const new_wassce_courses: Course[] = await Promise.all(
+        wassce_courses.map(async (course_name, idx) => {
+          const wassce_course = new Course();
+          wassce_course.avatar_url =
+            subjectImageUrls[course_name] || subjectImageUrls['Mathematics'];
+          wassce_course.currency = CurrencyType.USD;
+          wassce_course.description = 'This is a test course';
+          wassce_course.domains = [DomainType.ENGLISH];
+          wassce_course.level = LevelType.BEGINNER;
+          wassce_course.price = 100;
+          wassce_course.title = course_name;
+          wassce_course.is_mandatory = idx > 4 ? false : true;
+          wassce_course.instructor = instructor;
+          wassce_course.organization = organization;
+
+          return wassce_course;
+        }),
+      );
+
+      await this.courseRepository.save(new_wassce_courses);
+
+      // create course versions
+      const new_wassce_course_versions: Version[] = await Promise.all(
+        new_wassce_courses.map(async (course) => {
+          const version = new Version();
+          version.status = VersionStatusType.APPROVED;
+          version.version_number = 1;
+          version.course = course;
+          version.assigned_admin = admin;
+          await this.versionRepository.save(version);
+
+          course.approved_version = version;
+          await this.courseRepository.save(course);
+
+          return version;
+        }),
+      );
 
       const courseQuestionsMap: Record<
         string,
@@ -2891,6 +2914,7 @@ export class SetupDbService implements OnModuleInit {
               new_suite.description = suiteData.suiteDescription;
               new_suite.keywords = suiteData.suiteKeywords;
               new_suite.suite_type = suiteData.suiteType ?? SuiteType.YEAR;
+              new_suite.image_url = subjectImageUrl;
               new_suite.course_version = version;
 
               await this.testSuiteRepository.save(new_suite);
@@ -2950,7 +2974,8 @@ export class SetupDbService implements OnModuleInit {
       const new_bece_courses: Course[] = await Promise.all(
         bece_course_names.map(async (course_name, idx) => {
           const bece_course = new Course();
-          bece_course.avatar_url = 'https://example.com/avatar.jpg';
+          bece_course.avatar_url =
+            subjectImageUrls[course_name] || subjectImageUrls['Mathematics'];
           bece_course.currency = CurrencyType.USD;
           bece_course.description = `BECE ${course_name} course for JHS students`;
           bece_course.domains = [DomainType.SCIENCE];
@@ -4054,6 +4079,8 @@ export class SetupDbService implements OnModuleInit {
           new_bece_course_versions.map(async (version) => {
             const courseTitle = version.course.title;
             const suites = beceCourseQuestionsMap[courseTitle];
+            const subjectImageUrl =
+              subjectImageUrls[courseTitle] || subjectImageUrls['Mathematics'];
             const allQuestions: Question[] = [];
 
             for (const suiteData of suites) {
@@ -4062,6 +4089,7 @@ export class SetupDbService implements OnModuleInit {
               new_suite.description = suiteData.suiteDescription;
               new_suite.keywords = suiteData.suiteKeywords;
               new_suite.suite_type = suiteData.suiteType ?? SuiteType.YEAR;
+              new_suite.image_url = subjectImageUrl;
               new_suite.course_version = version;
               await this.testSuiteRepository.save(new_suite);
 
