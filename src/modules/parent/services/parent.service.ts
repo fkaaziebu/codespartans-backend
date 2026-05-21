@@ -1320,7 +1320,7 @@ export class ParentService {
           time_label: formatTimeLabel(alertDate),
           is_unread: isNew,
           actions: [
-            { label: 'Remind via WhatsApp', variant: 'primary', href: 'whatsapp' },
+            { label: 'Assign Test', variant: 'primary', href: 'assign-test' },
             { label: 'Dismiss', variant: 'secondary', href: 'dismiss' },
           ],
           sort_ts: alertDate.getTime(),
@@ -1343,11 +1343,11 @@ export class ParentService {
             icon: '⚠️',
             icon_bg: '#FAEEDA',
             title: `${firstName}'s ${courseName} score dropped to ${Math.round(score)}%`,
-            description: `This is below their usual average. ExamForge has automatically queued more practice for the next session.`,
+            description: `This is below their usual average. Check their weak areas to see which topics need more practice.`,
             time_label: formatTimeLabel(latestStart!),
             is_unread: isNew,
             actions: [
-              { label: 'See weak areas', variant: 'primary', href: '/dashboard' },
+              { label: 'View weak areas', variant: 'primary', href: 'weak-areas' },
               { label: 'Dismiss', variant: 'secondary', href: 'dismiss' },
             ],
             sort_ts: latestStart!.getTime(),
@@ -1379,9 +1379,9 @@ export class ParentService {
               24 * 60 * 60 * 1000,
             actions: [
               {
-                label: 'View progress',
+                label: 'View trends',
                 variant: 'primary',
-                href: '/dashboard',
+                href: 'trends',
               },
             ],
             sort_ts: recentTest.start!.getTime(),
@@ -1421,7 +1421,7 @@ export class ParentService {
           time_label: formatTimeLabel(reportDate),
           is_unread: false,
           actions: [
-            { label: 'Download reports', variant: 'primary', href: '/reports' },
+            { label: 'View trends', variant: 'primary', href: 'trends' },
           ],
           sort_ts: reportDate.getTime(),
         });
