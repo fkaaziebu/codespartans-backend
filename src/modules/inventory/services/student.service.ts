@@ -895,49 +895,77 @@ export class StudentService {
   }): Promise<SubjectProgressResponse[]> {
     const student = await this.studentRepository.findOne({
       where: { email },
-      relations: ['tests.submitted_answers.question'],
+      relations: [
+        'tests.submitted_answers',
+        'tests.test_suite.course_version.course',
+        'tests.time_events',
+      ],
     });
 
     if (!student) {
       throw new NotFoundException('Student not found');
     }
 
+    const RECENT_TEST_CAP = 10;
+
     let endedTests = student.tests.filter(
       (t) => t.status === TestStatusType.ENDED,
     );
 
     if (testId) {
-      endedTests = endedTests.filter((t) => t.id === testId);
-      if (!endedTests.length) {
-        throw new NotFoundException('Test not found or not yet ended');
-      }
+      endedTests = endedTests.filter(
+        (t) => t.test_suite?.course_version?.course?.id === testId,
+      );
     }
 
-    const tagStats = new Map<
+    const recentTests = endedTests
+      .map((t) => {
+        const startEvent = t.time_events?.find(
+          (e) => e.type === TimeEventType.STARTED,
+        );
+        return { test: t, startedAt: startEvent?.recorded_at ?? new Date(0) };
+      })
+      .sort(
+        (a, b) =>
+          new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime(),
+      )
+      .slice(0, RECENT_TEST_CAP)
+      .map((x) => x.test);
+
+    const courseStats = new Map<
       string,
-      { total: number; correct: number; wrong: number }
+      { sessions: number; correct: number; wrong: number }
     >();
 
-    for (const test of endedTests) {
+    for (const test of recentTests) {
+      const courseTitle = test.test_suite?.course_version?.course?.title;
+      if (!courseTitle) continue;
+
+      const stat = courseStats.get(courseTitle) ?? {
+        sessions: 0,
+        correct: 0,
+        wrong: 0,
+      };
+      stat.sessions += 1;
+
       for (const answer of test.submitted_answers) {
-        const isCorrect = answer.is_correct === true;
-        for (const tag of answer.question?.tags ?? []) {
-          const stat = tagStats.get(tag) ?? { total: 0, correct: 0, wrong: 0 };
-          stat.total += 1;
-          if (isCorrect) stat.correct += 1;
-          else stat.wrong += 1;
-          tagStats.set(tag, stat);
-        }
+        if (answer.is_correct === true) stat.correct += 1;
+        else stat.wrong += 1;
       }
+
+      courseStats.set(courseTitle, stat);
     }
 
-    return Array.from(tagStats.entries()).map(([subject, stat]) => ({
-      subject,
-      total: stat.total,
-      correct: stat.correct,
-      wrong: stat.wrong,
-      score: stat.total > 0 ? (stat.correct / stat.total) * 100 : 0,
-    }));
+    return Array.from(courseStats.entries()).map(([subject, stat]) => {
+      const totalAnswers = stat.correct + stat.wrong;
+      return {
+        subject,
+        total: stat.sessions,
+        correct: stat.correct,
+        wrong: stat.wrong,
+        score: totalAnswers > 0 ? (stat.correct / totalAnswers) * 100 : 0,
+      };
+    });
   }
 
   async weakSubjectAreas({
