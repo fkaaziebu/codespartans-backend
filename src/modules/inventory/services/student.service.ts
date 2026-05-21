@@ -27,6 +27,7 @@ import {
   StudentStatsResponse,
   SubjectProgressResponse,
   TestScoreHistoryResponse,
+  TestTopicProgressResponse,
   WeakSubjectAreaResponse,
 } from '../types';
 // import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
@@ -757,7 +758,8 @@ export class StudentService {
       throw new NotFoundException('Test not found');
     }
 
-    const categories = test.test_suite?.course_version?.course?.categories ?? [];
+    const categories =
+      test.test_suite?.course_version?.course?.categories ?? [];
     const course_category = categories.length > 0 ? categories[0].name : null;
 
     return {
@@ -968,6 +970,70 @@ export class StudentService {
     });
   }
 
+  async studentTestTopicProgress({
+    email,
+    testId,
+  }: {
+    email: string;
+    testId: string;
+  }): Promise<TestTopicProgressResponse[]> {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: [
+        'tests.submitted_answers.question',
+        'tests.test_suite.questions',
+      ],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const test = student.tests.find(
+      (t) => t.id === testId && t.status === TestStatusType.ENDED,
+    );
+
+    if (!test) {
+      throw new NotFoundException('Test not found or not yet ended');
+    }
+
+    const tagStats = new Map<string, { correct: number; wrong: number }>();
+
+    const answeredQuestionIds = new Set(
+      test.submitted_answers.map((a) => a.question?.id).filter(Boolean),
+    );
+
+    for (const answer of test.submitted_answers) {
+      for (const tag of answer.question?.tags ?? []) {
+        console.log(answer.question);
+        const stat = tagStats.get(tag) ?? { correct: 0, wrong: 0 };
+        if (answer.is_correct === true) stat.correct += 1;
+        else stat.wrong += 1;
+        tagStats.set(tag, stat);
+      }
+    }
+
+    for (const question of test.test_suite?.questions ?? []) {
+      if (answeredQuestionIds.has(question.id)) continue;
+      for (const tag of question.tags ?? []) {
+        const stat = tagStats.get(tag) ?? { correct: 0, wrong: 0 };
+        stat.wrong += 1;
+        tagStats.set(tag, stat);
+      }
+    }
+
+    return Array.from(tagStats.entries()).map(([topic, stat]) => {
+      const total = stat.correct + stat.wrong;
+      return {
+        topic,
+        total,
+        correct: stat.correct,
+        wrong: stat.wrong,
+        score: total > 0 ? (stat.correct / total) * 100 : 0,
+      };
+    });
+  }
+
   async weakSubjectAreas({
     email,
     testId,
@@ -1019,7 +1085,8 @@ export class StudentService {
           stat.total += 1;
           if (!isCorrect) {
             stat.error_count += 1;
-            if (answer.question) stat.questions.set(answer.question.id, answer.question);
+            if (answer.question)
+              stat.questions.set(answer.question.id, answer.question);
           }
           tagStats.set(tag, stat);
         }

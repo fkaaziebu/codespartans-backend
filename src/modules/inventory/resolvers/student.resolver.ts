@@ -17,6 +17,7 @@ import {
   StudentStatsResponse,
   SubjectProgressResponse,
   TestScoreHistoryResponse,
+  TestTopicProgressResponse,
   WeakSubjectAreaResponse,
 } from '../types';
 
@@ -135,6 +136,16 @@ export class StudentResolver {
     const { email } = context.req.user;
 
     return this.studentService.studentSubjectProgress({ email, testId });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [TestTopicProgressResponse])
+  studentTestTopicProgress(
+    @Context() context,
+    @Args('testId') testId: string,
+  ) {
+    const { email } = context.req.user;
+    return this.studentService.studentTestTopicProgress({ email, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
