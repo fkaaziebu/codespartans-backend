@@ -2,7 +2,7 @@ name: Codespartans CI/CD
 
 on:
   push:
-    branches: [‘main’]
+    branches: ['main']
 
 env:
   COMPOSE_PROJECT_NAME: codespartans
