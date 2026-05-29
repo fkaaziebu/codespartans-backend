@@ -1,4 +1,4 @@
-version: ‘3.9’
+version: '3.9'
 services:
   postgres:
     image: postgres:17
@@ -8,9 +8,9 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: codespartans-db
     ports:
-      - ‘5432:5432’
+      - '5432:5432'
     healthcheck:
-      test: [‘CMD’, ‘pg_isready’, ‘-U’, ‘postgres’]
+      test: ['CMD', 'pg_isready', '-U', 'postgres']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -18,18 +18,31 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - codespartans-network
-  
+
   redis:
     image: redis:latest
     container_name: redis
     restart: unless-stopped
     ports:
-      - ‘6379:6379’
+      - '6379:6379'
     volumes:
       - redis_data:/data
     networks:
       - codespartans-network
-  
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.16
+    container_name: meilisearch
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: 'password'
+    ports:
+      - '7700:7700'
+    volumes:
+      - ./meili_data:/meili_data
+    networks:
+      - codespartans-network
+
   codespartans-backend:
     image: fkaaziebu/codespartans-backend
     container_name: codespartans-backend
@@ -40,14 +53,14 @@ services:
     env_file:
       - .env
     ports:
-      - ‘4000:4000’
+      - '4000:4000'
     networks:
       - codespartans-network
-  
+
 networks:
   codespartans-network:
     driver: bridge
-  
+
 volumes:
   postgres_data:
     driver: local
@@ -55,7 +68,7 @@ volumes:
       type: none
       o: bind
       device: /mnt/postgres-data
-  
+
   redis_data:
     driver: local
     driver_opts:
