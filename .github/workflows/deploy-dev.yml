@@ -1,12 +1,12 @@
 name: Codespartans CI/CD
 
 on:
-push:
-branches: [‘main’]
+  push:
+    branches: [‘main’]
 
 env:
-COMPOSE_PROJECT_NAME: codespartans
-IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/codespartans-backend
+  COMPOSE_PROJECT_NAME: codespartans
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/codespartans-backend
 
 jobs:
   build-and-push:
