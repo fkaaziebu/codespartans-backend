@@ -28,6 +28,8 @@ import { Student } from 'src/modules/auth/entities/student.entity';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Cart } from 'src/modules/inventory/entities/cart.entity';
 import { Category } from 'src/modules/inventory/entities/category.entity';
+import { Course } from 'src/modules/inventory/entities/course.entity';
+import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { Child, ClassLevel } from '../entities/child.entity';
 import { Parent } from '../entities/parent.entity';
@@ -255,6 +257,60 @@ export class ParentService {
         );
 
         return { ...parent, token, refresh_token };
+      },
+    );
+  }
+
+  async requestParentPasswordReset({ email }: { email: string }) {
+    return this.parentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const parent = await transactionalEntityManager.findOne(Parent, {
+          where: { email },
+        });
+
+        if (!parent) {
+          return { message: 'Password reset link sent to your email' };
+        }
+
+        const resetCode = uuidv4();
+        parent.reset_token = resetCode;
+        await transactionalEntityManager.save(parent);
+
+        await this.emailProducer.sendParentPasswordResetEmail({
+          email,
+          name: `${parent.first_name} ${parent.last_name}`,
+          resetCode,
+        });
+
+        return { message: 'Password reset link sent to your email' };
+      },
+    );
+  }
+
+  async resetParentPassword({
+    email,
+    password,
+    token,
+  }: {
+    email: string;
+    password: string;
+    token: string;
+  }) {
+    return this.parentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const parent = await transactionalEntityManager.findOne(Parent, {
+          where: { email },
+        });
+
+        if (!parent || parent.reset_token !== token) {
+          throw new BadRequestException('Invalid password reset details');
+        }
+
+        parent.reset_token = '';
+        parent.password = await HashHelper.encrypt(password);
+        await transactionalEntityManager.save(parent);
+
+        return { message: 'Password reset is successful' };
       },
     );
   }
@@ -1167,6 +1223,7 @@ export class ParentService {
     parentEmail: string,
     childId: string,
     suiteId: string,
+    note?: string,
   ): Promise<TestAssignment> {
     return this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
@@ -1192,10 +1249,31 @@ export class ParentService {
         assignment.child = child;
         assignment.test_suite = testSuite;
         assignment.status = TestAssignmentStatus.PENDING;
+        if (note) assignment.note = note;
 
         return transactionalEntityManager.save(TestAssignment, assignment);
       },
     );
+  }
+
+  async listChildCourses(
+    parentEmail: string,
+    childId: string,
+  ): Promise<Course[]> {
+    const child = await this.childRepository.findOne({
+      where: { id: childId, parent: { email: parentEmail } },
+      relations: [
+        'student',
+        'student.subscribed_courses',
+        'student.subscribed_courses.approved_version',
+        'student.subscribed_courses.approved_version.test_suites',
+        'student.subscribed_courses.approved_version.test_suites.questions',
+      ],
+    });
+
+    if (!child) throw new NotFoundException('Child not found');
+
+    return child.student?.subscribed_courses ?? [];
   }
 
   async listChildAssignments(

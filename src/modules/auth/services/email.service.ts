@@ -63,6 +63,22 @@ export class EmailService {
     return template(context);
   }
 
+  async sendParentPasswordResetEmail(
+    to: string,
+    name: string,
+    resetToken: string,
+  ): Promise<void> {
+    const resetLink = `${this.configService.get<string>('PARENT_URL', 'http://localhost:3001')}/reset-password?token=${resetToken}&email=${to}`;
+    const html = this.compileTemplate('password-reset', { name, resetLink });
+
+    try {
+      await this.sendMail(to, 'Reset Your Password', '', html);
+    } catch (error) {
+      console.error('Failed to send parent password reset email:', error);
+      throw new Error('Failed to send parent password reset email');
+    }
+  }
+
   async sendPasswordResetEmail(
     to: string,
     name: string,

@@ -46,6 +46,10 @@ export class TestAssignment {
   @Column({ nullable: true, type: 'timestamp' })
   completed_at: Date;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
+  note: string;
+
   @Field(() => Parent, { nullable: true })
   @ManyToOne(() => Parent)
   parent: Parent;

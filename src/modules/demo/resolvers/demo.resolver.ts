@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { ActivateParentDemoInput } from '../inputs/activate-parent-demo.input';
 import { ActivateSchoolDemoInput } from '../inputs/activate-school-demo.input';
@@ -15,6 +15,7 @@ import { BookDemoResponse } from '../types/book-demo-response.type';
 import { InitiatePaymentResponse } from '../types/initiate-payment-response.type';
 import { LoginParentResponse } from 'src/modules/parent/types';
 import { StudentLoginResponse } from 'src/modules/auth/types';
+import { ParentSubscription } from 'src/modules/parent/entities/parent-subscription.entity';
 
 @Resolver()
 export class DemoResolver {
@@ -57,8 +58,19 @@ export class DemoResolver {
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => InitiatePaymentResponse)
-  async initiatePayment(@Args('planId') planId: string, @Context() context) {
+  async initiatePayment(
+    @Args('planId') planId: string,
+    @Args('childrenCount', { type: () => Int, defaultValue: 1 }) childrenCount: number,
+    @Context() context,
+  ) {
+    const { email, role } = context.req.user;
+    return this.demoService.initiatePayment(email, planId, role, childrenCount);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => ParentSubscription, { nullable: true })
+  async getMySubscription(@Context() context) {
     const { email } = context.req.user;
-    return this.demoService.initiatePayment(email, planId);
+    return this.demoService.getMySubscription(email);
   }
 }

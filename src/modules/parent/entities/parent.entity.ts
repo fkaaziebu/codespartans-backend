@@ -45,6 +45,9 @@ export class Parent {
   @Column({ nullable: true })
   validation_code: string;
 
+  @Column({ nullable: true })
+  reset_token: string;
+
   @Field(() => [Child], { nullable: true })
   @OneToMany(() => Child, (child) => child.parent)
   children: Child[];

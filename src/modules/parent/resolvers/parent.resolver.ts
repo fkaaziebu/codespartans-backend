@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Course } from 'src/modules/inventory/entities/course.entity';
 import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
@@ -59,6 +60,20 @@ export class ParentResolver {
   @Mutation(() => RefreshTokenResponse)
   async refreshParentToken(@Args('refresh_token') refresh_token: string) {
     return this.parentService.refreshParentToken(refresh_token);
+  }
+
+  @Mutation(() => RegisterParentResponse)
+  async requestParentPasswordReset(@Args('email') email: string) {
+    return this.parentService.requestParentPasswordReset({ email });
+  }
+
+  @Mutation(() => RegisterParentResponse)
+  async resetParentPassword(
+    @Args('email') email: string,
+    @Args('token') token: string,
+    @Args('password') password: string,
+  ) {
+    return this.parentService.resetParentPassword({ email, token, password });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -201,9 +216,10 @@ export class ParentResolver {
     @Args('childId') childId: string,
     @Args('suiteId') suiteId: string,
     @Context() context,
+    @Args('note', { nullable: true }) note?: string,
   ) {
     const { email } = context.req.user;
-    return this.parentService.assignTestToChild(email, childId, suiteId);
+    return this.parentService.assignTestToChild(email, childId, suiteId, note);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -221,6 +237,16 @@ export class ParentResolver {
   ) {
     const { email } = context.req.user;
     return this.parentService.listChildMonthlyReports(email, childId);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [Course])
+  async listChildCourses(
+    @Args('childId') childId: string,
+    @Context() context,
+  ) {
+    const { email } = context.req.user;
+    return this.parentService.listChildCourses(email, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)

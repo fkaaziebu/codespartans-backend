@@ -391,7 +391,11 @@ export class DemoService {
     return this.paymentService.listPlans();
   }
 
-  async initiatePayment(orgEmail: string, planId: string) {
-    return this.paymentService.initiatePayment(orgEmail, planId);
+  async initiatePayment(email: string, planId: string, role: string, childrenCount = 1) {
+    return this.paymentService.initiatePayment(email, planId, role, childrenCount);
+  }
+
+  async getMySubscription(parentEmail: string) {
+    return this.paymentService.getParentSubscription(parentEmail);
   }
 }

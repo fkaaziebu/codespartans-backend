@@ -15,6 +15,11 @@ export class EmailConsumer extends WorkerHost {
         await this.emailService.sendPasswordResetEmail(email, name, resetCode);
         break;
       }
+      case 'send-parent-password-reset': {
+        const { email, name, resetCode } = job.data;
+        await this.emailService.sendParentPasswordResetEmail(email, name, resetCode);
+        break;
+      }
       case 'send-account-validation': {
         const { email, name, validationCode } = job.data;
         await this.emailService.sendAccountValidationEmail(

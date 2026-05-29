@@ -11,8 +11,10 @@ import {
   OrgSubscription,
   SubscriptionStatus,
 } from 'src/modules/demo/entities/organization-subscription.entity';
+import { ParentSubscription } from 'src/modules/parent/entities/parent-subscription.entity';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Student } from 'src/modules/auth/entities/student.entity';
+import { Child } from 'src/modules/parent/entities/child.entity';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
@@ -25,6 +27,10 @@ export class SubscriptionGuard implements CanActivate {
     private readonly orgRepo: Repository<Organization>,
     @InjectRepository(OrgSubscription)
     private readonly orgSubscriptionRepo: Repository<OrgSubscription>,
+    @InjectRepository(Child)
+    private readonly childRepo: Repository<Child>,
+    @InjectRepository(ParentSubscription)
+    private readonly parentSubscriptionRepo: Repository<ParentSubscription>,
     private configService: ConfigService,
   ) {}
 
@@ -45,7 +51,11 @@ export class SubscriptionGuard implements CanActivate {
       return this.checkOrgAccess(email);
     }
 
-    // INSTRUCTOR, ADMIN, PARENT, CHILD — not gated
+    if (role === 'CHILD') {
+      return this.checkChildAccess(email);
+    }
+
+    // INSTRUCTOR, ADMIN, PARENT — not gated
     return true;
   }
 
@@ -85,6 +95,37 @@ export class SubscriptionGuard implements CanActivate {
       code: 'SUBSCRIPTION_REQUIRED',
       message:
         'Your free trial has ended. Please subscribe to a plan to continue.',
+    });
+  }
+
+  private async checkChildAccess(studentEmail: string): Promise<boolean> {
+    // CHILD JWT carries the linked student's email
+    const child = await this.childRepo.findOne({
+      where: { student: { email: studentEmail } },
+      relations: ['parent'],
+    });
+
+    if (!child?.parent) {
+      throw new ForbiddenException({
+        code: 'SUBSCRIPTION_REQUIRED',
+        message: 'Your parent needs an active subscription to unlock tests.',
+      });
+    }
+
+    const now = new Date();
+    const activeSub = await this.parentSubscriptionRepo.findOne({
+      where: {
+        parent: { id: child.parent.id },
+        status: SubscriptionStatus.ACTIVE,
+      },
+      order: { expires_at: 'DESC' },
+    });
+
+    if (activeSub && activeSub.expires_at > now) return true;
+
+    throw new ForbiddenException({
+      code: 'SUBSCRIPTION_REQUIRED',
+      message: 'Your parent needs an active subscription to unlock tests.',
     });
   }
 

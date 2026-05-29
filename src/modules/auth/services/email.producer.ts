@@ -14,6 +14,14 @@ export class EmailProducer {
     await this.emailQueue.add('send-password-reset', data);
   }
 
+  async sendParentPasswordResetEmail(data: {
+    email: string;
+    name: string;
+    resetCode: string;
+  }) {
+    await this.emailQueue.add('send-parent-password-reset', data);
+  }
+
   async sendAccountValidationEmail(data: {
     email: string;
     name: string;

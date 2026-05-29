@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import * as crypto from 'crypto';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
+import { Parent } from 'src/modules/parent/entities/parent.entity';
+import { ParentSubscription } from 'src/modules/parent/entities/parent-subscription.entity';
 import { Repository } from 'typeorm';
 import {
   OrgSubscription,
@@ -24,8 +26,12 @@ export class PaymentService {
     private readonly planRepo: Repository<SubscriptionPlan>,
     @InjectRepository(OrgSubscription)
     private readonly orgSubscriptionRepo: Repository<OrgSubscription>,
+    @InjectRepository(ParentSubscription)
+    private readonly parentSubscriptionRepo: Repository<ParentSubscription>,
     @InjectRepository(Organization)
     private readonly orgRepo: Repository<Organization>,
+    @InjectRepository(Parent)
+    private readonly parentRepo: Repository<Parent>,
     private readonly configService: ConfigService,
   ) {}
 
@@ -34,35 +40,70 @@ export class PaymentService {
   }
 
   async initiatePayment(
-    orgEmail: string,
+    email: string,
     planId: string,
+    role: string,
+    childrenCount = 1,
   ): Promise<{ authorization_url: string; reference: string }> {
-    const org = await this.orgRepo.findOne({ where: { email: orgEmail } });
-    if (!org) throw new NotFoundException('Organization not found');
-
     const plan = await this.planRepo.findOne({
       where: { id: planId, is_active: true },
     });
     if (!plan) throw new NotFoundException('Plan not found');
 
     const secretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY');
-    const amountInKobo = Math.round(plan.price * 100);
+
+    // For parent plans, calculate amount based on children count with family discount
+    const isParentPlan = plan.plan_key.startsWith('parent_');
+    const familyDiscount = isParentPlan && childrenCount > 1 ? 0.8 : 1.0;
+    const amountInKobo = Math.round(
+      plan.price * childrenCount * familyDiscount * 100,
+    );
+
+    let payerEmail: string;
+    let metadata: Record<string, string>;
+    let callbackUrl: string;
+    let webhookUrl: string;
+
+    if (role === 'PARENT') {
+      const parent = await this.parentRepo.findOne({ where: { email } });
+      if (!parent) throw new NotFoundException('Parent not found');
+      payerEmail = parent.email;
+      metadata = {
+        parent_id: parent.id,
+        plan_id: plan.id,
+        plan_name: plan.name,
+      };
+      callbackUrl =
+        this.configService.get<string>(
+          'PARENT_UI_URL',
+          'http://localhost:3000',
+        ) + '/billing/callback';
+    } else {
+      const org = await this.orgRepo.findOne({ where: { email } });
+      if (!org) throw new NotFoundException('Organization not found');
+      payerEmail = org.email;
+      metadata = { org_id: org.id, plan_id: plan.id, plan_name: plan.name };
+      callbackUrl =
+        this.configService.get<string>(
+          'SCHOOL_DEMO_URL',
+          'http://localhost:3000',
+        ) + '/payment/callback';
+      webhookUrl =
+        this.configService.get<string>(
+          'REST_BASE_URL',
+          'http://localhost:3000',
+        ) + '/payments/paystack/webhook';
+    }
 
     const response = await axios.post(
       `${this.paystackBaseUrl}/transaction/initialize`,
       {
-        email: org.email,
+        email: payerEmail,
         amount: amountInKobo,
         currency: plan.currency,
-        metadata: {
-          org_id: org.id,
-          plan_id: plan.id,
-          plan_name: plan.name,
-        },
-        callback_url: this.configService.get<string>(
-          'SCHOOL_DEMO_URL',
-          'http://localhost:3000',
-        ) + '/payment/callback',
+        metadata,
+        callback_url: callbackUrl,
+        webhook_url: webhookUrl,
       },
       {
         headers: {
@@ -94,33 +135,69 @@ export class PaymentService {
     const { reference, metadata, status } = data;
     if (status !== 'success') return;
 
-    const { org_id, plan_id } = metadata ?? {};
-    if (!org_id || !plan_id) return;
+    const { org_id, parent_id, plan_id } = metadata ?? {};
+    if (!plan_id || (!org_id && !parent_id)) return;
 
-    const org = await this.orgRepo.findOne({ where: { id: org_id } });
     const plan = await this.planRepo.findOne({ where: { id: plan_id } });
-
-    if (!org || !plan) return;
-
-    // Idempotency — skip if this reference was already processed
-    const existing = await this.orgSubscriptionRepo.findOne({
-      where: { paystack_reference: reference },
-    });
-    if (existing) return;
+    if (!plan) return;
 
     const startedAt = new Date();
     const expiresAt = new Date(startedAt);
     expiresAt.setDate(expiresAt.getDate() + plan.duration_days);
 
-    const subscription = this.orgSubscriptionRepo.create({
-      organization: org,
-      plan,
-      paystack_reference: reference,
-      status: SubscriptionStatus.ACTIVE,
-      started_at: startedAt,
-      expires_at: expiresAt,
-    });
+    if (parent_id) {
+      const parent = await this.parentRepo.findOne({
+        where: { id: parent_id },
+      });
+      if (!parent) return;
 
-    await this.orgSubscriptionRepo.save(subscription);
+      const existing = await this.parentSubscriptionRepo.findOne({
+        where: { paystack_reference: reference },
+      });
+      if (existing) return;
+
+      await this.parentSubscriptionRepo.save(
+        this.parentSubscriptionRepo.create({
+          parent,
+          plan,
+          paystack_reference: reference,
+          status: SubscriptionStatus.ACTIVE,
+          started_at: startedAt,
+          expires_at: expiresAt,
+        }),
+      );
+    } else {
+      const org = await this.orgRepo.findOne({ where: { id: org_id } });
+      if (!org) return;
+
+      const existing = await this.orgSubscriptionRepo.findOne({
+        where: { paystack_reference: reference },
+      });
+      if (existing) return;
+
+      await this.orgSubscriptionRepo.save(
+        this.orgSubscriptionRepo.create({
+          organization: org,
+          plan,
+          paystack_reference: reference,
+          status: SubscriptionStatus.ACTIVE,
+          started_at: startedAt,
+          expires_at: expiresAt,
+        }),
+      );
+    }
+  }
+
+  async getParentSubscription(
+    parentEmail: string,
+  ): Promise<ParentSubscription | null> {
+    return this.parentSubscriptionRepo.findOne({
+      where: {
+        parent: { email: parentEmail },
+        status: SubscriptionStatus.ACTIVE,
+      },
+      relations: ['plan'],
+      order: { expires_at: 'DESC' },
+    });
   }
 }
