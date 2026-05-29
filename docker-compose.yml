@@ -57,21 +57,21 @@ services:
     networks:
       - codespartans-network
   
-  networks:
-    codespartans-network:
-      driver: bridge
+networks:
+  codespartans-network:
+    driver: bridge
   
-  volumes:
-    postgres_data:
-      driver: local
-      driver_opts:
-        type: none
-        o: bind
-        device: /mnt/postgres-data
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/postgres-data
   
-    redis_data:
-      driver: local
-      driver_opts:
-        type: none
-        o: bind
-        device: /mnt/redis-data
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/redis-data
