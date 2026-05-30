@@ -50,6 +50,40 @@ export class PaymentService {
     });
     if (!plan) throw new NotFoundException('Plan not found');
 
+    const now = new Date();
+
+    if (role === 'PARENT') {
+      const parent = await this.parentRepo.findOne({ where: { email } });
+      if (parent) {
+        const existingSub = await this.parentSubscriptionRepo.findOne({
+          where: { parent: { id: parent.id }, status: SubscriptionStatus.ACTIVE },
+          order: { expires_at: 'DESC' },
+        });
+        if (existingSub) {
+          if (existingSub.expires_at > now) {
+            throw new BadRequestException('You already have an active subscription plan');
+          }
+          existingSub.status = SubscriptionStatus.EXPIRED;
+          await this.parentSubscriptionRepo.save(existingSub);
+        }
+      }
+    } else {
+      const org = await this.orgRepo.findOne({ where: { email } });
+      if (org) {
+        const existingSub = await this.orgSubscriptionRepo.findOne({
+          where: { organization: { id: org.id }, status: SubscriptionStatus.ACTIVE },
+          order: { expires_at: 'DESC' },
+        });
+        if (existingSub) {
+          if (existingSub.expires_at > now) {
+            throw new BadRequestException('You already have an active subscription plan');
+          }
+          existingSub.status = SubscriptionStatus.EXPIRED;
+          await this.orgSubscriptionRepo.save(existingSub);
+        }
+      }
+    }
+
     const secretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY');
 
     // For parent plans, calculate amount based on children count with family discount
