@@ -4243,6 +4243,42 @@ export class SetupDbService implements OnModuleInit {
           'SLA and uptime guarantee',
         ],
       },
+      // ── Free trial plans (created automatically on demo activation, no payment) ──
+      {
+        plan_key: 'school_trial',
+        name: 'School Free Trial',
+        tagline: 'Trial access for schools',
+        price: 0,
+        currency: 'GHS',
+        interval: PlanInterval.MONTHLY,
+        duration_days: 30,
+        is_custom: false,
+        billing_label: null,
+        max_students: null,
+        features: [
+          'All subjects unlocked',
+          'Admin & teacher console',
+          'Class performance analytics',
+        ],
+      },
+      {
+        plan_key: 'parent_trial',
+        name: 'Parent Free Trial',
+        tagline: 'Trial access for parents',
+        price: 0,
+        currency: 'GHS',
+        interval: PlanInterval.MONTHLY,
+        duration_days: 30,
+        is_custom: false,
+        billing_label: null,
+        max_students: null,
+        features: [
+          'All subjects unlocked',
+          'Unlimited practice questions',
+          'Weak area analysis',
+          'Timed exam simulation',
+        ],
+      },
       // ── Parent plans (per-child base price for the full duration period) ──
       {
         plan_key: 'parent_1mo',

@@ -33,8 +33,8 @@ export class OrgSubscription {
   @ManyToOne(() => SubscriptionPlan)
   plan: SubscriptionPlan;
 
-  @Field()
-  @Column({ unique: true })
+  @Field({ nullable: true })
+  @Column({ unique: true, nullable: true })
   paystack_reference: string;
 
   @Field(() => SubscriptionStatus)

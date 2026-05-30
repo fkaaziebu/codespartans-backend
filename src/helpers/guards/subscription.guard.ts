@@ -12,6 +12,7 @@ import {
   OrgSubscription,
   SubscriptionStatus,
 } from 'src/modules/demo/entities/organization-subscription.entity';
+import { StudentSubscription } from 'src/modules/demo/entities/student-subscription.entity';
 import { ParentSubscription } from 'src/modules/parent/entities/parent-subscription.entity';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Student } from 'src/modules/auth/entities/student.entity';
@@ -28,6 +29,8 @@ export class SubscriptionGuard implements CanActivate {
     private readonly orgRepo: Repository<Organization>,
     @InjectRepository(OrgSubscription)
     private readonly orgSubscriptionRepo: Repository<OrgSubscription>,
+    @InjectRepository(StudentSubscription)
+    private readonly studentSubscriptionRepo: Repository<StudentSubscription>,
     @InjectRepository(Child)
     private readonly childRepo: Repository<Child>,
     @InjectRepository(ParentSubscription)
@@ -66,17 +69,39 @@ export class SubscriptionGuard implements CanActivate {
       relations: ['organizations', 'organizations.school_demo'],
     });
 
-    if (!student || !student.organizations?.length) {
-      // Independent student — not gated by org subscription
-      return true;
-    }
+    if (!student) return true;
 
-    for (const org of student.organizations) {
+    const genpopEmail = this.configService.get<string>('GENPOP_EMAIL');
+
+    // Check any non-GENPOP orgs first — if the student belongs to a paying school,
+    // that school's subscription covers them.
+    const nonGenpopOrgs = (student.organizations ?? []).filter(
+      (org) => org.email !== genpopEmail,
+    );
+
+    for (const org of nonGenpopOrgs) {
       if (await this.orgHasValidAccess(org)) return true;
     }
 
+    // Student is GENPOP-only, independent, or no non-GENPOP org has valid access.
+    // They must have their own active subscription.
+    return this.checkStudentSubscription(email);
+  }
+
+  private async checkStudentSubscription(email: string): Promise<boolean> {
+    const now = new Date();
+    const activeSub = await this.studentSubscriptionRepo.findOne({
+      where: {
+        student: { email },
+        status: SubscriptionStatus.ACTIVE,
+      },
+      order: { expires_at: 'DESC' },
+    });
+
+    if (activeSub && activeSub.expires_at > now) return true;
+
     throw new GraphQLError(
-      "Your school's access has expired. Please contact your school administrator to renew.",
+      'You need an active subscription. Please subscribe to a plan to continue.',
       { extensions: { code: 'SUBSCRIPTION_REQUIRED' } },
     );
   }
@@ -112,15 +137,31 @@ export class SubscriptionGuard implements CanActivate {
     }
 
     const now = new Date();
-    const activeSub = await this.parentSubscriptionRepo.findOne({
-      where: {
-        parent: { id: child.parent.id },
-        status: SubscriptionStatus.ACTIVE,
-      },
-      order: { expires_at: 'DESC' },
-    });
 
-    if (activeSub && activeSub.expires_at > now) return true;
+    // Check for an active subscription that explicitly covers this child
+    const childSpecificSub = await this.parentSubscriptionRepo
+      .createQueryBuilder('sub')
+      .innerJoin('sub.children', 'child')
+      .where('sub.parent.id = :parentId', { parentId: child.parent.id })
+      .andWhere('child.id = :childId', { childId: child.id })
+      .andWhere('sub.status = :status', { status: SubscriptionStatus.ACTIVE })
+      .andWhere('sub.expires_at > :now', { now })
+      .getOne();
+
+    if (childSpecificSub) return true;
+
+    // Backward compat: active subscriptions with no children entries cover all children
+    const legacySub = await this.parentSubscriptionRepo
+      .createQueryBuilder('sub')
+      .leftJoin('sub.children', 'child')
+      .where('sub.parent.id = :parentId', { parentId: child.parent.id })
+      .andWhere('sub.status = :status', { status: SubscriptionStatus.ACTIVE })
+      .andWhere('sub.expires_at > :now', { now })
+      .groupBy('sub.id')
+      .having('COUNT(child.id) = 0')
+      .getOne();
+
+    if (legacySub) return true;
 
     throw new GraphQLError(
       'Your parent needs an active subscription to unlock tests.',
@@ -130,11 +171,6 @@ export class SubscriptionGuard implements CanActivate {
 
   private async orgHasValidAccess(org: Organization): Promise<boolean> {
     const now = new Date();
-
-    // Test organization
-    if (org.email === this.configService.get('GENPOP_EMAIL')) {
-      return true;
-    }
 
     // Active demo that hasn't expired
     if (

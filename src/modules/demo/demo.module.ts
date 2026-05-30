@@ -10,6 +10,7 @@ import { OrgSubscription } from './entities/organization-subscription.entity';
 import { ParentDemoRequest } from './entities/parent-demo-request.entity';
 import { SchoolDemo } from './entities/school-demo.entity';
 import { StudentDemoRequest } from './entities/student-demo-request.entity';
+import { StudentSubscription } from './entities/student-subscription.entity';
 import { SubscriptionPlan } from './entities/subscription-plan.entity';
 import { PaymentController } from './controllers/payment.controller';
 import { DemoResolver } from './resolvers/demo.resolver';
@@ -45,6 +46,7 @@ import { BullModule } from '@nestjs/bullmq';
       SubscriptionPlan,
       OrgSubscription,
       ParentSubscription,
+      StudentSubscription,
       Cart,
       Organization,
       Student,

@@ -3,29 +3,24 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { SubscriptionPlan } from '../../demo/entities/subscription-plan.entity';
-import {
-  SubscriptionStatus,
-} from '../../demo/entities/organization-subscription.entity';
-import { Parent } from './parent.entity';
-import { Child } from './child.entity';
+import { SubscriptionPlan } from './subscription-plan.entity';
+import { SubscriptionStatus } from './organization-subscription.entity';
+import { Student } from '../../auth/entities/student.entity';
 
-@ObjectType('ParentSubscription')
-@Entity('parent_subscriptions')
-export class ParentSubscription {
+@ObjectType('StudentSubscription')
+@Entity('student_subscriptions')
+export class StudentSubscription {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field(() => Parent)
-  @ManyToOne(() => Parent, { onDelete: 'CASCADE' })
-  parent: Parent;
+  @Field(() => Student)
+  @ManyToOne(() => Student, { onDelete: 'CASCADE' })
+  student: Student;
 
   @Field(() => SubscriptionPlan)
   @ManyToOne(() => SubscriptionPlan)
@@ -50,15 +45,6 @@ export class ParentSubscription {
   @Field()
   @Column({ type: 'timestamptz' })
   expires_at: Date;
-
-  @Field(() => [Child], { nullable: true })
-  @ManyToMany(() => Child)
-  @JoinTable({
-    name: 'parent_subscription_children',
-    joinColumn: { name: 'parent_subscription_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'child_id', referencedColumnName: 'id' },
-  })
-  children: Child[];
 
   @Field()
   @CreateDateColumn({ type: 'timestamptz' })

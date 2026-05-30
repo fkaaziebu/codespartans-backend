@@ -26,6 +26,12 @@ import { DemoStatus, SchoolDemo } from '../entities/school-demo.entity';
 import { ParentDemoRequest } from '../entities/parent-demo-request.entity';
 import { StudentDemoRequest } from '../entities/student-demo-request.entity';
 import { SubscriptionPlan } from '../entities/subscription-plan.entity';
+import {
+  OrgSubscription,
+  SubscriptionStatus,
+} from '../entities/organization-subscription.entity';
+import { ParentSubscription } from '../../parent/entities/parent-subscription.entity';
+import { StudentSubscription } from '../entities/student-subscription.entity';
 import { PaymentService } from './payment.service';
 
 @Injectable()
@@ -47,6 +53,14 @@ export class DemoService {
     private readonly studentRepository: Repository<Student>,
     @InjectRepository(Parent)
     private readonly parentRepository: Repository<Parent>,
+    @InjectRepository(OrgSubscription)
+    private readonly orgSubscriptionRepository: Repository<OrgSubscription>,
+    @InjectRepository(ParentSubscription)
+    private readonly parentSubscriptionRepository: Repository<ParentSubscription>,
+    @InjectRepository(StudentSubscription)
+    private readonly studentSubscriptionRepository: Repository<StudentSubscription>,
+    @InjectRepository(SubscriptionPlan)
+    private readonly planRepository: Repository<SubscriptionPlan>,
     private readonly emailProducer: EmailProducer,
     private readonly paymentService: PaymentService,
     private readonly configService: ConfigService,
@@ -216,9 +230,25 @@ export class DemoService {
     demo.activated_at = now;
     demo.expires_at = expiresAt;
 
+    const trialPlan = await this.planRepository.findOne({
+      where: { plan_key: 'school_trial' },
+    });
+
     await this.orgRepository.manager.transaction(async (em) => {
       await em.save(SchoolDemo, demo);
       await em.save(Organization, org);
+      if (trialPlan) {
+        await em.save(
+          OrgSubscription,
+          em.create(OrgSubscription, {
+            organization: org,
+            plan: trialPlan,
+            status: SubscriptionStatus.ACTIVE,
+            started_at: now,
+            expires_at: expiresAt,
+          }),
+        );
+      }
     });
 
     const payload = {
@@ -288,11 +318,27 @@ export class DemoService {
     demo.activated_at = now;
     demo.expires_at = expiresAt;
 
+    const studentTrialPlan = await this.planRepository.findOne({
+      where: { plan_key: 'student_free' },
+    });
+
     await this.studentRepository.manager.transaction(async (em) => {
       await em.save(Cart, cart);
       student.cart = cart;
       await em.save(StudentDemoRequest, demo);
       await em.save(Student, student);
+      if (studentTrialPlan) {
+        await em.save(
+          StudentSubscription,
+          em.create(StudentSubscription, {
+            student,
+            plan: studentTrialPlan,
+            status: SubscriptionStatus.ACTIVE,
+            started_at: now,
+            expires_at: expiresAt,
+          }),
+        );
+      }
     });
 
     const payload = {
@@ -361,9 +407,25 @@ export class DemoService {
     demo.activated_at = now;
     demo.expires_at = expiresAt;
 
+    const parentTrialPlan = await this.planRepository.findOne({
+      where: { plan_key: 'parent_trial' },
+    });
+
     await this.parentRepository.manager.transaction(async (em) => {
       await em.save(ParentDemoRequest, demo);
       await em.save(Parent, parent);
+      if (parentTrialPlan) {
+        await em.save(
+          ParentSubscription,
+          em.create(ParentSubscription, {
+            parent,
+            plan: parentTrialPlan,
+            status: SubscriptionStatus.ACTIVE,
+            started_at: now,
+            expires_at: expiresAt,
+          }),
+        );
+      }
     });
 
     const payload = {
@@ -391,8 +453,8 @@ export class DemoService {
     return this.paymentService.listPlans();
   }
 
-  async initiatePayment(email: string, planId: string, role: string, childrenCount = 1) {
-    return this.paymentService.initiatePayment(email, planId, role, childrenCount);
+  async initiatePayment(email: string, planId: string, role: string, childrenIds: string[] = []) {
+    return this.paymentService.initiatePayment(email, planId, role, childrenIds);
   }
 
   async getMySubscription(parentEmail: string) {
@@ -401,5 +463,13 @@ export class DemoService {
 
   async listMySubscriptions(parentEmail: string) {
     return this.paymentService.listParentSubscriptions(parentEmail);
+  }
+
+  async getMyStudentSubscription(studentEmail: string) {
+    return this.paymentService.getStudentSubscription(studentEmail);
+  }
+
+  async listMyStudentSubscriptions(studentEmail: string) {
+    return this.paymentService.listStudentSubscriptions(studentEmail);
   }
 }

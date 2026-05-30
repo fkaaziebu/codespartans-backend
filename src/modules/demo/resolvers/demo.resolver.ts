@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { ActivateParentDemoInput } from '../inputs/activate-parent-demo.input';
 import { ActivateSchoolDemoInput } from '../inputs/activate-school-demo.input';
@@ -16,6 +16,7 @@ import { InitiatePaymentResponse } from '../types/initiate-payment-response.type
 import { LoginParentResponse } from 'src/modules/parent/types';
 import { StudentLoginResponse } from 'src/modules/auth/types';
 import { ParentSubscription } from 'src/modules/parent/entities/parent-subscription.entity';
+import { StudentSubscription } from '../entities/student-subscription.entity';
 
 @Resolver()
 export class DemoResolver {
@@ -60,11 +61,11 @@ export class DemoResolver {
   @Mutation(() => InitiatePaymentResponse)
   async initiatePayment(
     @Args('planId') planId: string,
-    @Args('childrenCount', { type: () => Int, defaultValue: 1 }) childrenCount: number,
+    @Args('children', { type: () => [String] }) children: string[],
     @Context() context,
   ) {
     const { email, role } = context.req.user;
-    return this.demoService.initiatePayment(email, planId, role, childrenCount);
+    return this.demoService.initiatePayment(email, planId, role, children);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -79,5 +80,19 @@ export class DemoResolver {
   async listMySubscriptions(@Context() context) {
     const { email } = context.req.user;
     return this.demoService.listMySubscriptions(email);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => StudentSubscription, { nullable: true })
+  async getMyStudentSubscription(@Context() context) {
+    const { email } = context.req.user;
+    return this.demoService.getMyStudentSubscription(email);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [StudentSubscription])
+  async listMyStudentSubscriptions(@Context() context) {
+    const { email } = context.req.user;
+    return this.demoService.listMyStudentSubscriptions(email);
   }
 }
