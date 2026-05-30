@@ -126,11 +126,9 @@ export class PaymentService {
 
     const secretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY');
 
-    // For parent plans, calculate amount based on children count with family discount
-    const count = childrenIds.length || 1;
-    const isParentPlan = plan.plan_key.startsWith('parent_');
-    const familyDiscount = isParentPlan && count > 1 ? 0.8 : 1.0;
-    const amountInKobo = Math.round(plan.price * count * familyDiscount * 100);
+    const count = role === 'PARENT' && childrenIds.length > 0 ? childrenIds.length : 1;
+    const discount = plan.plan_key.startsWith('parent_') ? 0.8 : 1.0;
+    const amountInKobo = Math.round(plan.price * discount * count * 100);
 
     let payerEmail: string;
     let metadata: Record<string, string>;
