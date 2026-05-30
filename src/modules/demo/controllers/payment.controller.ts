@@ -20,6 +20,9 @@ export class PaymentController {
     @Req() req: RawBodyRequest<Request>,
     @Body() body: any,
   ) {
+    console.log('PAYMENT_WEBHOOK_REQ:', req);
+    console.log('PAYMENT_WEBHOOK_BODY:', body);
+
     if (!signature) throw new BadRequestException('Missing signature header');
 
     console.log('PAYMENT_WEBHOOK_INITIALIZE');
