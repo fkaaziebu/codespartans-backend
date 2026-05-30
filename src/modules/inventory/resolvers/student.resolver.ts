@@ -64,7 +64,7 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
+  @UseGuards(GqlJwtAuthGuard)
   @Query(() => [CategoryTypeClass])
   listOrganizationCategories(
     @Context() context,
