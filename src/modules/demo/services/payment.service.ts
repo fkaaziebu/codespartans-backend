@@ -66,9 +66,10 @@ export class PaymentService {
       if (parent && childrenIds.length > 0) {
         const ownedChildren = await this.childRepo.find({
           where: { parent: { id: parent.id } },
-          select: ['id'],
+          select: ['id', 'full_name'],
         });
         const ownedIds = new Set(ownedChildren.map((c) => c.id));
+        const childNameById = new Map(ownedChildren.map((c) => [c.id, c.full_name]));
         const invalidIds = childrenIds.filter((id) => !ownedIds.has(id));
         if (invalidIds.length > 0) {
           throw new BadRequestException(
@@ -88,8 +89,9 @@ export class PaymentService {
             .getOne();
 
           if (activeSub) {
+            const childName = childNameById.get(childId) ?? childId;
             throw new BadRequestException(
-              `Child ${childId} already has an active subscription`,
+              `${childName} already has an active subscription`,
             );
           }
         }
