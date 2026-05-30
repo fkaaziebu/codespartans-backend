@@ -73,4 +73,11 @@ export class DemoResolver {
     const { email } = context.req.user;
     return this.demoService.getMySubscription(email);
   }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => [ParentSubscription])
+  async listMySubscriptions(@Context() context) {
+    const { email } = context.req.user;
+    return this.demoService.listMySubscriptions(email);
+  }
 }

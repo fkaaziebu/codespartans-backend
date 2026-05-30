@@ -10,7 +10,7 @@ import * as crypto from 'crypto';
 import { Organization } from 'src/modules/auth/entities/organization.entity';
 import { Parent } from 'src/modules/parent/entities/parent.entity';
 import { ParentSubscription } from 'src/modules/parent/entities/parent-subscription.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import {
   OrgSubscription,
   SubscriptionStatus,
@@ -143,7 +143,7 @@ export class PaymentService {
 
     const startedAt = new Date();
     const expiresAt = new Date(startedAt);
-    expiresAt.setDate(expiresAt.getDate() + plan.duration_days);
+    expiresAt.setDate(expiresAt.getDate() + Number(plan.duration_days));
 
     if (parent_id) {
       const parent = await this.parentRepo.findOne({
@@ -198,6 +198,20 @@ export class PaymentService {
       },
       relations: ['plan'],
       order: { expires_at: 'DESC' },
+    });
+  }
+
+  async listParentSubscriptions(parentEmail: string): Promise<ParentSubscription[]> {
+    const year = new Date().getFullYear();
+    const start = new Date(year, 0, 1);
+    const end = new Date(year + 1, 0, 1);
+    return this.parentSubscriptionRepo.find({
+      where: {
+        parent: { email: parentEmail },
+        created_at: Between(start, end),
+      },
+      relations: ['plan'],
+      order: { created_at: 'DESC' },
     });
   }
 }

@@ -398,4 +398,8 @@ export class DemoService {
   async getMySubscription(parentEmail: string) {
     return this.paymentService.getParentSubscription(parentEmail);
   }
+
+  async listMySubscriptions(parentEmail: string) {
+    return this.paymentService.listParentSubscriptions(parentEmail);
+  }
 }

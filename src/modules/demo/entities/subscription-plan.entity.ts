@@ -58,7 +58,7 @@ export class SubscriptionPlan {
   interval: PlanInterval;
 
   @Field(() => Int)
-  @Column()
+  @Column({ type: 'int' })
   duration_days: number;
 
   @Field(() => [String])
