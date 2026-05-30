@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { Gender } from '../entities/parent.entity';
 
 @InputType()
 export class RegisterParentInput {
@@ -16,4 +17,7 @@ export class RegisterParentInput {
 
   @Field()
   password: string;
+
+  @Field(() => Gender, { nullable: true })
+  gender?: Gender;
 }

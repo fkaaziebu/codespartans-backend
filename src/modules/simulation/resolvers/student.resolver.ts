@@ -4,7 +4,10 @@ import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course
 import { SuiteFilterInput } from 'src/modules/inventory/inputs';
 import { Question as QuestionTypeClass } from 'src/modules/review/entities/question.entity';
 import { SubmittedAnswer as SubmittedAnswerTypeClass } from 'src/modules/simulation/entities/sumitted_answer.entity';
-import { Test as TestTypeClass, TestModeType } from 'src/modules/simulation/entities/test.entity';
+import {
+  Test as TestTypeClass,
+  TestModeType,
+} from 'src/modules/simulation/entities/test.entity';
 import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
 import { GqlJwtAuthGuard, SubscriptionGuard } from 'src/helpers/guards';
 import { StudentService } from '../services';
@@ -138,7 +141,7 @@ export class StudentResolver {
     return this.studentService.listMyAssignments({ email });
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => TestTypeClass)
   startAssignedTest(
     @Context() context,

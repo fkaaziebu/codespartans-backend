@@ -692,10 +692,25 @@ export class StudentService {
       return [];
     }
 
-    return this.testAssignmentRepository.find({
+    const assignments = await this.testAssignmentRepository.find({
       where: { child: { id: child.id } },
-      relations: ['test_suite', 'test', 'parent'],
+      relations: [
+        'test_suite',
+        'test',
+        'test.test_suite',
+        'test.test_suite.course_version',
+        'test.test_suite.course_version.course',
+        'parent',
+      ],
       order: { assigned_at: 'DESC' },
+    });
+
+    return assignments.map((assignment) => {
+      if (assignment.test) {
+        assignment.test.course_id =
+          assignment.test.test_suite?.course_version?.course?.id ?? undefined;
+      }
+      return assignment;
     });
   }
 
@@ -730,7 +745,12 @@ export class StudentService {
           TestAssignment,
           {
             where: { id: assignmentId, child: { id: child.id } },
-            relations: ['test_suite.questions', 'test'],
+            relations: [
+              'test_suite.questions',
+              'test_suite.course_version',
+              'test_suite.course_version.course',
+              'test',
+            ],
           },
         );
 
@@ -757,6 +777,8 @@ export class StudentService {
         new_test.test_suite = assignment.test_suite;
         new_test.student = student;
         new_test.mode = mode;
+        new_test.course_id =
+          assignment.test_suite?.course_version?.course?.id ?? undefined;
 
         await transactionalEntityManager.save(new_test);
 

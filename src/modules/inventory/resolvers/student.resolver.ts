@@ -40,7 +40,10 @@ export class StudentResolver {
     });
   }
 
-  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
+  @UseGuards(
+    GqlJwtAuthGuard,
+    // , SubscriptionGuard
+  )
   @Query(() => CourseConnection)
   listOrganizationCourses(
     @Context() context,
@@ -140,10 +143,7 @@ export class StudentResolver {
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [TestTopicProgressResponse])
-  studentTestTopicProgress(
-    @Context() context,
-    @Args('testId') testId: string,
-  ) {
+  studentTestTopicProgress(@Context() context, @Args('testId') testId: string) {
     const { email } = context.req.user;
     return this.studentService.studentTestTopicProgress({ email, testId });
   }

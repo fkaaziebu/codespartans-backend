@@ -5,6 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { GraphQLError } from 'graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DemoStatus } from 'src/modules/demo/entities/school-demo.entity';
 import {
@@ -74,11 +75,10 @@ export class SubscriptionGuard implements CanActivate {
       if (await this.orgHasValidAccess(org)) return true;
     }
 
-    throw new ForbiddenException({
-      code: 'SUBSCRIPTION_REQUIRED',
-      message:
-        "Your school's access has expired. Please contact your school administrator to renew.",
-    });
+    throw new GraphQLError(
+      "Your school's access has expired. Please contact your school administrator to renew.",
+      { extensions: { code: 'SUBSCRIPTION_REQUIRED' } },
+    );
   }
 
   private async checkOrgAccess(email: string): Promise<boolean> {
@@ -91,11 +91,10 @@ export class SubscriptionGuard implements CanActivate {
 
     if (await this.orgHasValidAccess(org)) return true;
 
-    throw new ForbiddenException({
-      code: 'SUBSCRIPTION_REQUIRED',
-      message:
-        'Your free trial has ended. Please subscribe to a plan to continue.',
-    });
+    throw new GraphQLError(
+      'Your free trial has ended. Please subscribe to a plan to continue.',
+      { extensions: { code: 'SUBSCRIPTION_REQUIRED' } },
+    );
   }
 
   private async checkChildAccess(studentEmail: string): Promise<boolean> {
@@ -106,10 +105,10 @@ export class SubscriptionGuard implements CanActivate {
     });
 
     if (!child?.parent) {
-      throw new ForbiddenException({
-        code: 'SUBSCRIPTION_REQUIRED',
-        message: 'Your parent needs an active subscription to unlock tests.',
-      });
+      throw new GraphQLError(
+        'Your parent needs an active subscription to unlock tests.',
+        { extensions: { code: 'SUBSCRIPTION_REQUIRED' } },
+      );
     }
 
     const now = new Date();
@@ -123,10 +122,10 @@ export class SubscriptionGuard implements CanActivate {
 
     if (activeSub && activeSub.expires_at > now) return true;
 
-    throw new ForbiddenException({
-      code: 'SUBSCRIPTION_REQUIRED',
-      message: 'Your parent needs an active subscription to unlock tests.',
-    });
+    throw new GraphQLError(
+      'Your parent needs an active subscription to unlock tests.',
+      { extensions: { code: 'SUBSCRIPTION_REQUIRED' } },
+    );
   }
 
   private async orgHasValidAccess(org: Organization): Promise<boolean> {

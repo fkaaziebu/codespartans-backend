@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -7,6 +7,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Child } from './child.entity';
+
+export enum Gender {
+  Male = 'Male',
+  Female = 'Female',
+}
+
+registerEnumType(Gender, {
+  name: 'Gender',
+  description: 'Parent gender',
+});
 
 @ObjectType('Parent')
 @Entity('parents')
@@ -30,6 +40,10 @@ export class Parent {
   @Field({ nullable: true })
   @Column({ nullable: true })
   whatsapp_number: string;
+
+  @Field(() => Gender)
+  @Column({ type: 'enum', enum: Gender, default: Gender.Male })
+  gender: Gender;
 
   @Column()
   @Exclude({ toPlainOnly: true })

@@ -32,7 +32,7 @@ import { Course } from 'src/modules/inventory/entities/course.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { Child, ClassLevel } from '../entities/child.entity';
-import { Parent } from '../entities/parent.entity';
+import { Gender, Parent } from '../entities/parent.entity';
 import {
   ActivityConnection,
   ChildStatsResponse,
@@ -67,12 +67,14 @@ export class ParentService {
     email,
     whatsapp_number,
     password,
+    gender,
   }: {
     first_name: string;
     last_name: string;
     email: string;
     whatsapp_number: string;
     password: string;
+    gender?: Gender;
   }): Promise<{ message: string }> {
     return this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
@@ -96,6 +98,7 @@ export class ParentService {
         parent.email = email;
         parent.whatsapp_number = whatsapp_number;
         parent.password = await HashHelper.encrypt(password);
+        parent.gender = gender ?? Gender.Male;
         parent.is_account_validated = false;
         parent.is_setup_completed = false;
         parent.validation_code = validationCode;
