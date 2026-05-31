@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginateHelper } from 'src/helpers';
-import { PaginationInput } from 'src/helpers/inputs';
+import { PaginateHelper } from '../../../helpers';
+import { PaginationInput } from '../../../helpers/inputs';
 import { ILike, Repository } from 'typeorm';
 import { Instructor } from '../../auth/entities/instructor.entity';
 import { Course } from '../../inventory/entities/course.entity';
@@ -9,7 +9,7 @@ import { Issue } from '../entities/issue.entity';
 import { Question } from '../entities/question.entity';
 import { Review } from '../entities/review.entity';
 import { Version } from '../entities/version.entity';
-import { Issue as IssueTypeClass, IssueStatusType } from 'src/modules/review/entities/issue.entity';
+import { Issue as IssueTypeClass, IssueStatusType } from '../entities/issue.entity';
 
 @Injectable()
 export class InstructorService {

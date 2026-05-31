@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VersionStatusType } from 'src/modules/review/entities/version.entity';
-import { PaginateHelper } from 'src/helpers';
-import { PaginationInput } from 'src/helpers/inputs';
+import { VersionStatusType } from '../../review/entities/version.entity';
+import { PaginateHelper } from '../../../helpers';
+import { PaginationInput } from '../../../helpers/inputs';
 import { ILike, Repository } from 'typeorm';
 import { Admin } from '../../auth/entities/admin.entity';
 import { Instructor } from '../../auth/entities/instructor.entity';

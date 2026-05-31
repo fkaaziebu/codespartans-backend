@@ -7,11 +7,11 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import * as crypto from 'crypto';
-import { Organization } from 'src/modules/auth/entities/organization.entity';
-import { Student } from 'src/modules/auth/entities/student.entity';
-import { Child } from 'src/modules/parent/entities/child.entity';
-import { Parent } from 'src/modules/parent/entities/parent.entity';
-import { ParentSubscription } from 'src/modules/parent/entities/parent-subscription.entity';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Student } from '../../auth/entities/student.entity';
+import { Child } from '../../parent/entities/child.entity';
+import { Parent } from '../../parent/entities/parent.entity';
+import { ParentSubscription } from '../../parent/entities/parent-subscription.entity';
 import { Between, In, Repository } from 'typeorm';
 import {
   OrgSubscription,

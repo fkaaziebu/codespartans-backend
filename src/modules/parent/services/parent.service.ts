@@ -8,27 +8,27 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { HashHelper, PaginateHelper } from 'src/helpers';
-import { PaginationInput } from 'src/helpers/inputs';
-import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
-import { TestStatusType } from 'src/modules/simulation/entities/test.entity';
-import { SubjectProgressResponse } from 'src/modules/inventory/types/subject-progress-response.type';
-import { WeakSubjectAreaResponse } from 'src/modules/inventory/types/weak-subject-area-response.type';
+import { HashHelper, PaginateHelper } from '../../../helpers';
+import { PaginationInput } from '../../../helpers/inputs';
+import { TimeEventType } from '../../simulation/entities/time_event.entity';
+import { TestStatusType } from '../../simulation/entities/test.entity';
+import { SubjectProgressResponse } from '../../inventory/types/subject-progress-response.type';
+import { WeakSubjectAreaResponse } from '../../inventory/types/weak-subject-area-response.type';
 import {
   AttemptConnection,
   AttemptResponse,
-} from 'src/modules/inventory/types';
-import { Test } from 'src/modules/simulation/entities/test.entity';
+} from '../../inventory/types';
+import { Test } from '../../simulation/entities/test.entity';
 import {
   TestAssignment,
   TestAssignmentStatus,
-} from 'src/modules/simulation/entities/test_assignment.entity';
-import { TestSuite } from 'src/modules/review/entities/test_suite.entity';
-import { Student } from 'src/modules/auth/entities/student.entity';
-import { Organization } from 'src/modules/auth/entities/organization.entity';
-import { Cart } from 'src/modules/inventory/entities/cart.entity';
-import { Category } from 'src/modules/inventory/entities/category.entity';
-import { Course } from 'src/modules/inventory/entities/course.entity';
+} from '../../simulation/entities/test_assignment.entity';
+import { TestSuite } from '../../review/entities/test_suite.entity';
+import { Student } from '../../auth/entities/student.entity';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Cart } from '../../inventory/entities/cart.entity';
+import { Category } from '../../inventory/entities/category.entity';
+import { Course } from '../../inventory/entities/course.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { Child, ClassLevel } from '../entities/child.entity';
@@ -139,7 +139,7 @@ export class ParentService {
       throw new UnauthorizedException('Invalid token type');
     }
 
-    const { type: _type, ...tokenPayload } = payload;
+    const { type: _type, iat: _iat, exp: _exp, ...tokenPayload } = payload as any;
     const access_token = this.jwtService.sign(tokenPayload);
     return { access_token };
   }

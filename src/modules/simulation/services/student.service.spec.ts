@@ -1,3 +1,8 @@
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -5,12 +10,16 @@ import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import {
   Admin,
+  Cart,
+  Child,
   Course,
   entities,
   Instructor,
   Organization,
+  Parent,
   Question,
   Student,
+  TestAssignment,
   TestSuite,
   Version,
 } from '../../../database/entities';
@@ -18,16 +27,23 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from 'src/modules/inventory/entities/course.entity';
+} from '../../inventory/entities/course.entity';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from 'src/modules/review/entities/question.entity';
+} from '../../review/entities/question.entity';
+import { TestAssignmentStatus } from '../entities/test_assignment.entity';
+import { TestModeType, TestStatusType } from '../entities/test.entity';
+import { TimeEventType } from '../entities/time_event.entity';
+import { ClassLevel } from '../../parent/entities/child.entity';
+import { Gender } from '../../parent/entities/parent.entity';
 import { HashHelper } from '../../../helpers';
+import { StudentGateway } from '../gateways/student.gateway';
+import { MarkAnswerProducer } from './mark-answer.producer';
+import { MarkAnswerService } from './mark-answer.service';
+import { TestTimerService } from './test-timer.service';
 import { StudentService } from './student.service';
-import { TestStatusType } from 'src/modules/simulation/entities/test.entity';
-import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
 
 describe('StudentService', () => {
   let module: TestingModule;
@@ -42,6 +58,31 @@ describe('StudentService', () => {
   let versionRepository: Repository<Version>;
   let testSuiteRepository: Repository<TestSuite>;
   let questionRepository: Repository<Question>;
+  let testAssignmentRepository: Repository<TestAssignment>;
+  let cartRepository: Repository<Cart>;
+  let parentRepository: Repository<Parent>;
+  let childRepository: Repository<Child>;
+
+  const mockTimerService = {
+    startTimer: jest.fn(),
+    pauseTimer: jest.fn(),
+    resumeTimer: jest.fn(),
+    stopTimer: jest.fn(),
+  };
+
+  const mockSseGateway = {
+    sendTestEnded: jest.fn(),
+    sendTimeUpdate: jest.fn(),
+    sendTestPaused: jest.fn(),
+  };
+
+  const mockMarkAnswerProducer = {
+    markShortAnswer: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockMarkAnswerService = {
+    markShortAnswer: jest.fn().mockResolvedValue({}),
+  };
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -53,8 +94,8 @@ describe('StudentService', () => {
         JwtModule.registerAsync({
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
-            secret: configService.get<string>('JWT_SECRET'),
-            secretOrPrivateKey: configService.get('JWT_SECRET'),
+            secret: configService.get<string>('JWT_SECRET') || 'test-secret',
+            secretOrPrivateKey: configService.get('JWT_SECRET') || 'test-secret',
             signOptions: { expiresIn: '1h' },
           }),
           inject: [ConfigService],
@@ -71,362 +112,613 @@ describe('StudentService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      controllers: [],
-      providers: [StudentService],
+      providers: [
+        StudentService,
+        { provide: TestTimerService, useValue: mockTimerService },
+        { provide: StudentGateway, useValue: mockSseGateway },
+        { provide: MarkAnswerProducer, useValue: mockMarkAnswerProducer },
+        { provide: MarkAnswerService, useValue: mockMarkAnswerService },
+      ],
     }).compile();
 
     connection = module.get<Connection>(Connection);
     studentService = module.get<StudentService>(StudentService);
-    instructorRepository = module.get<Repository<Instructor>>(
-      getRepositoryToken(Instructor),
-    );
-    organizationRepository = module.get<Repository<Organization>>(
-      getRepositoryToken(Organization),
-    );
     adminRepository = module.get<Repository<Admin>>(getRepositoryToken(Admin));
-    studentRepository = module.get<Repository<Student>>(
-      getRepositoryToken(Student),
-    );
-    courseRepository = module.get<Repository<Course>>(
-      getRepositoryToken(Course),
-    );
-    versionRepository = module.get<Repository<Version>>(
-      getRepositoryToken(Version),
-    );
-    testSuiteRepository = module.get<Repository<TestSuite>>(
-      getRepositoryToken(TestSuite),
-    );
-    questionRepository = module.get<Repository<Question>>(
-      getRepositoryToken(Question),
-    );
+    instructorRepository = module.get<Repository<Instructor>>(getRepositoryToken(Instructor));
+    organizationRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
+    studentRepository = module.get<Repository<Student>>(getRepositoryToken(Student));
+    courseRepository = module.get<Repository<Course>>(getRepositoryToken(Course));
+    versionRepository = module.get<Repository<Version>>(getRepositoryToken(Version));
+    testSuiteRepository = module.get<Repository<TestSuite>>(getRepositoryToken(TestSuite));
+    questionRepository = module.get<Repository<Question>>(getRepositoryToken(Question));
+    testAssignmentRepository = module.get<Repository<TestAssignment>>(getRepositoryToken(TestAssignment));
+    cartRepository = module.get<Repository<Cart>>(getRepositoryToken(Cart));
+    parentRepository = module.get<Repository<Parent>>(getRepositoryToken(Parent));
+    childRepository = module.get<Repository<Child>>(getRepositoryToken(Child));
   });
 
   beforeEach(async () => {
-    // Clear the database before each test
-    const entities = connection.entityMetadatas;
-    for (const entity of entities) {
+    const entityMetadatas = connection.entityMetadatas;
+    for (const entity of entityMetadatas) {
       const repository = connection.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
-    jest.restoreAllMocks();
-  });
+    jest.clearAllMocks();
+  }, 30000);
 
   afterAll(async () => {
     await connection.close();
     await module.close();
   });
 
-  describe('startTest', () => {
-    it('returns test with id and status after successfully creating test', async () => {
-      const { suite, student } = await setupData();
+  // ─── helpers ────────────────────────────────────────────────────────────────
 
-      const response = await studentService.startTest({
-        email: instructorInfo.email,
-        suiteId: suite.id,
-      });
+  const studentEmail = 'student@test.com';
 
-      expect(response.status).toBe(TestStatusType.ON_GOING);
-
-      const std = await getStudent(student.id);
-
-      expect(std.tests[0].id).toEqual(response.id);
-    });
-  });
-
-  describe('pauseTest', () => {
-    it('returns paused test with id and status after successfully pausing test', async () => {
-      const { suite, student } = await setupData();
-
-      const test = await studentService.startTest({
-        email: instructorInfo.email,
-        suiteId: suite.id,
-      });
-
-      const response = await studentService.pauseTest({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      expect(response.status).toBe(TestStatusType.PAUSED);
-
-      const std = await getStudent(student.id);
-
-      expect(std.tests[0].status).toEqual(response.status);
-      expect(std.tests[0].time_events.length).toEqual(2);
-      expect(std.tests[0].time_events.map((e) => e.type)).toContain(
-        TimeEventType.PAUSED,
-      );
-    });
-  });
-
-  describe('resumeTest', () => {
-    it('returns resumed test with id and status after successfully resuming test', async () => {
-      const { suite, student } = await setupData();
-
-      let test = await studentService.startTest({
-        email: instructorInfo.email,
-        suiteId: suite.id,
-      });
-
-      test = await studentService.pauseTest({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      const response = await studentService.resumeTest({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      expect(response.status).toBe(TestStatusType.ON_GOING);
-
-      const std = await getStudent(student.id);
-
-      expect(std.tests[0].status).toEqual(response.status);
-      expect(std.tests[0].time_events.length).toEqual(3);
-      expect(std.tests[0].time_events.map((e) => e.type)).toContain(
-        TimeEventType.RESUMED,
-      );
-    });
-  });
-
-  describe('endTest', () => {
-    it('returns ended test with id and status after successfully ending test', async () => {
-      const { suite, student } = await setupData();
-
-      let test = await studentService.startTest({
-        email: instructorInfo.email,
-        suiteId: suite.id,
-      });
-
-      test = await studentService.pauseTest({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      test = await studentService.resumeTest({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      const response = await studentService.endTest({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      expect(response.status).toBe(TestStatusType.ENDED);
-
-      const std = await getStudent(student.id);
-
-      expect(std.tests[0].status).toEqual(response.status);
-      expect(std.tests[0].time_events.length).toEqual(4);
-      expect(std.tests[0].time_events.map((e) => e.type)).toContain(
-        TimeEventType.ENDED,
-      );
-    });
-  });
-
-  describe('getQuestion', () => {
-    it('returns question with only the relevant fields', async () => {
-      const { suite } = await setupData();
-
-      const test = await studentService.startTest({
-        email: instructorInfo.email,
-        suiteId: suite.id,
-      });
-
-      const response = await studentService.getQuestion({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      expect(response).toBeDefined();
-    });
-  });
-
-  describe('submitAnswer', () => {
-    it('returns submitted answer after submission', async () => {
-      const { suite, student } = await setupData();
-
-      const test = await studentService.startTest({
-        email: instructorInfo.email,
-        suiteId: suite.id,
-      });
-
-      const question1 = await studentService.getQuestion({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      const response1 = await studentService.submitAnswer({
-        email: instructorInfo.email,
-        testId: test.id,
-        questionId: question1.id,
-        timeRange: `${new Date().getTime()}#${new Date().getTime() + 10000}`,
-        answer: 'option one',
-      });
-
-      expect(response1.question_id).toEqual(question1.id);
-
-      const std1 = await getStudent(student.id);
-
-      expect(std1.tests[0].submitted_answers[0].id).toEqual(response1.id);
-
-      const question2 = await studentService.getQuestion({
-        email: instructorInfo.email,
-        testId: test.id,
-      });
-
-      const response2 = await studentService.submitAnswer({
-        email: instructorInfo.email,
-        testId: test.id,
-        questionId: question2.id,
-        timeRange: `${new Date().getTime()}#${new Date().getTime() + 10000}`,
-        answer: 'option one',
-      });
-
-      expect(response2.question_id).toEqual(question2.id);
-
-      const std2 = await getStudent(student.id);
-
-      expect(std2.tests[0].submitted_answers[1].id).toEqual(response2.id);
-
-      expect(question1.id).not.toEqual(question2.id);
-    });
-  });
-
-  const instructorInfo = {
-    email: 'test@example.com',
-    questions: [
-      {
-        question_number: 1,
-        description: 'Heyyaaa test question 1.',
-        hints: ['hint one', 'hint two', 'hint three'],
-        solution_steps: ['step one', 'step two', 'step three'],
-        options: ['option one', 'option two', 'option three'],
-        type: QuestionType.MULTIPLE_CHOICE,
-        tags: [QuestionTagType.TAG_ALGEBRA],
-        difficulty: QuestionDifficultyType.EASY,
-        estimated_time_in_ms: 10000,
-        correct_answer: 'option one',
-      },
-      {
-        question_number: 2,
-        description: 'Heyyaaa test question 2.',
-        hints: ['hint one', 'hint two', 'hint three'],
-        solution_steps: ['step one', 'step two', 'step three'],
-        options: ['option one', 'option two', 'option three'],
-        type: QuestionType.MULTIPLE_CHOICE,
-        tags: [QuestionTagType.TAG_ALGEBRA],
-        difficulty: QuestionDifficultyType.EASY,
-        estimated_time_in_ms: 10000,
-        correct_answer: 'option one',
-      },
-    ],
-  };
-
-  const courseInfo = {
-    avatar_url: 'https://example.com/avatar.jpg',
-    currency: CurrencyType.USD,
-    description: 'This is a test course',
-    domains: [DomainType.ENGLISH],
-    level: LevelType.BEGINNER,
-    price: 100,
-    title: 'Test Course',
-  };
-
-  const getStudent = async (studentId: string) => {
-    return studentRepository.findOne({
-      where: {
-        id: studentId,
-      },
+  const getStudent = async (studentId: string) =>
+    studentRepository.findOne({
+      where: { id: studentId },
       relations: ['tests.submitted_answers', 'tests.time_events'],
     });
-  };
 
   const setupData = async () => {
     const organization = new Organization();
     organization.name = 'Test Organization';
-    organization.email = 'test@example.com';
+    organization.email = 'org@test.com';
     organization.password = await HashHelper.encrypt('password');
-
     await organizationRepository.save(organization);
 
     const admin = new Admin();
-    admin.name = 'Test Organization';
-    admin.email = 'test@example.com';
+    admin.name = 'Test Admin';
+    admin.email = 'admin@test.com';
     admin.password = await HashHelper.encrypt('password');
     admin.organization = organization;
-
     await adminRepository.save(admin);
 
     const instructor = new Instructor();
-    instructor.name = 'Test Organization';
-    instructor.email = 'test@example.com';
+    instructor.name = 'Test Instructor';
+    instructor.email = 'instructor@test.com';
     instructor.password = await HashHelper.encrypt('password');
     instructor.organizations = [organization];
-
     await instructorRepository.save(instructor);
 
     const course = new Course();
-    course.avatar_url = courseInfo.avatar_url;
-    course.currency = courseInfo.currency;
-    course.description = courseInfo.description;
-    course.domains = courseInfo.domains;
-    course.level = courseInfo.level;
-    course.price = courseInfo.price;
-    course.title = courseInfo.title;
+    course.avatar_url = 'https://example.com/avatar.jpg';
+    course.currency = CurrencyType.USD;
+    course.description = 'Test course';
+    course.domains = [DomainType.ENGLISH];
+    course.level = LevelType.BEGINNER;
+    course.price = 100;
+    course.title = 'Test Course';
     course.instructor = instructor;
     course.organization = organization;
-
     await courseRepository.save(course);
 
     const version = new Version();
     version.version_number = 1;
     version.course = course;
-
     await versionRepository.save(version);
 
     const suite = new TestSuite();
     suite.title = 'Suite Title';
     suite.description = 'Suite Description';
-    suite.keywords = ['suiteKeywords'];
+    suite.keywords = ['algebra'];
     suite.course_version = version;
-
     await testSuiteRepository.save(suite);
 
-    // create questions
-    const new_questions: Question[] = await Promise.all(
-      instructorInfo.questions.map(async (question) => {
-        const new_question = new Question();
-        new_question.correct_answer = question.correct_answer;
-        new_question.description = question.description;
-        new_question.difficulty = question.difficulty;
-        new_question.estimated_time_in_ms = question.estimated_time_in_ms;
-        new_question.hints = question.hints;
-        new_question.options = question.options;
-        new_question.question_number = question.question_number;
-        new_question.solution_steps = question.solution_steps;
-        new_question.tags = question.tags;
-        new_question.type = question.type;
-        new_question.version = version;
-        new_question.test_suite = suite;
-
-        return new_question;
+    const questions = await Promise.all(
+      [
+        { num: 1, desc: 'Question 1.', answer: 'option one' },
+        { num: 2, desc: 'Question 2.', answer: 'option two' },
+      ].map(async ({ num, desc, answer }) => {
+        const q = new Question();
+        q.question_number = num;
+        q.description = desc;
+        q.hints = ['hint'];
+        q.solution_steps = ['step'];
+        q.options = ['option one', 'option two', 'option three'];
+        q.type = QuestionType.MULTIPLE_CHOICE;
+        q.tags = [QuestionTagType.TAG_ALGEBRA];
+        q.difficulty = QuestionDifficultyType.EASY;
+        q.estimated_time_in_ms = 10000;
+        q.correct_answer = answer;
+        q.version = version;
+        q.test_suite = suite;
+        return q;
       }),
     );
+    await questionRepository.save(questions);
 
-    await questionRepository.save(new_questions);
+    course.approved_version = version;
+    await courseRepository.save(course);
+
+    const cart = new Cart();
+    await cartRepository.save(cart);
 
     const student = new Student();
     student.name = 'Test Student';
-    student.email = 'test@example.com';
+    student.email = studentEmail;
     student.password = await HashHelper.encrypt('password');
+    student.is_account_validated = true;
     student.organizations = [organization];
     student.subscribed_courses = [course];
-
+    student.cart = cart;
     await studentRepository.save(student);
 
-    return { suite, student };
+    return { organization, admin, instructor, course, version, suite, questions, student };
   };
+
+  /** Start a test and return both the test and the student */
+  const startTest = async (suiteId: string) => {
+    const test = await studentService.startTest({ email: studentEmail, suiteId });
+    return test;
+  };
+
+  // ─── startTest ───────────────────────────────────────────────────────────────
+
+  describe('startTest', () => {
+    it('creates an ON_GOING test and stores a STARTED time event', async () => {
+      const { suite, student } = await setupData();
+
+      const response = await startTest(suite.id);
+
+      expect(response.status).toBe(TestStatusType.ON_GOING);
+      expect(mockTimerService.startTimer).toHaveBeenCalled();
+
+      const std = await getStudent(student.id);
+      expect(std.tests[0].id).toBe(response.id);
+      expect(std.tests[0].time_events.map((e) => e.type)).toContain(
+        TimeEventType.STARTED,
+      );
+    });
+
+    it('throws ConflictException if student already has an ongoing test', async () => {
+      const { suite } = await setupData();
+      await startTest(suite.id);
+
+      await expect(startTest(suite.id)).rejects.toThrow(
+        new ConflictException('You already have an ongoing test'),
+      );
+    });
+
+    it('throws NotFoundException if student does not have access to the suite', async () => {
+      await setupData();
+
+      await expect(
+        studentService.startTest({
+          email: studentEmail,
+          suiteId: '00000000-0000-0000-0000-000000000000',
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  // ─── pauseTest ───────────────────────────────────────────────────────────────
+
+  describe('pauseTest', () => {
+    it('pauses an ongoing test and adds a PAUSED time event', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id);
+
+      const response = await studentService.pauseTest({
+        email: studentEmail,
+        testId: test.id,
+      });
+
+      expect(response.status).toBe(TestStatusType.PAUSED);
+      expect(mockTimerService.pauseTimer).toHaveBeenCalled();
+
+      const std = await getStudent(student.id);
+      expect(std.tests[0].time_events.map((e) => e.type)).toContain(
+        TimeEventType.PAUSED,
+      );
+      expect(std.tests[0].time_events).toHaveLength(2);
+    });
+
+    it('throws NotFoundException if student does not own the test', async () => {
+      await setupData();
+
+      await expect(
+        studentService.pauseTest({
+          email: studentEmail,
+          testId: '00000000-0000-0000-0000-000000000000',
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  // ─── resumeTest ──────────────────────────────────────────────────────────────
+
+  describe('resumeTest', () => {
+    it('resumes a paused test and adds a RESUMED time event', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id);
+      await studentService.pauseTest({ email: studentEmail, testId: test.id });
+
+      const response = await studentService.resumeTest({
+        email: studentEmail,
+        testId: test.id,
+      });
+
+      expect(response.status).toBe(TestStatusType.ON_GOING);
+      expect(mockTimerService.resumeTimer).toHaveBeenCalled();
+
+      const std = await getStudent(student.id);
+      expect(std.tests[0].time_events.map((e) => e.type)).toContain(
+        TimeEventType.RESUMED,
+      );
+      expect(std.tests[0].time_events).toHaveLength(3);
+    });
+  });
+
+  // ─── endTest ─────────────────────────────────────────────────────────────────
+
+  describe('endTest', () => {
+    it('ends a test and adds an ENDED time event', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id);
+
+      const response = await studentService.endTest({
+        email: studentEmail,
+        testId: test.id,
+      });
+
+      expect(response.status).toBe(TestStatusType.ENDED);
+      expect(mockTimerService.stopTimer).toHaveBeenCalled();
+      expect(mockSseGateway.sendTestEnded).toHaveBeenCalled();
+
+      const std = await getStudent(student.id);
+      expect(std.tests[0].time_events.map((e) => e.type)).toContain(
+        TimeEventType.ENDED,
+      );
+    });
+
+    it('throws NotFoundException if student does not own the test', async () => {
+      await setupData();
+
+      await expect(
+        studentService.endTest({
+          email: studentEmail,
+          testId: '00000000-0000-0000-0000-000000000000',
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  // ─── getQuestion ─────────────────────────────────────────────────────────────
+
+  describe('getQuestion', () => {
+    it('returns an unanswered question from the test suite', async () => {
+      const { suite } = await setupData();
+      const test = await startTest(suite.id);
+
+      const response = await studentService.getQuestion({
+        email: studentEmail,
+        testId: test.id,
+      });
+
+      expect(response).toBeDefined();
+      expect(response.id).toBeDefined();
+    });
+
+    it('throws BadRequestException when all questions have been answered', async () => {
+      const { suite, questions } = await setupData();
+      const test = await startTest(suite.id);
+
+      for (const q of questions) {
+        await studentService.submitAnswer({
+          email: studentEmail,
+          testId: test.id,
+          questionId: q.id,
+          timeRange: `${Date.now()}#${Date.now() + 1000}`,
+          answer: q.correct_answer,
+          isFlagged: false,
+        });
+      }
+
+      await expect(
+        studentService.getQuestion({ email: studentEmail, testId: test.id }),
+      ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  // ─── submitAnswer ────────────────────────────────────────────────────────────
+
+  describe('submitAnswer', () => {
+    it('creates a submitted answer and marks it correctly', async () => {
+      const { suite, student, questions } = await setupData();
+      const test = await startTest(suite.id);
+
+      const response = await studentService.submitAnswer({
+        email: studentEmail,
+        testId: test.id,
+        questionId: questions[0].id,
+        timeRange: `${Date.now()}#${Date.now() + 1000}`,
+        answer: questions[0].correct_answer,
+        isFlagged: false,
+      });
+
+      expect(response.question_id).toBe(questions[0].id);
+      expect(response.is_correct).toBe(true);
+
+      const std = await getStudent(student.id);
+      expect(std.tests[0].submitted_answers).toHaveLength(1);
+    });
+
+    it('marks answer incorrect when answer does not match correct answer', async () => {
+      const { suite, questions } = await setupData();
+      const test = await startTest(suite.id);
+
+      const response = await studentService.submitAnswer({
+        email: studentEmail,
+        testId: test.id,
+        questionId: questions[0].id,
+        timeRange: `${Date.now()}#${Date.now() + 1000}`,
+        answer: 'wrong answer',
+        isFlagged: false,
+      });
+
+      expect(response.is_correct).toBe(false);
+    });
+
+    it('updates an existing answer on re-submission', async () => {
+      const { suite, questions } = await setupData();
+      const test = await startTest(suite.id);
+
+      await studentService.submitAnswer({
+        email: studentEmail,
+        testId: test.id,
+        questionId: questions[0].id,
+        timeRange: `${Date.now()}#${Date.now() + 1000}`,
+        answer: 'wrong answer',
+        isFlagged: false,
+      });
+
+      const updated = await studentService.submitAnswer({
+        email: studentEmail,
+        testId: test.id,
+        questionId: questions[0].id,
+        timeRange: `${Date.now()}#${Date.now() + 1000}`,
+        answer: questions[0].correct_answer,
+        isFlagged: false,
+      });
+
+      expect(updated.is_correct).toBe(true);
+    });
+
+    it('throws BadRequestException when test is ended', async () => {
+      const { suite, questions } = await setupData();
+      const test = await startTest(suite.id);
+      await studentService.endTest({ email: studentEmail, testId: test.id });
+
+      await expect(
+        studentService.submitAnswer({
+          email: studentEmail,
+          testId: test.id,
+          questionId: questions[0].id,
+          timeRange: `${Date.now()}#${Date.now() + 1000}`,
+          answer: 'option one',
+          isFlagged: false,
+        }),
+      ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  // ─── getAllAttemptedQuestions ─────────────────────────────────────────────────
+
+  describe('getAllAttemptedQuestions', () => {
+    it('returns all submitted answers for an ongoing test', async () => {
+      const { suite, questions } = await setupData();
+      const test = await startTest(suite.id);
+
+      await studentService.submitAnswer({
+        email: studentEmail,
+        testId: test.id,
+        questionId: questions[0].id,
+        timeRange: `${Date.now()}#${Date.now() + 1000}`,
+        answer: questions[0].correct_answer,
+        isFlagged: false,
+      });
+
+      const result = await studentService.getAllAttemptedQuestions({
+        email: studentEmail,
+        testId: test.id,
+      });
+
+      expect(result).toHaveLength(1);
+      expect(result[0].question_id).toBe(questions[0].id);
+    });
+
+    it('throws BadRequestException when test has ended', async () => {
+      const { suite } = await setupData();
+      const test = await startTest(suite.id);
+      await studentService.endTest({ email: studentEmail, testId: test.id });
+
+      await expect(
+        studentService.getAllAttemptedQuestions({
+          email: studentEmail,
+          testId: test.id,
+        }),
+      ).rejects.toThrow(new BadRequestException('Test has ended'));
+    });
+  });
+
+  // ─── testStats ───────────────────────────────────────────────────────────────
+
+  describe('testStats', () => {
+    it('returns the ended test with all relations', async () => {
+      const { suite } = await setupData();
+      const test = await startTest(suite.id);
+      await studentService.endTest({ email: studentEmail, testId: test.id });
+
+      const result = await studentService.testStats({
+        email: studentEmail,
+        testId: test.id,
+      });
+
+      expect(result.id).toBe(test.id);
+      expect(result.status).toBe(TestStatusType.ENDED);
+    });
+
+    it('throws BadRequestException when test is not ended', async () => {
+      const { suite } = await setupData();
+      const test = await startTest(suite.id);
+
+      await expect(
+        studentService.testStats({ email: studentEmail, testId: test.id }),
+      ).rejects.toThrow(new BadRequestException('Test is not ended'));
+    });
+  });
+
+  // ─── listMyAssignments ───────────────────────────────────────────────────────
+
+  describe('listMyAssignments', () => {
+    it('returns empty array for a student without a child profile', async () => {
+      await setupData();
+
+      const result = await studentService.listMyAssignments({
+        email: studentEmail,
+      });
+
+      expect(result).toHaveLength(0);
+    });
+
+    it('returns assignments when child profile exists', async () => {
+      const { suite, student } = await setupData();
+
+      const parent = new Parent();
+      parent.first_name = 'Test';
+      parent.last_name = 'Parent';
+      parent.email = 'parent@test.com';
+      parent.password = await HashHelper.encrypt('password');
+      parent.whatsapp_number = '+1234567890';
+      parent.gender = Gender.Male;
+      parent.is_account_validated = true;
+      parent.is_setup_completed = true;
+      await parentRepository.save(parent);
+
+      const child = new Child();
+      child.full_name = 'Test Child';
+      child.class_level = ClassLevel.JHS1;
+      child.target_exam = suite.id;
+      child.username = 'test.child99';
+      child.pin = await HashHelper.encrypt('123456');
+      child.parent = parent;
+      child.student = student;
+      await childRepository.save(child);
+
+      const assignment = new TestAssignment();
+      assignment.parent = parent;
+      assignment.child = child;
+      assignment.test_suite = suite;
+      assignment.status = TestAssignmentStatus.PENDING;
+      await testAssignmentRepository.save(assignment);
+
+      const result = await studentService.listMyAssignments({
+        email: studentEmail,
+      });
+
+      expect(result).toHaveLength(1);
+      expect(result[0].status).toBe(TestAssignmentStatus.PENDING);
+    });
+
+    it('throws NotFoundException if student does not exist', async () => {
+      await expect(
+        studentService.listMyAssignments({ email: 'nobody@test.com' }),
+      ).rejects.toThrow(new NotFoundException('Student not found'));
+    });
+  });
+
+  // ─── startAssignedTest ───────────────────────────────────────────────────────
+
+  describe('startAssignedTest', () => {
+    it('starts a test from an assignment and links them', async () => {
+      const { suite, student } = await setupData();
+
+      const parent = new Parent();
+      parent.first_name = 'Test';
+      parent.last_name = 'Parent';
+      parent.email = 'parent@test.com';
+      parent.password = await HashHelper.encrypt('password');
+      parent.whatsapp_number = '+1234567890';
+      parent.gender = Gender.Male;
+      parent.is_account_validated = true;
+      parent.is_setup_completed = true;
+      await parentRepository.save(parent);
+
+      const child = new Child();
+      child.full_name = 'Test Child';
+      child.class_level = ClassLevel.JHS1;
+      child.target_exam = suite.id;
+      child.username = 'test.child99';
+      child.pin = await HashHelper.encrypt('123456');
+      child.parent = parent;
+      child.student = student;
+      await childRepository.save(child);
+
+      const assignment = new TestAssignment();
+      assignment.parent = parent;
+      assignment.child = child;
+      assignment.test_suite = suite;
+      assignment.status = TestAssignmentStatus.PENDING;
+      await testAssignmentRepository.save(assignment);
+
+      const result = await studentService.startAssignedTest({
+        email: studentEmail,
+        assignmentId: assignment.id,
+      });
+
+      expect(result.status).toBe(TestStatusType.ON_GOING);
+      expect(mockTimerService.startTimer).toHaveBeenCalled();
+
+      const updatedAssignment = await testAssignmentRepository.findOne({
+        where: { id: assignment.id },
+        relations: ['test'],
+      });
+      expect(updatedAssignment.test.id).toBe(result.id);
+    });
+
+    it('throws NotFoundException if assignment does not exist', async () => {
+      const { student, suite } = await setupData();
+
+      const parent = new Parent();
+      parent.first_name = 'Test';
+      parent.last_name = 'Parent';
+      parent.email = 'parent@test.com';
+      parent.password = await HashHelper.encrypt('password');
+      parent.whatsapp_number = '+1234567890';
+      parent.gender = Gender.Male;
+      parent.is_account_validated = true;
+      parent.is_setup_completed = true;
+      await parentRepository.save(parent);
+
+      const child = new Child();
+      child.full_name = 'Test Child';
+      child.class_level = ClassLevel.JHS1;
+      child.target_exam = suite.id;
+      child.username = 'test.child99';
+      child.pin = await HashHelper.encrypt('123456');
+      child.parent = parent;
+      child.student = student;
+      await childRepository.save(child);
+
+      await expect(
+        studentService.startAssignedTest({
+          email: studentEmail,
+          assignmentId: '00000000-0000-0000-0000-000000000000',
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws NotFoundException if student has no child profile', async () => {
+      await setupData();
+
+      await expect(
+        studentService.startAssignedTest({
+          email: studentEmail,
+          assignmentId: '00000000-0000-0000-0000-000000000000',
+        }),
+      ).rejects.toThrow(new NotFoundException('Child profile not found'));
+    });
+  });
 });

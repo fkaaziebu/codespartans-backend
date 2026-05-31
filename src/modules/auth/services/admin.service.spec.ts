@@ -26,8 +26,9 @@ describe('AdminService', () => {
         JwtModule.registerAsync({
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
-            secret: configService.get<string>('JWT_SECRET'),
-            secretOrPrivateKey: configService.get('JWT_SECRET'),
+            secret: configService.get<string>('JWT_SECRET') || 'test-secret',
+            secretOrPrivateKey:
+              configService.get('JWT_SECRET') || 'test-secret',
             signOptions: { expiresIn: '1h' },
           }),
           inject: [ConfigService],
@@ -44,7 +45,6 @@ describe('AdminService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      controllers: [],
       providers: [AdminService],
     }).compile();
 
@@ -57,9 +57,8 @@ describe('AdminService', () => {
   });
 
   beforeEach(async () => {
-    // Clear the database before each test
-    const entities = connection.entityMetadatas;
-    for (const entity of entities) {
+    const entityMetadatas = connection.entityMetadatas;
+    for (const entity of entityMetadatas) {
       const repository = connection.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
@@ -71,8 +70,29 @@ describe('AdminService', () => {
     await module.close();
   });
 
+  const adminInfo = {
+    email: 'admin@test.com',
+    name: 'Test Admin',
+    password: 'password',
+  };
+
+  const setupData = async () => {
+    const organization = new Organization();
+    organization.name = 'Test Organization';
+    organization.email = 'org@test.com';
+    organization.password = await HashHelper.encrypt('password');
+    await organizationRepository.save(organization);
+
+    const admin = new Admin();
+    admin.name = adminInfo.name;
+    admin.email = adminInfo.email;
+    admin.password = await HashHelper.encrypt(adminInfo.password);
+    admin.organization = organization;
+    await adminRepository.save(admin);
+  };
+
   describe('loginAdmin', () => {
-    it('returns organization with token after successfully logging in', async () => {
+    it('returns admin with token after successful login', async () => {
       await setupData();
 
       const response = await adminService.loginAdmin(adminInfo);
@@ -83,7 +103,7 @@ describe('AdminService', () => {
       expect(response.email).toBe(adminInfo.email);
     });
 
-    it('throws an error if email or password is incorrect', async () => {
+    it('throws BadRequestException if email is incorrect', async () => {
       await setupData();
 
       await expect(
@@ -91,41 +111,22 @@ describe('AdminService', () => {
           email: 'invalid@email.com',
           password: 'password',
         }),
-      ).rejects.toThrowError(
+      ).rejects.toThrow(
         new BadRequestException('Email or password is incorrect'),
       );
+    });
+
+    it('throws BadRequestException if password is incorrect', async () => {
+      await setupData();
 
       await expect(
         adminService.loginAdmin({
           email: adminInfo.email,
           password: 'invalidpassword',
         }),
-      ).rejects.toThrowError(
+      ).rejects.toThrow(
         new BadRequestException('Email or password is incorrect'),
       );
     });
   });
-
-  const adminInfo = {
-    email: 'fkaaziebu1998@gmail.com',
-    name: 'Frederick Aziebu',
-    password: 'password',
-  };
-
-  const setupData = async () => {
-    const organization = new Organization();
-    organization.name = 'Organization Name';
-    organization.email = 'fkaaziebu1998@gmail.com';
-    organization.password = await HashHelper.encrypt('password');
-
-    await organizationRepository.save(organization);
-
-    const admin = new Admin();
-    admin.name = adminInfo.name;
-    admin.email = adminInfo.email;
-    admin.password = await HashHelper.encrypt(adminInfo.password);
-    admin.organization = organization;
-
-    await adminRepository.save(admin);
-  };
 });

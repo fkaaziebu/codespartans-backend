@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cart as CartTypeClass } from 'src/modules/inventory/entities/cart.entity';
-import { Checkout as CheckoutTypeClass } from 'src/modules/inventory/entities/checkout.entity';
-import { Student as StudentTypeClass } from 'src/modules/auth/entities/student.entity';
-import { HashHelper, PaginateHelper } from 'src/helpers';
-import { PaginationInput } from 'src/helpers/inputs';
+import { Cart as CartTypeClass } from '../entities/cart.entity';
+import { Checkout as CheckoutTypeClass } from '../entities/checkout.entity';
+import { Student as StudentTypeClass } from '../../auth/entities/student.entity';
+import { HashHelper, PaginateHelper } from '../../../helpers';
+import { PaginationInput } from '../../../helpers/inputs';
 import { ILike, Repository } from 'typeorm';
 import { Organization } from '../../auth/entities/organization.entity';
 import { Student } from '../../auth/entities/student.entity';
@@ -17,11 +17,11 @@ import { Checkout } from '../entities/checkout.entity';
 import { Course } from '../entities/course.entity';
 import { Question } from '../../review/entities/question.entity';
 import { Test } from '../../simulation/entities/test.entity';
-import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
+import { TimeEventType } from '../../simulation/entities/time_event.entity';
 import {
   TestModeType,
   TestStatusType,
-} from 'src/modules/simulation/entities/test.entity';
+} from '../../simulation/entities/test.entity';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import {
   StudentStatsResponse,
