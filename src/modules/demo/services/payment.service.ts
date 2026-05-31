@@ -66,9 +66,10 @@ export class PaymentService {
       if (parent && childrenIds.length > 0) {
         const ownedChildren = await this.childRepo.find({
           where: { parent: { id: parent.id } },
-          select: ['id'],
+          select: ['id', 'full_name'],
         });
         const ownedIds = new Set(ownedChildren.map((c) => c.id));
+        const childNameById = new Map(ownedChildren.map((c) => [c.id, c.full_name]));
         const invalidIds = childrenIds.filter((id) => !ownedIds.has(id));
         if (invalidIds.length > 0) {
           throw new BadRequestException(
@@ -81,13 +82,16 @@ export class PaymentService {
             .createQueryBuilder('sub')
             .innerJoin('sub.children', 'child')
             .where('child.id = :childId', { childId })
-            .andWhere('sub.status = :status', { status: SubscriptionStatus.ACTIVE })
+            .andWhere('sub.status = :status', {
+              status: SubscriptionStatus.ACTIVE,
+            })
             .andWhere('sub.expires_at > :now', { now })
             .getOne();
 
           if (activeSub) {
+            const childName = childNameById.get(childId) ?? childId;
             throw new BadRequestException(
-              `Child ${childId} already has an active subscription`,
+              `${childName} already has an active subscription`,
             );
           }
         }
@@ -96,12 +100,17 @@ export class PaymentService {
       const student = await this.studentRepo.findOne({ where: { email } });
       if (student) {
         const existingSub = await this.studentSubscriptionRepo.findOne({
-          where: { student: { id: student.id }, status: SubscriptionStatus.ACTIVE },
+          where: {
+            student: { id: student.id },
+            status: SubscriptionStatus.ACTIVE,
+          },
           order: { expires_at: 'DESC' },
         });
         if (existingSub) {
           if (existingSub.expires_at > now) {
-            throw new BadRequestException('You already have an active subscription plan');
+            throw new BadRequestException(
+              'You already have an active subscription plan',
+            );
           }
           existingSub.status = SubscriptionStatus.EXPIRED;
           await this.studentSubscriptionRepo.save(existingSub);
@@ -111,12 +120,17 @@ export class PaymentService {
       const org = await this.orgRepo.findOne({ where: { email } });
       if (org) {
         const existingSub = await this.orgSubscriptionRepo.findOne({
-          where: { organization: { id: org.id }, status: SubscriptionStatus.ACTIVE },
+          where: {
+            organization: { id: org.id },
+            status: SubscriptionStatus.ACTIVE,
+          },
           order: { expires_at: 'DESC' },
         });
         if (existingSub) {
           if (existingSub.expires_at > now) {
-            throw new BadRequestException('You already have an active subscription plan');
+            throw new BadRequestException(
+              'You already have an active subscription plan',
+            );
           }
           existingSub.status = SubscriptionStatus.EXPIRED;
           await this.orgSubscriptionRepo.save(existingSub);
@@ -126,11 +140,10 @@ export class PaymentService {
 
     const secretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY');
 
-    // For parent plans, calculate amount based on children count with family discount
-    const count = childrenIds.length || 1;
-    const isParentPlan = plan.plan_key.startsWith('parent_');
-    const familyDiscount = isParentPlan && count > 1 ? 0.8 : 1.0;
-    const amountInKobo = Math.round(plan.price * count * familyDiscount * 100);
+    const count =
+      role === 'PARENT' && childrenIds.length > 0 ? childrenIds.length : 1;
+    const discount = plan.plan_key.startsWith('parent_') ? 0.8 : 1.0;
+    const amountInKobo = Math.round(plan.price * discount * count * 100);
 
     let payerEmail: string;
     let metadata: Record<string, string>;
@@ -152,8 +165,10 @@ export class PaymentService {
         children_ids: childrenIds.join(','),
       };
       callbackUrl =
-        this.configService.get<string>('PARENT_UI_URL', 'http://localhost:3000') +
-        '/billing/callback';
+        this.configService.get<string>(
+          'PARENT_UI_URL',
+          'http://localhost:3000',
+        ) + '/billing/callback';
     } else if (role === 'STUDENT') {
       const student = await this.studentRepo.findOne({ where: { email } });
       if (!student) throw new NotFoundException('Student not found');
@@ -172,8 +187,10 @@ export class PaymentService {
       payerEmail = org.email;
       metadata = { org_id: org.id, plan_id: plan.id, plan_name: plan.name };
       callbackUrl =
-        this.configService.get<string>('SCHOOL_DEMO_URL', 'http://localhost:3000') +
-        '/payment/callback';
+        this.configService.get<string>(
+          'SCHOOL_DEMO_URL',
+          'http://localhost:3000',
+        ) + '/payment/callback';
     }
 
     const response = await axios.post(
@@ -216,7 +233,8 @@ export class PaymentService {
     const { reference, metadata, status } = data;
     if (status !== 'success') return;
 
-    const { org_id, parent_id, student_id, plan_id, children_ids } = metadata ?? {};
+    const { org_id, parent_id, student_id, plan_id, children_ids } =
+      metadata ?? {};
     if (!plan_id || (!org_id && !parent_id && !student_id)) return;
 
     const plan = await this.planRepo.findOne({ where: { id: plan_id } });
@@ -227,7 +245,9 @@ export class PaymentService {
     expiresAt.setDate(expiresAt.getDate() + Number(plan.duration_days));
 
     if (student_id) {
-      const student = await this.studentRepo.findOne({ where: { id: student_id } });
+      const student = await this.studentRepo.findOne({
+        where: { id: student_id },
+      });
       if (!student) return;
 
       const existing = await this.studentSubscriptionRepo.findOne({
@@ -246,7 +266,9 @@ export class PaymentService {
         }),
       );
     } else if (parent_id) {
-      const parent = await this.parentRepo.findOne({ where: { id: parent_id } });
+      const parent = await this.parentRepo.findOne({
+        where: { id: parent_id },
+      });
       if (!parent) return;
 
       const existing = await this.parentSubscriptionRepo.findOne({
@@ -258,7 +280,9 @@ export class PaymentService {
       if (children_ids) {
         const ids = children_ids.split(',').filter(Boolean);
         if (ids.length > 0) {
-          coveredChildren = await this.childRepo.find({ where: { id: In(ids) } });
+          coveredChildren = await this.childRepo.find({
+            where: { id: In(ids) },
+          });
         }
       }
 
@@ -303,12 +327,14 @@ export class PaymentService {
         parent: { email: parentEmail },
         status: SubscriptionStatus.ACTIVE,
       },
-      relations: ['plan'],
+      relations: ['plan', 'children'],
       order: { expires_at: 'DESC' },
     });
   }
 
-  async listParentSubscriptions(parentEmail: string): Promise<ParentSubscription[]> {
+  async listParentSubscriptions(
+    parentEmail: string,
+  ): Promise<ParentSubscription[]> {
     const year = new Date().getFullYear();
     const start = new Date(year, 0, 1);
     const end = new Date(year + 1, 0, 1);
@@ -317,7 +343,7 @@ export class PaymentService {
         parent: { email: parentEmail },
         created_at: Between(start, end),
       },
-      relations: ['plan'],
+      relations: ['plan', 'children'],
       order: { created_at: 'DESC' },
     });
   }
@@ -335,7 +361,9 @@ export class PaymentService {
     });
   }
 
-  async listStudentSubscriptions(studentEmail: string): Promise<StudentSubscription[]> {
+  async listStudentSubscriptions(
+    studentEmail: string,
+  ): Promise<StudentSubscription[]> {
     const year = new Date().getFullYear();
     const start = new Date(year, 0, 1);
     const end = new Date(year + 1, 0, 1);
