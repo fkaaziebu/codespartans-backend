@@ -152,10 +152,6 @@ export class PaymentService {
     let callbackUrl: string;
     let webhookUrl: string;
 
-    webhookUrl =
-      this.configService.get<string>('PARENT_UI_URL', 'http://localhost:3000') +
-      '/api/payments/paystack/webhook';
-
     if (role === 'PARENT') {
       const parent = await this.parentRepo.findOne({ where: { email } });
       if (!parent) throw new NotFoundException('Parent not found');
@@ -166,11 +162,12 @@ export class PaymentService {
         plan_name: plan.name,
         children_ids: childrenIds.join(','),
       };
-      callbackUrl =
-        this.configService.get<string>(
-          'PARENT_UI_URL',
-          'http://localhost:3000',
-        ) + '/billing/callback';
+      const parentUrl = this.configService.get<string>(
+        'PARENT_UI_URL',
+        'http://localhost:3000',
+      );
+      callbackUrl = parentUrl + '/billing/callback';
+      webhookUrl = parentUrl + '/api/payments/paystack/webhook';
     } else if (role === 'STUDENT') {
       const student = await this.studentRepo.findOne({ where: { email } });
       if (!student) throw new NotFoundException('Student not found');
@@ -180,19 +177,23 @@ export class PaymentService {
         plan_id: plan.id,
         plan_name: plan.name,
       };
-      callbackUrl =
-        this.configService.get<string>('STUDENT_URL', 'http://localhost:3000') +
-        '/billing/callback';
+      const studentUrl = this.configService.get<string>(
+        'STUDENT_DEMO_URL',
+        'http://localhost:3000',
+      );
+      callbackUrl = studentUrl + '/billing/callback';
+      webhookUrl = studentUrl + '/api/payments/paystack/webhook';
     } else {
       const org = await this.orgRepo.findOne({ where: { email } });
       if (!org) throw new NotFoundException('Organization not found');
       payerEmail = org.email;
       metadata = { org_id: org.id, plan_id: plan.id, plan_name: plan.name };
-      callbackUrl =
-        this.configService.get<string>(
-          'SCHOOL_DEMO_URL',
-          'http://localhost:3000',
-        ) + '/payment/callback';
+      const schoolUrl = this.configService.get<string>(
+        'SCHOOL_DEMO_URL',
+        'http://localhost:3000',
+      );
+      callbackUrl = schoolUrl + '/payment/callback';
+      webhookUrl = schoolUrl + '/api/payments/paystack/webhook';
     }
 
     const response = await axios.post(
