@@ -139,18 +139,14 @@ export class SetupDbService implements OnModuleInit {
           course.organization = organization;
           await this.courseRepository.save(course);
 
-          // Each suite gets its own dedicated version so suites can be
-          // versioned, reviewed, and updated independently.
-          let firstVersion: Version | null = null;
+          const version = new Version();
+          version.status = VersionStatusType.APPROVED;
+          version.version_number = 1;
+          version.course = course;
+          version.assigned_admin = admin;
+          await this.versionRepository.save(version);
 
           for (const suiteData of courseData.suites) {
-            const version = new Version();
-            version.status = VersionStatusType.APPROVED;
-            version.version_number = 1;
-            version.course = course;
-            version.assigned_admin = admin;
-            await this.versionRepository.save(version);
-
             const suite = new TestSuite();
             suite.title = suiteData.suiteName;
             suite.description = suiteData.suiteDescription;
@@ -189,15 +185,10 @@ export class SetupDbService implements OnModuleInit {
               return question;
             });
             await this.questionRepository.save(questions);
-
-            if (!firstVersion) firstVersion = version;
           }
 
-          // Mark the first suite's version as the course's approved version.
-          if (firstVersion) {
-            course.approved_version = firstVersion;
-            await this.courseRepository.save(course);
-          }
+          course.approved_version = version;
+          await this.courseRepository.save(course);
 
           courseMap.set(courseData.courseName, course);
         }
