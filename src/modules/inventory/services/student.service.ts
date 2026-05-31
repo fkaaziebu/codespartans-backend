@@ -588,6 +588,7 @@ export class StudentService {
       where: { email },
       relations: [
         'tests.test_suite.course_version.course',
+        'tests.test_suite.questions',
         'tests.submitted_answers.question',
         'tests.time_events',
       ],
@@ -598,10 +599,12 @@ export class StudentService {
     }
 
     const computeScore = (test: Test): number => {
-      const { submitted_answers: answers } = test;
-      if (!answers.length) return 0;
+      const answers = test.submitted_answers;
+      const totalQuestions =
+        test.test_suite?.questions?.length ?? answers.length;
+      if (!totalQuestions) return 0;
       const correct = answers.filter((a) => a.is_correct === true).length;
-      return (correct / answers.length) * 100;
+      return (correct / totalQuestions) * 100;
     };
 
     const computeStudyMs = (test: Test): number => {
@@ -638,7 +641,9 @@ export class StudentService {
     const enriched = endedTests.map((test) => {
       const answers = test.submitted_answers;
       const correct = answers.filter((a) => a.is_correct === true).length;
-      const wrong = answers.length - correct;
+      const totalQuestions =
+        test.test_suite?.questions?.length ?? answers.length;
+      const wrong = totalQuestions - correct;
       const score = computeScore(test);
       const startEvent = test.time_events.find(
         (e) => e.type === TimeEventType.STARTED,
@@ -772,7 +777,11 @@ export class StudentService {
   async getStats({ email }: { email: string }): Promise<StudentStatsResponse> {
     const student = await this.studentRepository.findOne({
       where: { email },
-      relations: ['tests.submitted_answers.question', 'tests.time_events'],
+      relations: [
+        'tests.submitted_answers.question',
+        'tests.time_events',
+        'tests.test_suite.questions',
+      ],
     });
 
     if (!student) {
@@ -807,9 +816,11 @@ export class StudentService {
 
     const computeScore = (test: Test): number => {
       const answers = test.submitted_answers;
-      if (!answers.length) return 0;
+      const totalQuestions =
+        test.test_suite?.questions?.length ?? answers.length;
+      if (!totalQuestions) return 0;
       const correct = answers.filter((a) => a.is_correct === true).length;
-      return (correct / answers.length) * 100;
+      return (correct / totalQuestions) * 100;
     };
 
     const computeAverage = (tests: Test[]): number => {
@@ -900,6 +911,7 @@ export class StudentService {
       relations: [
         'tests.submitted_answers',
         'tests.test_suite.course_version.course',
+        'tests.test_suite.questions',
         'tests.time_events',
       ],
     });
@@ -936,7 +948,12 @@ export class StudentService {
 
     const courseStats = new Map<
       string,
-      { sessions: number; correct: number; wrong: number }
+      {
+        sessions: number;
+        correct: number;
+        wrong: number;
+        total_questions: number;
+      }
     >();
 
     for (const test of recentTests) {
@@ -947,27 +964,29 @@ export class StudentService {
         sessions: 0,
         correct: 0,
         wrong: 0,
+        total_questions: 0,
       };
       stat.sessions += 1;
+      stat.total_questions +=
+        test.test_suite?.questions?.length ?? test.submitted_answers.length;
 
       for (const answer of test.submitted_answers) {
         if (answer.is_correct === true) stat.correct += 1;
-        else stat.wrong += 1;
       }
 
       courseStats.set(courseTitle, stat);
     }
 
-    return Array.from(courseStats.entries()).map(([subject, stat]) => {
-      const totalAnswers = stat.correct + stat.wrong;
-      return {
-        subject,
-        total: stat.sessions,
-        correct: stat.correct,
-        wrong: stat.wrong,
-        score: totalAnswers > 0 ? (stat.correct / totalAnswers) * 100 : 0,
-      };
-    });
+    return Array.from(courseStats.entries()).map(([subject, stat]) => ({
+      subject,
+      total: stat.sessions,
+      correct: stat.correct,
+      wrong: stat.total_questions - stat.correct,
+      score:
+        stat.total_questions > 0
+          ? (stat.correct / stat.total_questions) * 100
+          : 0,
+    }));
   }
 
   async studentTestTopicProgress({
