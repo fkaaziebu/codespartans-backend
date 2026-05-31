@@ -70,6 +70,7 @@ export class StudentService {
           where: {
             email,
           },
+          relations: ['organizations'],
         });
 
         if (!student) {
