@@ -20,7 +20,7 @@ export class MarkAnswerService {
     });
   }
 
-  async markShortAnswer(submittedAnswerId: string): Promise<void> {
+  async markShortAnswer(submittedAnswerId: string): Promise<SubmittedAnswer> {
     const submittedAnswer = await this.submittedAnswerRepository.findOne({
       where: { id: submittedAnswerId },
       relations: ['question'],
@@ -28,7 +28,7 @@ export class MarkAnswerService {
 
     if (!submittedAnswer) {
       this.logger.warn(`SubmittedAnswer ${submittedAnswerId} not found`);
-      return;
+      return submittedAnswer;
     }
 
     const { question, answer_provided } = submittedAnswer;
@@ -75,11 +75,14 @@ Respond with only a raw JSON object using exactly this shape — no markdown, no
       this.logger.log(
         `Marked answer ${submittedAnswerId}: is_correct=${is_correct}`,
       );
+
+      return final_result;
     } catch (err) {
       this.logger.error(
         `Failed to mark answer ${submittedAnswerId}: ${(err as Error).message}`,
       );
       // Leave is_marked=false so the student can see it is still pending
+      return submittedAnswer;
     }
   }
 }
