@@ -151,7 +151,7 @@ export class SetupDbService implements OnModuleInit {
           course.domains = [DomainType.ENGLISH];
           course.level = LevelType.BEGINNER;
           course.price = 100;
-          course.is_mandatory = true;
+          course.is_mandatory = courseData.is_mandatory;
           course.instructor = instructor;
           course.organization = organization;
           await this.courseRepository.save(course);

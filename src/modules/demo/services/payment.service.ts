@@ -150,7 +150,6 @@ export class PaymentService {
     let payerEmail: string;
     let metadata: Record<string, string>;
     let callbackUrl: string;
-    let webhookUrl: string;
 
     if (role === 'PARENT') {
       const parent = await this.parentRepo.findOne({ where: { email } });
@@ -167,7 +166,6 @@ export class PaymentService {
         'http://localhost:3000',
       );
       callbackUrl = parentUrl + '/billing/callback';
-      webhookUrl = parentUrl + '/api/payments/paystack/webhook';
     } else if (role === 'STUDENT') {
       const student = await this.studentRepo.findOne({ where: { email } });
       if (!student) throw new NotFoundException('Student not found');
@@ -182,7 +180,6 @@ export class PaymentService {
         'http://localhost:3000',
       );
       callbackUrl = studentUrl + '/billing/callback';
-      webhookUrl = studentUrl + '/api/payments/paystack/webhook';
     } else {
       const org = await this.orgRepo.findOne({ where: { email } });
       if (!org) throw new NotFoundException('Organization not found');
@@ -193,7 +190,6 @@ export class PaymentService {
         'http://localhost:3000',
       );
       callbackUrl = schoolUrl + '/payment/callback';
-      webhookUrl = schoolUrl + '/api/payments/paystack/webhook';
     }
 
     const response = await axios.post(
@@ -204,7 +200,6 @@ export class PaymentService {
         currency: plan.currency,
         metadata,
         callback_url: callbackUrl,
-        webhook_url: webhookUrl,
       },
       {
         headers: {
