@@ -30,6 +30,7 @@ import { Child } from '../../parent/entities/child.entity';
 import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
 import { MarkAnswerProducer } from './mark-answer.producer';
+import { MarkAnswerService } from './mark-answer.service';
 import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
 import { SuiteFilterInput } from 'src/modules/inventory/inputs';
 import { SuiteType } from 'src/modules/review/entities/test_suite.entity';
@@ -46,6 +47,7 @@ export class StudentService {
     private timerService: TestTimerService,
     private sseGateway: StudentGateway,
     private markAnswerProducer: MarkAnswerProducer,
+    private markAnswerService: MarkAnswerService,
   ) {}
 
   async startTest({
@@ -416,7 +418,10 @@ export class StudentService {
     answer: string;
     isFlagged: boolean;
   }) {
-    return await this.studentRepository.manager.transaction(
+    let isNonDeterministic = false;
+    let testMode: TestModeType;
+
+    const saved = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
@@ -448,9 +453,11 @@ export class StudentService {
           where: { id: questionId },
         });
 
-        const isNonDeterministic =
+        isNonDeterministic =
           question?.type === QuestionType.SHORT_ANSWER ||
           question?.type === QuestionType.FILL_IN;
+
+        testMode = student.tests[0].mode;
 
         const existingAnswer = student.tests[0].submitted_answers.find(
           (ans) => ans.question_id === questionId,
@@ -469,15 +476,7 @@ export class StudentService {
             existingAnswer.is_marked = true;
           }
 
-          const saved = await transactionalEntityManager.save(existingAnswer);
-
-          if (isNonDeterministic) {
-            await this.markAnswerProducer.markShortAnswer({
-              submittedAnswerId: saved.id,
-            });
-          }
-
-          return saved;
+          return await transactionalEntityManager.save(existingAnswer);
         } else {
           const newAnswer = new SubmittedAnswer();
           newAnswer.question_id = questionId;
@@ -495,18 +494,22 @@ export class StudentService {
             newAnswer.is_marked = true;
           }
 
-          const saved = await transactionalEntityManager.save(newAnswer);
-
-          if (isNonDeterministic) {
-            await this.markAnswerProducer.markShortAnswer({
-              submittedAnswerId: saved.id,
-            });
-          }
-
-          return saved;
+          return await transactionalEntityManager.save(newAnswer);
         }
       },
     );
+
+    if (isNonDeterministic) {
+      if (testMode === TestModeType.UN_PROCTURED) {
+        return await this.markAnswerService.markShortAnswer(saved.id);
+      } else {
+        await this.markAnswerProducer.markShortAnswer({
+          submittedAnswerId: saved.id,
+        });
+      }
+    }
+
+    return saved;
   }
 
   async getAllAttemptedQuestions({
