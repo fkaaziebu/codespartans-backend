@@ -1136,6 +1136,7 @@ export class StudentService {
         'tests.submitted_answers.question',
         'tests.time_events',
         'tests.test_suite.course_version.course',
+        'tests.test_suite.questions',
       ],
     });
 
@@ -1166,7 +1167,9 @@ export class StudentService {
       .map((test) => {
         const answers = test.submitted_answers;
         const correct = answers.filter((a) => a.is_correct === true).length;
-        const score = answers.length > 0 ? (correct / answers.length) * 100 : 0;
+        const totalQuestions =
+          test.test_suite?.questions?.length ?? answers.length;
+        const score = totalQuestions > 0 ? (correct / totalQuestions) * 100 : 0;
 
         const startEvent = test.time_events.find(
           (e) => e.type === TimeEventType.STARTED,
