@@ -69,7 +69,9 @@ export class PaymentService {
           select: ['id', 'full_name'],
         });
         const ownedIds = new Set(ownedChildren.map((c) => c.id));
-        const childNameById = new Map(ownedChildren.map((c) => [c.id, c.full_name]));
+        const childNameById = new Map(
+          ownedChildren.map((c) => [c.id, c.full_name]),
+        );
         const invalidIds = childrenIds.filter((id) => !ownedIds.has(id));
         if (invalidIds.length > 0) {
           throw new BadRequestException(
@@ -151,8 +153,8 @@ export class PaymentService {
     let webhookUrl: string;
 
     webhookUrl =
-      this.configService.get<string>('REST_BASE_URL', 'http://localhost:3000') +
-      '/payments/paystack/webhook';
+      this.configService.get<string>('PARENT_UI_URL', 'http://localhost:3000') +
+      '/api/payments/paystack/webhook';
 
     if (role === 'PARENT') {
       const parent = await this.parentRepo.findOne({ where: { email } });
