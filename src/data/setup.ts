@@ -5,6 +5,7 @@ const datas = [
       {
         courseName: 'Mathematics',
         is_mandatory: true,
+        imageFile: { filename: 'math_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'WASSCE Mathematics — Number, Numeration & Algebra',
@@ -659,6 +660,7 @@ const datas = [
       {
         courseName: 'English Language',
         is_mandatory: true,
+        imageFile: { filename: 'english_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'WASSCE English Language — Grammar & Vocabulary',
@@ -972,6 +974,7 @@ const datas = [
       {
         courseName: 'Physics',
         is_mandatory: true,
+        imageFile: { filename: 'physics_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'WASSCE Physics — Mechanics, Waves & Electricity',
@@ -1155,6 +1158,7 @@ const datas = [
       {
         courseName: 'Chemistry',
         is_mandatory: true,
+        imageFile: { filename: 'chemistry_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName:
@@ -1353,6 +1357,7 @@ const datas = [
       {
         courseName: 'Biology',
         is_mandatory: true,
+        imageFile: { filename: 'biology_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'WASSCE Biology — Cell Biology, Genetics & Ecology',
@@ -1603,6 +1608,7 @@ const datas = [
       {
         courseName: 'Economics',
         is_mandatory: false,
+        imageFile: { filename: 'economics_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'WASSCE Economics — Demand, Supply & Production',
@@ -1824,6 +1830,7 @@ const datas = [
       {
         courseName: 'Geography',
         is_mandatory: false,
+        imageFile: { filename: 'geography_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'WASSCE Geography — Physical & Human Geography',
@@ -2043,6 +2050,7 @@ const datas = [
       {
         courseName: 'Literature',
         is_mandatory: false,
+        imageFile: { filename: 'literature_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName:
@@ -2248,6 +2256,7 @@ const datas = [
       {
         courseName: 'Government',
         is_mandatory: false,
+        imageFile: { filename: 'government_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName:
@@ -2474,6 +2483,7 @@ const datas = [
       {
         courseName: 'History',
         is_mandatory: false,
+        imageFile: { filename: 'history_1.png', mime: 'image/png', ext: 'png' },
         suites: [
           {
             suiteName:
@@ -2711,6 +2721,7 @@ const datas = [
       {
         courseName: 'Mathematics',
         is_mandatory: true,
+        imageFile: { filename: 'math_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'BECE Mathematics — Number & Algebra',
@@ -2898,6 +2909,7 @@ const datas = [
       {
         courseName: 'English Language',
         is_mandatory: true,
+        imageFile: { filename: 'english_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'BECE English Language — Grammar & Vocabulary',
@@ -3121,6 +3133,7 @@ const datas = [
       {
         courseName: 'Social Studies',
         is_mandatory: true,
+        imageFile: { filename: 'social_studies_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'BECE Social Studies — Ghana History & Culture',
@@ -3356,6 +3369,7 @@ const datas = [
       {
         courseName: 'Integrated Science',
         is_mandatory: true,
+        imageFile: { filename: 'integrated_science_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'BECE Integrated Science — Life Processes & Health',
@@ -3575,6 +3589,7 @@ const datas = [
       {
         courseName: 'Religious and Moral Education',
         is_mandatory: false,
+        imageFile: { filename: 'religious_moral_education_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'BECE RME — Christianity & Islam',
@@ -3794,6 +3809,7 @@ const datas = [
       {
         courseName: 'ICT',
         is_mandatory: false,
+        imageFile: { filename: 'ict_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
         suites: [
           {
             suiteName: 'BECE ICT — Computer Hardware & Software',
@@ -4000,6 +4016,201 @@ const datas = [
           },
         ],
       },
+    ],
+  },
+];
+
+export const plans = [
+  {
+    plan_key: 'student_free',
+    name: 'Student Free',
+    tagline: 'Individual learners getting started',
+    price: 0,
+    currency: 'GHS',
+    interval: 'monthly',
+    duration_days: 7,
+    is_custom: false,
+    billing_label: null,
+    max_students: null,
+    features: [
+      '1 subject access',
+      '10 questions/day',
+      'Basic progress dashboard',
+      'Mobile app access',
+    ],
+  },
+  {
+    plan_key: 'student_pro',
+    name: 'Student Pro',
+    tagline: 'Serious WASSCE/BECE candidates',
+    price: 39,
+    currency: 'GHS',
+    interval: 'monthly',
+    duration_days: 30,
+    is_custom: false,
+    billing_label: 'per student / month',
+    max_students: null,
+    features: [
+      'All subjects unlocked',
+      'Unlimited practice questions',
+      'Weak area analysis',
+      'Timed exam simulation',
+      'Answer explanations',
+      'Parent visibility included',
+    ],
+  },
+  {
+    plan_key: 'institution',
+    name: 'Institution',
+    tagline: 'Schools, SHS, tutorial centers',
+    price: 499,
+    currency: 'GHS',
+    interval: 'monthly',
+    duration_days: 30,
+    is_custom: false,
+    billing_label: 'per month · up to 100 students',
+    max_students: 100,
+    features: [
+      'Everything in Student Pro',
+      'Admin & teacher console',
+      'Class performance analytics',
+      'Monthly PDF reports',
+      'Branded school portal',
+      'Priority WhatsApp support',
+      'Founding rate locked in for 12 months',
+    ],
+  },
+  {
+    plan_key: 'enterprise',
+    name: 'Enterprise',
+    tagline: '500+ students, multi-campus',
+    price: 0,
+    currency: 'GHS',
+    interval: 'monthly',
+    duration_days: 30,
+    is_custom: true,
+    billing_label: 'tailored to your institution',
+    max_students: null,
+    features: [
+      'Everything in Institution',
+      'Unlimited student accounts',
+      'Multi-campus management',
+      'Dedicated account manager',
+      'Custom integrations available',
+      'SLA and uptime guarantee',
+    ],
+  },
+  {
+    plan_key: 'school_trial',
+    name: 'School Free Trial',
+    tagline: 'Trial access for schools',
+    price: 0,
+    currency: 'GHS',
+    interval: 'monthly',
+    duration_days: 7,
+    is_custom: false,
+    billing_label: null,
+    max_students: null,
+    features: [
+      'All subjects unlocked',
+      'Admin & teacher console',
+      'Class performance analytics',
+    ],
+  },
+  {
+    plan_key: 'parent_trial',
+    name: 'Parent Free Trial',
+    tagline: 'Trial access for parents',
+    price: 0,
+    currency: 'GHS',
+    interval: 'monthly',
+    duration_days: 7,
+    is_custom: false,
+    billing_label: null,
+    max_students: null,
+    features: [
+      'All subjects unlocked',
+      'Unlimited practice questions',
+      'Weak area analysis',
+      'Timed exam simulation',
+    ],
+  },
+  {
+    plan_key: 'parent_1mo',
+    name: '1 Month',
+    tagline: 'Full access for 1 month',
+    price: 90,
+    currency: 'GHS',
+    interval: 'monthly',
+    duration_days: 30,
+    is_custom: false,
+    billing_label: null,
+    max_students: null,
+    features: [
+      'All subjects unlocked',
+      'Unlimited practice questions',
+      'Weak area analysis',
+      'Timed exam simulation',
+      'Answer explanations',
+    ],
+  },
+  {
+    plan_key: 'parent_2mo',
+    name: '2 Months',
+    tagline: 'Full access for 2 months',
+    price: 180,
+    currency: 'GHS',
+    interval: 'monthly',
+    duration_days: 60,
+    is_custom: false,
+    billing_label: null,
+    max_students: null,
+    features: [
+      'All subjects unlocked',
+      'Unlimited practice questions',
+      'Weak area analysis',
+      'Timed exam simulation',
+      'Answer explanations',
+    ],
+  },
+  {
+    plan_key: 'parent_3mo',
+    name: '3 Months',
+    tagline: 'Best for exam season',
+    price: 243,
+    currency: 'GHS',
+    interval: 'quarterly',
+    duration_days: 90,
+    is_custom: false,
+    billing_label: 'Popular',
+    max_students: null,
+    features: [
+      'All subjects unlocked',
+      'Unlimited practice questions',
+      'Weak area analysis',
+      'Timed exam simulation',
+      'Answer explanations',
+      '10% savings vs monthly',
+    ],
+  },
+  {
+    plan_key: 'parent_1yr',
+    name: '1 Year',
+    tagline: 'Maximum savings for dedicated learners',
+    price: 900,
+    currency: 'GHS',
+    interval: 'yearly',
+    duration_days: 365,
+    is_custom: false,
+    billing_label: 'Best value',
+    max_students: null,
+    features: [
+      'All subjects unlocked',
+      'Unlimited practice questions',
+      'Weak area analysis',
+      'Timed exam simulation',
+      'Answer explanations',
+      '17% savings vs monthly',
     ],
   },
 ];

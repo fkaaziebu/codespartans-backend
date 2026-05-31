@@ -140,6 +140,10 @@ export class PaymentService {
       }
     }
 
+    if (plan.price === 0) {
+      return this.activateFreeTrial(email, plan, role, childrenIds);
+    }
+
     const secretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY');
 
     const count =
@@ -211,6 +215,92 @@ export class PaymentService {
 
     const { authorization_url, reference } = response.data.data;
     return { authorization_url, reference };
+  }
+
+  private async activateFreeTrial(
+    email: string,
+    plan: SubscriptionPlan,
+    role: string,
+    childrenIds: string[],
+  ): Promise<{ authorization_url: string; reference: string }> {
+    const reference = `free_trial_${crypto.randomUUID()}`;
+    const startedAt = new Date();
+    const expiresAt = new Date(startedAt);
+    expiresAt.setDate(expiresAt.getDate() + 7);
+
+    let callbackUrl: string;
+
+    if (role === 'PARENT') {
+      const parent = await this.parentRepo.findOne({ where: { email } });
+      if (!parent) throw new NotFoundException('Parent not found');
+
+      let coveredChildren: Child[] = [];
+      if (childrenIds.length > 0) {
+        coveredChildren = await this.childRepo.find({
+          where: { id: In(childrenIds) },
+        });
+      }
+
+      await this.parentSubscriptionRepo.save(
+        this.parentSubscriptionRepo.create({
+          parent,
+          plan,
+          paystack_reference: reference,
+          status: SubscriptionStatus.ACTIVE,
+          started_at: startedAt,
+          expires_at: expiresAt,
+          children: coveredChildren,
+        }),
+      );
+
+      const parentUrl = this.configService.get<string>(
+        'PARENT_UI_URL',
+        'http://localhost:3000',
+      );
+      callbackUrl = `${parentUrl}/billing/callback?reference=${reference}&status=success`;
+    } else if (role === 'STUDENT') {
+      const student = await this.studentRepo.findOne({ where: { email } });
+      if (!student) throw new NotFoundException('Student not found');
+
+      await this.studentSubscriptionRepo.save(
+        this.studentSubscriptionRepo.create({
+          student,
+          plan,
+          paystack_reference: reference,
+          status: SubscriptionStatus.ACTIVE,
+          started_at: startedAt,
+          expires_at: expiresAt,
+        }),
+      );
+
+      const studentUrl = this.configService.get<string>(
+        'STUDENT_DEMO_URL',
+        'http://localhost:3000',
+      );
+      callbackUrl = `${studentUrl}/billing/callback?reference=${reference}&status=success`;
+    } else {
+      const org = await this.orgRepo.findOne({ where: { email } });
+      if (!org) throw new NotFoundException('Organization not found');
+
+      await this.orgSubscriptionRepo.save(
+        this.orgSubscriptionRepo.create({
+          organization: org,
+          plan,
+          paystack_reference: reference,
+          status: SubscriptionStatus.ACTIVE,
+          started_at: startedAt,
+          expires_at: expiresAt,
+        }),
+      );
+
+      const schoolUrl = this.configService.get<string>(
+        'SCHOOL_DEMO_URL',
+        'http://localhost:3000',
+      );
+      callbackUrl = `${schoolUrl}/payment/callback?reference=${reference}&status=success`;
+    }
+
+    return { authorization_url: callbackUrl, reference };
   }
 
   verifyWebhookSignature(signature: string, rawBody: Buffer): void {

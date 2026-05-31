@@ -31,12 +31,9 @@ import {
   Version,
   VersionStatusType,
 } from './modules/review/entities/version.entity';
-import {
-  PlanInterval,
-  SubscriptionPlan,
-} from './modules/demo/entities/subscription-plan.entity';
+import { SubscriptionPlan } from './modules/demo/entities/subscription-plan.entity';
 import { HashHelper } from './helpers';
-import datas from './data/setup';
+import datas, { plans } from './data/setup';
 
 @Injectable()
 export class SetupDbService implements OnModuleInit {
@@ -100,37 +97,23 @@ export class SetupDbService implements OnModuleInit {
 
       const studentUrl = this.configService.get<string>('STUDENT_URL');
 
-      const subjectImageFiles: Record<
-        string,
-        { filename: string; mime: string; ext: string }
-      > = {
-        Mathematics: { filename: 'math_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        'English Language': { filename: 'english_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Physics: { filename: 'physics_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Chemistry: { filename: 'chemistry_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Biology: { filename: 'biology_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Economics: { filename: 'economics_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Geography: { filename: 'geography_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Literature: { filename: 'literature_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        Government: { filename: 'government_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        History: { filename: 'history_1.png', mime: 'image/png', ext: 'png' },
-        'Social Studies': { filename: 'social_studies_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        'Integrated Science': { filename: 'integrated_science_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        'Religious and Moral Education': { filename: 'religious_moral_education_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-        ICT: { filename: 'ict_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
-      };
-
       const subjectImageUrls: Record<string, string> = {};
-      for (const [subject, { filename, mime, ext }] of Object.entries(subjectImageFiles)) {
-        const img = new Image();
-        img.path = `seed-${subject.toLowerCase().replace(/\s+/g, '-')}-question.${ext}`;
-        img.original_name = filename;
-        img.mime_type = mime;
-        img.buffer = fs.readFileSync(
-          path.resolve(path.join(__dirname, '/data/', filename)),
-        );
-        await this.imageRepository.save(img);
-        subjectImageUrls[subject] = `${studentUrl}/api/images/${img.path}`;
+      const seenImages = new Set<string>();
+      for (const categoryData of datas) {
+        for (const courseData of categoryData.courses) {
+          if (seenImages.has(courseData.courseName)) continue;
+          seenImages.add(courseData.courseName);
+          const { filename, mime, ext } = courseData.imageFile;
+          const img = new Image();
+          img.path = `seed-${courseData.courseName.toLowerCase().replace(/\s+/g, '-')}-question.${ext}`;
+          img.original_name = filename;
+          img.mime_type = mime;
+          img.buffer = fs.readFileSync(
+            path.resolve(path.join(__dirname, '/data/', filename)),
+          );
+          await this.imageRepository.save(img);
+          subjectImageUrls[courseData.courseName] = `${studentUrl}/api/images/${img.path}`;
+        }
       }
 
       // Build a deduplicated course map so that courses shared across categories
@@ -242,201 +225,6 @@ export class SetupDbService implements OnModuleInit {
   }
 
   private async setupSubscriptionPlans() {
-    const plans = [
-      {
-        plan_key: 'student_free',
-        name: 'Student Free',
-        tagline: 'Individual learners getting started',
-        price: 0,
-        currency: 'GHS',
-        interval: PlanInterval.MONTHLY,
-        duration_days: 30,
-        is_custom: false,
-        billing_label: null,
-        max_students: null,
-        features: [
-          '1 subject access',
-          '10 questions/day',
-          'Basic progress dashboard',
-          'Mobile app access',
-        ],
-      },
-      {
-        plan_key: 'student_pro',
-        name: 'Student Pro',
-        tagline: 'Serious WASSCE/BECE candidates',
-        price: 39,
-        currency: 'GHS',
-        interval: PlanInterval.MONTHLY,
-        duration_days: 30,
-        is_custom: false,
-        billing_label: 'per student / month',
-        max_students: null,
-        features: [
-          'All subjects unlocked',
-          'Unlimited practice questions',
-          'Weak area analysis',
-          'Timed exam simulation',
-          'Answer explanations',
-          'Parent visibility included',
-        ],
-      },
-      {
-        plan_key: 'institution',
-        name: 'Institution',
-        tagline: 'Schools, SHS, tutorial centers',
-        price: 499,
-        currency: 'GHS',
-        interval: PlanInterval.MONTHLY,
-        duration_days: 30,
-        is_custom: false,
-        billing_label: 'per month · up to 100 students',
-        max_students: 100,
-        features: [
-          'Everything in Student Pro',
-          'Admin & teacher console',
-          'Class performance analytics',
-          'Monthly PDF reports',
-          'Branded school portal',
-          'Priority WhatsApp support',
-          'Founding rate locked in for 12 months',
-        ],
-      },
-      {
-        plan_key: 'enterprise',
-        name: 'Enterprise',
-        tagline: '500+ students, multi-campus',
-        price: 0,
-        currency: 'GHS',
-        interval: PlanInterval.MONTHLY,
-        duration_days: 30,
-        is_custom: true,
-        billing_label: 'tailored to your institution',
-        max_students: null,
-        features: [
-          'Everything in Institution',
-          'Unlimited student accounts',
-          'Multi-campus management',
-          'Dedicated account manager',
-          'Custom integrations available',
-          'SLA and uptime guarantee',
-        ],
-      },
-      {
-        plan_key: 'school_trial',
-        name: 'School Free Trial',
-        tagline: 'Trial access for schools',
-        price: 0,
-        currency: 'GHS',
-        interval: PlanInterval.MONTHLY,
-        duration_days: 30,
-        is_custom: false,
-        billing_label: null,
-        max_students: null,
-        features: [
-          'All subjects unlocked',
-          'Admin & teacher console',
-          'Class performance analytics',
-        ],
-      },
-      {
-        plan_key: 'parent_trial',
-        name: 'Parent Free Trial',
-        tagline: 'Trial access for parents',
-        price: 0,
-        currency: 'GHS',
-        interval: PlanInterval.MONTHLY,
-        duration_days: 30,
-        is_custom: false,
-        billing_label: null,
-        max_students: null,
-        features: [
-          'All subjects unlocked',
-          'Unlimited practice questions',
-          'Weak area analysis',
-          'Timed exam simulation',
-        ],
-      },
-      {
-        plan_key: 'parent_1mo',
-        name: '1 Month',
-        tagline: 'Full access for 1 month',
-        price: 90,
-        currency: 'GHS',
-        interval: PlanInterval.MONTHLY,
-        duration_days: 30,
-        is_custom: false,
-        billing_label: null,
-        max_students: null,
-        features: [
-          'All subjects unlocked',
-          'Unlimited practice questions',
-          'Weak area analysis',
-          'Timed exam simulation',
-          'Answer explanations',
-        ],
-      },
-      {
-        plan_key: 'parent_2mo',
-        name: '2 Months',
-        tagline: 'Full access for 2 months',
-        price: 180,
-        currency: 'GHS',
-        interval: PlanInterval.MONTHLY,
-        duration_days: 60,
-        is_custom: false,
-        billing_label: null,
-        max_students: null,
-        features: [
-          'All subjects unlocked',
-          'Unlimited practice questions',
-          'Weak area analysis',
-          'Timed exam simulation',
-          'Answer explanations',
-        ],
-      },
-      {
-        plan_key: 'parent_3mo',
-        name: '3 Months',
-        tagline: 'Best for exam season',
-        price: 243,
-        currency: 'GHS',
-        interval: PlanInterval.QUARTERLY,
-        duration_days: 90,
-        is_custom: false,
-        billing_label: 'Popular',
-        max_students: null,
-        features: [
-          'All subjects unlocked',
-          'Unlimited practice questions',
-          'Weak area analysis',
-          'Timed exam simulation',
-          'Answer explanations',
-          '10% savings vs monthly',
-        ],
-      },
-      {
-        plan_key: 'parent_1yr',
-        name: '1 Year',
-        tagline: 'Maximum savings for dedicated learners',
-        price: 900,
-        currency: 'GHS',
-        interval: PlanInterval.YEARLY,
-        duration_days: 365,
-        is_custom: false,
-        billing_label: 'Best value',
-        max_students: null,
-        features: [
-          'All subjects unlocked',
-          'Unlimited practice questions',
-          'Weak area analysis',
-          'Timed exam simulation',
-          'Answer explanations',
-          '17% savings vs monthly',
-        ],
-      },
-    ];
-
     for (const planData of plans) {
       const existing = await this.planRepository.findOne({
         where: { plan_key: planData.plan_key },
