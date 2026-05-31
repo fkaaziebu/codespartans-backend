@@ -230,7 +230,7 @@ export class SetupDbService implements OnModuleInit {
         where: { plan_key: planData.plan_key },
       });
       if (!existing) {
-        const plan = this.planRepository.create(planData);
+        const plan = this.planRepository.create(planData as any);
         await this.planRepository.save(plan);
       }
     }
