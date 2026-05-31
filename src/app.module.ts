@@ -12,8 +12,7 @@ import { ParentModule } from './modules/parent/parent.module';
 import { ReviewModule } from './modules/review/review.module';
 import { SchoolModule } from './modules/school/school.module';
 import { SimulationModule } from './modules/simulation/simulation.module';
-import { SetupDbService } from './setup-db.service';
-import { SetupDbResolver } from './setup-db.resolver';
+import { SetupDbService } from './setup-db-2.service';
 
 @Module({
   imports: [
@@ -43,7 +42,7 @@ import { SetupDbResolver } from './setup-db.resolver';
     SchoolModule,
   ],
   controllers: [],
-  providers: [SetupDbService, SetupDbResolver],
+  providers: [SetupDbService],
   exports: [],
 })
 export class AppModule {}
