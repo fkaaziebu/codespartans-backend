@@ -40,7 +40,8 @@ export class SubscriptionGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
-    const user = ctx.getContext().req.user;
+    const req = ctx.getContext().req;
+    const user = req.user;
 
     // Not authenticated — let GqlJwtAuthGuard handle it
     if (!user) return true;
@@ -48,7 +49,7 @@ export class SubscriptionGuard implements CanActivate {
     const { email, role } = user;
 
     if (role === 'STUDENT') {
-      return this.checkStudentAccess(email);
+      return this.checkStudentAccess(email, req);
     }
 
     if (role === 'ORGANIZATION') {
@@ -63,7 +64,7 @@ export class SubscriptionGuard implements CanActivate {
     return true;
   }
 
-  private async checkStudentAccess(email: string): Promise<boolean> {
+  private async checkStudentAccess(email: string, req: any): Promise<boolean> {
     const student = await this.studentRepo.findOne({
       where: { email },
       relations: ['organizations', 'organizations.school_demo'],
@@ -85,20 +86,31 @@ export class SubscriptionGuard implements CanActivate {
 
     // Student is GENPOP-only, independent, or no non-GENPOP org has valid access.
     // They must have their own active subscription.
-    return this.checkStudentSubscription(email);
+    return this.checkStudentSubscription(email, req);
   }
 
-  private async checkStudentSubscription(email: string): Promise<boolean> {
+  private async checkStudentSubscription(
+    email: string,
+    req: any,
+  ): Promise<boolean> {
     const now = new Date();
     const activeSub = await this.studentSubscriptionRepo.findOne({
       where: {
         student: { email },
         status: SubscriptionStatus.ACTIVE,
       },
+      relations: ['plan'],
       order: { expires_at: 'DESC' },
     });
 
-    if (activeSub && activeSub.expires_at > now) return true;
+    if (activeSub && activeSub.expires_at > now) {
+      // Mark free-trial students so resolvers can enforce plan limits
+      // (1 subject access, 10 questions/day)
+      if (activeSub.plan?.plan_key === 'student_free') {
+        req.isStudentFreeTrial = true;
+      }
+      return true;
+    }
 
     throw new GraphQLError(
       'You need an active subscription. Please subscribe to a plan to continue.',
