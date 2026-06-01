@@ -1279,4 +1279,95 @@ export class StudentService {
 
     return PaginateHelper.paginate<TestSuite>(suites, pagination, (s) => s.id);
   }
+
+  async getCurrentStreakCount({
+    email,
+  }: {
+    email: string;
+  }): Promise<{ current_streak: number; best_streak: number }> {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: ['tests.time_events'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const endedTests = student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+
+    const getTestStartTime = (test: Test): Date | null => {
+      const event = test.time_events.find(
+        (e) => e.type === TimeEventType.STARTED,
+      );
+      return event ? new Date(event.recorded_at) : null;
+    };
+
+    const { current, best } = this.computeStreaks(endedTests, getTestStartTime);
+
+    return { current_streak: current, best_streak: best };
+  }
+
+  private computeStreaks(
+    tests: Test[],
+    getStartTime: (test: Test) => Date | null,
+  ): { current: number; best: number } {
+    const days = new Set<string>();
+
+    for (const test of tests) {
+      const start = getStartTime(test);
+      if (start) {
+        days.add(start.toISOString().split('T')[0]);
+      }
+    }
+
+    if (days.size === 0) return { current: 0, best: 0 };
+
+    const sortedDays = Array.from(days).sort();
+
+    let bestStreak = 1;
+    let runStreak = 1;
+    for (let i = 1; i < sortedDays.length; i++) {
+      const prev = new Date(sortedDays[i - 1]);
+      const curr = new Date(sortedDays[i]);
+      const diffDays = Math.round(
+        (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24),
+      );
+      if (diffDays === 1) {
+        runStreak++;
+        bestStreak = Math.max(bestStreak, runStreak);
+      } else {
+        runStreak = 1;
+      }
+    }
+
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    const lastDay = sortedDays[sortedDays.length - 1];
+    let currentStreak = 0;
+
+    if (lastDay === todayStr || lastDay === yesterdayStr) {
+      currentStreak = 1;
+      for (let i = sortedDays.length - 2; i >= 0; i--) {
+        const curr = new Date(sortedDays[i + 1]);
+        const prev = new Date(sortedDays[i]);
+        const diffDays = Math.round(
+          (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24),
+        );
+        if (diffDays === 1) {
+          currentStreak++;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return { current: currentStreak, best: bestStreak };
+  }
 }

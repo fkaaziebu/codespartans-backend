@@ -24,6 +24,7 @@ import {
   TestTopicProgressResponse,
   WeakSubjectAreaResponse,
 } from '../types';
+import { StreakResponse } from '../../parent/types';
 
 @Resolver()
 export class StudentResolver {
@@ -151,6 +152,14 @@ export class StudentResolver {
     const { email } = context.req.user;
 
     return this.studentService.getStats({ email });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => StreakResponse)
+  getCurrentStreakCount(@Context() context) {
+    const { email } = context.req.user;
+
+    return this.studentService.getCurrentStreakCount({ email });
   }
 
   @UseGuards(GqlJwtAuthGuard)
