@@ -70,7 +70,7 @@ export class StudentService {
           where: {
             email,
           },
-          relations: ['organizations'],
+          relations: ['organizations', 'subscribed_categories'],
         });
 
         if (!student) {
@@ -300,7 +300,12 @@ export class StudentService {
       throw new BadRequestException('Invalid token type');
     }
 
-    const { type: _type, iat: _iat, exp: _exp, ...tokenPayload } = payload as any;
+    const {
+      type: _type,
+      iat: _iat,
+      exp: _exp,
+      ...tokenPayload
+    } = payload as any;
     const access_token = this.jwtService.sign(tokenPayload);
     return { access_token };
   }
