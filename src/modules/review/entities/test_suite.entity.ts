@@ -22,13 +22,19 @@ registerEnumType(SuiteDifficultyType, {
 
 export enum SuiteType {
   YEAR = 'YEAR',
+  YEAR_ONE = 'YEAR_ONE',
+  YEAR_TWO = 'YEAR_TWO',
+  YEAR_THREE = 'YEAR_THREE',
+  MIXED = 'MIXED',
+  PAST_QUESTIONS = 'PAST_QUESTIONS',
   CLASS = 'CLASS',
   TOPIC = 'TOPIC',
 }
 
 registerEnumType(SuiteType, {
   name: 'SuiteType',
-  description: 'Suite type — Year-based exam prep, Class level, or Topic focused',
+  description:
+    'Suite type — Year-based exam prep, Class level, or Topic focused',
 });
 
 @ObjectType('TestSuite')

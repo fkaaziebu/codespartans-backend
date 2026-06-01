@@ -9,6 +9,7 @@ const defaultPostgresDBConnection = (
   type: 'postgres',
   autoLoadEntities: true,
   synchronize: false,
+  migrationsRun: true,
   migrations: [join(__dirname, '../migrations/*{.ts,.js}')],
   url: configService.get('DATABASE_URL'),
   ssl: {
