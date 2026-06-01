@@ -1067,6 +1067,159 @@ describe('StudentService', () => {
     });
   });
 
+  describe('getCurrentStreakCount', () => {
+    const todayUtcNoon = () => {
+      const d = new Date();
+      return new Date(
+        Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 12, 0, 0),
+      );
+    };
+
+    const daysAgoUtcNoon = (n: number) => {
+      const d = todayUtcNoon();
+      d.setUTCDate(d.getUTCDate() - n);
+      return d;
+    };
+
+    it('returns zero streaks when student has no ended tests', async () => {
+      const { student } = await setupData();
+
+      const result = await studentService.getCurrentStreakCount({
+        email: student.email,
+      });
+
+      expect(result.current_streak).toBe(0);
+      expect(result.best_streak).toBe(0);
+    });
+
+    it('returns current_streak of 1 when one test was taken today', async () => {
+      const { student, version, question } = await setupData();
+
+      const suite = new TestSuite();
+      suite.title = 'Streak Suite';
+      suite.description = '';
+      suite.keywords = [];
+      suite.course_version = version;
+      await testSuiteRepository.save(suite);
+
+      await createEndedTest(student, suite, [question], [true], todayUtcNoon());
+
+      const result = await studentService.getCurrentStreakCount({
+        email: student.email,
+      });
+
+      expect(result.current_streak).toBe(1);
+      expect(result.best_streak).toBe(1);
+    });
+
+    it('accumulates current_streak over consecutive days ending today', async () => {
+      const { student, version, question } = await setupData();
+
+      const suite = new TestSuite();
+      suite.title = 'Streak Suite';
+      suite.description = '';
+      suite.keywords = [];
+      suite.course_version = version;
+      await testSuiteRepository.save(suite);
+
+      await createEndedTest(student, suite, [question], [true], daysAgoUtcNoon(2));
+      await createEndedTest(student, suite, [question], [true], daysAgoUtcNoon(1));
+      await createEndedTest(student, suite, [question], [true], todayUtcNoon());
+
+      const result = await studentService.getCurrentStreakCount({
+        email: student.email,
+      });
+
+      expect(result.current_streak).toBe(3);
+      expect(result.best_streak).toBe(3);
+    });
+
+    it('resets current_streak on a gap day and tracks best_streak separately', async () => {
+      // Scenario from spec:
+      //   d1 (3 days ago): 1 test  → streak running
+      //   d2 (2 days ago): 2 tests → streak 2
+      //   d3 (yesterday):  0 tests → GAP
+      //   d4 (today):      3 tests → current_streak resets to 1, best_streak stays 2
+      const { student, version, question } = await setupData();
+
+      const suite = new TestSuite();
+      suite.title = 'Streak Suite';
+      suite.description = '';
+      suite.keywords = [];
+      suite.course_version = version;
+      await testSuiteRepository.save(suite);
+
+      await createEndedTest(student, suite, [question], [true], daysAgoUtcNoon(3));
+      await createEndedTest(student, suite, [question], [true], daysAgoUtcNoon(2));
+      await createEndedTest(student, suite, [question], [true], daysAgoUtcNoon(2));
+      // yesterday is skipped (gap)
+      await createEndedTest(student, suite, [question], [true], todayUtcNoon());
+      await createEndedTest(student, suite, [question], [true], todayUtcNoon());
+      await createEndedTest(student, suite, [question], [true], todayUtcNoon());
+
+      const result = await studentService.getCurrentStreakCount({
+        email: student.email,
+      });
+
+      expect(result.current_streak).toBe(1);
+      expect(result.best_streak).toBe(2);
+    });
+
+    it('returns current_streak 0 when last test was more than a day ago', async () => {
+      const { student, version, question } = await setupData();
+
+      const suite = new TestSuite();
+      suite.title = 'Streak Suite';
+      suite.description = '';
+      suite.keywords = [];
+      suite.course_version = version;
+      await testSuiteRepository.save(suite);
+
+      await createEndedTest(student, suite, [question], [true], daysAgoUtcNoon(2));
+
+      const result = await studentService.getCurrentStreakCount({
+        email: student.email,
+      });
+
+      expect(result.current_streak).toBe(0);
+      expect(result.best_streak).toBe(1);
+    });
+
+    it('counts multiple tests on the same day as a single streak day', async () => {
+      const { student, version, question } = await setupData();
+
+      const suite = new TestSuite();
+      suite.title = 'Streak Suite';
+      suite.description = '';
+      suite.keywords = [];
+      suite.course_version = version;
+      await testSuiteRepository.save(suite);
+
+      const today = todayUtcNoon();
+      await createEndedTest(student, suite, [question], [true], today);
+      await createEndedTest(
+        student,
+        suite,
+        [question],
+        [true],
+        new Date(today.getTime() + 3600_000),
+      );
+
+      const result = await studentService.getCurrentStreakCount({
+        email: student.email,
+      });
+
+      expect(result.current_streak).toBe(1);
+      expect(result.best_streak).toBe(1);
+    });
+
+    it('throws NotFoundException when student does not exist', async () => {
+      await expect(
+        studentService.getCurrentStreakCount({ email: 'nobody@test.com' }),
+      ).rejects.toThrow(new NotFoundException('Student not found'));
+    });
+  });
+
   describe('listCourseSuitesPaginated', () => {
     const makeSuite = async (
       version: Version,
