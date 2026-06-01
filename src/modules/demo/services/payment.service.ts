@@ -82,6 +82,7 @@ export class PaymentService {
         for (const childId of childrenIds) {
           const activeSub = await this.parentSubscriptionRepo
             .createQueryBuilder('sub')
+            .innerJoinAndSelect('sub.plan', 'plan')
             .innerJoin('sub.children', 'child')
             .where('child.id = :childId', { childId })
             .andWhere('sub.status = :status', {
@@ -91,6 +92,11 @@ export class PaymentService {
             .getOne();
 
           if (activeSub) {
+            if (activeSub.plan.price === 0) {
+              activeSub.status = SubscriptionStatus.EXPIRED;
+              await this.parentSubscriptionRepo.save(activeSub);
+              continue;
+            }
             const childName = childNameById.get(childId) ?? childId;
             throw new BadRequestException(
               `${childName} already has an active subscription`,
@@ -106,14 +112,18 @@ export class PaymentService {
             student: { id: student.id },
             status: SubscriptionStatus.ACTIVE,
           },
+          relations: ['plan'],
           order: { expires_at: 'DESC' },
         });
-        if (existingSub) {
-          if (existingSub.expires_at > now) {
+        if (existingSub && existingSub.expires_at > now) {
+          if (existingSub.plan.price > 0) {
             throw new BadRequestException(
               'You already have an active subscription plan',
             );
           }
+          existingSub.status = SubscriptionStatus.EXPIRED;
+          await this.studentSubscriptionRepo.save(existingSub);
+        } else if (existingSub) {
           existingSub.status = SubscriptionStatus.EXPIRED;
           await this.studentSubscriptionRepo.save(existingSub);
         }
@@ -126,14 +136,18 @@ export class PaymentService {
             organization: { id: org.id },
             status: SubscriptionStatus.ACTIVE,
           },
+          relations: ['plan'],
           order: { expires_at: 'DESC' },
         });
-        if (existingSub) {
-          if (existingSub.expires_at > now) {
+        if (existingSub && existingSub.expires_at > now) {
+          if (existingSub.plan.price > 0) {
             throw new BadRequestException(
               'You already have an active subscription plan',
             );
           }
+          existingSub.status = SubscriptionStatus.EXPIRED;
+          await this.orgSubscriptionRepo.save(existingSub);
+        } else if (existingSub) {
           existingSub.status = SubscriptionStatus.EXPIRED;
           await this.orgSubscriptionRepo.save(existingSub);
         }
@@ -217,7 +231,7 @@ export class PaymentService {
     return { authorization_url, reference };
   }
 
-  private async activateFreeTrial(
+  async activateFreeTrial(
     email: string,
     plan: SubscriptionPlan,
     role: string,

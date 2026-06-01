@@ -15,6 +15,7 @@ import { PaginationInput } from '../../../helpers/inputs';
 import { StudentLoginResponse } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from './email.producer';
+import { SignupProducer } from './signup.producer';
 import { LoginBodyDto } from '../dto/login-body.dto';
 
 @Injectable()
@@ -25,6 +26,7 @@ export class StudentService {
     private jwtService: JwtService,
     private configService: ConfigService,
     private readonly emailProducer: EmailProducer,
+    private readonly signupProducer: SignupProducer,
   ) {}
 
   async listOrganizationsPaginated({
@@ -234,6 +236,8 @@ export class StudentService {
         student.is_account_validated = true;
         student.validation_code = null;
         await transactionalEntityManager.save(Student, student);
+
+        await this.signupProducer.enqueueFreeTrial({ email, role: 'STUDENT' });
 
         return { message: 'Account verified successfully' };
       },

@@ -14,6 +14,7 @@ import {
   Organization,
 } from '../../../database/entities';
 import { HashHelper } from '../../../helpers';
+import { SignupProducer } from './signup.producer';
 import { OrganizationService } from './organization.service';
 
 describe('OrganizationService', () => {
@@ -24,6 +25,10 @@ describe('OrganizationService', () => {
   let organizationRepository: Repository<Organization>;
   let adminRepository: Repository<Admin>;
   let instructorRepository: Repository<Instructor>;
+
+  const mockSignupProducer = {
+    enqueueFreeTrial: jest.fn().mockResolvedValue(undefined),
+  };
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -54,7 +59,13 @@ describe('OrganizationService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      providers: [OrganizationService],
+      providers: [
+        OrganizationService,
+        {
+          provide: SignupProducer,
+          useValue: mockSignupProducer,
+        },
+      ],
     }).compile();
 
     connection = module.get<Connection>(Connection);
@@ -110,6 +121,15 @@ describe('OrganizationService', () => {
       await expect(
         organizationService.registerOrganization(organizationInfo),
       ).rejects.toThrow('Organization with this email already exists');
+    });
+
+    it('enqueues a free trial job after successful registration', async () => {
+      await organizationService.registerOrganization(organizationInfo);
+
+      expect(mockSignupProducer.enqueueFreeTrial).toHaveBeenCalledWith({
+        email: organizationInfo.email,
+        role: 'ORGANIZATION',
+      });
     });
   });
 

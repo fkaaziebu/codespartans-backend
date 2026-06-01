@@ -45,6 +45,7 @@ import { ClassLevel } from '../entities/child.entity';
 import { Gender } from '../entities/parent.entity';
 import { HashHelper } from '../../../helpers';
 import { EmailProducer } from '../../auth/services/email.producer';
+import { SignupProducer } from '../../auth/services/signup.producer';
 import { ParentService } from './parent.service';
 
 const GENPOP_EMAIL = 'genpop@codespartans.com';
@@ -72,6 +73,10 @@ describe('ParentService', () => {
   const mockEmailProducer = {
     sendAccountValidationEmail: jest.fn().mockResolvedValue(undefined),
     sendParentPasswordResetEmail: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockSignupProducer = {
+    enqueueFreeTrial: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeAll(async () => {
@@ -108,6 +113,7 @@ describe('ParentService', () => {
       providers: [
         ParentService,
         { provide: EmailProducer, useValue: mockEmailProducer },
+        { provide: SignupProducer, useValue: mockSignupProducer },
       ],
     }).compile();
 
@@ -396,6 +402,23 @@ describe('ParentService', () => {
           code: '123456',
         }),
       ).rejects.toThrow(new NotFoundException('Parent not found'));
+    });
+
+    it('enqueues a free trial job after successful verification', async () => {
+      await parentService.registerParent(parentInfo);
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
+      await parentService.verifyParentAccount({
+        email: parentInfo.email,
+        code: parent.validation_code,
+      });
+
+      expect(mockSignupProducer.enqueueFreeTrial).toHaveBeenCalledWith({
+        email: parentInfo.email,
+        role: 'PARENT',
+      });
     });
   });
 

@@ -8,6 +8,7 @@ import { entities, Organization, Student } from '../../../database/entities';
 import { HashHelper } from '../../../helpers';
 import { LoginBodyDto } from '../dto/login-body.dto';
 import { EmailProducer } from './email.producer';
+import { SignupProducer } from './signup.producer';
 import { StudentService } from './student.service';
 
 const GENPOP_EMAIL = 'genpop@codespartans.com';
@@ -22,6 +23,10 @@ describe('StudentService', () => {
   const mockEmailProducer = {
     sendAccountValidationEmail: jest.fn().mockResolvedValue(undefined),
     sendPasswordResetEmail: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockSignupProducer = {
+    enqueueFreeTrial: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeAll(async () => {
@@ -57,10 +62,8 @@ describe('StudentService', () => {
       ],
       providers: [
         StudentService,
-        {
-          provide: EmailProducer,
-          useValue: mockEmailProducer,
-        },
+        { provide: EmailProducer, useValue: mockEmailProducer },
+        { provide: SignupProducer, useValue: mockSignupProducer },
       ],
     }).compile();
 
@@ -322,6 +325,36 @@ describe('StudentService', () => {
           validation_code: '123456',
         }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
+    });
+
+    it('enqueues a free trial job after successful validation', async () => {
+      await seedGenpopOrganization();
+      await studentService.registerStudent(studentInfo);
+
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
+
+      await studentService.completeStudentAccountValidation({
+        email: studentInfo.email,
+        validation_code: student.validation_code,
+      });
+
+      expect(mockSignupProducer.enqueueFreeTrial).toHaveBeenCalledWith({
+        email: studentInfo.email,
+        role: 'STUDENT',
+      });
+    });
+
+    it('does not enqueue a free trial if account was already verified', async () => {
+      await registerAndValidateStudent();
+
+      await studentService.completeStudentAccountValidation({
+        email: studentInfo.email,
+        validation_code: 'anycode',
+      });
+
+      expect(mockSignupProducer.enqueueFreeTrial).not.toHaveBeenCalled();
     });
   });
 

@@ -23,14 +23,13 @@ import { ParentSubscription } from '../parent/entities/parent-subscription.entit
 import { EmailConsumer } from '../auth/services/email.consumer';
 import { EmailProducer } from '../auth/services/email.producer';
 import { EmailService } from '../auth/services/email.service';
+import { SignupConsumer } from './services/signup.consumer';
 import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
     ConfigModule,
-    BullModule.registerQueue({
-      name: 'email-queue',
-    }),
+    BullModule.registerQueue({ name: 'email-queue' }, { name: 'signup-queue' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -64,6 +63,7 @@ import { BullModule } from '@nestjs/bullmq';
     EmailProducer,
     EmailConsumer,
     EmailService,
+    SignupConsumer,
   ],
   exports: [TypeOrmModule, SubscriptionGuard],
 })

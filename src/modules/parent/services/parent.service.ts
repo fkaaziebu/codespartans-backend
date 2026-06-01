@@ -31,6 +31,7 @@ import { Category } from '../../inventory/entities/category.entity';
 import { Course } from '../../inventory/entities/course.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from '../../auth/services/email.producer';
+import { SignupProducer } from '../../auth/services/signup.producer';
 import { Child, ClassLevel } from '../entities/child.entity';
 import { Gender, Parent } from '../entities/parent.entity';
 import {
@@ -59,6 +60,7 @@ export class ParentService {
     private jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailProducer: EmailProducer,
+    private readonly signupProducer: SignupProducer,
   ) {}
 
   async registerParent({
@@ -208,6 +210,8 @@ export class ParentService {
         parent.validation_code = null;
 
         await transactionalEntityManager.save(Parent, parent);
+
+        await this.signupProducer.enqueueFreeTrial({ email, role: 'PARENT' });
 
         return { message: 'Account verified successfully' };
       },

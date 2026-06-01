@@ -13,6 +13,7 @@ import { Instructor } from '../entities/instructor.entity';
 import { Organization } from '../entities/organization.entity';
 import { HashHelper } from '../../../helpers';
 import { OrganizationLoginResponse } from '../types';
+import { SignupProducer } from './signup.producer';
 
 @Injectable()
 export class OrganizationService {
@@ -20,6 +21,7 @@ export class OrganizationService {
     @InjectRepository(Organization)
     private organizationRepository: Repository<Organization>,
     private jwtService: JwtService,
+    private readonly signupProducer: SignupProducer,
   ) {}
 
   async registerOrganization({
@@ -50,6 +52,8 @@ export class OrganizationService {
         organization.password = await HashHelper.encrypt(password);
 
         await transactionalEntityManager.save(Organization, organization);
+
+        await this.signupProducer.enqueueFreeTrial({ email, role: 'ORGANIZATION' });
 
         return { message: 'Organization registered successfully' };
       },

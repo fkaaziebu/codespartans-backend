@@ -23,14 +23,13 @@ import { BullModule } from '@nestjs/bullmq';
 import { EmailProducer } from './services/email.producer';
 import { EmailConsumer } from './services/email.consumer';
 import { EmailService } from './services/email.service';
+import { SignupProducer } from './services/signup.producer';
 import { StudentController } from './controllers/student.controller';
 
 @Module({
   imports: [
     ConfigModule,
-    BullModule.registerQueue({
-      name: 'email-queue',
-    }),
+    BullModule.registerQueue({ name: 'email-queue' }, { name: 'signup-queue' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -48,6 +47,7 @@ import { StudentController } from './controllers/student.controller';
     EmailProducer,
     EmailConsumer,
     EmailService,
+    SignupProducer,
     AdminService,
     InstructorService,
     StudentService,
@@ -59,6 +59,6 @@ import { StudentController } from './controllers/student.controller';
     StudentResolver,
     OrganizationResolver,
   ],
-  exports: [TypeOrmModule, EmailProducer],
+  exports: [TypeOrmModule, EmailProducer, SignupProducer],
 })
 export class AuthModule {}
