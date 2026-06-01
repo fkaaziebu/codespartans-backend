@@ -11,6 +11,12 @@ export class AddSuiteTypeEnumValues1780272000000 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TYPE test_suites_suite_type_enum ADD VALUE IF NOT EXISTS 'YEAR_THREE'`,
     );
+    await queryRunner.query(
+      `ALTER TYPE test_suites_suite_type_enum ADD VALUE IF NOT EXISTS 'MIXED'`,
+    );
+    await queryRunner.query(
+      `ALTER TYPE test_suites_suite_type_enum ADD VALUE IF NOT EXISTS 'PAST_QUESTIONS'`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
