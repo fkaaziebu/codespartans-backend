@@ -9,6 +9,9 @@ import { Test as TestTypeClass } from 'src/modules/simulation/entities/test.enti
 import { GqlJwtAuthGuard, SubscriptionGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';
+import {
+  SuiteType,
+} from 'src/modules/review/entities/test_suite.entity';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import { StudentService } from '../services';
 import {
@@ -17,6 +20,7 @@ import {
   StudentStatsResponse,
   SubjectProgressResponse,
   TestScoreHistoryResponse,
+  TestSuiteConnection,
   TestTopicProgressResponse,
   WeakSubjectAreaResponse,
 } from '../types';
@@ -102,6 +106,25 @@ export class StudentResolver {
       email,
       searchTerm,
       filter,
+      pagination,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
+  @Query(() => TestSuiteConnection)
+  listCourseSuites(
+    @Context() context,
+    @Args('courseId') courseId: string,
+    @Args('suiteTypes', { type: () => [SuiteType], nullable: true })
+    suiteTypes?: SuiteType[],
+    @Args('pagination', { nullable: true }) pagination?: PaginationInput,
+  ) {
+    const { email } = context.req.user;
+
+    return this.studentService.listCourseSuitesPaginated({
+      email,
+      courseId,
+      suiteTypes,
       pagination,
     });
   }

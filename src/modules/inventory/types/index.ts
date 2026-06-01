@@ -11,4 +11,5 @@ export { StudentStatsResponse } from './student-stats-response.type';
 export { SubjectProgressResponse } from './subject-progress-response.type';
 export { WeakSubjectAreaResponse } from './weak-subject-area-response.type';
 export { TestScoreHistoryResponse } from './test-score-history-response.type';
+export { TestSuiteConnection } from './test-suite-connection.type';
 export { TestTopicProgressResponse } from './test-topic-progress-response.type';

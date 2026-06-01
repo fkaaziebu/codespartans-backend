@@ -12,6 +12,7 @@ import { Checkout } from './entities/checkout.entity';
 import { Coupon } from './entities/coupon.entity';
 import { Course } from './entities/course.entity';
 import { Test } from 'src/modules/simulation/entities/test.entity';
+import { TestSuite } from 'src/modules/review/entities/test_suite.entity';
 import { JwtStrategy } from 'src/helpers/strategies';
 import {
   InstructorResolver,
@@ -48,6 +49,7 @@ import {
       Organization,
       Student,
       Test,
+      TestSuite,
     ]),
   ],
   controllers: [],

@@ -16,6 +16,10 @@ import { Category } from '../entities/category.entity';
 import { Checkout } from '../entities/checkout.entity';
 import { Course } from '../entities/course.entity';
 import { Question } from '../../review/entities/question.entity';
+import {
+  TestSuite,
+  SuiteType,
+} from '../../review/entities/test_suite.entity';
 import { Test } from '../../simulation/entities/test.entity';
 import { TimeEventType } from '../../simulation/entities/time_event.entity';
 import {
@@ -45,6 +49,8 @@ export class StudentService {
     private categoryRepository: Repository<Category>,
     @InjectRepository(Test)
     private testRepository: Repository<Test>,
+    @InjectRepository(TestSuite)
+    private testSuiteRepository: Repository<TestSuite>,
   ) {}
 
   async getOrganizationCourse({
@@ -1233,5 +1239,44 @@ export class StudentService {
 
     student.password = await HashHelper.encrypt(newPassword);
     return await this.studentRepository.save(student);
+  }
+
+  async listCourseSuitesPaginated({
+    email,
+    courseId,
+    suiteTypes,
+    pagination,
+  }: {
+    email: string;
+    courseId: string;
+    suiteTypes?: SuiteType[];
+    pagination?: PaginationInput;
+  }) {
+    const student = await this.studentRepository.findOne({
+      where: { email, subscribed_courses: { id: courseId } },
+    });
+
+    if (!student) {
+      throw new NotFoundException(
+        'Student not found or not subscribed to this course',
+      );
+    }
+
+    const course = await this.courseRepository.findOne({
+      where: { id: courseId },
+      relations: ['approved_version.test_suites'],
+    });
+
+    if (!course?.approved_version) {
+      throw new NotFoundException('Course or approved version not found');
+    }
+
+    let suites = course.approved_version.test_suites ?? [];
+
+    if (suiteTypes?.length) {
+      suites = suites.filter((s) => suiteTypes.includes(s.suite_type));
+    }
+
+    return PaginateHelper.paginate<TestSuite>(suites, pagination, (s) => s.id);
   }
 }

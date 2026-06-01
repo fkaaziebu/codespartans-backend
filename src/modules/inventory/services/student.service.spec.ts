@@ -30,6 +30,7 @@ import {
   QuestionTagType,
   QuestionType,
 } from '../../review/entities/question.entity';
+import { SuiteType } from '../../review/entities/test_suite.entity';
 import {
   TestModeType,
   TestStatusType,
@@ -1063,6 +1064,158 @@ describe('StudentService', () => {
           newPassword: 'newpassword',
         }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
+    });
+  });
+
+  describe('listCourseSuitesPaginated', () => {
+    const makeSuite = async (
+      version: Version,
+      title: string,
+      suiteType: SuiteType,
+    ) => {
+      const suite = new TestSuite();
+      suite.title = title;
+      suite.description = '';
+      suite.keywords = [];
+      suite.suite_type = suiteType;
+      suite.course_version = version;
+      return testSuiteRepository.save(suite);
+    };
+
+    it('throws NotFoundException when student is not subscribed to the course', async () => {
+      const { course } = await setupData();
+
+      await expect(
+        studentService.listCourseSuitesPaginated({
+          email: 'student@test.com',
+          courseId: course.id,
+        }),
+      ).rejects.toThrow(
+        new NotFoundException(
+          'Student not found or not subscribed to this course',
+        ),
+      );
+    });
+
+    it('returns all suites when no suiteTypes filter is provided', async () => {
+      const { student, course, version } = await setupData();
+      await studentService.createCheckout({
+        email: student.email,
+        courseId: course.id,
+        autoApproveSubscription: true,
+      });
+
+      await makeSuite(version, 'Topic Suite', SuiteType.TOPIC);
+      await makeSuite(version, 'Year Suite', SuiteType.YEAR);
+      await makeSuite(version, 'Class Suite', SuiteType.CLASS);
+
+      const result = await studentService.listCourseSuitesPaginated({
+        email: student.email,
+        courseId: course.id,
+      });
+
+      expect(result.count).toBe(3);
+      expect(result.edges).toHaveLength(3);
+    });
+
+    it('filters suites by a single suite type', async () => {
+      const { student, course, version } = await setupData();
+      await studentService.createCheckout({
+        email: student.email,
+        courseId: course.id,
+        autoApproveSubscription: true,
+      });
+
+      await makeSuite(version, 'Topic Suite 1', SuiteType.TOPIC);
+      await makeSuite(version, 'Topic Suite 2', SuiteType.TOPIC);
+      await makeSuite(version, 'Year Suite', SuiteType.YEAR);
+
+      const result = await studentService.listCourseSuitesPaginated({
+        email: student.email,
+        courseId: course.id,
+        suiteTypes: [SuiteType.TOPIC],
+      });
+
+      expect(result.count).toBe(2);
+      result.edges.forEach((e) =>
+        expect((e.node as TestSuite).suite_type).toBe(SuiteType.TOPIC),
+      );
+    });
+
+    it('filters suites by multiple suite types', async () => {
+      const { student, course, version } = await setupData();
+      await studentService.createCheckout({
+        email: student.email,
+        courseId: course.id,
+        autoApproveSubscription: true,
+      });
+
+      await makeSuite(version, 'Topic Suite', SuiteType.TOPIC);
+      await makeSuite(version, 'Year Suite', SuiteType.YEAR);
+      await makeSuite(version, 'Class Suite', SuiteType.CLASS);
+
+      const result = await studentService.listCourseSuitesPaginated({
+        email: student.email,
+        courseId: course.id,
+        suiteTypes: [SuiteType.TOPIC, SuiteType.CLASS],
+      });
+
+      expect(result.count).toBe(2);
+      const types = result.edges.map((e) => (e.node as TestSuite).suite_type);
+      expect(types).toContain(SuiteType.TOPIC);
+      expect(types).toContain(SuiteType.CLASS);
+      expect(types).not.toContain(SuiteType.YEAR);
+    });
+
+    it('returns empty edges when suiteTypes filter matches no suites', async () => {
+      const { student, course, version } = await setupData();
+      await studentService.createCheckout({
+        email: student.email,
+        courseId: course.id,
+        autoApproveSubscription: true,
+      });
+
+      await makeSuite(version, 'Year Suite', SuiteType.YEAR);
+
+      const result = await studentService.listCourseSuitesPaginated({
+        email: student.email,
+        courseId: course.id,
+        suiteTypes: [SuiteType.TOPIC],
+      });
+
+      expect(result.count).toBe(0);
+      expect(result.edges).toHaveLength(0);
+    });
+
+    it('paginates results with first/after cursor', async () => {
+      const { student, course, version } = await setupData();
+      await studentService.createCheckout({
+        email: student.email,
+        courseId: course.id,
+        autoApproveSubscription: true,
+      });
+
+      await makeSuite(version, 'Suite A', SuiteType.TOPIC);
+      await makeSuite(version, 'Suite B', SuiteType.TOPIC);
+      await makeSuite(version, 'Suite C', SuiteType.TOPIC);
+
+      const page1 = await studentService.listCourseSuitesPaginated({
+        email: student.email,
+        courseId: course.id,
+        pagination: { first: 2 },
+      });
+
+      expect(page1.edges).toHaveLength(2);
+      expect(page1.pageInfo.hasNextPage).toBe(true);
+
+      const page2 = await studentService.listCourseSuitesPaginated({
+        email: student.email,
+        courseId: course.id,
+        pagination: { first: 2, after: page1.pageInfo.endCursor },
+      });
+
+      expect(page2.edges).toHaveLength(1);
+      expect(page2.pageInfo.hasNextPage).toBe(false);
     });
   });
 });
