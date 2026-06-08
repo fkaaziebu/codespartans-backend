@@ -12,10 +12,7 @@ const defaultPostgresDBConnection = (
   migrationsRun: true,
   migrations: [join(__dirname, '../migrations/*{.ts,.js}')],
   url: configService.get('DATABASE_URL'),
-  ssl:
-    configService.get('STAGE') === 'prod'
-      ? { rejectUnauthorized: false }
-      : false,
+  ssl: false,
 });
 
 const defaultRedisDBConnection = async (configService: ConfigService) => ({
