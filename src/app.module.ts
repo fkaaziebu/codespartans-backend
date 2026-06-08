@@ -25,7 +25,7 @@ import { LoggingRedactionPlugin } from './plugins';
           : '.env',
       ],
       validationSchema: configValidationSchema,
-      validatePredefined: false,
+      // validatePredefined: false,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
