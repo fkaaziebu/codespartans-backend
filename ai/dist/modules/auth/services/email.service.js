@@ -1,0 +1,221 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EmailService = void 0;
+const fs = require("node:fs");
+const path = require("node:path");
+const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
+const axios_1 = require("axios");
+const handlebars = require("handlebars");
+const nodemailer = require("nodemailer");
+let EmailService = class EmailService {
+    constructor(configService) {
+        this.configService = configService;
+        if (this.configService.get('STAGE') === 'prod') {
+            this.transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: this.configService.get('GMAIL_USER'),
+                    pass: this.configService.get('GMAIL_APP_PASSWORD'),
+                },
+            });
+            this.transporter.verify((error, success) => {
+                if (error) {
+                    console.error('Email transporter verification failed:', error);
+                }
+                else {
+                    console.log('Email transporter is ready to take messages', success);
+                }
+            });
+        }
+        else {
+            this.createTestAccount();
+        }
+    }
+    async createTestAccount() {
+        const testAccount = await nodemailer.createTestAccount();
+        this.transporter = nodemailer.createTransport({
+            host: this.configService.get('EMAIL_HOST'),
+            port: 587,
+            secure: false,
+            tls: {
+                rejectUnauthorized: false,
+            },
+            auth: {
+                user: testAccount.user,
+                pass: testAccount.pass,
+            },
+        });
+    }
+    compileTemplate(templateName, context) {
+        const templatePath = path.join(__dirname, '/templates/', `${templateName}.hbs`);
+        const templateSource = fs.readFileSync(templatePath, 'utf-8');
+        const template = handlebars.compile(templateSource);
+        return template(context);
+    }
+    async sendParentPasswordResetEmail(to, name, resetToken) {
+        const resetLink = `${this.configService.get('PARENT_URL', 'http://localhost:3001')}/reset-password?token=${resetToken}&email=${to}`;
+        const html = this.compileTemplate('password-reset', { name, resetLink });
+        try {
+            await this.sendMail(to, 'Reset Your Password', '', html);
+        }
+        catch (error) {
+            console.error('Failed to send parent password reset email:', error);
+            throw new Error('Failed to send parent password reset email');
+        }
+    }
+    async sendPasswordResetEmail(to, name, resetToken) {
+        const resetLink = `${this.configService.get('STUDENT_URL', 'http://localhost:3000')}/reset-password?token=${resetToken}&email=${to}`;
+        const html = this.compileTemplate('password-reset', { name, resetLink });
+        const mailOptions = {
+            from: this.configService.get('EMAIL_FROM'),
+            subject: 'Reset Your Password',
+            to,
+            html,
+        };
+        try {
+            await this.sendMail(mailOptions.to, mailOptions.subject, '', mailOptions.html);
+        }
+        catch (error) {
+            console.error('Failed to send password reset email:', error);
+            throw new Error('Failed to send password reset email');
+        }
+    }
+    async sendAccountValidationEmail(to, name, validationCode) {
+        const html = this.compileTemplate('account-validation', {
+            name,
+            validationCode,
+        });
+        try {
+            await this.sendMail(to, 'Verify Your Account', '', html);
+        }
+        catch (error) {
+            console.error('Failed to send account validation email:', error);
+            throw new Error('Failed to send account validation email');
+        }
+    }
+    async sendDemoInvitationEmail(to, name, school_name) {
+        const html = this.compileTemplate('demo-invitation', {
+            name,
+            school_name,
+        });
+        try {
+            await this.sendMail(to, 'Your Free Demo Access – Codespartans', '', html);
+        }
+        catch (error) {
+            console.error('Failed to send demo invitation email:', error);
+            throw new Error('Failed to send demo invitation email');
+        }
+    }
+    async sendDemoAdminNotificationEmail(name, school_name, role, approximate_students, email, whatsapp_number) {
+        const adminEmail = this.configService.get('EMAIL_FROM');
+        const html = this.compileTemplate('demo-admin-notification', {
+            name,
+            school_name,
+            role,
+            approximate_students,
+            email,
+            whatsapp_number,
+        });
+        try {
+            await this.sendMail(adminEmail, `New Demo Request – ${school_name}`, '', html);
+        }
+        catch (error) {
+            console.error('Failed to send demo admin notification email:', error);
+            throw new Error('Failed to send demo admin notification email');
+        }
+    }
+    async sendParentDemoInvitationEmail(to, full_name, target_exams, registrationUrl) {
+        const target_exams_display = target_exams.join(', ');
+        const html = this.compileTemplate('parent-demo-invitation', {
+            full_name,
+            target_exams_display,
+            multipleExams: target_exams.length > 1,
+            registrationUrl,
+        });
+        try {
+            await this.sendMail(to, 'Get started for free – Codespartans', '', html);
+        }
+        catch (error) {
+            console.error('Failed to send parent demo invitation email:', error);
+            throw new Error('Failed to send parent demo invitation email');
+        }
+    }
+    async sendStudentDemoInvitationEmail(to, full_name, target_exam, registrationUrl) {
+        const html = this.compileTemplate('student-demo-invitation', {
+            full_name,
+            target_exam,
+            registrationUrl,
+        });
+        try {
+            await this.sendMail(to, 'Get started for free – Codespartans', '', html);
+        }
+        catch (error) {
+            console.error('Failed to send student demo invitation email:', error);
+            throw new Error('Failed to send student demo invitation email');
+        }
+    }
+    async sendLeadAdminNotificationEmail(lead_type, full_name, email, target_exams_display, registrationUrl) {
+        const adminEmail = this.configService.get('EMAIL_FROM');
+        const html = this.compileTemplate('lead-admin-notification', {
+            lead_type,
+            full_name,
+            email,
+            target_exams_display,
+            registrationUrl,
+        });
+        try {
+            await this.sendMail(adminEmail, `New Demo Lead – ${lead_type}: ${full_name}`, '', html);
+        }
+        catch (error) {
+            console.error('Failed to send lead admin notification email:', error);
+            throw new Error('Failed to send lead admin notification email');
+        }
+    }
+    async validateEmail(email) {
+        const apiKey = this.configService.get('ABSTRACT_API_KEY');
+        const url = `https://emailvalidation.abstractapi.com/v1/?api_key=${apiKey}&email=${email}`;
+        try {
+            const response = await axios_1.default.get(url);
+            const data = response.data;
+            return data.deliverability === 'DELIVERABLE';
+        }
+        catch (error) {
+            console.error('Error validating email:', error);
+            return false;
+        }
+    }
+    async sendMail(to, subject, text, html) {
+        try {
+            const info = await this.transporter.sendMail({
+                from: this.configService.get('EMAIL_FROM'),
+                to,
+                subject,
+                text,
+                html,
+            });
+            console.log('Activation email sent: %s', info.messageId);
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+            return info;
+        }
+        catch (error) {
+            console.error('Error sending activation email:', error);
+            throw error;
+        }
+    }
+};
+exports.EmailService = EmailService;
+exports.EmailService = EmailService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [config_1.ConfigService])
+], EmailService);
+//# sourceMappingURL=email.service.js.map

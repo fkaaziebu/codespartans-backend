@@ -80,8 +80,11 @@ export class Test {
   @Field(() => String, { nullable: true })
   course_category?: string;
 
-  @ManyToOne(() => Student, (student) => student.tests)
-  student: Student;
+  @ManyToOne(() => Student, (student) => student.tests, {
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
+  student: Student | null;
 
   @Field(() => TestAssignment, { nullable: true })
   @OneToOne(() => TestAssignment, (assignment) => assignment.test, {

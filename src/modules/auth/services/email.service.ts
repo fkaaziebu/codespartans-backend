@@ -125,6 +125,21 @@ export class EmailService {
     }
   }
 
+  async sendParentAccountAlreadyExistsEmail(
+    to: string,
+    name: string,
+  ): Promise<void> {
+    const loginUrl = `${this.configService.get<string>('PARENT_URL', 'http://localhost:3001')}/login`;
+    const html = this.compileTemplate('parent-account-already-exists', { name, loginUrl });
+
+    try {
+      await this.sendMail(to, 'You already have an account', '', html);
+    } catch (error) {
+      console.error('Failed to send parent account already exists email:', error);
+      throw new Error('Failed to send parent account already exists email');
+    }
+  }
+
   async sendDemoInvitationEmail(
     to: string,
     name: string,
@@ -242,6 +257,49 @@ export class EmailService {
     } catch (error) {
       console.error('Failed to send lead admin notification email:', error);
       throw new Error('Failed to send lead admin notification email');
+    }
+  }
+
+  async sendAccountDeletionNoticeEmail(
+    to: string,
+    name: string,
+    gracePeriodEnd: string,
+  ): Promise<void> {
+    const html = this.compileTemplate('account-deletion-notice', {
+      name,
+      gracePeriodEnd,
+    });
+
+    try {
+      await this.sendMail(to, 'Your Account Deletion Request – Examforge', '', html);
+    } catch (error) {
+      console.error('Failed to send account deletion notice email:', error);
+      throw new Error('Failed to send account deletion notice email');
+    }
+  }
+
+  async sendAccountRestoredEmail(to: string, name: string): Promise<void> {
+    const html = this.compileTemplate('account-restored', { name });
+
+    try {
+      await this.sendMail(to, 'Your Account Has Been Restored – Examforge', '', html);
+    } catch (error) {
+      console.error('Failed to send account restored email:', error);
+      throw new Error('Failed to send account restored email');
+    }
+  }
+
+  async sendAccountPurgedConfirmationEmail(
+    to: string,
+    name: string,
+  ): Promise<void> {
+    const html = this.compileTemplate('account-purged', { name });
+
+    try {
+      await this.sendMail(to, 'Your Account Has Been Deleted – Examforge', '', html);
+    } catch (error) {
+      console.error('Failed to send account purged confirmation email:', error);
+      throw new Error('Failed to send account purged confirmation email');
     }
   }
 

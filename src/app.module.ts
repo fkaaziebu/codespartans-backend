@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ThrottlerModule, minutes } from '@nestjs/throttler';
 import { configValidationSchema } from './config.schema';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -13,6 +14,7 @@ import { ReviewModule } from './modules/review/review.module';
 import { SchoolModule } from './modules/school/school.module';
 import { SimulationModule } from './modules/simulation/simulation.module';
 import { SetupDbService } from './setup-db-2.service';
+import { LoggingRedactionPlugin } from './plugins';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { SetupDbService } from './setup-db-2.service';
           : '.env',
       ],
       validationSchema: configValidationSchema,
+      validatePredefined: false,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
@@ -30,6 +33,9 @@ import { SetupDbService } from './setup-db-2.service';
       playground: true,
       driver: ApolloDriver,
       resolvers: {},
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [{ name: 'default', ttl: minutes(1), limit: 10 }],
     }),
     DatabaseModule,
     AuthModule,
@@ -42,7 +48,7 @@ import { SetupDbService } from './setup-db-2.service';
     SchoolModule,
   ],
   controllers: [],
-  providers: [SetupDbService],
+  providers: [SetupDbService, LoggingRedactionPlugin],
   exports: [],
 })
 export class AppModule {}

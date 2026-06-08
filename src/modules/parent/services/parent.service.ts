@@ -32,6 +32,7 @@ import { Course } from '../../inventory/entities/course.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { SignupProducer } from '../../auth/services/signup.producer';
+import { AccountDeletionService } from '../../auth/services/account-deletion.service';
 import { Child, ClassLevel } from '../entities/child.entity';
 import { Gender, Parent } from '../entities/parent.entity';
 import {
@@ -61,6 +62,7 @@ export class ParentService {
     private readonly configService: ConfigService,
     private readonly emailProducer: EmailProducer,
     private readonly signupProducer: SignupProducer,
+    private readonly accountDeletionService: AccountDeletionService,
   ) {}
 
   async registerParent({
@@ -85,9 +87,11 @@ export class ParentService {
         });
 
         if (existing) {
-          throw new BadRequestException(
-            'An account with this email already exists',
-          );
+          await this.emailProducer.sendParentAccountAlreadyExistsEmail({
+            email,
+            name: `${existing.first_name} ${existing.last_name}`,
+          });
+          return { message: 'Registration successful. Please verify your email.' };
         }
 
         const validationCode = Math.floor(
@@ -225,47 +229,64 @@ export class ParentService {
     email: string;
     password: string;
   }): Promise<LoginParentResponse> {
-    return this.parentRepository.manager.transaction(
+    // Validate credentials inside transaction, then restore outside to avoid write-lock deadlock
+    const foundParent = await this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
-        const parent = await transactionalEntityManager.findOne(Parent, {
+        const record = await transactionalEntityManager.findOne(Parent, {
           where: { email },
         });
 
-        if (!parent) {
+        if (!record) {
           throw new BadRequestException('Email or password is incorrect');
         }
 
         const isPasswordValid = await HashHelper.compare(
           password,
-          parent.password,
+          record.password,
         );
 
         if (!isPasswordValid) {
           throw new BadRequestException('Email or password is incorrect');
         }
 
-        if (!parent.is_account_validated) {
+        if (!record.is_account_validated) {
           throw new BadRequestException(
             'Account not verified. Please check your email for the verification code.',
           );
         }
 
-        const payload = {
-          id: parent.id,
-          name: `${parent.first_name} ${parent.last_name}`,
-          email: parent.email,
-          role: 'PARENT' as const,
-        };
+        if (record.is_deactivated) {
+          const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
+          const elapsed =
+            Date.now() - new Date(record.deactivated_at).getTime();
+          if (elapsed >= NINETY_DAYS_MS) {
+            throw new BadRequestException('This account no longer exists.');
+          }
+        }
 
-        const token = this.jwtService.sign(payload);
-        const refresh_token = this.jwtService.sign(
-          { ...payload, type: 'refresh' },
-          { expiresIn: '30d' },
-        );
-
-        return { ...parent, token, refresh_token };
+        return record;
       },
     );
+
+    // Restore outside transaction to avoid write-lock deadlock
+    if (foundParent.is_deactivated) {
+      await this.accountDeletionService.restoreParent(foundParent);
+    }
+
+    const payload = {
+      id: foundParent.id,
+      name: `${foundParent.first_name} ${foundParent.last_name}`,
+      email: foundParent.email,
+      role: 'PARENT' as const,
+    };
+
+    const token = this.jwtService.sign(payload);
+    const refresh_token = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      { expiresIn: '30d' },
+    );
+
+    return { ...foundParent, token, refresh_token };
   }
 
   async requestParentPasswordReset({ email }: { email: string }) {

@@ -1,0 +1,33 @@
+import { Repository } from 'typeorm';
+import { Admin } from './modules/auth/entities/admin.entity';
+import { Instructor } from './modules/auth/entities/instructor.entity';
+import { Organization } from './modules/auth/entities/organization.entity';
+import { Cart } from './modules/inventory/entities/cart.entity';
+import { Category } from './modules/inventory/entities/category.entity';
+import { Course } from './modules/inventory/entities/course.entity';
+import { Image } from './modules/media/entities/image.entity';
+import { Question } from './modules/review/entities/question.entity';
+import { TestSuite } from './modules/review/entities/test_suite.entity';
+import { Version } from './modules/review/entities/version.entity';
+import { SubscriptionPlan } from './modules/demo/entities/subscription-plan.entity';
+import { OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+export declare class SetupDbService implements OnModuleInit {
+    private instructorRepository;
+    private organizationRepository;
+    private adminRepository;
+    private cartRepository;
+    private courseRepository;
+    private versionRepository;
+    private questionRepository;
+    private categoryRepository;
+    private testSuiteRepository;
+    private imageRepository;
+    private planRepository;
+    private configService;
+    private readonly logger;
+    constructor(instructorRepository: Repository<Instructor>, organizationRepository: Repository<Organization>, adminRepository: Repository<Admin>, cartRepository: Repository<Cart>, courseRepository: Repository<Course>, versionRepository: Repository<Version>, questionRepository: Repository<Question>, categoryRepository: Repository<Category>, testSuiteRepository: Repository<TestSuite>, imageRepository: Repository<Image>, planRepository: Repository<SubscriptionPlan>, configService: ConfigService);
+    onModuleInit(): Promise<void>;
+    setupDatabase(): Promise<string>;
+    setupSubscriptionPlans(): Promise<void>;
+}

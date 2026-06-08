@@ -1,0 +1,101 @@
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Student } from '../../auth/entities/student.entity';
+import { Cart } from '../../inventory/entities/cart.entity';
+import { Parent } from '../../parent/entities/parent.entity';
+import { EmailProducer } from '../../auth/services/email.producer';
+import { Repository } from 'typeorm';
+import { ActivateParentDemoInput } from '../inputs/activate-parent-demo.input';
+import { ActivateSchoolDemoInput } from '../inputs/activate-school-demo.input';
+import { ActivateStudentDemoInput } from '../inputs/activate-student-demo.input';
+import { BookParentFreeDemoInput } from '../inputs/book-parent-free-demo.input';
+import { BookSchoolFreeDemoInput } from '../inputs/book-school-free-demo.input';
+import { BookStudentFreeDemoInput } from '../inputs/book-student-free-demo.input';
+import { SchoolDemo } from '../entities/school-demo.entity';
+import { ParentDemoRequest } from '../entities/parent-demo-request.entity';
+import { StudentDemoRequest } from '../entities/student-demo-request.entity';
+import { SubscriptionPlan } from '../entities/subscription-plan.entity';
+import { OrgSubscription } from '../entities/organization-subscription.entity';
+import { ParentSubscription } from '../../parent/entities/parent-subscription.entity';
+import { StudentSubscription } from '../entities/student-subscription.entity';
+import { PaymentService } from './payment.service';
+export declare class DemoService {
+    private readonly schoolDemoRepository;
+    private readonly parentDemoRepository;
+    private readonly studentDemoRepository;
+    private readonly orgRepository;
+    private readonly cartRepository;
+    private readonly studentRepository;
+    private readonly parentRepository;
+    private readonly orgSubscriptionRepository;
+    private readonly parentSubscriptionRepository;
+    private readonly studentSubscriptionRepository;
+    private readonly planRepository;
+    private readonly emailProducer;
+    private readonly paymentService;
+    private readonly configService;
+    private readonly jwtService;
+    private readonly logger;
+    constructor(schoolDemoRepository: Repository<SchoolDemo>, parentDemoRepository: Repository<ParentDemoRequest>, studentDemoRepository: Repository<StudentDemoRequest>, orgRepository: Repository<Organization>, cartRepository: Repository<Cart>, studentRepository: Repository<Student>, parentRepository: Repository<Parent>, orgSubscriptionRepository: Repository<OrgSubscription>, parentSubscriptionRepository: Repository<ParentSubscription>, studentSubscriptionRepository: Repository<StudentSubscription>, planRepository: Repository<SubscriptionPlan>, emailProducer: EmailProducer, paymentService: PaymentService, configService: ConfigService, jwtService: JwtService);
+    bookSchoolFreeDemo(input: BookSchoolFreeDemoInput): Promise<{
+        message: string;
+    }>;
+    bookParentFreeDemo(input: BookParentFreeDemoInput): Promise<{
+        message: string;
+    }>;
+    bookStudentFreeDemo(input: BookStudentFreeDemoInput): Promise<{
+        message: string;
+    }>;
+    activateSchoolDemo(input: ActivateSchoolDemoInput): Promise<{
+        access_token: string;
+        org_name: string;
+        email: string;
+        expires_at: string;
+    }>;
+    activateStudentDemo(input: ActivateStudentDemoInput): Promise<{
+        token: string;
+        refresh_token: string;
+        expires_at: string;
+        id: string;
+        name: string;
+        email: string;
+        password: string;
+        reset_token: string;
+        is_setup_completed: boolean;
+        is_account_validated: boolean;
+        validation_code: string;
+        subscribed_courses: import("../../inventory/entities/course.entity").Course[];
+        subscribed_categories: import("../../inventory/entities/category.entity").Category[];
+        organizations: Organization[];
+        checkouts: import("../../inventory/entities/checkout.entity").Checkout[];
+        cart: Cart;
+        tests: import("../../simulation/entities/test.entity").Test[];
+    }>;
+    activateParentDemo(input: ActivateParentDemoInput): Promise<{
+        token: string;
+        refresh_token: string;
+        expires_at: string;
+        id: string;
+        first_name: string;
+        last_name: string;
+        email: string;
+        whatsapp_number: string;
+        gender: import("../../parent/entities/parent.entity").Gender;
+        password: string;
+        is_account_validated: boolean;
+        is_setup_completed: boolean;
+        validation_code: string;
+        reset_token: string;
+        children: import("../../parent/entities/child.entity").Child[];
+    }>;
+    listPlans(): Promise<SubscriptionPlan[]>;
+    initiatePayment(email: string, planId: string, role: string, childrenIds?: string[]): Promise<{
+        authorization_url: string;
+        reference: string;
+    }>;
+    getMySubscription(parentEmail: string): Promise<ParentSubscription>;
+    listMySubscriptions(parentEmail: string): Promise<ParentSubscription[]>;
+    getMyStudentSubscription(studentEmail: string): Promise<StudentSubscription>;
+    listMyStudentSubscriptions(studentEmail: string): Promise<StudentSubscription[]>;
+}

@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from './email.producer';
 import { SignupProducer } from './signup.producer';
 import { LoginBodyDto } from '../dto/login-body.dto';
+import { AccountDeletionService } from './account-deletion.service';
 
 @Injectable()
 export class StudentService {
@@ -27,6 +28,7 @@ export class StudentService {
     private configService: ConfigService,
     private readonly emailProducer: EmailProducer,
     private readonly signupProducer: SignupProducer,
+    private readonly accountDeletionService: AccountDeletionService,
   ) {}
 
   async listOrganizationsPaginated({
@@ -155,7 +157,8 @@ export class StudentService {
     email: string;
     password: string;
   }): Promise<StudentLoginResponse> {
-    return await this.studentRepository.manager.transaction(
+    // Validate credentials inside transaction, then restore outside to avoid deadlock
+    const student = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: { email },
@@ -181,31 +184,47 @@ export class StudentService {
           );
         }
 
-        const payload: {
-          id: string;
-          name: string;
-          email: string;
-          role: 'STUDENT';
-        } = {
-          id: student.id,
-          name: student.name,
-          email: student.email,
-          role: 'STUDENT',
-        };
+        if (student.is_deactivated) {
+          const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
+          const elapsed =
+            Date.now() - new Date(student.deactivated_at).getTime();
+          if (elapsed >= NINETY_DAYS_MS) {
+            throw new BadRequestException('This account no longer exists.');
+          }
+        }
 
-        const access_token = this.jwtService.sign(payload);
-        const refresh_token = this.jwtService.sign(
-          { ...payload, type: 'refresh' },
-          { expiresIn: '30d' },
-        );
-
-        return {
-          ...student,
-          token: access_token,
-          refresh_token,
-        };
+        return student;
       },
     );
+
+    // Restore outside transaction to avoid write-lock deadlock
+    if (student.is_deactivated) {
+      await this.accountDeletionService.restoreStudent(student);
+    }
+
+    const payload: {
+      id: string;
+      name: string;
+      email: string;
+      role: 'STUDENT';
+    } = {
+      id: student.id,
+      name: student.name,
+      email: student.email,
+      role: 'STUDENT',
+    };
+
+    const access_token = this.jwtService.sign(payload);
+    const refresh_token = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      { expiresIn: '30d' },
+    );
+
+    return {
+      ...student,
+      token: access_token,
+      refresh_token,
+    };
   }
 
   async completeStudentAccountValidation({
