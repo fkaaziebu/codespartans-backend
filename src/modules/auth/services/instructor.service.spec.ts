@@ -26,8 +26,9 @@ describe('InstructorService', () => {
         JwtModule.registerAsync({
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
-            secret: configService.get<string>('JWT_SECRET'),
-            secretOrPrivateKey: configService.get('JWT_SECRET'),
+            secret: configService.get<string>('JWT_SECRET') || 'test-secret',
+            secretOrPrivateKey:
+              configService.get('JWT_SECRET') || 'test-secret',
             signOptions: { expiresIn: '1h' },
           }),
           inject: [ConfigService],
@@ -44,7 +45,6 @@ describe('InstructorService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      controllers: [],
       providers: [InstructorService],
     }).compile();
 
@@ -59,9 +59,8 @@ describe('InstructorService', () => {
   });
 
   beforeEach(async () => {
-    // Clear the database before each test
-    const entities = connection.entityMetadatas;
-    for (const entity of entities) {
+    const entityMetadatas = connection.entityMetadatas;
+    for (const entity of entityMetadatas) {
       const repository = connection.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
@@ -73,62 +72,17 @@ describe('InstructorService', () => {
     await module.close();
   });
 
-  describe('loginInstructor', () => {
-    it('returns organization with token after successfully logging in', async () => {
-      await setupData();
-
-      const response = await instructorService.loginInstructor(instructorInfo);
-
-      expect(response).toBeDefined();
-      expect(response.token).toBeDefined();
-      expect(response.name).toBe(instructorInfo.name);
-      expect(response.email).toBe(instructorInfo.email);
-    });
-
-    it('throws an error if email or password is incorrect', async () => {
-      await setupData();
-
-      await expect(
-        instructorService.loginInstructor({
-          email: 'invalid@email.com',
-          password: 'password',
-        }),
-      ).rejects.toThrowError(
-        new BadRequestException('Email or password is incorrect'),
-      );
-
-      await expect(
-        instructorService.loginInstructor({
-          email: instructorInfo.email,
-          password: 'invalidpassword',
-        }),
-      ).rejects.toThrowError(
-        new BadRequestException('Email or password is incorrect'),
-      );
-    });
-  });
-
   const instructorInfo = {
-    email: 'fkaaziebu1998@gmail.com',
-    name: 'Frederick Aziebu',
+    email: 'instructor@test.com',
+    name: 'Test Instructor',
     password: 'password',
-  };
-
-  const registerOrganization = async () => {
-    const organization = new Organization();
-    organization.name = 'Organization Name';
-    organization.email = 'fkaaziebu1998@gmail.com';
-    organization.password = await HashHelper.encrypt('password');
-
-    return await organizationRepository.save(organization);
   };
 
   const setupData = async () => {
     const organization = new Organization();
-    organization.name = 'Organization Name';
-    organization.email = 'fkaaziebu1998@gmail.com';
+    organization.name = 'Test Organization';
+    organization.email = 'org@test.com';
     organization.password = await HashHelper.encrypt('password');
-
     await organizationRepository.save(organization);
 
     const instructor = new Instructor();
@@ -136,7 +90,46 @@ describe('InstructorService', () => {
     instructor.email = instructorInfo.email;
     instructor.password = await HashHelper.encrypt(instructorInfo.password);
     instructor.organizations = [organization];
-
     await instructorRepository.save(instructor);
   };
+
+  describe('loginInstructor', () => {
+    it('returns instructor with token after successful login', async () => {
+      await setupData();
+
+      const response =
+        await instructorService.loginInstructor(instructorInfo);
+
+      expect(response).toBeDefined();
+      expect(response.token).toBeDefined();
+      expect(response.name).toBe(instructorInfo.name);
+      expect(response.email).toBe(instructorInfo.email);
+    });
+
+    it('throws BadRequestException if email is incorrect', async () => {
+      await setupData();
+
+      await expect(
+        instructorService.loginInstructor({
+          email: 'invalid@email.com',
+          password: 'password',
+        }),
+      ).rejects.toThrow(
+        new BadRequestException('Email or password is incorrect'),
+      );
+    });
+
+    it('throws BadRequestException if password is incorrect', async () => {
+      await setupData();
+
+      await expect(
+        instructorService.loginInstructor({
+          email: instructorInfo.email,
+          password: 'invalidpassword',
+        }),
+      ).rejects.toThrow(
+        new BadRequestException('Email or password is incorrect'),
+      );
+    });
+  });
 });

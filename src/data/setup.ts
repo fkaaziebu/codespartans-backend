@@ -5,7 +5,7 @@ const datas = [
       {
         courseName: 'Mathematics',
         is_mandatory: true,
-        imageFile: { filename: 'math_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'maths.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'WASSCE Mathematics — Number, Numeration & Algebra',
@@ -660,7 +660,7 @@ const datas = [
       {
         courseName: 'English Language',
         is_mandatory: true,
-        imageFile: { filename: 'english_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'en.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'WASSCE English Language — Grammar & Vocabulary',
@@ -974,7 +974,7 @@ const datas = [
       {
         courseName: 'Physics',
         is_mandatory: true,
-        imageFile: { filename: 'physics_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'physics.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'WASSCE Physics — Mechanics, Waves & Electricity',
@@ -1158,7 +1158,7 @@ const datas = [
       {
         courseName: 'Chemistry',
         is_mandatory: true,
-        imageFile: { filename: 'chemistry_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'chemistry.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName:
@@ -1357,7 +1357,7 @@ const datas = [
       {
         courseName: 'Biology',
         is_mandatory: true,
-        imageFile: { filename: 'biology_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'biology.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'WASSCE Biology — Cell Biology, Genetics & Ecology',
@@ -1608,7 +1608,7 @@ const datas = [
       {
         courseName: 'Economics',
         is_mandatory: false,
-        imageFile: { filename: 'economics_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'economics.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'WASSCE Economics — Demand, Supply & Production',
@@ -1830,7 +1830,7 @@ const datas = [
       {
         courseName: 'Geography',
         is_mandatory: false,
-        imageFile: { filename: 'geography_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'geography.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'WASSCE Geography — Physical & Human Geography',
@@ -2050,7 +2050,7 @@ const datas = [
       {
         courseName: 'Literature',
         is_mandatory: false,
-        imageFile: { filename: 'literature_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'literature.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName:
@@ -2256,7 +2256,7 @@ const datas = [
       {
         courseName: 'Government',
         is_mandatory: false,
-        imageFile: { filename: 'government_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'government.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName:
@@ -2483,7 +2483,7 @@ const datas = [
       {
         courseName: 'History',
         is_mandatory: false,
-        imageFile: { filename: 'history_1.png', mime: 'image/png', ext: 'png' },
+        imageFile: { filename: 'history.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName:
@@ -2721,7 +2721,7 @@ const datas = [
       {
         courseName: 'Mathematics',
         is_mandatory: true,
-        imageFile: { filename: 'math_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'maths.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'BECE Mathematics — Number & Algebra',
@@ -2909,7 +2909,7 @@ const datas = [
       {
         courseName: 'English Language',
         is_mandatory: true,
-        imageFile: { filename: 'english_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'en.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'BECE English Language — Grammar & Vocabulary',
@@ -3133,7 +3133,7 @@ const datas = [
       {
         courseName: 'Social Studies',
         is_mandatory: true,
-        imageFile: { filename: 'social_studies_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'social-study.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'BECE Social Studies — Ghana History & Culture',
@@ -3369,7 +3369,7 @@ const datas = [
       {
         courseName: 'Integrated Science',
         is_mandatory: true,
-        imageFile: { filename: 'integrated_science_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'science.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'BECE Integrated Science — Life Processes & Health',
@@ -3589,7 +3589,7 @@ const datas = [
       {
         courseName: 'Religious and Moral Education',
         is_mandatory: false,
-        imageFile: { filename: 'religious_moral_education_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'rme.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'BECE RME — Christianity & Islam',
@@ -3809,7 +3809,7 @@ const datas = [
       {
         courseName: 'ICT',
         is_mandatory: false,
-        imageFile: { filename: 'ict_1.jpeg', mime: 'image/jpeg', ext: 'jpeg' },
+        imageFile: { filename: 'ict.svg', mime: 'image/svg+xml', ext: 'svg' },
         suites: [
           {
             suiteName: 'BECE ICT — Computer Hardware & Software',

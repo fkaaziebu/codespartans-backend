@@ -16,6 +16,7 @@ import { StudentController } from './controllers/student.controller';
 import { StudentGateway } from './gateways/student.gateway';
 import { StudentResolver } from './resolvers';
 import { StudentService } from './services';
+import { InsightService } from './services/insight.service';
 import { MarkAnswerConsumer } from './services/mark-answer.consumer';
 import { MarkAnswerProducer } from './services/mark-answer.producer';
 import { MarkAnswerService } from './services/mark-answer.service';
@@ -51,6 +52,7 @@ import { TestTimerService } from './services/test-timer.service';
   controllers: [StudentController],
   providers: [
     StudentService,
+    InsightService,
     TestTimerService,
     JwtStrategy,
     StudentResolver,

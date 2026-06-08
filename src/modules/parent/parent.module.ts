@@ -14,6 +14,7 @@ import { TestSuite } from 'src/modules/review/entities/test_suite.entity';
 import { EmailConsumer } from '../auth/services/email.consumer';
 import { EmailProducer } from '../auth/services/email.producer';
 import { EmailService } from '../auth/services/email.service';
+import { SignupProducer } from '../auth/services/signup.producer';
 import { Child } from './entities/child.entity';
 import { Parent } from './entities/parent.entity';
 import { ParentResolver } from './resolvers/parent.resolver';
@@ -22,9 +23,7 @@ import { ParentService } from './services/parent.service';
 @Module({
   imports: [
     ConfigModule,
-    BullModule.registerQueue({
-      name: 'email-queue',
-    }),
+    BullModule.registerQueue({ name: 'email-queue' }, { name: 'signup-queue' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -37,7 +36,7 @@ import { ParentService } from './services/parent.service';
     }),
     TypeOrmModule.forFeature([Parent, Child, Student, Organization, Cart, Category, Test, TestAssignment, TestSuite]),
   ],
-  providers: [ParentService, ParentResolver, JwtStrategy, EmailProducer, EmailConsumer, EmailService],
+  providers: [ParentService, ParentResolver, JwtStrategy, EmailProducer, EmailConsumer, EmailService, SignupProducer],
   exports: [TypeOrmModule],
 })
 export class ParentModule {}

@@ -15,6 +15,7 @@ import { PaginationInput } from '../../../helpers/inputs';
 import { StudentLoginResponse } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from './email.producer';
+import { SignupProducer } from './signup.producer';
 import { LoginBodyDto } from '../dto/login-body.dto';
 
 @Injectable()
@@ -25,6 +26,7 @@ export class StudentService {
     private jwtService: JwtService,
     private configService: ConfigService,
     private readonly emailProducer: EmailProducer,
+    private readonly signupProducer: SignupProducer,
   ) {}
 
   async listOrganizationsPaginated({
@@ -70,7 +72,7 @@ export class StudentService {
           where: {
             email,
           },
-          relations: ['organizations'],
+          relations: ['organizations', 'subscribed_categories'],
         });
 
         if (!student) {
@@ -235,6 +237,8 @@ export class StudentService {
         student.validation_code = null;
         await transactionalEntityManager.save(Student, student);
 
+        await this.signupProducer.enqueueFreeTrial({ email, role: 'STUDENT' });
+
         return { message: 'Account verified successfully' };
       },
     );
@@ -300,7 +304,12 @@ export class StudentService {
       throw new BadRequestException('Invalid token type');
     }
 
-    const { type: _type, ...tokenPayload } = payload;
+    const {
+      type: _type,
+      iat: _iat,
+      exp: _exp,
+      ...tokenPayload
+    } = payload as any;
     const access_token = this.jwtService.sign(tokenPayload);
     return { access_token };
   }

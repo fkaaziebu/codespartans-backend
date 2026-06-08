@@ -1,20 +1,19 @@
 import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { join } from 'path';
 
-/**
- * Setup default connection in the application
- * @param config {ConfigService}
- */
 const defaultPostgresDBConnection = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => ({
   type: 'postgres',
   autoLoadEntities: true,
-  synchronize: configService.get('NODE_ENV') !== 'production',
+  synchronize: false,
+  migrationsRun: true,
+  migrations: [join(__dirname, '../migrations/*{.ts,.js}')],
   url: configService.get('DATABASE_URL'),
   ssl: {
-    rejectUnauthorized: false, // allow self-signed AWS certs
+    rejectUnauthorized: false,
   },
 });
 

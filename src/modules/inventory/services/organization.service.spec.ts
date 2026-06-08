@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -19,16 +20,18 @@ import {
   CurrencyType,
   DomainType,
   LevelType,
-} from 'src/modules/inventory/entities/course.entity';
-import { IssueStatusType } from 'src/modules/review/entities/issue.entity';
+} from '../entities/course.entity';
+import { IssueStatusType } from '../../review/entities/issue.entity';
 import {
   QuestionDifficultyType,
   QuestionTagType,
   QuestionType,
-} from 'src/modules/review/entities/question.entity';
-import { ReviewStatusType } from 'src/modules/review/entities/review.entity';
+} from '../../review/entities/question.entity';
+import { ReviewStatusType } from '../../review/entities/review.entity';
+import {
+  VersionStatusType,
+} from '../../review/entities/version.entity';
 import { HashHelper } from '../../../helpers';
-import { QuestionInput } from '../inputs';
 import { OrganizationService } from './organization.service';
 
 describe('OrganizationService', () => {
@@ -56,8 +59,9 @@ describe('OrganizationService', () => {
         JwtModule.registerAsync({
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
-            secret: configService.get<string>('JWT_SECRET'),
-            secretOrPrivateKey: configService.get('JWT_SECRET'),
+            secret: configService.get<string>('JWT_SECRET') || 'test-secret',
+            secretOrPrivateKey:
+              configService.get('JWT_SECRET') || 'test-secret',
             signOptions: { expiresIn: '1h' },
           }),
           inject: [ConfigService],
@@ -74,7 +78,6 @@ describe('OrganizationService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      controllers: [],
       providers: [OrganizationService],
     }).compile();
 
@@ -106,9 +109,8 @@ describe('OrganizationService', () => {
   });
 
   beforeEach(async () => {
-    // Clear the database before each test
-    const entities = connection.entityMetadatas;
-    for (const entity of entities) {
+    const entityMetadatas = connection.entityMetadatas;
+    for (const entity of entityMetadatas) {
       const repository = connection.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
@@ -120,8 +122,309 @@ describe('OrganizationService', () => {
     await module.close();
   });
 
+  const orgInfo = {
+    name: 'Test Organization',
+    email: 'org@test.com',
+    password: 'password',
+  };
+
+  const getOrganization = async (email: string) => {
+    return organizationRepository.findOne({
+      where: { email },
+      relations: [
+        'organizational_categories.courses',
+        'organizational_courses.versions.assigned_admin',
+        'admins.assigned_course_versions_for_review',
+      ],
+    });
+  };
+
+  const setupData = async () => {
+    const organization = new Organization();
+    organization.name = orgInfo.name;
+    organization.email = orgInfo.email;
+    organization.password = await HashHelper.encrypt(orgInfo.password);
+    await organizationRepository.save(organization);
+
+    const admin = new Admin();
+    admin.name = 'Test Admin';
+    admin.email = 'admin@test.com';
+    admin.password = await HashHelper.encrypt('password');
+    admin.organization = organization;
+    await adminRepository.save(admin);
+
+    const instructor = new Instructor();
+    instructor.name = 'Test Instructor';
+    instructor.email = 'instructor@test.com';
+    instructor.password = await HashHelper.encrypt('password');
+    instructor.organizations = [organization];
+    await instructorRepository.save(instructor);
+
+    const course = new Course();
+    course.avatar_url = 'https://example.com/avatar.jpg';
+    course.currency = CurrencyType.USD;
+    course.description = 'Test course description';
+    course.domains = [DomainType.ENGLISH];
+    course.level = LevelType.BEGINNER;
+    course.price = 100;
+    course.title = 'Test Course';
+    course.instructor = instructor;
+    course.organization = organization;
+    await courseRepository.save(course);
+
+    const course2 = new Course();
+    course2.avatar_url = 'https://example.com/avatar.jpg';
+    course2.currency = CurrencyType.USD;
+    course2.description = 'Second test course';
+    course2.domains = [DomainType.ENGLISH];
+    course2.level = LevelType.BEGINNER;
+    course2.price = 200;
+    course2.title = 'Second Course';
+    course2.instructor = instructor;
+    course2.organization = organization;
+    await courseRepository.save(course2);
+
+    const version = new Version();
+    version.version_number = 1;
+    version.course = course;
+    await versionRepository.save(version);
+
+    const version2 = new Version();
+    version2.version_number = 1;
+    version2.course = course2;
+    await versionRepository.save(version2);
+
+    const sampleQuestion = {
+      question_number: 1,
+      description: 'Test question.',
+      hints: ['hint'],
+      solution_steps: ['step'],
+      options: ['a', 'b', 'c'],
+      type: QuestionType.MULTIPLE_CHOICE,
+      tags: [QuestionTagType.TAG_ALGEBRA],
+      difficulty: QuestionDifficultyType.EASY,
+      estimated_time_in_ms: 5000,
+      correct_answer: 'a',
+    };
+
+    const q1 = Object.assign(new Question(), sampleQuestion, {
+      version,
+    });
+    const q2 = Object.assign(new Question(), sampleQuestion, {
+      version: version2,
+    });
+    await questionRepository.save([q1, q2]);
+
+    const reviewRequest = new ReviewRequest();
+    reviewRequest.course_version = version;
+    reviewRequest.organization = organization;
+    await reviewRequestRepository.save(reviewRequest);
+
+    admin.assigned_course_versions_for_review = [version, version2];
+    await adminRepository.save(admin);
+
+    return { organization, admin, instructor, version, version2, course, course2 };
+  };
+
+  const setupStatsData = async (courseVersion: Version) => {
+    const review = new Review();
+    review.title = 'Review Title';
+    review.message = 'Review Message';
+    review.status = ReviewStatusType.CLOSED;
+    review.course_version = courseVersion;
+    await reviewRepository.save(review);
+
+    const issue = new Issue();
+    issue.description = 'Issue Description';
+    issue.status = IssueStatusType.CLOSED;
+    issue.review = review;
+    await issueRepository.save(issue);
+
+    courseVersion.course.approved_version = courseVersion;
+    await courseRepository.save(courseVersion.course);
+  };
+
+  describe('listInstructors', () => {
+    it('returns all instructors belonging to the organization', async () => {
+      const { organization } = await setupData();
+
+      const result = await organizationService.listInstructors({
+        email: organization.email,
+      });
+
+      expect(result).toHaveLength(1);
+      expect(result[0].email).toBe('instructor@test.com');
+    });
+
+    it('filters instructors by searchTerm', async () => {
+      const { organization } = await setupData();
+
+      const match = await organizationService.listInstructors({
+        email: organization.email,
+        searchTerm: 'Test Instructor',
+      });
+      expect(match).toHaveLength(1);
+
+      const empty = await organizationService.listInstructors({
+        email: organization.email,
+        searchTerm: 'Nobody',
+      });
+      expect(empty).toHaveLength(0);
+    });
+  });
+
+  describe('listInstructorsPaginated', () => {
+    it('returns paginated instructors', async () => {
+      const { organization } = await setupData();
+
+      const result = await organizationService.listInstructorsPaginated({
+        email: organization.email,
+      });
+
+      expect(result.edges).toHaveLength(1);
+      expect(result.count).toBe(1);
+    });
+  });
+
+  describe('listAdmins', () => {
+    it('returns all admins belonging to the organization', async () => {
+      const { organization } = await setupData();
+
+      const result = await organizationService.listAdmins({
+        email: organization.email,
+      });
+
+      expect(result).toHaveLength(1);
+      expect(result[0].email).toBe('admin@test.com');
+    });
+
+    it('filters admins by searchTerm', async () => {
+      const { organization } = await setupData();
+
+      const match = await organizationService.listAdmins({
+        email: organization.email,
+        searchTerm: 'Test Admin',
+      });
+      expect(match).toHaveLength(1);
+
+      const empty = await organizationService.listAdmins({
+        email: organization.email,
+        searchTerm: 'Nobody',
+      });
+      expect(empty).toHaveLength(0);
+    });
+  });
+
+  describe('listAdminsPaginated', () => {
+    it('returns paginated admins', async () => {
+      const { organization } = await setupData();
+
+      const result = await organizationService.listAdminsPaginated({
+        email: organization.email,
+      });
+
+      expect(result.edges).toHaveLength(1);
+      expect(result.count).toBe(1);
+    });
+  });
+
+  describe('listCourses', () => {
+    it('returns all courses for the organization', async () => {
+      const { organization } = await setupData();
+
+      const result = await organizationService.listCourses({
+        email: organization.email,
+      });
+
+      expect(result).toHaveLength(2);
+    });
+
+    it('filters courses by searchTerm', async () => {
+      const { organization } = await setupData();
+
+      const match = await organizationService.listCourses({
+        email: organization.email,
+        searchTerm: 'Second',
+      });
+      expect(match).toHaveLength(1);
+      expect(match[0].title).toBe('Second Course');
+    });
+
+    it('throws NotFoundException if organization does not exist', async () => {
+      await expect(
+        organizationService.listCourses({ email: 'nobody@test.com' }),
+      ).rejects.toThrow(new NotFoundException('Organization not found'));
+    });
+  });
+
+  describe('listCoursesPaginated', () => {
+    it('returns paginated courses', async () => {
+      const { organization } = await setupData();
+
+      const result = await organizationService.listCoursesPaginated({
+        email: organization.email,
+      });
+
+      expect(result.edges).toHaveLength(2);
+      expect(result.count).toBe(2);
+    });
+  });
+
+  describe('listRequestedReviews', () => {
+    it('returns all review requests for the organization', async () => {
+      const { organization } = await setupData();
+
+      const result = await organizationService.listRequestedReviews({
+        email: organization.email,
+      });
+
+      expect(result).toHaveLength(1);
+    });
+
+    it('throws NotFoundException if organization does not exist', async () => {
+      await expect(
+        organizationService.listRequestedReviews({ email: 'nobody@test.com' }),
+      ).rejects.toThrow(new NotFoundException('Organization not found'));
+    });
+  });
+
+  describe('listRequestedReviewsPaginated', () => {
+    it('returns paginated review requests', async () => {
+      const { organization } = await setupData();
+
+      const result = await organizationService.listRequestedReviewsPaginated({
+        email: organization.email,
+      });
+
+      expect(result.edges).toHaveLength(1);
+      expect(result.count).toBe(1);
+    });
+  });
+
+  describe('getStats', () => {
+    it('returns correct organization statistics', async () => {
+      const { organization, version } = await setupData();
+      await setupStatsData(version);
+
+      const response = await organizationService.getStats({
+        email: organization.email,
+      });
+
+      expect(response.total_admins).toBe(1);
+      expect(response.total_instructors).toBe(1);
+      expect(response.total_assigned_reviews).toBe(2);
+      expect(response.total_requested_reviews).toBe(1);
+    });
+
+    it('throws NotFoundException if organization does not exist', async () => {
+      await expect(
+        organizationService.getStats({ email: 'nobody@test.com' }),
+      ).rejects.toThrow(new NotFoundException('Organization does not exist'));
+    });
+  });
+
   describe('assignCourseVersionForReview', () => {
-    it('returns the updated course version with the assigned admin', async () => {
+    it('assigns the admin to the course version', async () => {
       const { organization, admin, version } = await setupData();
 
       const response = await organizationService.assignCourseVersionForReview({
@@ -131,26 +434,59 @@ describe('OrganizationService', () => {
       });
 
       expect(response.id).toBe(version.id);
+      expect(response.status).toBe(VersionStatusType.IN_PROGRESS);
 
       const org = await getOrganization(organization.email);
+      expect(
+        org.organizational_courses[0].versions[0].assigned_admin.id,
+      ).toBe(admin.id);
+    });
 
-      expect(org.organizational_courses[0].versions[0].assigned_admin.id).toBe(
-        admin.id,
-      );
-      expect(org.admins[0].assigned_course_versions_for_review[0].id).toBe(
-        version.id,
-      );
+    it('throws NotFoundException if organization does not exist', async () => {
+      const { admin, version } = await setupData();
+
+      await expect(
+        organizationService.assignCourseVersionForReview({
+          email: 'nobody@test.com',
+          versionId: version.id,
+          adminId: admin.id,
+        }),
+      ).rejects.toThrow(new NotFoundException('Organization does not exist'));
+    });
+
+    it('throws an error if admin does not belong to the organization', async () => {
+      const { organization, version } = await setupData();
+
+      await expect(
+        organizationService.assignCourseVersionForReview({
+          email: organization.email,
+          versionId: version.id,
+          adminId: '00000000-0000-0000-0000-000000000000',
+        }),
+      ).rejects.toThrow('Admin does not exist');
+    });
+
+    it('throws NotFoundException if course version is not found', async () => {
+      const { organization, admin } = await setupData();
+
+      await expect(
+        organizationService.assignCourseVersionForReview({
+          email: organization.email,
+          versionId: '00000000-0000-0000-0000-000000000000',
+          adminId: admin.id,
+        }),
+      ).rejects.toThrow(new NotFoundException('Course version not found'));
     });
   });
 
   describe('createCategory', () => {
-    it('returns created category', async () => {
+    it('creates and returns the category linked to the organization', async () => {
       const { organization } = await setupData();
 
       const response = await organizationService.createCategory({
         email: organization.email,
         categoryInfo: {
-          avatar_url: 'https://example.com/avatar.jpg',
+          avatar_url: 'https://example.com/cat.jpg',
           name: 'Test Category',
         },
       });
@@ -158,22 +494,26 @@ describe('OrganizationService', () => {
       expect(response.name).toBe('Test Category');
 
       const org = await getOrganization(organization.email);
-
       expect(org.organizational_categories[0].id).toBe(response.id);
-      expect(org.organizational_categories[0].name).toBe('Test Category');
+    });
+
+    it('throws NotFoundException if organization does not exist', async () => {
+      await expect(
+        organizationService.createCategory({
+          email: 'nobody@test.com',
+          categoryInfo: { avatar_url: '', name: 'Cat' },
+        }),
+      ).rejects.toThrow(new NotFoundException('Organization does not exist'));
     });
   });
 
-  describe('addCourseToCategory', () => {
-    it('returns category with courses', async () => {
+  describe('addCoursesToCategory', () => {
+    it('adds courses to the category and returns it', async () => {
       const { organization, course, course2 } = await setupData();
 
       const category = await organizationService.createCategory({
         email: organization.email,
-        categoryInfo: {
-          avatar_url: 'https://example.com/avatar.jpg',
-          name: 'Test Category',
-        },
+        categoryInfo: { avatar_url: 'https://example.com/cat.jpg', name: 'Cat' },
       });
 
       const response = await organizationService.addCoursesToCategory({
@@ -185,198 +525,35 @@ describe('OrganizationService', () => {
       expect(response.courses).toHaveLength(2);
 
       const org = await getOrganization(organization.email);
-
       expect(org.organizational_categories[0].courses).toHaveLength(2);
     });
-  });
 
-  describe('getStats', () => {
-    it('returns organization stats', async () => {
-      const { organization, version } = await setupData();
-      await setupStatsData(version);
-
-      const response = await organizationService.getStats({
+    it('throws NotFoundException if organization does not exist', async () => {
+      const { organization, course } = await setupData();
+      const category = await organizationService.createCategory({
         email: organization.email,
+        categoryInfo: { avatar_url: '', name: 'Cat' },
       });
 
-      expect(response.total_admins).toEqual(1);
-      expect(response.total_instructors).toEqual(1);
-      expect(response.total_assigned_reviews).toEqual(2);
-      expect(response.total_requested_reviews).toEqual(1);
+      await expect(
+        organizationService.addCoursesToCategory({
+          email: 'nobody@test.com',
+          categoryId: category.id,
+          courseIds: [course.id],
+        }),
+      ).rejects.toThrow(new NotFoundException('Organization does not exist'));
+    });
+
+    it('throws NotFoundException if category does not exist', async () => {
+      const { organization, course } = await setupData();
+
+      await expect(
+        organizationService.addCoursesToCategory({
+          email: organization.email,
+          categoryId: '00000000-0000-0000-0000-000000000000',
+          courseIds: [course.id],
+        }),
+      ).rejects.toThrow(new NotFoundException('Category does not exist'));
     });
   });
-
-  const getOrganization = async (email: string) => {
-    return await organizationRepository.findOne({
-      where: { email },
-      relations: [
-        'organizational_categories.courses',
-        'organizational_courses.versions.assigned_admin',
-        'admins.assigned_course_versions_for_review',
-      ],
-    });
-  };
-
-  const setupStatsData = async (courseVersion: Version) => {
-    const review = new Review();
-    review.title = 'Review Title';
-    review.message = 'Review Message';
-    review.status = ReviewStatusType.CLOSED;
-    review.course_version = courseVersion;
-
-    await reviewRepository.save(review);
-
-    const issue = new Issue();
-    issue.description = 'Issue Description';
-    issue.status = IssueStatusType.CLOSED;
-    issue.review = review;
-
-    await issueRepository.save(issue);
-
-    courseVersion.course.approved_version = courseVersion;
-    await courseRepository.save(courseVersion.course);
-  };
-
-  const setupData = async () => {
-    const organization = new Organization();
-    organization.name = 'Test Organization';
-    organization.email = 'test@example.com';
-    organization.password = await HashHelper.encrypt('password');
-
-    await organizationRepository.save(organization);
-
-    const admin = new Admin();
-    admin.name = 'Test Organization';
-    admin.email = 'test@example.com';
-    admin.password = await HashHelper.encrypt('password');
-    admin.organization = organization;
-
-    await adminRepository.save(admin);
-
-    const instructor = new Instructor();
-    instructor.name = 'Test Organization';
-    instructor.email = 'test@example.com';
-    instructor.password = await HashHelper.encrypt('password');
-    instructor.organizations = [organization];
-
-    await instructorRepository.save(instructor);
-
-    // create course
-    const course = new Course();
-    course.avatar_url = 'https://example.com/avatar.jpg';
-    course.currency = CurrencyType.USD;
-    course.description = 'This is a test course';
-    course.domains = [DomainType.ENGLISH];
-    course.level = LevelType.BEGINNER;
-    course.price = 100;
-    course.title = 'Test Course';
-    course.instructor = instructor;
-    course.organization = organization;
-
-    await courseRepository.save(course);
-
-    const course2 = new Course();
-    course2.avatar_url = 'https://example.com/avatar.jpg';
-    course2.currency = CurrencyType.USD;
-    course2.description = 'This is a test course';
-    course2.domains = [DomainType.ENGLISH];
-    course2.level = LevelType.BEGINNER;
-    course2.price = 100;
-    course2.title = 'Test Course';
-    course2.instructor = instructor;
-    course2.organization = organization;
-
-    await courseRepository.save(course2);
-
-    // create course version
-    const version = new Version();
-    version.version_number = 1;
-    version.course = course;
-
-    await versionRepository.save(version);
-
-    const version2 = new Version();
-    version2.version_number = 2;
-    version2.course = course2;
-
-    await versionRepository.save(version2);
-    // add questions to course version
-    const questions: QuestionInput[] = [
-      {
-        question_number: 1,
-        description: 'Heyyaaa test question 1.',
-        hints: ['hint one', 'hint two', 'hint three'],
-        solution_steps: ['step one', 'step two', 'step three'],
-        options: ['option one', 'option two', 'option three'],
-        type: QuestionType.MULTIPLE_CHOICE,
-        tags: [QuestionTagType.TAG_ALGEBRA],
-        difficulty: QuestionDifficultyType.EASY,
-        estimated_time_in_ms: 10000,
-        correct_answer: 'option one',
-      },
-      {
-        question_number: 2,
-        description: 'Heyyaaa test question 2.',
-        hints: ['hint one', 'hint two', 'hint three'],
-        solution_steps: ['step one', 'step two', 'step three'],
-        options: ['option one', 'option two', 'option three'],
-        type: QuestionType.MULTIPLE_CHOICE,
-        tags: [QuestionTagType.TAG_ALGEBRA],
-        difficulty: QuestionDifficultyType.EASY,
-        estimated_time_in_ms: 10000,
-        correct_answer: 'option one',
-      },
-    ];
-
-    const new_questions: Question[] = await Promise.all(
-      questions.map(async (question) => {
-        const new_question = new Question();
-        new_question.correct_answer = question.correct_answer;
-        new_question.description = question.description;
-        new_question.difficulty = question.difficulty;
-        new_question.estimated_time_in_ms = question.estimated_time_in_ms;
-        new_question.hints = question.hints;
-        new_question.options = question.options;
-        new_question.question_number = question.question_number;
-        new_question.solution_steps = question.solution_steps;
-        new_question.tags = question.tags;
-        new_question.type = question.type;
-        new_question.version = version;
-
-        return new_question;
-      }),
-    );
-
-    const new_questions2: Question[] = await Promise.all(
-      questions.map(async (question) => {
-        const new_question = new Question();
-        new_question.correct_answer = question.correct_answer;
-        new_question.description = question.description;
-        new_question.difficulty = question.difficulty;
-        new_question.estimated_time_in_ms = question.estimated_time_in_ms;
-        new_question.hints = question.hints;
-        new_question.options = question.options;
-        new_question.question_number = question.question_number;
-        new_question.solution_steps = question.solution_steps;
-        new_question.tags = question.tags;
-        new_question.type = question.type;
-        new_question.version = version2;
-
-        return new_question;
-      }),
-    );
-
-    await questionRepository.save([...new_questions, ...new_questions2]);
-
-    const reviewRequest = new ReviewRequest();
-    reviewRequest.course_version = version;
-    reviewRequest.organization = organization;
-
-    await reviewRequestRepository.save(reviewRequest);
-
-    admin.assigned_course_versions_for_review = [version, version2];
-    await adminRepository.save(admin);
-
-    return { organization, admin, instructor, version, course, course2 };
-  };
 });

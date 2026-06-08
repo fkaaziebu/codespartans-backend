@@ -7,12 +7,12 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HashHelper, PaginateHelper } from 'src/helpers';
-import { PaginationInput } from 'src/helpers/inputs';
-import { Organization } from 'src/modules/auth/entities/organization.entity';
-import { Student } from 'src/modules/auth/entities/student.entity';
-import { Cart } from 'src/modules/inventory/entities/cart.entity';
-import { Category } from 'src/modules/inventory/entities/category.entity';
+import { HashHelper, PaginateHelper } from '../../../helpers';
+import { PaginationInput } from '../../../helpers/inputs';
+import { Organization } from '../../auth/entities/organization.entity';
+import { Student } from '../../auth/entities/student.entity';
+import { Cart } from '../../inventory/entities/cart.entity';
+import { Category } from '../../inventory/entities/category.entity';
 import { ILike, Repository } from 'typeorm';
 import { SchoolStudent } from '../entities/school-student.entity';
 import { AddSchoolStudentInput } from '../inputs/add-school-student.input';

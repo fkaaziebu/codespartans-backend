@@ -21,19 +21,19 @@ import {
   TestAssignmentStatus,
 } from '../entities/test_assignment.entity';
 import { TimeEvent } from '../entities/time_event.entity';
-import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
+import { TimeEventType } from '../entities/time_event.entity';
 import {
   TestModeType,
   TestStatusType,
-} from 'src/modules/simulation/entities/test.entity';
+} from '../entities/test.entity';
 import { Child } from '../../parent/entities/child.entity';
 import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
 import { MarkAnswerProducer } from './mark-answer.producer';
 import { MarkAnswerService } from './mark-answer.service';
-import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
-import { SuiteFilterInput } from 'src/modules/inventory/inputs';
-import { SuiteType } from 'src/modules/review/entities/test_suite.entity';
+import { Course as CourseTypeClass } from '../../inventory/entities/course.entity';
+import { SuiteFilterInput } from '../../inventory/inputs';
+import { SuiteType } from '../../review/entities/test_suite.entity';
 
 @Injectable()
 export class StudentService {

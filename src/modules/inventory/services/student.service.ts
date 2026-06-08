@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cart as CartTypeClass } from 'src/modules/inventory/entities/cart.entity';
-import { Checkout as CheckoutTypeClass } from 'src/modules/inventory/entities/checkout.entity';
-import { Student as StudentTypeClass } from 'src/modules/auth/entities/student.entity';
-import { HashHelper, PaginateHelper } from 'src/helpers';
-import { PaginationInput } from 'src/helpers/inputs';
+import { Cart as CartTypeClass } from '../entities/cart.entity';
+import { Checkout as CheckoutTypeClass } from '../entities/checkout.entity';
+import { Student as StudentTypeClass } from '../../auth/entities/student.entity';
+import { HashHelper, PaginateHelper } from '../../../helpers';
+import { PaginationInput } from '../../../helpers/inputs';
 import { ILike, Repository } from 'typeorm';
 import { Organization } from '../../auth/entities/organization.entity';
 import { Student } from '../../auth/entities/student.entity';
@@ -16,12 +16,16 @@ import { Category } from '../entities/category.entity';
 import { Checkout } from '../entities/checkout.entity';
 import { Course } from '../entities/course.entity';
 import { Question } from '../../review/entities/question.entity';
+import {
+  TestSuite,
+  SuiteType,
+} from '../../review/entities/test_suite.entity';
 import { Test } from '../../simulation/entities/test.entity';
-import { TimeEventType } from 'src/modules/simulation/entities/time_event.entity';
+import { TimeEventType } from '../../simulation/entities/time_event.entity';
 import {
   TestModeType,
   TestStatusType,
-} from 'src/modules/simulation/entities/test.entity';
+} from '../../simulation/entities/test.entity';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import {
   StudentStatsResponse,
@@ -45,6 +49,8 @@ export class StudentService {
     private categoryRepository: Repository<Category>,
     @InjectRepository(Test)
     private testRepository: Repository<Test>,
+    @InjectRepository(TestSuite)
+    private testSuiteRepository: Repository<TestSuite>,
   ) {}
 
   async getOrganizationCourse({
@@ -1233,5 +1239,135 @@ export class StudentService {
 
     student.password = await HashHelper.encrypt(newPassword);
     return await this.studentRepository.save(student);
+  }
+
+  async listCourseSuitesPaginated({
+    email,
+    courseId,
+    suiteTypes,
+    pagination,
+  }: {
+    email: string;
+    courseId: string;
+    suiteTypes?: SuiteType[];
+    pagination?: PaginationInput;
+  }) {
+    const student = await this.studentRepository.findOne({
+      where: { email, subscribed_courses: { id: courseId } },
+    });
+
+    if (!student) {
+      throw new NotFoundException(
+        'Student not found or not subscribed to this course',
+      );
+    }
+
+    const course = await this.courseRepository.findOne({
+      where: { id: courseId },
+      relations: ['approved_version.test_suites'],
+    });
+
+    if (!course?.approved_version) {
+      throw new NotFoundException('Course or approved version not found');
+    }
+
+    let suites = course.approved_version.test_suites ?? [];
+
+    if (suiteTypes?.length) {
+      suites = suites.filter((s) => suiteTypes.includes(s.suite_type));
+    }
+
+    return PaginateHelper.paginate<TestSuite>(suites, pagination, (s) => s.id);
+  }
+
+  async getCurrentStreakCount({
+    email,
+  }: {
+    email: string;
+  }): Promise<{ current_streak: number; best_streak: number }> {
+    const student = await this.studentRepository.findOne({
+      where: { email },
+      relations: ['tests.time_events'],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const endedTests = student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+
+    const getTestStartTime = (test: Test): Date | null => {
+      const event = test.time_events.find(
+        (e) => e.type === TimeEventType.STARTED,
+      );
+      return event ? new Date(event.recorded_at) : null;
+    };
+
+    const { current, best } = this.computeStreaks(endedTests, getTestStartTime);
+
+    return { current_streak: current, best_streak: best };
+  }
+
+  private computeStreaks(
+    tests: Test[],
+    getStartTime: (test: Test) => Date | null,
+  ): { current: number; best: number } {
+    const days = new Set<string>();
+
+    for (const test of tests) {
+      const start = getStartTime(test);
+      if (start) {
+        days.add(start.toISOString().split('T')[0]);
+      }
+    }
+
+    if (days.size === 0) return { current: 0, best: 0 };
+
+    const sortedDays = Array.from(days).sort();
+
+    let bestStreak = 1;
+    let runStreak = 1;
+    for (let i = 1; i < sortedDays.length; i++) {
+      const prev = new Date(sortedDays[i - 1]);
+      const curr = new Date(sortedDays[i]);
+      const diffDays = Math.round(
+        (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24),
+      );
+      if (diffDays === 1) {
+        runStreak++;
+        bestStreak = Math.max(bestStreak, runStreak);
+      } else {
+        runStreak = 1;
+      }
+    }
+
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    const lastDay = sortedDays[sortedDays.length - 1];
+    let currentStreak = 0;
+
+    if (lastDay === todayStr || lastDay === yesterdayStr) {
+      currentStreak = 1;
+      for (let i = sortedDays.length - 2; i >= 0; i--) {
+        const curr = new Date(sortedDays[i + 1]);
+        const prev = new Date(sortedDays[i]);
+        const diffDays = Math.round(
+          (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24),
+        );
+        if (diffDays === 1) {
+          currentStreak++;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return { current: currentStreak, best: bestStreak };
   }
 }

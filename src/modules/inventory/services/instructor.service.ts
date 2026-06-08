@@ -8,8 +8,8 @@ import { Question } from '../../review/entities/question.entity';
 import { ReviewRequest } from '../../review/entities/review_request.entity';
 import { TestSuite } from '../../review/entities/test_suite.entity';
 import { Version } from '../../review/entities/version.entity';
-import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
-import { Version as VersionTypeClass } from 'src/modules/review/entities/version.entity';
+import { Course as CourseTypeClass } from '../entities/course.entity';
+import { Version as VersionTypeClass } from '../../review/entities/version.entity';
 import { CourseInfoInput, QuestionInput } from '../inputs';
 
 @Injectable()

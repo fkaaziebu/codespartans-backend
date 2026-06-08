@@ -10,11 +10,15 @@ import {
 } from 'src/modules/simulation/entities/test.entity';
 import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
 import { GqlJwtAuthGuard, SubscriptionGuard } from 'src/helpers/guards';
-import { StudentService } from '../services';
+import { InsightService, StudentService } from '../services';
+import { WeeklyInsight } from '../types/weekly-insight.type';
 
 @Resolver()
 export class StudentResolver {
-  constructor(private readonly studentService: StudentService) {}
+  constructor(
+    private readonly studentService: StudentService,
+    private readonly insightService: InsightService,
+  ) {}
 
   // Queries
   @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
@@ -43,6 +47,13 @@ export class StudentResolver {
       email,
       testId,
     });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => WeeklyInsight, { nullable: true })
+  getWeeklyInsight(@Context() context) {
+    const { email } = context.req.user;
+    return this.insightService.getWeeklyInsight({ email });
   }
 
   @UseGuards(GqlJwtAuthGuard)
