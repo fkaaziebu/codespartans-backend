@@ -10,7 +10,8 @@ async function createDatabase(dbName: string) {
     host: process.env.DB_HOST,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
-    ssl: { rejectUnauthorized: false },
+    ssl:
+      process.env.STAGE === 'prod' ? { rejectUnauthorized: false } : undefined,
   });
 
   try {
