@@ -1,10 +1,12 @@
-import { UseGuards } from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Student as StudentTypeClass } from 'src/modules/auth/entities/student.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { StudentService } from '../services/student.service';
+import { AccountDeletionService } from '../services/account-deletion.service';
 import {
+  AccountDeletionResponse,
   OrganizationConnection,
   PasswordResetResponse,
   RefreshTokenResponse,
@@ -14,7 +16,10 @@ import {
 
 @Resolver()
 export class StudentResolver {
-  constructor(private readonly studentService: StudentService) {}
+  constructor(
+    private readonly studentService: StudentService,
+    private readonly accountDeletionService: AccountDeletionService,
+  ) {}
   // Queries
   @Query(() => StudentLoginResponse)
   async loginStudent(
@@ -98,5 +103,17 @@ export class StudentResolver {
       token,
       password,
     });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => AccountDeletionResponse)
+  async requestStudentAccountDeletion(@Context() context) {
+    const { id, role } = context.req.user;
+    if (role === 'CHILD') {
+      throw new ForbiddenException(
+        'Children cannot delete their own accounts.',
+      );
+    }
+    return this.accountDeletionService.requestStudentAccountDeletion(id);
   }
 }

@@ -7,6 +7,7 @@ import { Connection, Repository } from 'typeorm';
 import { entities, Organization, Student } from '../../../database/entities';
 import { HashHelper } from '../../../helpers';
 import { LoginBodyDto } from '../dto/login-body.dto';
+import { AccountDeletionService } from './account-deletion.service';
 import { EmailProducer } from './email.producer';
 import { SignupProducer } from './signup.producer';
 import { StudentService } from './student.service';
@@ -23,10 +24,15 @@ describe('StudentService', () => {
   const mockEmailProducer = {
     sendAccountValidationEmail: jest.fn().mockResolvedValue(undefined),
     sendPasswordResetEmail: jest.fn().mockResolvedValue(undefined),
+    sendAccountRestoredNotice: jest.fn().mockResolvedValue(undefined),
   };
 
   const mockSignupProducer = {
     enqueueFreeTrial: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockAccountDeletionService = {
+    restoreStudent: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeAll(async () => {
@@ -64,6 +70,7 @@ describe('StudentService', () => {
         StudentService,
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: SignupProducer, useValue: mockSignupProducer },
+        { provide: AccountDeletionService, useValue: mockAccountDeletionService },
       ],
     }).compile();
 
@@ -208,6 +215,40 @@ describe('StudentService', () => {
         new BadRequestException(
           'Account not verified. Please check your email for the verification code.',
         ),
+      );
+    });
+
+    it('throws BadRequestException if account was deactivated more than 90 days ago', async () => {
+      await registerAndValidateStudent();
+      const ninetyOneDaysAgo = new Date(Date.now() - 91 * 24 * 60 * 60 * 1000);
+      await studentRepository.update(
+        { email: studentInfo.email },
+        { is_deactivated: true, deactivated_at: ninetyOneDaysAgo },
+      );
+
+      await expect(
+        studentService.loginStudent(studentInfo),
+      ).rejects.toThrow(
+        new BadRequestException('This account no longer exists.'),
+      );
+    });
+
+    it('restores account and returns token if deactivated within 90-day grace period', async () => {
+      await registerAndValidateStudent();
+      await studentRepository.update(
+        { email: studentInfo.email },
+        {
+          is_deactivated: true,
+          deactivated_at: new Date(),
+          deletion_job_id: 'job-to-cancel',
+        },
+      );
+
+      const response = await studentService.loginStudent(studentInfo);
+
+      expect(response.token).toBeDefined();
+      expect(mockAccountDeletionService.restoreStudent).toHaveBeenCalledWith(
+        expect.objectContaining({ email: studentInfo.email }),
       );
     });
   });

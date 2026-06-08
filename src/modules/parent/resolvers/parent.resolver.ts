@@ -1,8 +1,11 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Throttle } from '@nestjs/throttler';
+import { AccountDeletionService } from 'src/modules/auth/services/account-deletion.service';
+import { AccountDeletionResponse } from 'src/modules/auth/types';
 import { Course } from 'src/modules/inventory/entities/course.entity';
 import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
-import { GqlJwtAuthGuard } from 'src/helpers/guards';
+import { GqlJwtAuthGuard, GqlThrottlerGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { RefreshTokenResponse } from 'src/modules/auth/types';
 import { Category } from 'src/modules/inventory/entities/category.entity';
@@ -35,8 +38,13 @@ import {
 
 @Resolver()
 export class ParentResolver {
-  constructor(private readonly parentService: ParentService) {}
+  constructor(
+    private readonly parentService: ParentService,
+    private readonly accountDeletionService: AccountDeletionService,
+  ) {}
 
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => RegisterParentResponse)
   async registerParent(@Args('input') input: RegisterParentInput) {
     return this.parentService.registerParent(input);
@@ -47,11 +55,15 @@ export class ParentResolver {
     return this.parentService.verifyParentAccount(input);
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => RegisterParentResponse)
   async resendParentAccountValidationCode(@Args('email') email: string) {
     return this.parentService.resendParentAccountValidationCode(email);
   }
 
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => LoginParentResponse)
   async loginParent(@Args('input') input: LoginParentInput) {
     return this.parentService.loginParent(input);
@@ -62,6 +74,8 @@ export class ParentResolver {
     return this.parentService.refreshParentToken(refresh_token);
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => RegisterParentResponse)
   async requestParentPasswordReset(@Args('email') email: string) {
     return this.parentService.requestParentPasswordReset({ email });
@@ -257,5 +271,22 @@ export class ParentResolver {
   ) {
     const { email } = context.req.user;
     return this.parentService.listChildAssignments(email, childId);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => AccountDeletionResponse)
+  async requestParentAccountDeletion(@Context() context) {
+    const { id } = context.req.user;
+    return this.accountDeletionService.requestParentAccountDeletion(id);
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => AccountDeletionResponse)
+  async deleteChild(
+    @Args('childId') childId: string,
+    @Context() context,
+  ) {
+    const { email } = context.req.user;
+    return this.accountDeletionService.deleteChild(email, childId);
   }
 }

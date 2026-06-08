@@ -10,6 +10,8 @@ async function createDatabase(dbName: string) {
     host: process.env.DB_HOST,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
+    ssl:
+      process.env.STAGE === 'prod' ? { rejectUnauthorized: false } : undefined,
   });
 
   try {
@@ -37,6 +39,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { rawBody: true });
 
   app.useGlobalPipes(new ValidationPipe());
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
   const configService = app.get(ConfigService);
 

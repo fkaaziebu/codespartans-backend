@@ -65,4 +65,13 @@ export class Parent {
   @Field(() => [Child], { nullable: true })
   @OneToMany(() => Child, (child) => child.parent)
   children: Child[];
+
+  @Column({ default: false })
+  is_deactivated: boolean;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  deactivated_at: Date | null;
+
+  @Column({ nullable: true })
+  deletion_job_id: string | null;
 }

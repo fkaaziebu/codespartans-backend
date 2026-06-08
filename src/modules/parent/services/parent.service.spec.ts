@@ -44,6 +44,7 @@ import { TestAssignmentStatus } from '../../simulation/entities/test_assignment.
 import { ClassLevel } from '../entities/child.entity';
 import { Gender } from '../entities/parent.entity';
 import { HashHelper } from '../../../helpers';
+import { AccountDeletionService } from '../../auth/services/account-deletion.service';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { SignupProducer } from '../../auth/services/signup.producer';
 import { ParentService } from './parent.service';
@@ -73,10 +74,16 @@ describe('ParentService', () => {
   const mockEmailProducer = {
     sendAccountValidationEmail: jest.fn().mockResolvedValue(undefined),
     sendParentPasswordResetEmail: jest.fn().mockResolvedValue(undefined),
+    sendAccountRestoredNotice: jest.fn().mockResolvedValue(undefined),
+    sendParentAccountAlreadyExistsEmail: jest.fn().mockResolvedValue(undefined),
   };
 
   const mockSignupProducer = {
     enqueueFreeTrial: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockAccountDeletionService = {
+    restoreParent: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeAll(async () => {
@@ -114,6 +121,7 @@ describe('ParentService', () => {
         ParentService,
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: SignupProducer, useValue: mockSignupProducer },
+        { provide: AccountDeletionService, useValue: mockAccountDeletionService },
       ],
     }).compile();
 
@@ -344,11 +352,18 @@ describe('ParentService', () => {
       );
     });
 
-    it('throws BadRequestException if email already exists', async () => {
+    it('returns success message and sends already-exists email when email is taken', async () => {
       await parentService.registerParent(parentInfo);
 
-      await expect(parentService.registerParent(parentInfo)).rejects.toThrow(
-        new BadRequestException('An account with this email already exists'),
+      const response = await parentService.registerParent(parentInfo);
+
+      expect(response.message).toBe(
+        'Registration successful. Please verify your email.',
+      );
+      expect(
+        mockEmailProducer.sendParentAccountAlreadyExistsEmail,
+      ).toHaveBeenCalledWith(
+        expect.objectContaining({ email: parentInfo.email }),
       );
     });
   });
@@ -501,6 +516,46 @@ describe('ParentService', () => {
         new BadRequestException(
           'Account not verified. Please check your email for the verification code.',
         ),
+      );
+    });
+
+    it('throws BadRequestException if account was deactivated more than 90 days ago', async () => {
+      await registerAndVerifyParent();
+      const ninetyOneDaysAgo = new Date(Date.now() - 91 * 24 * 60 * 60 * 1000);
+      await parentRepository.update(
+        { email: parentInfo.email },
+        { is_deactivated: true, deactivated_at: ninetyOneDaysAgo },
+      );
+
+      await expect(
+        parentService.loginParent({
+          email: parentInfo.email,
+          password: parentInfo.password,
+        }),
+      ).rejects.toThrow(
+        new BadRequestException('This account no longer exists.'),
+      );
+    });
+
+    it('restores account and returns token if deactivated within 90-day grace period', async () => {
+      await registerAndVerifyParent();
+      await parentRepository.update(
+        { email: parentInfo.email },
+        {
+          is_deactivated: true,
+          deactivated_at: new Date(),
+          deletion_job_id: 'job-to-cancel',
+        },
+      );
+
+      const response = await parentService.loginParent({
+        email: parentInfo.email,
+        password: parentInfo.password,
+      });
+
+      expect(response.token).toBeDefined();
+      expect(mockAccountDeletionService.restoreParent).toHaveBeenCalledWith(
+        expect.objectContaining({ email: parentInfo.email }),
       );
     });
   });

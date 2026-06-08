@@ -18,9 +18,9 @@ export class StudentSubscription {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field(() => Student)
-  @ManyToOne(() => Student, { onDelete: 'CASCADE' })
-  student: Student;
+  @Field(() => Student, { nullable: true })
+  @ManyToOne(() => Student, { onDelete: 'SET NULL', nullable: true })
+  student: Student | null;
 
   @Field(() => SubscriptionPlan)
   @ManyToOne(() => SubscriptionPlan)

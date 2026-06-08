@@ -76,4 +76,27 @@ export class EmailProducer {
   }) {
     await this.emailQueue.add('send-lead-admin-notification', data);
   }
+
+  async sendAccountDeletionNotice(data: {
+    email: string;
+    name: string;
+    gracePeriodEnd: string;
+  }) {
+    await this.emailQueue.add('send-account-deletion-notice', data);
+  }
+
+  async sendAccountRestoredNotice(data: { email: string; name: string }) {
+    await this.emailQueue.add('send-account-restored-notice', data);
+  }
+
+  async sendAccountPurgedConfirmation(data: { email: string; name: string }) {
+    await this.emailQueue.add('send-account-purged-confirmation', data);
+  }
+
+  async sendParentAccountAlreadyExistsEmail(data: {
+    email: string;
+    name: string;
+  }) {
+    await this.emailQueue.add('send-parent-account-already-exists', data);
+  }
 }

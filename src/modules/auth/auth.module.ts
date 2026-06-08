@@ -25,6 +25,7 @@ import { EmailConsumer } from './services/email.consumer';
 import { EmailService } from './services/email.service';
 import { SignupProducer } from './services/signup.producer';
 import { StudentController } from './controllers/student.controller';
+import { AccountDeletionModule } from './account-deletion.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { StudentController } from './controllers/student.controller';
       }),
     }),
     TypeOrmModule.forFeature([Admin, Instructor, Organization, Student]),
+    AccountDeletionModule,
   ],
   controllers: [StudentController],
   providers: [

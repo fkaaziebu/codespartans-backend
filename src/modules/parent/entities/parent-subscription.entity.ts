@@ -23,9 +23,9 @@ export class ParentSubscription {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field(() => Parent)
-  @ManyToOne(() => Parent, { onDelete: 'CASCADE' })
-  parent: Parent;
+  @Field(() => Parent, { nullable: true })
+  @ManyToOne(() => Parent, { onDelete: 'SET NULL', nullable: true })
+  parent: Parent | null;
 
   @Field(() => SubscriptionPlan)
   @ManyToOne(() => SubscriptionPlan)

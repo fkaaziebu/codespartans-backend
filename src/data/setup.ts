@@ -12,6 +12,7 @@ const datas = [
             suiteDescription:
               '8 questions covering Number & Numeration (fractions, decimals, HCF) and Algebra (equations, simplification, expansion).',
             suiteKeywords: ['WASSCE', 'Mathematics', 'Number', 'Algebra'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -158,6 +159,7 @@ const datas = [
             suiteDescription:
               '22 questions covering Mensuration, Geometry, Statistics, Probability, Sets, Ratio, Percentages, Trigonometry, Indices and Word Problems.',
             suiteKeywords: ['WASSCE', 'Mathematics', 'Geometry', 'Statistics'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -489,7 +491,7 @@ const datas = [
             suiteDescription:
               '5 introductory questions covering basic algebra, number theory, and simple geometry for SHS 1 students.',
             suiteKeywords: ['SHS 1', 'Mathematics', 'Foundations', 'Algebra'],
-            suiteType: 'CLASS',
+            suiteType: 'YEAR_ONE',
             questions: [
               {
                 question_number: 1,
@@ -575,7 +577,7 @@ const datas = [
             suiteDescription:
               '5 questions focused on trigonometric ratios, identities, and applications.',
             suiteKeywords: ['Mathematics', 'Trigonometry', 'SOH-CAH-TOA'],
-            suiteType: 'TOPIC',
+            suiteType: 'YEAR_TWO',
             questions: [
               {
                 question_number: 1,
@@ -667,6 +669,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Grammar, Vocabulary and Figures of Speech.',
             suiteKeywords: ['WASSCE', 'English', 'Grammar', 'Vocabulary'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -766,6 +769,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Sentence Construction, Phonetics, Antonyms and Oral English.',
             suiteKeywords: ['WASSCE', 'English', 'Oral', 'Phonetics'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -873,6 +877,7 @@ const datas = [
               'Comprehension',
               'Short Answer',
             ],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -981,6 +986,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Mechanics, Waves and Electricity.',
             suiteKeywords: ['WASSCE', 'Physics', 'Mechanics'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1072,6 +1078,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Heat & Thermodynamics, Atomic Physics, Measurement and Wave Speed.',
             suiteKeywords: ['WASSCE', 'Physics', 'Heat', 'Atomic'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1166,6 +1173,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Atomic Structure, Periodic Table, Chemical Bonding, Acids/Bases and Stoichiometry.',
             suiteKeywords: ['WASSCE', 'Chemistry', 'Atomic', 'Bonding'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1267,6 +1275,7 @@ const datas = [
               'Organic',
               'Electrochemistry',
             ],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1364,6 +1373,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Cell Biology, Genetics and Ecology.',
             suiteKeywords: ['WASSCE', 'Biology', 'Cell', 'Genetics'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1494,6 +1504,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Ecology, Microorganisms & Disease, Classification, Human Physiology and Genetics.',
             suiteKeywords: ['WASSCE', 'Biology', 'Physiology', 'Disease'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1615,6 +1626,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Demand & Supply, Production Costs and National Income.',
             suiteKeywords: ['WASSCE', 'Economics', 'Demand', 'Supply'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1719,6 +1731,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning International Trade, Public Finance, Economies of Scale, National Income and Money & Banking.',
             suiteKeywords: ['WASSCE', 'Economics', 'Trade', 'Finance'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1837,6 +1850,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Physical Geography, Human Geography and Regional Geography.',
             suiteKeywords: ['WASSCE', 'Geography', 'Physical', 'Human'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -1949,6 +1963,7 @@ const datas = [
             suiteDescription:
               '5 questions covering Map Reading, Convectional Rainfall, Oceans, Regional Geography and Economic Geography.',
             suiteKeywords: ['WASSCE', 'Geography', 'Map', 'Economic'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2058,6 +2073,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Prose (Fiction, Narration), Poetry (Alliteration, Sonnet) and Drama (Tragedy).',
             suiteKeywords: ['WASSCE', 'Literature', 'Prose', 'Poetry'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2159,6 +2175,7 @@ const datas = [
             suiteDescription:
               '5 questions covering dramatic plot, simile, protagonist, soliloquy and assonance.',
             suiteKeywords: ['WASSCE', 'Literature', 'Drama', 'Devices'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2264,6 +2281,7 @@ const datas = [
             suiteDescription:
               "5 questions spanning the Constitution, Democratic Institutions and Ghana's Political History.",
             suiteKeywords: ['WASSCE', 'Government', 'Constitution'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2395,6 +2413,7 @@ const datas = [
             suiteDescription:
               "5 questions spanning Electoral Commission, Federalism, Voting Age and Ghana's administrative regions.",
             suiteKeywords: ['WASSCE', 'Government', 'Elections', 'Federalism'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2491,6 +2510,7 @@ const datas = [
             suiteDescription:
               '5 questions spanning Pre-colonial Africa, the Colonial Period and Independence Movements.',
             suiteKeywords: ['WASSCE', 'History', 'Ghana', 'Colonial'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2602,6 +2622,7 @@ const datas = [
             suiteDescription:
               "5 questions covering Ghana's Political History, Culture and Pre-colonial African Empires.",
             suiteKeywords: ['WASSCE', 'History', 'Ghana', 'Empire'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2728,6 +2749,7 @@ const datas = [
             suiteDescription:
               '5 questions covering Number Operations and Basic Algebra.',
             suiteKeywords: ['BECE', 'Mathematics', 'Number', 'Algebra'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2821,6 +2843,7 @@ const datas = [
             suiteDescription:
               '5 questions covering Geometry, Measurement, and Basic Statistics.',
             suiteKeywords: ['BECE', 'Mathematics', 'Geometry', 'Statistics'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -2916,6 +2939,7 @@ const datas = [
             suiteDescription:
               '5 questions covering Grammar, Vocabulary, and Word Usage.',
             suiteKeywords: ['BECE', 'English', 'Grammar', 'Vocabulary'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3013,6 +3037,7 @@ const datas = [
             suiteDescription:
               '5 questions covering Reading Comprehension, Figures of Speech, and Writing Skills.',
             suiteKeywords: ['BECE', 'English', 'Comprehension', 'Writing'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3145,6 +3170,7 @@ const datas = [
               'Ghana History',
               'Culture',
             ],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3249,6 +3275,7 @@ const datas = [
               'Government',
               'Environment',
             ],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3381,6 +3408,7 @@ const datas = [
               'Life Processes',
               'Health',
             ],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3495,6 +3523,7 @@ const datas = [
               'Physics',
               'Earth Science',
             ],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3596,6 +3625,7 @@ const datas = [
             suiteDescription:
               '5 questions covering the core beliefs and practices of Christianity and Islam.',
             suiteKeywords: ['BECE', 'RME', 'Christianity', 'Islam'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3702,6 +3732,7 @@ const datas = [
               'African Traditional Religion',
               'Moral Values',
             ],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3816,6 +3847,7 @@ const datas = [
             suiteDescription:
               '5 questions covering Computer Hardware components and Software types.',
             suiteKeywords: ['BECE', 'ICT', 'Hardware', 'Software'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,
@@ -3916,6 +3948,7 @@ const datas = [
             suiteDescription:
               '5 questions covering the Internet, Email, Web Browsers, and Data.',
             suiteKeywords: ['BECE', 'ICT', 'Internet', 'Data'],
+            suiteType: 'PAST_QUESTIONS',
             questions: [
               {
                 question_number: 1,

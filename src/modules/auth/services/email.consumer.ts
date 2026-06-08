@@ -94,6 +94,30 @@ export class EmailConsumer extends WorkerHost {
         );
         break;
       }
+      case 'send-account-deletion-notice': {
+        const { email, name, gracePeriodEnd } = job.data;
+        await this.emailService.sendAccountDeletionNoticeEmail(
+          email,
+          name,
+          gracePeriodEnd,
+        );
+        break;
+      }
+      case 'send-account-restored-notice': {
+        const { email, name } = job.data;
+        await this.emailService.sendAccountRestoredEmail(email, name);
+        break;
+      }
+      case 'send-account-purged-confirmation': {
+        const { email, name } = job.data;
+        await this.emailService.sendAccountPurgedConfirmationEmail(email, name);
+        break;
+      }
+      case 'send-parent-account-already-exists': {
+        const { email, name } = job.data;
+        await this.emailService.sendParentAccountAlreadyExistsEmail(email, name);
+        break;
+      }
     }
   }
 }
