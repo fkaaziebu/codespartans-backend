@@ -33,6 +33,7 @@ import { LoggingRedactionPlugin } from './plugins';
       playground: true,
       driver: ApolloDriver,
       resolvers: {},
+      context: ({ req, res }) => ({ req, res }),
     }),
     ThrottlerModule.forRoot({
       throttlers: [{ name: 'default', ttl: minutes(1), limit: 10 }],
