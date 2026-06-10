@@ -39,11 +39,21 @@ import { LoggingRedactionPlugin } from './plugins';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
-      introspection: true,
-      playground: true,
+      introspection: process.env.STAGE !== 'prod',
+      playground: process.env.STAGE !== 'prod',
       driver: ApolloDriver,
       resolvers: {},
       context: ({ req, res }) => ({ req, res }),
+      includeStacktraceInErrorResponses: process.env.STAGE !== 'prod',
+      formatError: (error) => {
+        if (process.env.STAGE === 'prod') {
+          return {
+            message: error.message,
+            extensions: { code: error.extensions?.code },
+          };
+        }
+        return error;
+      },
     }),
     ThrottlerModule.forRoot({
       throttlers: [{ name: 'default', ttl: minutes(1), limit: 10 }],

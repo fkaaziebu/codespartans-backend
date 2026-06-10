@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import helmet from 'helmet';
 import { Client } from 'pg';
 import { AppModule } from './app.module';
 
@@ -38,15 +39,29 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, { rawBody: true });
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
+  const isProd = process.env.STAGE === 'prod';
+
+  app.use(
+    helmet({
+      contentSecurityPolicy: isProd,
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
 
   const configService = app.get(ConfigService);
 
   const port = configService.get<number>('PORT') || 4000;
 
+  const corsOriginEnv = configService.get<string>('CORS_ORIGIN');
+  const allowedOrigins = corsOriginEnv
+    ? corsOriginEnv.split(',').map((o) => o.trim())
+    : ['http://localhost:3000', 'http://localhost:3001'];
+
   app.enableCors({
-    origin: configService.get<string>('CORS_ORIGIN') || '*',
+    origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
