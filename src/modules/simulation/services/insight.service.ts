@@ -1,12 +1,15 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import Anthropic from '@anthropic-ai/sdk';
+import { Cache } from 'cache-manager';
 import { Repository } from 'typeorm';
 import { Student } from '../../auth/entities/student.entity';
 import { Test, TestStatusType } from '../entities/test.entity';
@@ -27,6 +30,7 @@ export class InsightService {
     @InjectRepository(Test)
     private testRepository: Repository<Test>,
     private configService: ConfigService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     this.anthropic = new Anthropic({
       apiKey: this.configService.get<string>('ANTHROPIC_API_KEY'),
@@ -42,6 +46,13 @@ export class InsightService {
     const student = await this.studentRepository.findOne({ where: { email } });
     if (!student) {
       throw new NotFoundException('Student not found');
+    }
+
+    const cacheKey = `weekly-insight:${student.id}:${weekStart.toISOString()}`;
+    const cached = await this.cacheManager.get<WeeklyInsight>(cacheKey);
+    if (cached) {
+      this.logger.log(`Cache hit for weekly insight: student=${student.id}`);
+      return cached;
     }
 
     const tests = await this.testRepository
@@ -134,6 +145,9 @@ Respond with only a raw JSON object — no markdown, no code fences, no extra ke
         suites: WeeklyInsightSuite[];
       };
 
+      const ttl = this.msUntilNextMonday(now);
+      await this.cacheManager.set(cacheKey, result, ttl);
+
       this.logger.log(`Generated weekly insight for ${email}`);
       return result;
     } catch (err) {
@@ -142,5 +156,23 @@ Respond with only a raw JSON object — no markdown, no code fences, no extra ke
       );
       throw new BadRequestException('Failed to generate weekly insight');
     }
+  }
+
+  async invalidateForStudent(studentId: string): Promise<void> {
+    const now = new Date();
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    weekStart.setHours(0, 0, 0, 0);
+    await this.cacheManager.del(
+      `weekly-insight:${studentId}:${weekStart.toISOString()}`,
+    );
+  }
+
+  private msUntilNextMonday(from: Date): number {
+    const next = new Date(from);
+    const daysUntilMonday = (8 - next.getDay()) % 7 || 7;
+    next.setDate(next.getDate() + daysUntilMonday);
+    next.setHours(0, 0, 0, 0);
+    return Math.max(next.getTime() - from.getTime(), 60_000);
   }
 }

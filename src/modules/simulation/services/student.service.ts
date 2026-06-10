@@ -1,11 +1,14 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cache } from 'cache-manager';
 import { In, Repository } from 'typeorm';
 import { Student } from '../../auth/entities/student.entity';
 import { Course } from '../../inventory/entities/course.entity';
@@ -31,6 +34,7 @@ import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
 import { MarkAnswerProducer } from './mark-answer.producer';
 import { MarkAnswerService } from './mark-answer.service';
+import { InsightService } from './insight.service';
 import { Course as CourseTypeClass } from '../../inventory/entities/course.entity';
 import { SuiteFilterInput } from '../../inventory/inputs';
 import { SuiteType } from '../../review/entities/test_suite.entity';
@@ -48,6 +52,8 @@ export class StudentService {
     private sseGateway: StudentGateway,
     private markAnswerProducer: MarkAnswerProducer,
     private markAnswerService: MarkAnswerService,
+    private insightService: InsightService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async startTest({
@@ -277,6 +283,10 @@ export class StudentService {
         }
 
         this.logger.log(`Test ${testId} ended for student ${studentId}`);
+
+        // Invalidate stale weekly insight so next call regenerates with fresh data
+        await this.insightService.invalidateForStudent(studentId);
+
         return savedTest;
       },
     );
@@ -547,6 +557,12 @@ export class StudentService {
   }
 
   async testStats({ email, testId }: { email: string; testId: string }) {
+    const cacheKey = `test-stats:${testId}`;
+    const cached = await this.cacheManager.get<Test>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     const student = await this.studentRepository.findOne({
       where: {
         email,
@@ -571,6 +587,9 @@ export class StudentService {
     if (test.status !== TestStatusType.ENDED) {
       throw new BadRequestException('Test is not ended');
     }
+
+    const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+    await this.cacheManager.set(cacheKey, test, SEVEN_DAYS_MS);
 
     return test;
   }

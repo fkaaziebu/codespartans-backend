@@ -39,7 +39,9 @@ import { TimeEventType } from '../entities/time_event.entity';
 import { ClassLevel } from '../../parent/entities/child.entity';
 import { Gender } from '../../parent/entities/parent.entity';
 import { HashHelper } from '../../../helpers';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { StudentGateway } from '../gateways/student.gateway';
+import { InsightService } from './insight.service';
 import { MarkAnswerProducer } from './mark-answer.producer';
 import { MarkAnswerService } from './mark-answer.service';
 import { TestTimerService } from './test-timer.service';
@@ -118,6 +120,14 @@ describe('StudentService', () => {
         { provide: StudentGateway, useValue: mockSseGateway },
         { provide: MarkAnswerProducer, useValue: mockMarkAnswerProducer },
         { provide: MarkAnswerService, useValue: mockMarkAnswerService },
+        {
+          provide: InsightService,
+          useValue: { invalidateForStudent: jest.fn().mockResolvedValue(undefined) },
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: { get: jest.fn().mockResolvedValue(null), set: jest.fn().mockResolvedValue(undefined) },
+        },
       ],
     }).compile();
 
