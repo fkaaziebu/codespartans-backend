@@ -7,7 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   Cart,
   Category,
@@ -53,7 +53,7 @@ const GENPOP_EMAIL = 'genpop@codespartans.com';
 
 describe('ParentService', () => {
   let module: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
   let parentService: ParentService;
 
   let parentRepository: Repository<Parent>;
@@ -125,7 +125,7 @@ describe('ParentService', () => {
       ],
     }).compile();
 
-    connection = module.get<Connection>(Connection);
+    dataSource = module.get<DataSource>(DataSource);
     parentService = module.get<ParentService>(ParentService);
     parentRepository = module.get<Repository<Parent>>(getRepositoryToken(Parent));
     childRepository = module.get<Repository<Child>>(getRepositoryToken(Child));
@@ -144,16 +144,16 @@ describe('ParentService', () => {
   });
 
   beforeEach(async () => {
-    const entityMetadatas = connection.entityMetadatas;
+    const entityMetadatas = dataSource.entityMetadatas;
     for (const entity of entityMetadatas) {
-      const repository = connection.getRepository(entity.name);
+      const repository = dataSource.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
     jest.clearAllMocks();
   });
 
   afterAll(async () => {
-    await connection.close();
+    await dataSource.destroy();
     await module.close();
   });
 
@@ -251,7 +251,7 @@ describe('ParentService', () => {
     instructor.email = `instr-${Date.now()}@test.com`;
     instructor.password = await HashHelper.encrypt('password');
     instructor.organizations = [org];
-    const instructorRepo = connection.getRepository(Instructor);
+    const instructorRepo = dataSource.getRepository(Instructor);
     return instructorRepo.save(instructor);
   };
 

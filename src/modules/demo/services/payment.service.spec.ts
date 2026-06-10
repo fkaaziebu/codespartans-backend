@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import * as crypto from 'crypto';
 import {
   entities,
@@ -19,7 +19,7 @@ import { PaymentService } from './payment.service';
 
 describe('PaymentService — trial-to-paid upgrade', () => {
   let module: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
   let paymentService: PaymentService;
 
   let studentRepository: Repository<Student>;
@@ -47,7 +47,7 @@ describe('PaymentService — trial-to-paid upgrade', () => {
       providers: [PaymentService],
     }).compile();
 
-    connection = module.get<Connection>(Connection);
+    dataSource = module.get<DataSource>(DataSource);
     paymentService = module.get<PaymentService>(PaymentService);
     studentRepository = module.get<Repository<Student>>(getRepositoryToken(Student));
     orgRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
@@ -61,16 +61,16 @@ describe('PaymentService — trial-to-paid upgrade', () => {
   });
 
   beforeEach(async () => {
-    const entityMetadatas = connection.entityMetadatas;
+    const entityMetadatas = dataSource.entityMetadatas;
     for (const entity of entityMetadatas) {
-      const repository = connection.getRepository(entity.name);
+      const repository = dataSource.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
     jest.clearAllMocks();
   });
 
   afterAll(async () => {
-    await connection.close();
+    await dataSource.destroy();
     await module.close();
   });
 

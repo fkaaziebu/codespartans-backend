@@ -2,13 +2,13 @@ import { BadRequestException } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { entities, Image } from '../../database/entities';
 import { MediaService } from './media.service';
 
 describe('MediaService', () => {
   let module: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
   let mediaService: MediaService;
   let imageRepository: Repository<Image>;
 
@@ -34,21 +34,21 @@ describe('MediaService', () => {
       providers: [MediaService],
     }).compile();
 
-    connection = module.get<Connection>(Connection);
+    dataSource = module.get<DataSource>(DataSource);
     mediaService = module.get<MediaService>(MediaService);
     imageRepository = module.get<Repository<Image>>(getRepositoryToken(Image));
   });
 
   beforeEach(async () => {
-    const entityMetadatas = connection.entityMetadatas;
+    const entityMetadatas = dataSource.entityMetadatas;
     for (const entity of entityMetadatas) {
-      const repository = connection.getRepository(entity.name);
+      const repository = dataSource.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
   });
 
   afterAll(async () => {
-    await connection.close();
+    await dataSource.destroy();
     await module.close();
   });
 

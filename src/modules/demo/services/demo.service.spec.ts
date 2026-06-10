@@ -7,7 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   entities,
   Organization,
@@ -36,7 +36,7 @@ const GENPOP_EMAIL = 'genpop@codespartans.com';
 
 describe('DemoService', () => {
   let module: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
   let demoService: DemoService;
 
   let organizationRepository: Repository<Organization>;
@@ -101,7 +101,7 @@ describe('DemoService', () => {
       ],
     }).compile();
 
-    connection = module.get<Connection>(Connection);
+    dataSource = module.get<DataSource>(DataSource);
     demoService = module.get<DemoService>(DemoService);
     organizationRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
     schoolDemoRepository = module.get<Repository<SchoolDemo>>(getRepositoryToken(SchoolDemo));
@@ -113,16 +113,16 @@ describe('DemoService', () => {
   });
 
   beforeEach(async () => {
-    const entityMetadatas = connection.entityMetadatas;
+    const entityMetadatas = dataSource.entityMetadatas;
     for (const entity of entityMetadatas) {
-      const repository = connection.getRepository(entity.name);
+      const repository = dataSource.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
     jest.clearAllMocks();
   }, 30000);
 
   afterAll(async () => {
-    await connection.close();
+    await dataSource.destroy();
     await module.close();
   });
 
@@ -376,7 +376,7 @@ describe('DemoService', () => {
 
       // Seed a student with the demo email directly
       const existingCart = new (await import('../../inventory/entities/cart.entity')).Cart();
-      const cartRepo = connection.getRepository('Cart');
+      const cartRepo = dataSource.getRepository('Cart');
       await cartRepo.save(existingCart);
 
       const existingStudent = studentRepository.create({

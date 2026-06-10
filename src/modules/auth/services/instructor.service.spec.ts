@@ -3,14 +3,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { entities, Instructor, Organization } from '../../../database/entities';
 import { HashHelper } from '../../../helpers';
 import { InstructorService } from './instructor.service';
 
 describe('InstructorService', () => {
   let module: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
 
   let instructorService: InstructorService;
   let instructorRepository: Repository<Instructor>;
@@ -48,7 +48,7 @@ describe('InstructorService', () => {
       providers: [InstructorService],
     }).compile();
 
-    connection = module.get<Connection>(Connection);
+    dataSource = module.get<DataSource>(DataSource);
     instructorService = module.get<InstructorService>(InstructorService);
     instructorRepository = module.get<Repository<Instructor>>(
       getRepositoryToken(Instructor),
@@ -59,16 +59,16 @@ describe('InstructorService', () => {
   });
 
   beforeEach(async () => {
-    const entityMetadatas = connection.entityMetadatas;
+    const entityMetadatas = dataSource.entityMetadatas;
     for (const entity of entityMetadatas) {
-      const repository = connection.getRepository(entity.name);
+      const repository = dataSource.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
     jest.restoreAllMocks();
   });
 
   afterAll(async () => {
-    await connection.close();
+    await dataSource.destroy();
     await module.close();
   });
 

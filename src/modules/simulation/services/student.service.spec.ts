@@ -7,7 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   Admin,
   Cart,
@@ -49,7 +49,7 @@ import { StudentService } from './student.service';
 
 describe('StudentService', () => {
   let module: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
 
   let studentService: StudentService;
   let adminRepository: Repository<Admin>;
@@ -131,7 +131,7 @@ describe('StudentService', () => {
       ],
     }).compile();
 
-    connection = module.get<Connection>(Connection);
+    dataSource = module.get<DataSource>(DataSource);
     studentService = module.get<StudentService>(StudentService);
     adminRepository = module.get<Repository<Admin>>(getRepositoryToken(Admin));
     instructorRepository = module.get<Repository<Instructor>>(getRepositoryToken(Instructor));
@@ -148,16 +148,16 @@ describe('StudentService', () => {
   });
 
   beforeEach(async () => {
-    const entityMetadatas = connection.entityMetadatas;
+    const entityMetadatas = dataSource.entityMetadatas;
     for (const entity of entityMetadatas) {
-      const repository = connection.getRepository(entity.name);
+      const repository = dataSource.getRepository(entity.name);
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
     jest.clearAllMocks();
   }, 30000);
 
   afterAll(async () => {
-    await connection.close();
+    await dataSource.destroy();
     await module.close();
   });
 
