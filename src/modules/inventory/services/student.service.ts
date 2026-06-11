@@ -16,10 +16,7 @@ import { Category } from '../entities/category.entity';
 import { Checkout } from '../entities/checkout.entity';
 import { Course } from '../entities/course.entity';
 import { Question } from '../../review/entities/question.entity';
-import {
-  TestSuite,
-  SuiteType,
-} from '../../review/entities/test_suite.entity';
+import { TestSuite, SuiteType } from '../../review/entities/test_suite.entity';
 import { Test } from '../../simulation/entities/test.entity';
 import { TimeEventType } from '../../simulation/entities/time_event.entity';
 import {
@@ -168,6 +165,19 @@ export class StudentService {
         'approved_version.test_suites',
       ],
     });
+
+    // after courseRepository.find():
+    console.log('raw courses count:', courses.length);
+
+    // after the approved_version filter:
+    const withVersion = courses.filter((c) => c.approved_version);
+    console.log('with approved_version:', withVersion.length);
+
+    // after is_subscribed map:
+    console.log(
+      'subscribed_courses for student:',
+      student.subscribed_courses.length,
+    );
 
     return courses
       .filter((course) => course.approved_version)
