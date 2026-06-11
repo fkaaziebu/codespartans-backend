@@ -403,12 +403,12 @@ export class InitialSchema1749600000000 implements MigrationInterface {
         "level"              "courses_level_enum"     NOT NULL DEFAULT 'BEGINNER',
         "price"              double precision         NOT NULL,
         "currency"           "courses_currency_enum"  NOT NULL DEFAULT 'USD',
-        "approved_versionId" uuid,
+        "approvedVersionId"  uuid,
         "organizationId"     uuid,
         "instructorId"       uuid,
         "inserted_at"        timestamp                NOT NULL DEFAULT now(),
         "updated_at"         timestamp                NOT NULL DEFAULT now(),
-        CONSTRAINT "REL_courses_approvedVersion" UNIQUE ("approved_versionId"),
+        CONSTRAINT "REL_courses_approvedVersion" UNIQUE ("approvedVersionId"),
         CONSTRAINT "PK_courses" PRIMARY KEY ("id")
       )
     `);
@@ -626,7 +626,7 @@ export class InitialSchema1749600000000 implements MigrationInterface {
     await queryRunner.query(`
       DO $$ BEGIN
         ALTER TABLE "courses" ADD CONSTRAINT "FK_courses_approvedVersion"
-          FOREIGN KEY ("approved_versionId") REFERENCES "versions"("id")
+          FOREIGN KEY ("approvedVersionId") REFERENCES "versions"("id")
           ON DELETE NO ACTION ON UPDATE NO ACTION;
       EXCEPTION WHEN duplicate_object THEN NULL; END $$
     `);
