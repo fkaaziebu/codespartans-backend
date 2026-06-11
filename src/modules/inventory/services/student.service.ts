@@ -166,35 +166,24 @@ export class StudentService {
       ],
     });
 
-    // after courseRepository.find():
-    console.log('raw courses count:', courses.length);
-
     // after the approved_version filter:
-    const withVersion = courses.filter((c) => c.approved_version);
-    console.log('with approved_version:', withVersion.length);
-
-    // after is_subscribed map:
-    console.log(
-      'subscribed_courses for student:',
-      student.subscribed_courses.length,
+    const withVersion = courses.filter(
+      (c) =>
+        c.approved_version &&
+        Boolean(student.subscribed_courses.find((crs) => crs.id === c.id)),
     );
 
-    return courses
-      .filter((course) => course.approved_version)
-      .map((course) => ({
-        ...course,
-        is_subscribed: Boolean(
-          student.subscribed_courses.find((crs) => crs.id === course.id),
-        ),
-        total_questions: course.approved_version.questions.length,
-        estimated_duration: course.approved_version.questions.reduce(
-          (acc, question) => acc + question.estimated_time_in_ms,
-          0,
-        ),
-      }))
-      .filter((course) =>
-        filter ? filter.is_subscribed === course.is_subscribed : true,
-      );
+    return withVersion.map((course) => ({
+      ...course,
+      is_subscribed: Boolean(
+        student.subscribed_courses.find((crs) => crs.id === course.id),
+      ),
+      total_questions: course.approved_version.questions.length,
+      estimated_duration: course.approved_version.questions.reduce(
+        (acc, question) => acc + question.estimated_time_in_ms,
+        0,
+      ),
+    }));
   }
 
   async listCartCourses({ email }: { email: string }): Promise<Course[]> {
@@ -1040,7 +1029,6 @@ export class StudentService {
 
     for (const answer of test.submitted_answers) {
       for (const tag of answer.question?.tags ?? []) {
-        console.log(answer.question);
         const stat = tagStats.get(tag) ?? { correct: 0, wrong: 0 };
         if (answer.is_correct === true) stat.correct += 1;
         else stat.wrong += 1;
