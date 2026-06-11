@@ -1,4 +1,5 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -87,7 +88,13 @@ describe('StudentService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      providers: [StudentService],
+      providers: [
+        StudentService,
+        {
+          provide: CACHE_MANAGER,
+          useValue: { get: jest.fn().mockResolvedValue(null), set: jest.fn().mockResolvedValue(undefined), del: jest.fn().mockResolvedValue(undefined) },
+        },
+      ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);
@@ -314,7 +321,9 @@ describe('StudentService', () => {
 
   describe('listOrganizationCourses', () => {
     it('returns only courses with approved versions', async () => {
-      const { student } = await setupData();
+      const { student, course, course2 } = await setupData();
+      student.subscribed_courses = [course, course2];
+      await studentRepository.save(student);
 
       const result = await studentService.listOrganizationCourses({
         email: student.email,
@@ -333,7 +342,9 @@ describe('StudentService', () => {
 
   describe('listOrganizationCoursesPaginated', () => {
     it('returns paginated courses', async () => {
-      const { student } = await setupData();
+      const { student, course, course2 } = await setupData();
+      student.subscribed_courses = [course, course2];
+      await studentRepository.save(student);
 
       const result = await studentService.listOrganizationCoursesPaginated({
         email: student.email,

@@ -287,6 +287,14 @@ export class StudentService {
         // Invalidate stale weekly insight so next call regenerates with fresh data
         await this.insightService.invalidateForStudent(studentId);
 
+        await Promise.all([
+          this.cacheManager.del(`student-stats:${email}`),
+          this.cacheManager.del(`student-streak:${email}`),
+          this.cacheManager.del(`student-subject-progress:${email}:all`),
+          this.cacheManager.del(`student-weak-areas:${email}:all`),
+          this.cacheManager.del(`student-score-history:${email}:all`),
+        ]);
+
         return savedTest;
       },
     );

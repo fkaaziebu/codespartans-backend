@@ -1,8 +1,11 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,6 +22,8 @@ import { SignupProducer } from './signup.producer';
 import { LoginBodyDto } from '../dto/login-body.dto';
 import { AccountDeletionService } from './account-deletion.service';
 
+const FIVE_MIN_MS = 5 * 60 * 1000;
+
 @Injectable()
 export class StudentService {
   constructor(
@@ -29,6 +34,7 @@ export class StudentService {
     private readonly emailProducer: EmailProducer,
     private readonly signupProducer: SignupProducer,
     private readonly accountDeletionService: AccountDeletionService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async listOrganizationsPaginated({
@@ -68,22 +74,29 @@ export class StudentService {
   }
 
   async studentProfile({ email }: { email: string }) {
-    return this.studentRepository.manager.transaction(
+    const cacheKey = `student-profile:${email}`;
+    const cached = await this.cacheManager.get<Student>(cacheKey);
+    if (cached) return cached;
+
+    const student = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
-        const student = await transactionalEntityManager.findOne(Student, {
+        const s = await transactionalEntityManager.findOne(Student, {
           where: {
             email,
           },
           relations: ['organizations', 'subscribed_categories'],
         });
 
-        if (!student) {
+        if (!s) {
           throw new NotFoundException('Student does not exist');
         }
 
-        return student;
+        return s;
       },
     );
+
+    await this.cacheManager.set(cacheKey, student, FIVE_MIN_MS);
+    return student;
   }
 
   async registerStudent({

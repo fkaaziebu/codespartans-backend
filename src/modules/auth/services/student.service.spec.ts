@@ -1,4 +1,5 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -71,6 +72,10 @@ describe('StudentService', () => {
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: SignupProducer, useValue: mockSignupProducer },
         { provide: AccountDeletionService, useValue: mockAccountDeletionService },
+        {
+          provide: CACHE_MANAGER,
+          useValue: { get: jest.fn().mockResolvedValue(null), set: jest.fn().mockResolvedValue(undefined), del: jest.fn().mockResolvedValue(undefined) },
+        },
       ],
     }).compile();
 

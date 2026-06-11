@@ -1,8 +1,11 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart as CartTypeClass } from '../entities/cart.entity';
 import { Checkout as CheckoutTypeClass } from '../entities/checkout.entity';
@@ -33,6 +36,10 @@ import {
 } from '../types';
 // import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
 
+const FIVE_MIN_MS = 5 * 60 * 1000;
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
 @Injectable()
 export class StudentService {
   constructor(
@@ -48,6 +55,7 @@ export class StudentService {
     private testRepository: Repository<Test>,
     @InjectRepository(TestSuite)
     private testSuiteRepository: Repository<TestSuite>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async getOrganizationCourse({
@@ -223,6 +231,12 @@ export class StudentService {
     email: string;
     searchTerm?: string;
   }): Promise<Category[]> {
+    const cacheKey = `student-org-categories:${email}`;
+    if (!searchTerm) {
+      const cached = await this.cacheManager.get<Category[]>(cacheKey);
+      if (cached) return cached;
+    }
+
     const student = await this.studentRepository.findOne({
       where: {
         email,
@@ -246,6 +260,9 @@ export class StudentService {
       relations: ['courses'],
     });
 
+    if (!searchTerm) {
+      await this.cacheManager.set(cacheKey, categories, FIVE_MIN_MS);
+    }
     return categories;
   }
 
@@ -780,6 +797,10 @@ export class StudentService {
   }
 
   async getStats({ email }: { email: string }): Promise<StudentStatsResponse> {
+    const cacheKey = `student-stats:${email}`;
+    const cached = await this.cacheManager.get<StudentStatsResponse>(cacheKey);
+    if (cached) return cached;
+
     const student = await this.studentRepository.findOne({
       where: { email },
       relations: [
@@ -888,7 +909,7 @@ export class StudentService {
       }
     }
 
-    return {
+    const result = {
       total_test_taken: endedTests.length,
       total_test_taken_percentage_change: computePercentageChange(
         thisMonthCount,
@@ -902,6 +923,9 @@ export class StudentService {
       study_hours: totalStudyMs / (1000 * 60 * 60),
       weak_areas_count: tagErrorCount.size,
     };
+
+    await this.cacheManager.set(cacheKey, result, SEVEN_DAYS_MS);
+    return result;
   }
 
   async studentSubjectProgress({
@@ -911,6 +935,11 @@ export class StudentService {
     email: string;
     testId?: string;
   }): Promise<SubjectProgressResponse[]> {
+    const cacheKey = `student-subject-progress:${email}:${testId ?? 'all'}`;
+    const ttl = testId ? THIRTY_DAYS_MS : SEVEN_DAYS_MS;
+    const cached = await this.cacheManager.get<SubjectProgressResponse[]>(cacheKey);
+    if (cached) return cached;
+
     const student = await this.studentRepository.findOne({
       where: { email },
       relations: [
@@ -982,7 +1011,7 @@ export class StudentService {
       courseStats.set(courseTitle, stat);
     }
 
-    return Array.from(courseStats.entries()).map(([subject, stat]) => ({
+    const result = Array.from(courseStats.entries()).map(([subject, stat]) => ({
       subject,
       total: stat.sessions,
       correct: stat.correct,
@@ -992,6 +1021,9 @@ export class StudentService {
           ? (stat.correct / stat.total_questions) * 100
           : 0,
     }));
+
+    await this.cacheManager.set(cacheKey, result, ttl);
+    return result;
   }
 
   async studentTestTopicProgress({
@@ -1001,6 +1033,10 @@ export class StudentService {
     email: string;
     testId: string;
   }): Promise<TestTopicProgressResponse[]> {
+    const cacheKey = `student-topic-progress:${email}:${testId}`;
+    const cached = await this.cacheManager.get<TestTopicProgressResponse[]>(cacheKey);
+    if (cached) return cached;
+
     const student = await this.studentRepository.findOne({
       where: { email },
       relations: [
@@ -1045,7 +1081,7 @@ export class StudentService {
       }
     }
 
-    return Array.from(tagStats.entries()).map(([topic, stat]) => {
+    const result = Array.from(tagStats.entries()).map(([topic, stat]) => {
       const total = stat.correct + stat.wrong;
       return {
         topic,
@@ -1055,6 +1091,9 @@ export class StudentService {
         score: total > 0 ? (stat.correct / total) * 100 : 0,
       };
     });
+
+    await this.cacheManager.set(cacheKey, result, THIRTY_DAYS_MS);
+    return result;
   }
 
   async weakSubjectAreas({
@@ -1064,6 +1103,11 @@ export class StudentService {
     email: string;
     testId?: string;
   }): Promise<WeakSubjectAreaResponse[]> {
+    const cacheKey = `student-weak-areas:${email}:${testId ?? 'all'}`;
+    const ttl = testId ? THIRTY_DAYS_MS : SEVEN_DAYS_MS;
+    const cached = await this.cacheManager.get<WeakSubjectAreaResponse[]>(cacheKey);
+    if (cached) return cached;
+
     const student = await this.studentRepository.findOne({
       where: { email },
       relations: [
@@ -1131,7 +1175,7 @@ export class StudentService {
       }
     }
 
-    return Array.from(tagStats.entries())
+    const result = Array.from(tagStats.entries())
       .map(([subject, stat]) => ({
         subject,
         error_count: stat.error_count,
@@ -1144,6 +1188,9 @@ export class StudentService {
       }))
       .filter((item) => item.accuracy <= 65)
       .sort((a, b) => a.accuracy - b.accuracy);
+
+    await this.cacheManager.set(cacheKey, result, ttl);
+    return result;
   }
 
   async getTestScoreHistory({
@@ -1153,6 +1200,11 @@ export class StudentService {
     email: string;
     testId?: string;
   }): Promise<TestScoreHistoryResponse[]> {
+    const cacheKey = `student-score-history:${email}:${testId ?? 'all'}`;
+    const ttl = testId ? THIRTY_DAYS_MS : SEVEN_DAYS_MS;
+    const cached = await this.cacheManager.get<TestScoreHistoryResponse[]>(cacheKey);
+    if (cached) return cached;
+
     const student = await this.studentRepository.findOne({
       where: { email },
       relations: [
@@ -1186,7 +1238,7 @@ export class StudentService {
           t.test_suite?.course_version?.course?.id === courseId),
     );
 
-    return endedTests
+    const result = endedTests
       .map((test) => {
         const answers = test.submitted_answers;
         const correct = answers.filter((a) => a.is_correct === true).length;
@@ -1213,6 +1265,9 @@ export class StudentService {
       })
       .sort((a, b) => b.date_taken.getTime() - a.date_taken.getTime())
       .slice(0, 10);
+
+    await this.cacheManager.set(cacheKey, result, ttl);
+    return result;
   }
 
   async changeStudentPassword({
@@ -1283,6 +1338,10 @@ export class StudentService {
   }: {
     email: string;
   }): Promise<{ current_streak: number; best_streak: number }> {
+    const cacheKey = `student-streak:${email}`;
+    const cached = await this.cacheManager.get<{ current_streak: number; best_streak: number }>(cacheKey);
+    if (cached) return cached;
+
     const student = await this.studentRepository.findOne({
       where: { email },
       relations: ['tests.time_events'],
@@ -1305,7 +1364,9 @@ export class StudentService {
 
     const { current, best } = this.computeStreaks(endedTests, getTestStartTime);
 
-    return { current_streak: current, best_streak: best };
+    const result = { current_streak: current, best_streak: best };
+    await this.cacheManager.set(cacheKey, result, SEVEN_DAYS_MS);
+    return result;
   }
 
   private computeStreaks(
