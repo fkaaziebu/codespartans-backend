@@ -60,6 +60,9 @@ COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 # Explicitly copy email templates since tsc does not copy non-TS files
 COPY --chown=node:node --from=build /usr/src/app/src/modules/auth/services/templates ./dist/modules/auth/services/templates
 
+# Copy static data assets (images, etc.) since tsc does not copy non-TS files
+COPY --chown=node:node --from=build /usr/src/app/src/data ./dist/data
+
 # Start the server using the production build
 ENV STAGE=prod
 CMD [ "node", "dist/main.js" ]
