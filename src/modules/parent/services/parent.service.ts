@@ -14,10 +14,7 @@ import { TimeEventType } from '../../simulation/entities/time_event.entity';
 import { TestStatusType } from '../../simulation/entities/test.entity';
 import { SubjectProgressResponse } from '../../inventory/types/subject-progress-response.type';
 import { WeakSubjectAreaResponse } from '../../inventory/types/weak-subject-area-response.type';
-import {
-  AttemptConnection,
-  AttemptResponse,
-} from '../../inventory/types';
+import { AttemptConnection, AttemptResponse } from '../../inventory/types';
 import { Test } from '../../simulation/entities/test.entity';
 import {
   TestAssignment,
@@ -91,7 +88,9 @@ export class ParentService {
             email,
             name: `${existing.first_name} ${existing.last_name}`,
           });
-          return { message: 'Registration successful. Please verify your email.' };
+          return {
+            message: 'Registration successful. Please verify your email.',
+          };
         }
 
         const validationCode = Math.floor(
@@ -145,7 +144,12 @@ export class ParentService {
       throw new UnauthorizedException('Invalid token type');
     }
 
-    const { type: _type, iat: _iat, exp: _exp, ...tokenPayload } = payload as any;
+    const {
+      type: _type,
+      iat: _iat,
+      exp: _exp,
+      ...tokenPayload
+    } = payload as any;
     const access_token = this.jwtService.sign(tokenPayload);
     return { access_token };
   }
@@ -237,6 +241,10 @@ export class ParentService {
         });
 
         if (!record) {
+          throw new BadRequestException('Email or password is incorrect');
+        }
+
+        if (!record.password) {
           throw new BadRequestException('Email or password is incorrect');
         }
 
@@ -789,7 +797,10 @@ export class ParentService {
         );
         return { test: t, startedAt: startEvent?.recorded_at ?? new Date(0) };
       })
-      .sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime(),
+      )
       .slice(0, RECENT_TEST_CAP)
       .map((x) => x.test);
 
@@ -1323,9 +1334,7 @@ export class ParentService {
     });
   }
 
-  async listParentAlerts(
-    parentEmail: string,
-  ): Promise<
+  async listParentAlerts(parentEmail: string): Promise<
     {
       id: string;
       alert_type: string;
@@ -1376,7 +1385,10 @@ export class ParentService {
         });
         return `Yesterday, ${hhmm}`;
       }
-      return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      return date.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+      });
     };
 
     const getTestStartTime = (test: Test): Date | null => {
@@ -1453,7 +1465,11 @@ export class ParentService {
             time_label: formatTimeLabel(latestStart!),
             is_unread: isNew,
             actions: [
-              { label: 'View weak areas', variant: 'primary', href: 'weak-areas' },
+              {
+                label: 'View weak areas',
+                variant: 'primary',
+                href: 'weak-areas',
+              },
               { label: 'Dismiss', variant: 'secondary', href: 'dismiss' },
             ],
             sort_ts: latestStart!.getTime(),
@@ -1481,8 +1497,7 @@ export class ParentService {
             description: `${firstName} scored ${Math.round(score)}% — great work! Keep up the momentum.`,
             time_label: formatTimeLabel(recentTest.start!),
             is_unread:
-              now.getTime() - recentTest.start!.getTime() <
-              24 * 60 * 60 * 1000,
+              now.getTime() - recentTest.start!.getTime() < 24 * 60 * 60 * 1000,
             actions: [
               {
                 label: 'View trends',
@@ -1543,7 +1558,13 @@ export class ParentService {
     parentEmail: string,
     childId: string,
   ): Promise<
-    { month: number; year: number; avg_score: number; total_questions: number; streak_days: number }[]
+    {
+      month: number;
+      year: number;
+      avg_score: number;
+      total_questions: number;
+      streak_days: number;
+    }[]
   > {
     const child = await this.childRepository.findOne({
       where: { id: childId, parent: { email: parentEmail } },
@@ -1572,7 +1593,12 @@ export class ParentService {
 
     const monthlyMap = new Map<
       string,
-      { total_score: number; count: number; questions: number; days: Set<string> }
+      {
+        total_score: number;
+        count: number;
+        questions: number;
+        days: Set<string>;
+      }
     >();
 
     for (const test of endedTests) {

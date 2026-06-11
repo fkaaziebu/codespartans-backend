@@ -1,9 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import Anthropic from '@anthropic-ai/sdk';
+import { Cache } from 'cache-manager';
+import { createHash } from 'crypto';
 import { Repository } from 'typeorm';
 import { SubmittedAnswer } from '../entities/sumitted_answer.entity';
+
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class MarkAnswerService {
@@ -14,6 +19,7 @@ export class MarkAnswerService {
     @InjectRepository(SubmittedAnswer)
     private submittedAnswerRepository: Repository<SubmittedAnswer>,
     private configService: ConfigService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     this.anthropic = new Anthropic({
       apiKey: this.configService.get<string>('ANTHROPIC_API_KEY'),
@@ -32,6 +38,23 @@ export class MarkAnswerService {
     }
 
     const { question, answer_provided } = submittedAnswer;
+
+    const cacheKey = this.buildCacheKey(
+      question.id,
+      question.description,
+      question.correct_answer,
+      answer_provided,
+    );
+
+    const cached = await this.cacheManager.get<boolean>(cacheKey);
+    if (cached !== null && cached !== undefined) {
+      this.logger.log(
+        `Cache hit for answer ${submittedAnswerId}: is_correct=${cached}`,
+      );
+      submittedAnswer.is_correct = cached;
+      submittedAnswer.is_marked = true;
+      return this.submittedAnswerRepository.save(submittedAnswer);
+    }
 
     try {
       const response = await this.anthropic.messages.create({
@@ -63,14 +86,13 @@ Respond with only a raw JSON object using exactly this shape — no markdown, no
       const result = JSON.parse(text) as { is_correct?: boolean; correct?: boolean };
       const is_correct = result.is_correct ?? result.correct ?? false;
 
+      await this.cacheManager.set(cacheKey, is_correct, THIRTY_DAYS_MS);
+
       submittedAnswer.is_correct = is_correct;
       submittedAnswer.is_marked = true;
 
-      console.log('RESULT:', result);
-
       const final_result =
         await this.submittedAnswerRepository.save(submittedAnswer);
-      console.log('FINAL_RESULT:', final_result);
 
       this.logger.log(
         `Marked answer ${submittedAnswerId}: is_correct=${is_correct}`,
@@ -84,5 +106,18 @@ Respond with only a raw JSON object using exactly this shape — no markdown, no
       // Leave is_marked=false so the student can see it is still pending
       return submittedAnswer;
     }
+  }
+
+  private buildCacheKey(
+    questionId: string,
+    description: string,
+    correctAnswer: string,
+    studentAnswer: string,
+  ): string {
+    const normalized = studentAnswer.toLowerCase().trim().replace(/\s+/g, ' ');
+    const hash = createHash('sha256')
+      .update(`${description}|${correctAnswer}|${normalized}`)
+      .digest('hex');
+    return `mark-answer:${questionId}:${hash}`;
   }
 }

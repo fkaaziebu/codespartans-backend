@@ -109,20 +109,14 @@ export class ParentResolver {
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AddChildResponse)
-  async resetChildPin(
-    @Args('childId') childId: string,
-    @Context() context,
-  ) {
+  async resetChildPin(@Args('childId') childId: string, @Context() context) {
     const { email } = context.req.user;
     return this.parentService.resetChildPin(email, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => RegisterParentResponse)
-  async shareChildLogin(
-    @Args('childId') childId: string,
-    @Context() context,
-  ) {
+  async shareChildLogin(@Args('childId') childId: string, @Context() context) {
     const { email } = context.req.user;
     return this.parentService.shareChildLogin(email, childId);
   }
@@ -255,10 +249,7 @@ export class ParentResolver {
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [Course])
-  async listChildCourses(
-    @Args('childId') childId: string,
-    @Context() context,
-  ) {
+  async listChildCourses(@Args('childId') childId: string, @Context() context) {
     const { email } = context.req.user;
     return this.parentService.listChildCourses(email, childId);
   }
@@ -282,10 +273,7 @@ export class ParentResolver {
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AccountDeletionResponse)
-  async deleteChild(
-    @Args('childId') childId: string,
-    @Context() context,
-  ) {
+  async deleteChild(@Args('childId') childId: string, @Context() context) {
     const { email } = context.req.user;
     return this.accountDeletionService.deleteChild(email, childId);
   }

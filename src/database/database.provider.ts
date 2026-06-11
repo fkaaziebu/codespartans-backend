@@ -13,6 +13,11 @@ const defaultPostgresDBConnection = (
   migrations: [join(__dirname, '../migrations/*{.ts,.js}')],
   url: configService.get('DATABASE_URL'),
   ssl: false,
+  cache: {
+    type: 'ioredis',
+    options: configService.get<string>('REDIS_URL'),
+    duration: 3_600_000,
+  } as any,
 });
 
 const defaultRedisDBConnection = async (configService: ConfigService) => ({

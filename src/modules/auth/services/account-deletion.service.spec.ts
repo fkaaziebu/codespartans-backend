@@ -6,7 +6,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   Cart,
   Checkout,
@@ -33,7 +33,7 @@ const GENPOP_EMAIL = 'genpop@codespartans.com';
 
 describe('AccountDeletionService', () => {
   let module: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
   let accountDeletionService: AccountDeletionService;
 
   let studentRepository: Repository<Student>;
@@ -81,7 +81,7 @@ describe('AccountDeletionService', () => {
       ],
     }).compile();
 
-    connection = module.get<Connection>(Connection);
+    dataSource = module.get<DataSource>(DataSource);
     accountDeletionService = module.get<AccountDeletionService>(AccountDeletionService);
     studentRepository = module.get<Repository<Student>>(getRepositoryToken(Student));
     parentRepository = module.get<Repository<Parent>>(getRepositoryToken(Parent));
@@ -95,15 +95,15 @@ describe('AccountDeletionService', () => {
   });
 
   beforeEach(async () => {
-    for (const entity of connection.entityMetadatas) {
-      const repo = connection.getRepository(entity.name);
+    for (const entity of dataSource.entityMetadatas) {
+      const repo = dataSource.getRepository(entity.name);
       await repo.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
     jest.clearAllMocks();
   });
 
   afterAll(async () => {
-    await connection.close();
+    await dataSource.destroy();
     await module.close();
   });
 

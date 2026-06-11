@@ -1,10 +1,13 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,6 +36,8 @@ import {
 import { ParentSubscription } from '../../parent/entities/parent-subscription.entity';
 import { StudentSubscription } from '../entities/student-subscription.entity';
 import { PaymentService } from './payment.service';
+
+const ONE_HOUR_MS = 60 * 60 * 1000;
 
 @Injectable()
 export class DemoService {
@@ -65,6 +70,7 @@ export class DemoService {
     private readonly paymentService: PaymentService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async bookSchoolFreeDemo(input: BookSchoolFreeDemoInput) {
@@ -450,7 +456,12 @@ export class DemoService {
   }
 
   async listPlans(): Promise<SubscriptionPlan[]> {
-    return this.paymentService.listPlans();
+    const cacheKey = 'subscription-plans';
+    const cached = await this.cacheManager.get<SubscriptionPlan[]>(cacheKey);
+    if (cached) return cached;
+    const result = await this.paymentService.listPlans();
+    await this.cacheManager.set(cacheKey, result, ONE_HOUR_MS);
+    return result;
   }
 
   async initiatePayment(email: string, planId: string, role: string, childrenIds: string[] = []) {
