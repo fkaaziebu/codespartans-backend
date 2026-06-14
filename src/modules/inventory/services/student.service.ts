@@ -28,6 +28,7 @@ import {
 } from '../../simulation/entities/test.entity';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import {
+  CategoryCountdownResponse,
   StudentStatsResponse,
   SubjectProgressResponse,
   TestScoreHistoryResponse,
@@ -1428,5 +1429,36 @@ export class StudentService {
     }
 
     return { current: currentStreak, best: bestStreak };
+  }
+
+  async getCategoryCountdown({
+    categoryId,
+  }: {
+    categoryId: string;
+  }): Promise<CategoryCountdownResponse> {
+    const category = await this.studentRepository.manager.findOne(Category, {
+      where: { id: categoryId },
+    });
+
+    if (!category) {
+      throw new NotFoundException('Category does not exist');
+    }
+
+    let countdown: number | null = null;
+    if (category.date_of_exams) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const examDate = new Date(category.date_of_exams);
+      examDate.setHours(0, 0, 0, 0);
+      countdown = Math.round(
+        (examDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+      );
+    }
+
+    return {
+      categoryName: category.name,
+      countdown,
+      exam_duration_days: category.exam_duration_days ?? null,
+    };
   }
 }

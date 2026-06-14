@@ -384,10 +384,12 @@ export class InitialSchema1749600000000 implements MigrationInterface {
 
     await queryRunner.query(`
       CREATE TABLE IF NOT EXISTS "categories" (
-        "id"             uuid    NOT NULL DEFAULT uuid_generate_v4(),
-        "name"           varchar NOT NULL,
-        "avatar_url"     varchar NOT NULL,
-        "organizationId" uuid,
+        "id"                  uuid    NOT NULL DEFAULT uuid_generate_v4(),
+        "name"                varchar NOT NULL,
+        "avatar_url"          varchar NOT NULL,
+        "date_of_exams"       date,
+        "exam_duration_days"  integer,
+        "organizationId"      uuid,
         CONSTRAINT "PK_categories" PRIMARY KEY ("id")
       )
     `);

@@ -1382,4 +1382,63 @@ describe('StudentService', () => {
       expect(page2.pageInfo.hasNextPage).toBe(false);
     });
   });
+
+  describe('getCategoryCountdown', () => {
+    it('returns null countdown and null duration when no exam date is set', async () => {
+      const { category } = await setupData();
+
+      const result = await studentService.getCategoryCountdown({
+        categoryId: category.id,
+      });
+
+      expect(result.categoryName).toBe('Test Category');
+      expect(result.countdown).toBeNull();
+      expect(result.exam_duration_days).toBeNull();
+    });
+
+    it('returns the correct countdown in days for a future exam date', async () => {
+      const { category } = await setupData();
+
+      const future = new Date();
+      future.setDate(future.getDate() + 30);
+      future.setHours(0, 0, 0, 0);
+
+      category.date_of_exams = future;
+      category.exam_duration_days = 7;
+      await categoryRepository.save(category);
+
+      const result = await studentService.getCategoryCountdown({
+        categoryId: category.id,
+      });
+
+      expect(result.categoryName).toBe('Test Category');
+      expect(result.countdown).toBe(30);
+      expect(result.exam_duration_days).toBe(7);
+    });
+
+    it('returns a negative countdown when the exam date has passed', async () => {
+      const { category } = await setupData();
+
+      const past = new Date();
+      past.setDate(past.getDate() - 10);
+      past.setHours(0, 0, 0, 0);
+
+      category.date_of_exams = past;
+      await categoryRepository.save(category);
+
+      const result = await studentService.getCategoryCountdown({
+        categoryId: category.id,
+      });
+
+      expect(result.countdown).toBe(-10);
+    });
+
+    it('throws NotFoundException when the category does not exist', async () => {
+      await expect(
+        studentService.getCategoryCountdown({
+          categoryId: '00000000-0000-0000-0000-000000000000',
+        }),
+      ).rejects.toThrow(new NotFoundException('Category does not exist'));
+    });
+  });
 });
