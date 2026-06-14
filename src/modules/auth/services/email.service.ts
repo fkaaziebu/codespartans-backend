@@ -130,12 +130,18 @@ export class EmailService {
     name: string,
   ): Promise<void> {
     const loginUrl = `${this.configService.get<string>('PARENT_URL', 'http://localhost:3001')}/login`;
-    const html = this.compileTemplate('parent-account-already-exists', { name, loginUrl });
+    const html = this.compileTemplate('parent-account-already-exists', {
+      name,
+      loginUrl,
+    });
 
     try {
       await this.sendMail(to, 'You already have an account', '', html);
     } catch (error) {
-      console.error('Failed to send parent account already exists email:', error);
+      console.error(
+        'Failed to send parent account already exists email:',
+        error,
+      );
       throw new Error('Failed to send parent account already exists email');
     }
   }
@@ -267,10 +273,15 @@ export class EmailService {
     userType: 'student' | 'parent',
     childCount = 0,
   ): Promise<void> {
-    const baseUrl = userType === 'parent'
-      ? this.configService.get<string>('PARENT_URL', 'http://localhost:3001')
-      : this.configService.get<string>('STUDENT_URL', 'http://localhost:3000');
-    const loginUrl = `${baseUrl}/login`;
+    const baseUrl =
+      userType === 'parent'
+        ? this.configService.get<string>('PARENT_URL', 'http://localhost:3001')
+        : this.configService.get<string>(
+            'STUDENT_URL',
+            'http://localhost:3000',
+          );
+    const loginUrl =
+      userType === 'student' ? `${baseUrl}/signin` : `${baseUrl}/login`;
     const html = this.compileTemplate('account-deletion-notice', {
       name,
       gracePeriodEnd,
@@ -280,7 +291,12 @@ export class EmailService {
     });
 
     try {
-      await this.sendMail(to, 'Your Account Deletion Request – Examforge', '', html);
+      await this.sendMail(
+        to,
+        'Your Account Deletion Request – Examforge',
+        '',
+        html,
+      );
     } catch (error) {
       console.error('Failed to send account deletion notice email:', error);
       throw new Error('Failed to send account deletion notice email');
@@ -300,7 +316,12 @@ export class EmailService {
     });
 
     try {
-      await this.sendMail(to, 'Child Account Deletion Requested – Examforge', '', html);
+      await this.sendMail(
+        to,
+        'Child Account Deletion Requested – Examforge',
+        '',
+        html,
+      );
     } catch (error) {
       console.error('Failed to send child deletion notice email:', error);
       throw new Error('Failed to send child deletion notice email');
@@ -311,7 +332,12 @@ export class EmailService {
     const html = this.compileTemplate('account-restored', { name });
 
     try {
-      await this.sendMail(to, 'Your Account Has Been Restored – Examforge', '', html);
+      await this.sendMail(
+        to,
+        'Your Account Has Been Restored – Examforge',
+        '',
+        html,
+      );
     } catch (error) {
       console.error('Failed to send account restored email:', error);
       throw new Error('Failed to send account restored email');
@@ -331,7 +357,12 @@ export class EmailService {
     });
 
     try {
-      await this.sendMail(to, 'Your Account Has Been Deleted – Examforge', '', html);
+      await this.sendMail(
+        to,
+        'Your Account Has Been Deleted – Examforge',
+        '',
+        html,
+      );
     } catch (error) {
       console.error('Failed to send account purged confirmation email:', error);
       throw new Error('Failed to send account purged confirmation email');
@@ -346,7 +377,12 @@ export class EmailService {
     const html = this.compileTemplate('cancellation-otp', { name, otp });
 
     try {
-      await this.sendMail(to, 'Cancel your account deletion – verification code', '', html);
+      await this.sendMail(
+        to,
+        'Cancel your account deletion – verification code',
+        '',
+        html,
+      );
     } catch (error) {
       console.error('Failed to send cancellation OTP email:', error);
       throw new Error('Failed to send cancellation OTP email');

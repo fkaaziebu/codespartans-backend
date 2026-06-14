@@ -31,6 +31,8 @@ const TTL_30D_MS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class StudentService {
+  private readonly gracePeriodMs: number;
+
   constructor(
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
@@ -42,7 +44,14 @@ export class StudentService {
     private readonly signupProducer: SignupProducer,
     private readonly accountDeletionService: AccountDeletionService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  ) {
+    this.gracePeriodMs =
+      this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
+      24 *
+      60 *
+      60 *
+      1000;
+  }
 
   async listOrganizationsPaginated({
     searchTerm,
@@ -205,10 +214,9 @@ export class StudentService {
         }
 
         if (student.is_deactivated) {
-          const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
           const elapsed =
             Date.now() - new Date(student.deactivated_at).getTime();
-          if (elapsed >= NINETY_DAYS_MS) {
+          if (elapsed >= this.gracePeriodMs) {
             throw new BadRequestException('This account no longer exists.');
           }
         }
@@ -218,9 +226,8 @@ export class StudentService {
     );
 
     if (student.is_deactivated) {
-      const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
       const deletionScheduledFor = new Date(
-        new Date(student.deactivated_at).getTime() + NINETY_DAYS_MS,
+        new Date(student.deactivated_at).getTime() + this.gracePeriodMs,
       );
       const pendingToken = this.jwtService.sign(
         {
@@ -234,7 +241,11 @@ export class StudentService {
       );
 
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      await this.cacheManager.set(`cancel_otp:${student.id}`, otp, 10 * 60 * 1000);
+      await this.cacheManager.set(
+        `cancel_otp:${student.id}`,
+        otp,
+        10 * 60 * 1000,
+      );
       await this.emailProducer.sendCancellationOtpEmail({
         email: student.email,
         name: student.name,
@@ -278,12 +289,18 @@ export class StudentService {
     studentId: string,
     otp: string,
   ): Promise<{ message: string }> {
-    const stored = await this.cacheManager.get<string>(`cancel_otp:${studentId}`);
+    const stored = await this.cacheManager.get<string>(
+      `cancel_otp:${studentId}`,
+    );
     if (!stored || stored !== otp) {
       throw new BadRequestException('Invalid or expired OTP.');
     }
     await this.cacheManager.del(`cancel_otp:${studentId}`);
-    await this.cacheManager.set(`cancel_otp_verified:${studentId}`, '1', 10 * 60 * 1000);
+    await this.cacheManager.set(
+      `cancel_otp_verified:${studentId}`,
+      '1',
+      10 * 60 * 1000,
+    );
     return { message: 'OTP verified. You may now cancel deletion.' };
   }
 
@@ -291,7 +308,9 @@ export class StudentService {
     studentId: string,
     meta?: RequestMetadata,
   ): Promise<StudentLoginResponse> {
-    const verified = await this.cacheManager.get(`cancel_otp_verified:${studentId}`);
+    const verified = await this.cacheManager.get(
+      `cancel_otp_verified:${studentId}`,
+    );
     if (!verified) {
       throw new UnauthorizedException(
         'Email verification required before cancelling deletion.',
@@ -429,14 +448,18 @@ export class StudentService {
       throw new BadRequestException('Invalid token type');
     }
 
-    const isDeactivated = await this.cacheManager.get(`deactivated:${payload.id}`);
+    const isDeactivated = await this.cacheManager.get(
+      `deactivated:${payload.id}`,
+    );
     if (isDeactivated) {
       throw new UnauthorizedException('Account has been deactivated');
     }
 
     const pwChanged = await this.cacheManager.get(`pw_changed:${payload.id}`);
     if (pwChanged) {
-      throw new UnauthorizedException('Password was recently changed. Please log in again.');
+      throw new UnauthorizedException(
+        'Password was recently changed. Please log in again.',
+      );
     }
 
     const {
@@ -542,7 +565,10 @@ export class StudentService {
           throw new BadRequestException('Invalid credentials');
         }
 
-        const isValid = await HashHelper.compare(currentPassword, student.password);
+        const isValid = await HashHelper.compare(
+          currentPassword,
+          student.password,
+        );
         if (!isValid) {
           throw new BadRequestException('Current password is incorrect');
         }

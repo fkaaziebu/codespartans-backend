@@ -52,6 +52,7 @@ import {
 
 @Injectable()
 export class ParentService {
+  private readonly gracePeriodMs: number;
   constructor(
     @InjectRepository(Parent)
     private parentRepository: Repository<Parent>,
@@ -69,7 +70,14 @@ export class ParentService {
     private readonly signupProducer: SignupProducer,
     private readonly accountDeletionService: AccountDeletionService,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-  ) {}
+  ) {
+    this.gracePeriodMs =
+      this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
+      24 *
+      60 *
+      60 *
+      1000;
+  }
 
   async registerParent({
     first_name,
@@ -153,14 +161,18 @@ export class ParentService {
       throw new UnauthorizedException('Invalid token type');
     }
 
-    const isDeactivated = await this.cacheManager.get(`deactivated:${payload.id}`);
+    const isDeactivated = await this.cacheManager.get(
+      `deactivated:${payload.id}`,
+    );
     if (isDeactivated) {
       throw new UnauthorizedException('Account has been deactivated');
     }
 
     const pwChanged = await this.cacheManager.get(`pw_changed:${payload.id}`);
     if (pwChanged) {
-      throw new UnauthorizedException('Password was recently changed. Please log in again.');
+      throw new UnauthorizedException(
+        'Password was recently changed. Please log in again.',
+      );
     }
 
     const {
@@ -283,10 +295,9 @@ export class ParentService {
         }
 
         if (record.is_deactivated) {
-          const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
           const elapsed =
             Date.now() - new Date(record.deactivated_at).getTime();
-          if (elapsed >= NINETY_DAYS_MS) {
+          if (elapsed >= this.gracePeriodMs) {
             throw new BadRequestException('This account no longer exists.');
           }
         }
@@ -296,9 +307,8 @@ export class ParentService {
     );
 
     if (foundParent.is_deactivated) {
-      const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
       const deletionScheduledFor = new Date(
-        new Date(foundParent.deactivated_at).getTime() + NINETY_DAYS_MS,
+        new Date(foundParent.deactivated_at).getTime() + this.gracePeriodMs,
       );
       const pendingToken = this.jwtService.sign(
         {
@@ -312,7 +322,11 @@ export class ParentService {
       );
 
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      await this.cacheManager.set(`cancel_otp:${foundParent.id}`, otp, 10 * 60 * 1000);
+      await this.cacheManager.set(
+        `cancel_otp:${foundParent.id}`,
+        otp,
+        10 * 60 * 1000,
+      );
       await this.emailProducer.sendCancellationOtpEmail({
         email: foundParent.email,
         name: `${foundParent.first_name} ${foundParent.last_name}`,
@@ -347,12 +361,18 @@ export class ParentService {
     parentId: string,
     otp: string,
   ): Promise<{ message: string }> {
-    const stored = await this.cacheManager.get<string>(`cancel_otp:${parentId}`);
+    const stored = await this.cacheManager.get<string>(
+      `cancel_otp:${parentId}`,
+    );
     if (!stored || stored !== otp) {
       throw new BadRequestException('Invalid or expired OTP.');
     }
     await this.cacheManager.del(`cancel_otp:${parentId}`);
-    await this.cacheManager.set(`cancel_otp_verified:${parentId}`, '1', 10 * 60 * 1000);
+    await this.cacheManager.set(
+      `cancel_otp_verified:${parentId}`,
+      '1',
+      10 * 60 * 1000,
+    );
     return { message: 'OTP verified. You may now cancel deletion.' };
   }
 
@@ -360,7 +380,9 @@ export class ParentService {
     parentId: string,
     meta?: RequestMetadata,
   ): Promise<LoginParentResponse> {
-    const verified = await this.cacheManager.get(`cancel_otp_verified:${parentId}`);
+    const verified = await this.cacheManager.get(
+      `cancel_otp_verified:${parentId}`,
+    );
     if (!verified) {
       throw new UnauthorizedException(
         'Email verification required before cancelling deletion.',
@@ -394,7 +416,12 @@ export class ParentService {
       { expiresIn: '30d' },
     );
 
-    return { ...parent, token, refresh_token, account_status: AccountStatus.ACTIVE };
+    return {
+      ...parent,
+      token,
+      refresh_token,
+      account_status: AccountStatus.ACTIVE,
+    };
   }
 
   async cancelChildDeletion(
@@ -423,7 +450,11 @@ export class ParentService {
       );
     }
 
-    await this.accountDeletionService.restoreChild(child.parent.id, child, meta);
+    await this.accountDeletionService.restoreChild(
+      child.parent.id,
+      child,
+      meta,
+    );
 
     return {
       message: 'Child account deletion cancelled.',
@@ -513,7 +544,10 @@ export class ParentService {
           throw new BadRequestException('Invalid credentials');
         }
 
-        const isValid = await HashHelper.compare(currentPassword, parent.password);
+        const isValid = await HashHelper.compare(
+          currentPassword,
+          parent.password,
+        );
         if (!isValid) {
           throw new BadRequestException('Current password is incorrect');
         }
