@@ -42,6 +42,10 @@ const defaults: Record<string, string> = {
   GMAIL_APP_PASSWORD: 'ci-fake-gmail-pass',
   GMAIL_USER: 'ci@gmail.test',
   EMAIL_HOST: 'smtp.gmail.com',
+  GOOGLE_CLIENT_ID: 'XXXXXXXXXXXXXX',
+  GOOGLE_SECRET: 'XXXXXXXXXXXXX',
+  GOOGLE_CALLBACK_URL:
+    'http://localhost:3000/api/v1/students/auth/google/callback',
   STUDENT_URL: 'http://localhost:3000',
   MEILI_MASTER_KEY: 'password',
   MEILI_URL: 'http://127.0.0.1:7700',
