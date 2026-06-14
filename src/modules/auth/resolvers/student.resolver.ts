@@ -1,5 +1,14 @@
 import { ForbiddenException, UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ConfigService } from '@nestjs/config';
+import {
+  Args,
+  Context,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { RequestMetadata } from '../entities/deletion-audit-log.entity';
 import { Student as StudentTypeClass } from 'src/modules/auth/entities/student.entity';
 import {
@@ -12,6 +21,7 @@ import { StudentService } from '../services/student.service';
 import { AccountDeletionService } from '../services/account-deletion.service';
 import {
   AccountDeletionResponse,
+  AccountStatus,
   OrganizationConnection,
   PasswordResetResponse,
   RefreshTokenResponse,
@@ -28,12 +38,29 @@ function extractMeta(req: any): RequestMetadata {
   };
 }
 
-@Resolver()
+@Resolver(() => StudentTypeClass)
 export class StudentResolver {
   constructor(
     private readonly studentService: StudentService,
     private readonly accountDeletionService: AccountDeletionService,
+    private readonly configService: ConfigService,
   ) {}
+
+  @ResolveField(() => AccountStatus, { nullable: true })
+  account_status(@Parent() student: StudentTypeClass): AccountStatus {
+    return student.deletion_job_id
+      ? AccountStatus.PENDING_DELETION
+      : AccountStatus.ACTIVE;
+  }
+
+  @ResolveField(() => Date, { nullable: true })
+  deletion_scheduled_for(@Parent() student: StudentTypeClass): Date | null {
+    if (!student.deactivated_at) return null;
+    const graceDays =
+      this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') ?? 30;
+    const ms = Number(graceDays) * 24 * 60 * 60 * 1000;
+    return new Date(student.deactivated_at.getTime() + ms);
+  }
   // Queries
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @UseGuards(GqlThrottlerGuard)
