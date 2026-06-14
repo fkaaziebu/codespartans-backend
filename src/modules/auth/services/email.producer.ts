@@ -81,8 +81,19 @@ export class EmailProducer {
     email: string;
     name: string;
     gracePeriodEnd: string;
+    userType: 'student' | 'parent';
+    childCount?: number;
   }) {
     await this.emailQueue.add('send-account-deletion-notice', data);
+  }
+
+  async sendChildDeletionNotice(data: {
+    parentEmail: string;
+    parentName: string;
+    childName: string;
+    gracePeriodEnd: string;
+  }) {
+    await this.emailQueue.add('send-child-deletion-notice', data);
   }
 
   async sendAccountRestoredNotice(data: { email: string; name: string }) {
@@ -93,10 +104,26 @@ export class EmailProducer {
     await this.emailQueue.add('send-account-purged-confirmation', data);
   }
 
+  async sendPurgeFailureAlert(data: {
+    jobId: string;
+    accountId: string;
+    errorMessage: string;
+  }) {
+    await this.emailQueue.add('send-purge-failure-alert', data);
+  }
+
   async sendParentAccountAlreadyExistsEmail(data: {
     email: string;
     name: string;
   }) {
     await this.emailQueue.add('send-parent-account-already-exists', data);
+  }
+
+  async sendCancellationOtpEmail(data: {
+    email: string;
+    name: string;
+    otp: string;
+  }) {
+    await this.emailQueue.add('send-cancellation-otp', data);
   }
 }

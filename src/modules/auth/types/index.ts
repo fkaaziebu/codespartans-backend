@@ -6,4 +6,7 @@ export { RegisterResponse } from './register-response.type';
 export { StudentLoginResponse } from './student-login-response.type';
 export { PasswordResetResponse } from './password-reset-response.type';
 export { RefreshTokenResponse } from './refresh-token-response.type';
-export { AccountDeletionResponse } from './account-deletion-response.type';
+export {
+  AccountDeletionResponse,
+  AccountStatus,
+} from './account-deletion-response.type';

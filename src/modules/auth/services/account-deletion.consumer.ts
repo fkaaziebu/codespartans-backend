@@ -9,19 +9,24 @@ export class AccountDeletionConsumer extends WorkerHost {
   }
 
   async process(job: Job) {
-    switch (job.name) {
-      case 'purge-student-account': {
-        await this.accountDeletionService.permanentlyPurgeStudent(
-          job.data.studentId,
-        );
-        break;
+    try {
+      switch (job.name) {
+        case 'purge-student-account': {
+          await this.accountDeletionService.permanentlyPurgeStudent(
+            job.data.studentId,
+          );
+          break;
+        }
+        case 'purge-parent-account': {
+          await this.accountDeletionService.permanentlyPurgeParent(
+            job.data.parentId,
+          );
+          break;
+        }
       }
-      case 'purge-parent-account': {
-        await this.accountDeletionService.permanentlyPurgeParent(
-          job.data.parentId,
-        );
-        break;
-      }
+    } catch (err) {
+      await this.accountDeletionService.recordPurgeFailure(job, err);
+      throw err;
     }
   }
 }

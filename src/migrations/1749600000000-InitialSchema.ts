@@ -158,6 +158,29 @@ export class InitialSchema1749600000000 implements MigrationInterface {
       DO $$ BEGIN CREATE TYPE "time_events_type_enum" AS ENUM ('STARTED', 'PAUSED', 'RESUMED', 'ENDED');
       EXCEPTION WHEN duplicate_object THEN NULL; END $$
     `);
+    // NOTE: PurgeAuditReport migration adds STUDENT_PURGE_FAILED / PARENT_PURGE_FAILED enum values
+    await queryRunner.query(`
+      DO $$ BEGIN
+        CREATE TYPE "deletion_audit_event" AS ENUM (
+          'STUDENT_DELETION_REQUESTED',
+          'STUDENT_DELETION_ALREADY_PENDING',
+          'STUDENT_DELETION_CANCELLED',
+          'STUDENT_ACCOUNT_PURGED',
+          'PARENT_DELETION_REQUESTED',
+          'PARENT_DELETION_ALREADY_PENDING',
+          'PARENT_DELETION_CANCELLED',
+          'PARENT_ACCOUNT_PURGED',
+          'CHILD_DELETION_REQUESTED',
+          'CHILD_DELETION_CANCELLED',
+          'CHILD_CASCADE_DEACTIVATED',
+          'CHILD_CASCADE_PURGED'
+        );
+      EXCEPTION WHEN duplicate_object THEN NULL; END $$
+    `);
+    await queryRunner.query(`
+      DO $$ BEGIN CREATE TYPE "audit_account_type" AS ENUM ('STUDENT', 'PARENT');
+      EXCEPTION WHEN duplicate_object THEN NULL; END $$
+    `);
 
     // ─── TABLES (dependency order) ────────────────────────────────────────────
 
@@ -885,6 +908,21 @@ export class InitialSchema1749600000000 implements MigrationInterface {
       EXCEPTION WHEN duplicate_object THEN NULL; END $$
     `);
 
+    // NOTE: PurgeAuditReport migration adds the purge_report column
+    await queryRunner.query(`
+      CREATE TABLE IF NOT EXISTS "deletion_audit_logs" (
+        "id"                 uuid                    NOT NULL DEFAULT uuid_generate_v4(),
+        "event"              "deletion_audit_event"  NOT NULL,
+        "account_id"         varchar                 NOT NULL,
+        "account_type"       "audit_account_type"    NOT NULL,
+        "affected_child_ids" text,
+        "ip_address"         varchar,
+        "user_agent"         varchar,
+        "occurred_at"        timestamptz             NOT NULL DEFAULT now(),
+        CONSTRAINT "PK_deletion_audit_logs" PRIMARY KEY ("id")
+      )
+    `);
+
     // ─── JOIN TABLES ──────────────────────────────────────────────────────────
 
     await queryRunner.query(`
@@ -1132,6 +1170,7 @@ export class InitialSchema1749600000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE IF EXISTS "deletion_audit_logs"`);
     await queryRunner.query(`DROP TABLE IF EXISTS "parent_subscription_children"`);
     await queryRunner.query(`DROP TABLE IF EXISTS "checkouts_categories_categories"`);
     await queryRunner.query(`DROP TABLE IF EXISTS "checkouts_courses_courses"`);
@@ -1209,5 +1248,7 @@ export class InitialSchema1749600000000 implements MigrationInterface {
     await queryRunner.query(`DROP TYPE IF EXISTS "school_students_class_level_enum"`);
     await queryRunner.query(`DROP TYPE IF EXISTS "children_class_level_enum"`);
     await queryRunner.query(`DROP TYPE IF EXISTS "parents_gender_enum"`);
+    await queryRunner.query(`DROP TYPE IF EXISTS "audit_account_type"`);
+    await queryRunner.query(`DROP TYPE IF EXISTS "deletion_audit_event"`);
   }
 }

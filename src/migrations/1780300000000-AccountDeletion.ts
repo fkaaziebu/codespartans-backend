@@ -61,6 +61,12 @@ export class AccountDeletion1780300000000 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE parent_subscriptions ALTER COLUMN "parentId" DROP NOT NULL`,
     );
+    // Drop the named FK added by InitialSchema (if it exists) before the DO block so
+    // that LIMIT 1 below doesn't pick the auto-generated FK while leaving this one.
+    await queryRunner.query(`
+      ALTER TABLE parent_subscriptions
+        DROP CONSTRAINT IF EXISTS "FK_parent_subscriptions_parent"
+    `);
     await queryRunner.query(`
       DO $$
       DECLARE fk_name text;
@@ -89,6 +95,10 @@ export class AccountDeletion1780300000000 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE tests ALTER COLUMN "studentId" DROP NOT NULL`,
     );
+    // Drop the named FK added by InitialSchema before the DO block.
+    await queryRunner.query(`
+      ALTER TABLE tests DROP CONSTRAINT IF EXISTS "FK_tests_student"
+    `);
     await queryRunner.query(`
       DO $$
       DECLARE fk_name text;

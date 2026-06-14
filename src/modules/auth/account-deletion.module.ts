@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { BullModule } from '@nestjs/bullmq';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DeletionAuditLog } from './entities/deletion-audit-log.entity';
 import { Student } from './entities/student.entity';
 import { Parent } from '../parent/entities/parent.entity';
 import { Child } from '../parent/entities/child.entity';
@@ -14,11 +16,12 @@ import { EmailProducer } from './services/email.producer';
 
 @Module({
   imports: [
+    ConfigModule,
     BullModule.registerQueue(
       { name: 'account-deletion-queue' },
       { name: 'email-queue' },
     ),
-    TypeOrmModule.forFeature([Student, Parent, Child, Cart, Checkout, Test]),
+    TypeOrmModule.forFeature([Student, Parent, Child, Cart, Checkout, Test, DeletionAuditLog]),
   ],
   providers: [
     AccountDeletionService,

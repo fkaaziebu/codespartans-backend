@@ -1,4 +1,5 @@
 import { Admin } from '../modules/auth/entities/admin.entity';
+import { DeletionAuditLog } from '../modules/auth/entities/deletion-audit-log.entity';
 import { Instructor } from '../modules/auth/entities/instructor.entity';
 import { Organization } from '../modules/auth/entities/organization.entity';
 import { Student } from '../modules/auth/entities/student.entity';
@@ -33,6 +34,7 @@ import { SchoolStudent } from '../modules/school/entities/school-student.entity'
 export const entities = [
   Admin,
   Cart,
+  DeletionAuditLog,
   Category,
   Checkout,
   Child,
@@ -67,6 +69,7 @@ export const entities = [
 export {
   Admin,
   Cart,
+  DeletionAuditLog,
   Category,
   Checkout,
   Child,

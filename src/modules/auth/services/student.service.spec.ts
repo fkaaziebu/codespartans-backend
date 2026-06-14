@@ -1,13 +1,25 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { entities, Organization, Student } from '../../../database/entities';
+import {
+  Cart,
+  Child,
+  entities,
+  Organization,
+  Student,
+} from '../../../database/entities';
 import { HashHelper } from '../../../helpers';
 import { LoginBodyDto } from '../dto/login-body.dto';
+import { ClassLevel } from '../../parent/entities/child.entity';
+import { AccountStatus } from '../types/account-deletion-response.type';
 import { AccountDeletionService } from './account-deletion.service';
 import { EmailProducer } from './email.producer';
 import { SignupProducer } from './signup.producer';
@@ -21,11 +33,14 @@ describe('StudentService', () => {
   let studentService: StudentService;
   let studentRepository: Repository<Student>;
   let organizationRepository: Repository<Organization>;
+  let childRepository: Repository<Child>;
+  let cartRepository: Repository<Cart>;
 
   const mockEmailProducer = {
     sendAccountValidationEmail: jest.fn().mockResolvedValue(undefined),
     sendPasswordResetEmail: jest.fn().mockResolvedValue(undefined),
     sendAccountRestoredNotice: jest.fn().mockResolvedValue(undefined),
+    sendCancellationOtpEmail: jest.fn().mockResolvedValue(undefined),
   };
 
   const mockSignupProducer = {
@@ -34,6 +49,12 @@ describe('StudentService', () => {
 
   const mockAccountDeletionService = {
     restoreStudent: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockCacheManager = {
+    get: jest.fn().mockResolvedValue(null),
+    set: jest.fn().mockResolvedValue(undefined),
+    del: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeAll(async () => {
@@ -72,21 +93,16 @@ describe('StudentService', () => {
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: SignupProducer, useValue: mockSignupProducer },
         { provide: AccountDeletionService, useValue: mockAccountDeletionService },
-        {
-          provide: CACHE_MANAGER,
-          useValue: { get: jest.fn().mockResolvedValue(null), set: jest.fn().mockResolvedValue(undefined), del: jest.fn().mockResolvedValue(undefined) },
-        },
+        { provide: CACHE_MANAGER, useValue: mockCacheManager },
       ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);
     studentService = module.get<StudentService>(StudentService);
-    studentRepository = module.get<Repository<Student>>(
-      getRepositoryToken(Student),
-    );
-    organizationRepository = module.get<Repository<Organization>>(
-      getRepositoryToken(Organization),
-    );
+    studentRepository = module.get<Repository<Student>>(getRepositoryToken(Student));
+    organizationRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
+    childRepository = module.get<Repository<Child>>(getRepositoryToken(Child));
+    cartRepository = module.get<Repository<Cart>>(getRepositoryToken(Cart));
   });
 
   beforeEach(async () => {
@@ -96,6 +112,8 @@ describe('StudentService', () => {
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
     jest.clearAllMocks();
+    // Reset cache mock to default (no cached values)
+    mockCacheManager.get.mockResolvedValue(null);
   });
 
   afterAll(async () => {
@@ -126,6 +144,49 @@ describe('StudentService', () => {
     student.is_account_validated = true;
     student.validation_code = null;
     return studentRepository.save(student);
+  };
+
+  /** Create a child account linked to a given student */
+  const createChildForStudent = async (student: Student) => {
+    const org = await seedGenpopOrganization();
+    const cart = await cartRepository.save(new Cart());
+
+    const childStudent = new Student();
+    childStudent.name = 'Child Student';
+    childStudent.email = `${student.email}.child@child.local`;
+    childStudent.password = await HashHelper.encrypt('1234');
+    childStudent.is_account_validated = true;
+    childStudent.cart = cart;
+    childStudent.organizations = [org];
+    await studentRepository.save(childStudent);
+
+    const { Parent } = await import('../../parent/entities/parent.entity');
+    const { Gender } = await import('../../parent/entities/parent.entity');
+    const { parentRepository: pr } = { parentRepository: dataSource.getRepository(Parent) };
+    const parent = pr.create({
+      first_name: 'Test',
+      last_name: 'Parent',
+      email: 'testparent@test.com',
+      whatsapp_number: '+233501234567',
+      gender: Gender.Male,
+      password: await HashHelper.encrypt('pass'),
+      is_account_validated: true,
+    });
+    await pr.save(parent);
+
+    const childRepo = dataSource.getRepository(Child);
+    const child = childRepo.create({
+      full_name: 'Child One',
+      class_level: ClassLevel.JHS1,
+      target_exam: '00000000-0000-0000-0000-000000000001',
+      username: 'child.one99',
+      pin: await HashHelper.encrypt('1234'),
+      parent,
+      student: childStudent,
+    });
+    await childRepo.save(child);
+
+    return { child, childStudent };
   };
 
   describe('registerStudent', () => {
@@ -238,7 +299,7 @@ describe('StudentService', () => {
       );
     });
 
-    it('restores account and returns token if deactivated within 90-day grace period', async () => {
+    it('returns pending-deletion token and sends OTP when deactivated within grace period', async () => {
       await registerAndValidateStudent();
       await studentRepository.update(
         { email: studentInfo.email },
@@ -252,9 +313,12 @@ describe('StudentService', () => {
       const response = await studentService.loginStudent(studentInfo);
 
       expect(response.token).toBeDefined();
-      expect(mockAccountDeletionService.restoreStudent).toHaveBeenCalledWith(
+      expect(response.account_status).toBe(AccountStatus.PENDING_DELETION);
+      expect(response.deletion_scheduled_for).toBeInstanceOf(Date);
+      expect(mockEmailProducer.sendCancellationOtpEmail).toHaveBeenCalledWith(
         expect.objectContaining({ email: studentInfo.email }),
       );
+      expect(mockAccountDeletionService.restoreStudent).not.toHaveBeenCalled();
     });
   });
 
@@ -470,6 +534,38 @@ describe('StudentService', () => {
         }),
       ).rejects.toThrow(new BadRequestException('Invalid token type'));
     });
+
+    it('throws UnauthorizedException when account is deactivated', async () => {
+      await registerAndValidateStudent();
+      const loginResponse = await studentService.loginStudent(studentInfo);
+
+      // Simulate deactivation flag in cache
+      mockCacheManager.get.mockResolvedValueOnce('1');
+
+      await expect(
+        studentService.refreshStudentToken({
+          refresh_token: loginResponse.refresh_token,
+        }),
+      ).rejects.toThrow(new UnauthorizedException('Account has been deactivated'));
+    });
+
+    it('throws UnauthorizedException when password was recently changed', async () => {
+      await registerAndValidateStudent();
+      const loginResponse = await studentService.loginStudent(studentInfo);
+
+      // First call (deactivated check) returns null, second (pw_changed) returns '1'
+      mockCacheManager.get
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce('1');
+
+      await expect(
+        studentService.refreshStudentToken({
+          refresh_token: loginResponse.refresh_token,
+        }),
+      ).rejects.toThrow(
+        new UnauthorizedException('Password was recently changed. Please log in again.'),
+      );
+    });
   });
 
   describe('requestStudentPasswordReset', () => {
@@ -528,6 +624,11 @@ describe('StudentService', () => {
       expect(
         await HashHelper.compare('newpassword', updatedStudent.password),
       ).toBe(true);
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        expect.stringContaining('pw_changed:'),
+        '1',
+        expect.any(Number),
+      );
     });
 
     it('throws BadRequestException for an invalid reset token', async () => {
@@ -554,6 +655,267 @@ describe('StudentService', () => {
       ).rejects.toThrow(
         new BadRequestException('Invalid Password reset details'),
       );
+    });
+  });
+
+  describe('changePassword', () => {
+    it('changes the password and sets pw_changed cache flag', async () => {
+      await registerAndValidateStudent();
+
+      const response = await studentService.changePassword({
+        email: studentInfo.email,
+        currentPassword: studentInfo.password,
+        newPassword: 'newSecurePassword',
+      });
+
+      expect(response.message).toBe('Password changed successfully');
+
+      const updated = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
+      expect(await HashHelper.compare('newSecurePassword', updated.password)).toBe(true);
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        expect.stringContaining('pw_changed:'),
+        '1',
+        expect.any(Number),
+      );
+    });
+
+    it('throws BadRequestException if current password is incorrect', async () => {
+      await registerAndValidateStudent();
+
+      await expect(
+        studentService.changePassword({
+          email: studentInfo.email,
+          currentPassword: 'wrongpassword',
+          newPassword: 'newpass',
+        }),
+      ).rejects.toThrow(new BadRequestException('Current password is incorrect'));
+    });
+
+    it('throws BadRequestException if student does not exist', async () => {
+      await expect(
+        studentService.changePassword({
+          email: 'nobody@test.com',
+          currentPassword: 'any',
+          newPassword: 'new',
+        }),
+      ).rejects.toThrow(new BadRequestException('Invalid credentials'));
+    });
+  });
+
+  describe('changePin', () => {
+    it('changes the pin for a child-linked student', async () => {
+      const org = await seedGenpopOrganization();
+      const cart = await cartRepository.save(new Cart());
+
+      const childStudent = new Student();
+      childStudent.name = 'Child Student';
+      childStudent.email = 'child@child.local';
+      childStudent.password = await HashHelper.encrypt('1234');
+      childStudent.is_account_validated = true;
+      childStudent.cart = cart;
+      childStudent.organizations = [org];
+      await studentRepository.save(childStudent);
+
+      const { Parent } = await import('../../parent/entities/parent.entity');
+      const { Gender } = await import('../../parent/entities/parent.entity');
+      const parentRepo = dataSource.getRepository(Parent);
+      const parent = parentRepo.create({
+        first_name: 'Test',
+        last_name: 'Parent',
+        email: 'pinparent@test.com',
+        whatsapp_number: '+233501234567',
+        gender: Gender.Male,
+        password: await HashHelper.encrypt('pass'),
+        is_account_validated: true,
+      });
+      await parentRepo.save(parent);
+
+      const child = childRepository.create({
+        full_name: 'Child One',
+        class_level: ClassLevel.JHS1,
+        target_exam: '00000000-0000-0000-0000-000000000001',
+        username: 'child.pin99',
+        pin: await HashHelper.encrypt('1234'),
+        parent,
+        student: childStudent,
+      });
+      await childRepository.save(child);
+
+      const response = await studentService.changePin({
+        email: childStudent.email,
+        currentPin: '1234',
+        newPin: '5678',
+      });
+
+      expect(response.message).toBe('Pin changed successfully');
+
+      const updatedChild = await childRepository.findOne({ where: { id: child.id } });
+      expect(await HashHelper.compare('5678', updatedChild.pin)).toBe(true);
+    });
+
+    it('throws UnauthorizedException if current pin is incorrect', async () => {
+      const org = await seedGenpopOrganization();
+      const cart = await cartRepository.save(new Cart());
+
+      const childStudent = new Student();
+      childStudent.name = 'Child Student 2';
+      childStudent.email = 'child2@child.local';
+      childStudent.password = await HashHelper.encrypt('1234');
+      childStudent.is_account_validated = true;
+      childStudent.cart = cart;
+      childStudent.organizations = [org];
+      await studentRepository.save(childStudent);
+
+      const { Parent } = await import('../../parent/entities/parent.entity');
+      const { Gender } = await import('../../parent/entities/parent.entity');
+      const parentRepo = dataSource.getRepository(Parent);
+      const parent = parentRepo.create({
+        first_name: 'Parent',
+        last_name: 'Two',
+        email: 'pinparent2@test.com',
+        whatsapp_number: '+233501234568',
+        gender: Gender.Female,
+        password: await HashHelper.encrypt('pass'),
+        is_account_validated: true,
+      });
+      await parentRepo.save(parent);
+
+      const child = childRepository.create({
+        full_name: 'Child Two',
+        class_level: ClassLevel.JHS1,
+        target_exam: '00000000-0000-0000-0000-000000000001',
+        username: 'child.pin2x',
+        pin: await HashHelper.encrypt('1234'),
+        parent,
+        student: childStudent,
+      });
+      await childRepository.save(child);
+
+      await expect(
+        studentService.changePin({
+          email: childStudent.email,
+          currentPin: '0000',
+          newPin: '5678',
+        }),
+      ).rejects.toThrow(new UnauthorizedException('Current pin is incorrect'));
+    });
+
+    it('throws BadRequestException if no child found for the email', async () => {
+      await expect(
+        studentService.changePin({
+          email: 'nobody@child.local',
+          currentPin: '1234',
+          newPin: '5678',
+        }),
+      ).rejects.toThrow(new BadRequestException('Child account not found'));
+    });
+  });
+
+  describe('verifyCancellationOtp', () => {
+    it('returns success when OTP matches the cache', async () => {
+      await registerAndValidateStudent();
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
+
+      mockCacheManager.get.mockResolvedValueOnce('123456');
+
+      const result = await studentService.verifyCancellationOtp(student.id, '123456');
+
+      expect(result.message).toContain('OTP verified');
+      expect(mockCacheManager.del).toHaveBeenCalledWith(`cancel_otp:${student.id}`);
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        `cancel_otp_verified:${student.id}`,
+        '1',
+        expect.any(Number),
+      );
+    });
+
+    it('throws BadRequestException if OTP does not match', async () => {
+      await registerAndValidateStudent();
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
+
+      mockCacheManager.get.mockResolvedValueOnce('999999');
+
+      await expect(
+        studentService.verifyCancellationOtp(student.id, '123456'),
+      ).rejects.toThrow(new BadRequestException('Invalid or expired OTP.'));
+    });
+
+    it('throws BadRequestException if no OTP is in cache', async () => {
+      await registerAndValidateStudent();
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
+
+      // cache returns null (default mock)
+      await expect(
+        studentService.verifyCancellationOtp(student.id, '123456'),
+      ).rejects.toThrow(new BadRequestException('Invalid or expired OTP.'));
+    });
+  });
+
+  describe('cancelStudentAccountDeletion', () => {
+    it('restores a deactivated student after OTP verification and returns token', async () => {
+      await registerAndValidateStudent();
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
+      await studentRepository.update(student.id, {
+        is_deactivated: true,
+        deactivated_at: new Date(),
+      });
+
+      // Simulate OTP verified in cache
+      mockCacheManager.get.mockResolvedValueOnce('1');
+
+      const response = await studentService.cancelStudentAccountDeletion(student.id);
+
+      expect(response.token).toBeDefined();
+      expect(response.refresh_token).toBeDefined();
+      expect(response.account_status).toBe(AccountStatus.ACTIVE);
+      expect(mockAccountDeletionService.restoreStudent).toHaveBeenCalledWith(
+        expect.objectContaining({ id: student.id }),
+        null,
+      );
+    });
+
+    it('throws UnauthorizedException when OTP was not verified', async () => {
+      await registerAndValidateStudent();
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
+
+      // cache returns null (no verified flag)
+      await expect(
+        studentService.cancelStudentAccountDeletion(student.id),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('throws UnauthorizedException if student is not deactivated', async () => {
+      await registerAndValidateStudent();
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
+
+      // OTP is verified but student is not deactivated
+      mockCacheManager.get.mockResolvedValueOnce('1');
+
+      await expect(
+        studentService.cancelStudentAccountDeletion(student.id),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('throws UnauthorizedException if student does not exist', async () => {
+      mockCacheManager.get.mockResolvedValueOnce('1');
+
+      await expect(
+        studentService.cancelStudentAccountDeletion('00000000-0000-0000-0000-000000000000'),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 

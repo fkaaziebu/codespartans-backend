@@ -6,6 +6,6 @@ export class StudentLoginResponse extends StudentTypeClass {
   @Field()
   token: string;
 
-  @Field()
-  refresh_token: string;
+  @Field({ nullable: true })
+  refresh_token?: string;
 }

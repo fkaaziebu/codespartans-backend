@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   Post,
   Query,
   Req,
@@ -14,14 +15,28 @@ import { ConfigService } from '@nestjs/config';
 import { GoogleAuthGuard } from '../guards/google-auth.guard';
 import { ConsentQueryDto } from '../dto/consent-query.dto';
 import { ConsentInfoBodyDto } from '../dto/consent-info-body.dto';
+import { AccountStatus } from '../types/account-deletion-response.type';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { EmailProducer } from '../services/email.producer';
 
 @Controller('v1/students')
 export class StudentController {
+  private readonly gracePeriodMs: number;
   constructor(
     private readonly studentService: StudentService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly emailProducer: EmailProducer,
+  ) {
+    this.gracePeriodMs =
+      this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
+      24 *
+      60 *
+      60 *
+      1000;
+  }
 
   @UseGuards(GoogleAuthGuard)
   @Get('/auth/google/login')
@@ -45,6 +60,34 @@ export class StudentController {
       );
     }
 
+    if (user.is_deactivated) {
+      const deletionScheduledFor = new Date(
+        new Date(user.deactivated_at).getTime() + this.gracePeriodMs,
+      );
+      const pendingToken = this.jwtService.sign(
+        {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: 'STUDENT',
+          type: 'pending_deletion',
+        },
+        { expiresIn: '15m' },
+      );
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      await this.cacheManager.set(`cancel_otp:${user.id}`, otp, 10 * 60 * 1000);
+      await this.emailProducer.sendCancellationOtpEmail({
+        email: user.email,
+        name: user.name,
+        otp,
+      });
+
+      res.redirect(
+        `${this.configService.get<string>('STUDENT_URL')}/oauth/redirect?token=${pendingToken}&organizationId=${user.organizations.at(0).id}&isSetupCompleted=${Boolean(user.is_setup_completed)}&accountStatus=${AccountStatus.PENDING_DELETION}&deletionScheduledFor=${deletionScheduledFor}`,
+      );
+    }
+
     const payload: {
       id: string;
       name: string;
@@ -58,9 +101,13 @@ export class StudentController {
     };
 
     const access_token = this.jwtService.sign(payload);
+    const refresh_token = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      { expiresIn: '30d' },
+    );
 
     res.redirect(
-      `${this.configService.get<string>('STUDENT_URL')}/oauth/redirect?token=${access_token}&organizationId=${user.organizations.at(0).id}&isSetupCompleted=${Boolean(user.is_setup_completed)}`,
+      `${this.configService.get<string>('STUDENT_URL')}/oauth/redirect?token=${access_token}&refreshToken=${refresh_token}&organizationId=${user.organizations.at(0).id}&isSetupCompleted=${Boolean(user.is_setup_completed)}`,
     );
   }
 

@@ -1,9 +1,14 @@
 import {
   BadRequestException,
+  ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { AccountStatus } from '../../auth/types/account-deletion-response.type';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,8 +35,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { SignupProducer } from '../../auth/services/signup.producer';
 import { AccountDeletionService } from '../../auth/services/account-deletion.service';
+import { RequestMetadata } from '../../auth/entities/deletion-audit-log.entity';
 import { Child, ClassLevel } from '../entities/child.entity';
 import { Gender, Parent } from '../entities/parent.entity';
+
+const TTL_30D_MS = 30 * 24 * 60 * 60 * 1000;
 import {
   ActivityConnection,
   ChildStatsResponse,
@@ -44,6 +52,7 @@ import {
 
 @Injectable()
 export class ParentService {
+  private readonly gracePeriodMs: number;
   constructor(
     @InjectRepository(Parent)
     private parentRepository: Repository<Parent>,
@@ -60,7 +69,15 @@ export class ParentService {
     private readonly emailProducer: EmailProducer,
     private readonly signupProducer: SignupProducer,
     private readonly accountDeletionService: AccountDeletionService,
-  ) {}
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+  ) {
+    this.gracePeriodMs =
+      this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
+      24 *
+      60 *
+      60 *
+      1000;
+  }
 
   async registerParent({
     first_name,
@@ -142,6 +159,20 @@ export class ParentService {
 
     if (payload.type !== 'refresh' || payload.role !== 'PARENT') {
       throw new UnauthorizedException('Invalid token type');
+    }
+
+    const isDeactivated = await this.cacheManager.get(
+      `deactivated:${payload.id}`,
+    );
+    if (isDeactivated) {
+      throw new UnauthorizedException('Account has been deactivated');
+    }
+
+    const pwChanged = await this.cacheManager.get(`pw_changed:${payload.id}`);
+    if (pwChanged) {
+      throw new UnauthorizedException(
+        'Password was recently changed. Please log in again.',
+      );
     }
 
     const {
@@ -264,10 +295,9 @@ export class ParentService {
         }
 
         if (record.is_deactivated) {
-          const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
           const elapsed =
             Date.now() - new Date(record.deactivated_at).getTime();
-          if (elapsed >= NINETY_DAYS_MS) {
+          if (elapsed >= this.gracePeriodMs) {
             throw new BadRequestException('This account no longer exists.');
           }
         }
@@ -276,9 +306,39 @@ export class ParentService {
       },
     );
 
-    // Restore outside transaction to avoid write-lock deadlock
     if (foundParent.is_deactivated) {
-      await this.accountDeletionService.restoreParent(foundParent);
+      const deletionScheduledFor = new Date(
+        new Date(foundParent.deactivated_at).getTime() + this.gracePeriodMs,
+      );
+      const pendingToken = this.jwtService.sign(
+        {
+          id: foundParent.id,
+          name: `${foundParent.first_name} ${foundParent.last_name}`,
+          email: foundParent.email,
+          role: 'PARENT',
+          type: 'pending_deletion',
+        },
+        { expiresIn: '15m' },
+      );
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      await this.cacheManager.set(
+        `cancel_otp:${foundParent.id}`,
+        otp,
+        10 * 60 * 1000,
+      );
+      await this.emailProducer.sendCancellationOtpEmail({
+        email: foundParent.email,
+        name: `${foundParent.first_name} ${foundParent.last_name}`,
+        otp,
+      });
+
+      return {
+        ...foundParent,
+        token: pendingToken,
+        account_status: AccountStatus.PENDING_DELETION,
+        deletion_scheduled_for: deletionScheduledFor,
+      };
     }
 
     const payload = {
@@ -295,6 +355,112 @@ export class ParentService {
     );
 
     return { ...foundParent, token, refresh_token };
+  }
+
+  async verifyCancellationOtp(
+    parentId: string,
+    otp: string,
+  ): Promise<{ message: string }> {
+    const stored = await this.cacheManager.get<string>(
+      `cancel_otp:${parentId}`,
+    );
+    if (!stored || stored !== otp) {
+      throw new BadRequestException('Invalid or expired OTP.');
+    }
+    await this.cacheManager.del(`cancel_otp:${parentId}`);
+    await this.cacheManager.set(
+      `cancel_otp_verified:${parentId}`,
+      '1',
+      10 * 60 * 1000,
+    );
+    return { message: 'OTP verified. You may now cancel deletion.' };
+  }
+
+  async cancelParentAccountDeletion(
+    parentId: string,
+    meta?: RequestMetadata,
+  ): Promise<LoginParentResponse> {
+    const verified = await this.cacheManager.get(
+      `cancel_otp_verified:${parentId}`,
+    );
+    if (!verified) {
+      throw new UnauthorizedException(
+        'Email verification required before cancelling deletion.',
+      );
+    }
+    await this.cacheManager.del(`cancel_otp_verified:${parentId}`);
+
+    const parent = await this.parentRepository.findOne({
+      where: { id: parentId },
+      relations: ['children', 'children.student'],
+    });
+
+    if (!parent || !parent.is_deactivated) {
+      throw new UnauthorizedException(
+        'No pending deletion found for this account.',
+      );
+    }
+
+    await this.accountDeletionService.restoreParent(parent, meta ?? null);
+
+    const payload = {
+      id: parent.id,
+      name: `${parent.first_name} ${parent.last_name}`,
+      email: parent.email,
+      role: 'PARENT' as const,
+    };
+
+    const token = this.jwtService.sign(payload);
+    const refresh_token = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      { expiresIn: '30d' },
+    );
+
+    return {
+      ...parent,
+      token,
+      refresh_token,
+      account_status: AccountStatus.ACTIVE,
+    };
+  }
+
+  async cancelChildDeletion(
+    parentEmail: string,
+    childId: string,
+    meta: RequestMetadata | null = null,
+  ) {
+    const child = await this.childRepository.findOne({
+      where: { id: childId },
+      relations: ['parent', 'student'],
+    });
+
+    if (!child) {
+      throw new NotFoundException('Child not found.');
+    }
+
+    if (child.parent.email !== parentEmail) {
+      throw new ForbiddenException(
+        'You are not authorized to restore this child account.',
+      );
+    }
+
+    if (!child.student || !child.student.is_deactivated) {
+      throw new NotFoundException(
+        'No pending deletion found for this child account.',
+      );
+    }
+
+    await this.accountDeletionService.restoreChild(
+      child.parent.id,
+      child,
+      meta,
+    );
+
+    return {
+      message: 'Child account deletion cancelled.',
+      deletionScheduledFor: null,
+      status: AccountStatus.ACTIVE,
+    };
   }
 
   async requestParentPasswordReset({ email }: { email: string }) {
@@ -332,7 +498,9 @@ export class ParentService {
     password: string;
     token: string;
   }) {
-    return this.parentRepository.manager.transaction(
+    let parentId: string;
+
+    const result = await this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const parent = await transactionalEntityManager.findOne(Parent, {
           where: { email },
@@ -342,6 +510,7 @@ export class ParentService {
           throw new BadRequestException('Invalid password reset details');
         }
 
+        parentId = parent.id;
         parent.reset_token = '';
         parent.password = await HashHelper.encrypt(password);
         await transactionalEntityManager.save(parent);
@@ -349,6 +518,50 @@ export class ParentService {
         return { message: 'Password reset is successful' };
       },
     );
+
+    await this.cacheManager.set(`pw_changed:${parentId}`, '1', TTL_30D_MS);
+    return result;
+  }
+
+  async changeParentPassword({
+    email,
+    currentPassword,
+    newPassword,
+  }: {
+    email: string;
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<{ message: string }> {
+    let parentId: string;
+
+    const result = await this.parentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const parent = await transactionalEntityManager.findOne(Parent, {
+          where: { email },
+        });
+
+        if (!parent) {
+          throw new BadRequestException('Invalid credentials');
+        }
+
+        const isValid = await HashHelper.compare(
+          currentPassword,
+          parent.password,
+        );
+        if (!isValid) {
+          throw new BadRequestException('Current password is incorrect');
+        }
+
+        parentId = parent.id;
+        parent.password = await HashHelper.encrypt(newPassword);
+        await transactionalEntityManager.save(parent);
+
+        return { message: 'Password changed successfully' };
+      },
+    );
+
+    await this.cacheManager.set(`pw_changed:${parentId}`, '1', TTL_30D_MS);
+    return result;
   }
 
   async setupParentAccount(
@@ -1234,6 +1447,12 @@ export class ParentService {
 
     if (!child) {
       throw new NotFoundException('Child not found');
+    }
+
+    if (child.student?.is_deactivated) {
+      throw new UnauthorizedException(
+        'This account is pending deletion. Contact your parent to cancel.',
+      );
     }
 
     const isPinValid = await HashHelper.compare(pin, child.pin);

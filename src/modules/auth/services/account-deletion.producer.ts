@@ -1,21 +1,27 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Queue } from 'bullmq';
-
-const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class AccountDeletionProducer {
+  private readonly gracePeriodMs: number;
+
   constructor(
     @InjectQueue('account-deletion-queue')
     private readonly queue: Queue,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.gracePeriodMs =
+      this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
+      24 * 60 * 60 * 1000;
+  }
 
   async scheduleStudentPurge(studentId: string): Promise<string> {
     const job = await this.queue.add(
       'purge-student-account',
       { studentId },
-      { delay: NINETY_DAYS_MS },
+      { delay: this.gracePeriodMs },
     );
     return String(job.id);
   }
@@ -24,7 +30,7 @@ export class AccountDeletionProducer {
     const job = await this.queue.add(
       'purge-parent-account',
       { parentId },
-      { delay: NINETY_DAYS_MS },
+      { delay: this.gracePeriodMs },
     );
     return String(job.id);
   }

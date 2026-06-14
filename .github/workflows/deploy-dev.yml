@@ -10,7 +10,7 @@ env:
 
 jobs:
   test:
-    name: Run Tests
+    name: Run Unit Tests
     runs-on: ubuntu-latest
 
     services:
@@ -48,15 +48,88 @@ jobs:
           JWT_SECRET=test-jwt-secret-for-ci
           DATABASE_URL=postgresql://postgres:postgres@localhost:5432/codespartans-test-db?sslmode=disable
           GENPOP_EMAIL=genpop@codespartans.com
+          ACCOUNT_DELETION_GRACE_DAYS=90
           EOF
 
-      - name: Run tests
+      - name: Run unit tests
         run: npm run test -- --runInBand --forceExit
+
+  test-e2e:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: codespartans-test-db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Write test environment file
+        run: |
+          cat > .env.test.local << 'EOF'
+          PORT=4002
+          JWT_SECRET=test-jwt-secret-for-ci
+          DATABASE_URL=postgresql://postgres:postgres@localhost:5432/codespartans-test-db?sslmode=disable
+          DB_USERNAME=postgres
+          DB_PASSWORD=postgres
+          DB_HOST=localhost
+          DB_PORT=5432
+          DB_NAME=codespartans-test-db
+          DB_NAME_TEST=codespartans-test-db
+          GENPOP_EMAIL=genpop@codespartans.com
+          EMAIL_FROM=noreply@ci.test
+          GMAIL_APP_PASSWORD=ci-fake-gmail-pass
+          GMAIL_USER=ci@gmail.test
+          EMAIL_HOST=smtp.gmail.com
+          STUDENT_URL=http://localhost:3000
+          PARENT_URL=http://localhost:3001
+          PAYSTACK_SECRET_KEY=sk_test_fake
+          ANTHROPIC_API_KEY=sk-ant-fake
+          PAYMENT_RETENTION_YEARS=7
+          ADMIN_EMAIL=admin@example.com
+          REDIS_URL=redis://localhost:6379
+          ACCOUNT_DELETION_GRACE_DAYS=90
+          EOF
+
+      - name: Run E2E tests
+        run: npm run test:e2e -- --runInBand --forceExit
 
   build-and-push:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, test-e2e]
 
     steps:
       - name: Checkout repository

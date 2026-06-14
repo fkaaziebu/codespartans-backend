@@ -16,6 +16,7 @@ import { Checkout } from '../../inventory/entities/checkout.entity';
 import { Course } from '../../inventory/entities/course.entity';
 import { Organization } from './organization.entity';
 import { Test } from '../../simulation/entities/test.entity';
+import { AccountStatus } from '../types/account-deletion-response.type';
 
 @ObjectType('Student')
 @Entity('students')
@@ -84,4 +85,10 @@ export class Student {
 
   @Column({ nullable: true })
   deletion_job_id: string | null;
+
+  @Field(() => AccountStatus, { nullable: true })
+  account_status?: AccountStatus;
+
+  @Field(() => Date, { nullable: true })
+  deletion_scheduled_for?: Date;
 }

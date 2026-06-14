@@ -1,8 +1,8 @@
 import {
-  BadRequestException,
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +11,7 @@ import {
   Cart,
   Checkout,
   Child,
+  DeletionAuditLog,
   entities,
   Organization,
   Parent,
@@ -25,6 +26,7 @@ import { TestModeType, TestStatusType } from '../../simulation/entities/test.ent
 import { ClassLevel } from '../../parent/entities/child.entity';
 import { Gender } from '../../parent/entities/parent.entity';
 import { PlanInterval } from '../../demo/entities/subscription-plan.entity';
+import { AccountStatus } from '../types/account-deletion-response.type';
 import { AccountDeletionProducer } from './account-deletion.producer';
 import { AccountDeletionService } from './account-deletion.service';
 import { EmailProducer } from './email.producer';
@@ -54,11 +56,21 @@ describe('AccountDeletionService', () => {
 
   const mockEmailProducer = {
     sendAccountDeletionNotice: jest.fn().mockResolvedValue(undefined),
+    sendChildDeletionNotice: jest.fn().mockResolvedValue(undefined),
     sendAccountRestoredNotice: jest.fn().mockResolvedValue(undefined),
     sendAccountPurgedConfirmation: jest.fn().mockResolvedValue(undefined),
+    sendPurgeFailureAlert: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockCacheManager = {
+    get: jest.fn().mockResolvedValue(null),
+    set: jest.fn().mockResolvedValue(undefined),
+    del: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeAll(async () => {
+    process.env.ACCOUNT_DELETION_GRACE_DAYS = '90';
+
     module = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env.test.local' }),
@@ -78,6 +90,7 @@ describe('AccountDeletionService', () => {
         AccountDeletionService,
         { provide: AccountDeletionProducer, useValue: mockAccountDeletionProducer },
         { provide: EmailProducer, useValue: mockEmailProducer },
+        { provide: CACHE_MANAGER, useValue: mockCacheManager },
       ],
     }).compile();
 
@@ -173,6 +186,8 @@ describe('AccountDeletionService', () => {
       const result = await accountDeletionService.requestStudentAccountDeletion(student.id);
 
       expect(result.message).toContain('90 days');
+      expect(result.deletionScheduledFor).toBeInstanceOf(Date);
+      expect(result.status).toBe(AccountStatus.PENDING_DELETION);
 
       const updated = await studentRepository.findOne({ where: { id: student.id } });
       expect(updated.is_deactivated).toBe(true);
@@ -204,16 +219,21 @@ describe('AccountDeletionService', () => {
       );
     });
 
-    it('throws BadRequestException if already deactivated', async () => {
+    it('returns AccountDeletionResponse if already deactivated (does not throw)', async () => {
       const student = await createStudent();
+      const deactivatedAt = new Date();
       await studentRepository.update(student.id, {
         is_deactivated: true,
-        deactivated_at: new Date(),
+        deactivated_at: deactivatedAt,
       });
 
-      await expect(
-        accountDeletionService.requestStudentAccountDeletion(student.id),
-      ).rejects.toThrow(new BadRequestException('Account deletion already requested'));
+      const result = await accountDeletionService.requestStudentAccountDeletion(student.id);
+
+      expect(result.status).toBe(AccountStatus.PENDING_DELETION);
+      expect(result.deletionScheduledFor).toBeInstanceOf(Date);
+      expect(result.message).toContain('days');
+      // Does not schedule another job
+      expect(mockAccountDeletionProducer.scheduleStudentPurge).not.toHaveBeenCalled();
     });
 
     it('throws NotFoundException if student does not exist', async () => {
@@ -232,6 +252,8 @@ describe('AccountDeletionService', () => {
       const result = await accountDeletionService.requestParentAccountDeletion(parent.id);
 
       expect(result.message).toContain('90 days');
+      expect(result.deletionScheduledFor).toBeInstanceOf(Date);
+      expect(result.status).toBe(AccountStatus.PENDING_DELETION);
 
       const updated = await parentRepository.findOne({ where: { id: parent.id } });
       expect(updated.is_deactivated).toBe(true);
@@ -266,16 +288,20 @@ describe('AccountDeletionService', () => {
       expect(mockAccountDeletionProducer.scheduleStudentPurge).toHaveBeenCalledWith(student.id);
     });
 
-    it('throws BadRequestException if parent already deactivated', async () => {
+    it('returns AccountDeletionResponse if parent already deactivated (does not throw)', async () => {
       const parent = await createParent();
+      const deactivatedAt = new Date();
       await parentRepository.update(parent.id, {
         is_deactivated: true,
-        deactivated_at: new Date(),
+        deactivated_at: deactivatedAt,
       });
 
-      await expect(
-        accountDeletionService.requestParentAccountDeletion(parent.id),
-      ).rejects.toThrow(new BadRequestException('Account deletion already requested'));
+      const result = await accountDeletionService.requestParentAccountDeletion(parent.id);
+
+      expect(result.status).toBe(AccountStatus.PENDING_DELETION);
+      expect(result.deletionScheduledFor).toBeInstanceOf(Date);
+      expect(result.message).toContain('days');
+      expect(mockAccountDeletionProducer.scheduleParentPurge).not.toHaveBeenCalled();
     });
 
     it('throws NotFoundException if parent does not exist', async () => {
@@ -288,7 +314,7 @@ describe('AccountDeletionService', () => {
   // ─── deleteChild ──────────────────────────────────────────────────────────────
 
   describe('deleteChild', () => {
-    it('initiates deletion of child student and nullifies child.student', async () => {
+    it('initiates deletion of child student and sends child deletion notice', async () => {
       const parent = await createParent();
       const student = await createStudent();
       const child = await createChild(parent, student);
@@ -296,15 +322,18 @@ describe('AccountDeletionService', () => {
       const result = await accountDeletionService.deleteChild(parent.email, child.id);
 
       expect(result.message).toContain('deletion requested');
+      expect(result.deletionScheduledFor).toBeInstanceOf(Date);
+      expect(result.status).toBe(AccountStatus.PENDING_DELETION);
 
       const updatedStudent = await studentRepository.findOne({ where: { id: student.id } });
       expect(updatedStudent.is_deactivated).toBe(true);
 
-      const updatedChild = await childRepository.findOne({
-        where: { id: child.id },
-        relations: ['student'],
-      });
-      expect(updatedChild.student).toBeNull();
+      expect(mockEmailProducer.sendChildDeletionNotice).toHaveBeenCalledWith(
+        expect.objectContaining({
+          parentEmail: parent.email,
+          childName: student.name,
+        }),
+      );
     });
 
     it('throws NotFoundException if child does not exist', async () => {
@@ -344,8 +373,98 @@ describe('AccountDeletionService', () => {
       expect(restored.deletion_job_id).toBeNull();
 
       expect(mockAccountDeletionProducer.cancelJob).toHaveBeenCalledWith('job-abc');
+      expect(mockCacheManager.del).toHaveBeenCalledWith(`deactivated:${student.id}`);
       expect(mockEmailProducer.sendAccountRestoredNotice).toHaveBeenCalledWith(
         expect.objectContaining({ email: student.email, name: student.name }),
+      );
+    });
+  });
+
+  // ─── restoreParent ────────────────────────────────────────────────────────────
+
+  describe('restoreParent', () => {
+    it('restores deactivated parent and linked child students, cancels jobs, clears cache', async () => {
+      const parent = await createParent();
+      const student = await createStudent();
+      await studentRepository.update(student.id, {
+        is_deactivated: true,
+        deactivated_at: new Date(),
+        deletion_job_id: 'child-job-1',
+      });
+      await createChild(parent, student);
+      await parentRepository.update(parent.id, {
+        is_deactivated: true,
+        deactivated_at: new Date(),
+        deletion_job_id: 'parent-job-1',
+      });
+      const deactivatedParent = await parentRepository.findOne({ where: { id: parent.id } });
+
+      await accountDeletionService.restoreParent(deactivatedParent);
+
+      const restoredParent = await parentRepository.findOne({ where: { id: parent.id } });
+      expect(restoredParent.is_deactivated).toBe(false);
+      expect(restoredParent.deactivated_at).toBeNull();
+      expect(restoredParent.deletion_job_id).toBeNull();
+
+      const restoredStudent = await studentRepository.findOne({ where: { id: student.id } });
+      expect(restoredStudent.is_deactivated).toBe(false);
+      expect(restoredStudent.deletion_job_id).toBeNull();
+
+      expect(mockAccountDeletionProducer.cancelJob).toHaveBeenCalledWith('parent-job-1');
+      expect(mockAccountDeletionProducer.cancelJob).toHaveBeenCalledWith('child-job-1');
+      expect(mockCacheManager.del).toHaveBeenCalledWith(`deactivated:${parent.id}`);
+      expect(mockCacheManager.del).toHaveBeenCalledWith(`deactivated:${student.id}`);
+      expect(mockEmailProducer.sendAccountRestoredNotice).toHaveBeenCalledWith(
+        expect.objectContaining({ email: parent.email }),
+      );
+    });
+
+    it('restores a parent with no children without errors', async () => {
+      const parent = await createParent();
+      await parentRepository.update(parent.id, {
+        is_deactivated: true,
+        deactivated_at: new Date(),
+        deletion_job_id: 'parent-job-2',
+      });
+      const deactivatedParent = await parentRepository.findOne({ where: { id: parent.id } });
+
+      await expect(
+        accountDeletionService.restoreParent(deactivatedParent),
+      ).resolves.not.toThrow();
+
+      const restoredParent = await parentRepository.findOne({ where: { id: parent.id } });
+      expect(restoredParent.is_deactivated).toBe(false);
+    });
+  });
+
+  // ─── restoreChild ─────────────────────────────────────────────────────────────
+
+  describe('restoreChild', () => {
+    it('reactivates the child student, cancels the queued job, and sends restored email', async () => {
+      const parent = await createParent();
+      const student = await createStudent();
+      await studentRepository.update(student.id, {
+        is_deactivated: true,
+        deactivated_at: new Date(),
+        deletion_job_id: 'child-job-restore',
+      });
+      const child = await createChild(parent, student);
+
+      const childWithStudent = await childRepository.findOne({
+        where: { id: child.id },
+        relations: ['student'],
+      });
+
+      await accountDeletionService.restoreChild(parent.id, childWithStudent);
+
+      const restoredStudent = await studentRepository.findOne({ where: { id: student.id } });
+      expect(restoredStudent.is_deactivated).toBe(false);
+      expect(restoredStudent.deletion_job_id).toBeNull();
+
+      expect(mockAccountDeletionProducer.cancelJob).toHaveBeenCalledWith('child-job-restore');
+      expect(mockCacheManager.del).toHaveBeenCalledWith(`deactivated:${student.id}`);
+      expect(mockEmailProducer.sendAccountRestoredNotice).toHaveBeenCalledWith(
+        expect.objectContaining({ email: student.email }),
       );
     });
   });
@@ -464,6 +583,7 @@ describe('AccountDeletionService', () => {
       const student = await createStudent();
       await studentRepository.update(student.id, { is_deactivated: true });
       const child = await createChild(parent, student);
+      await parentRepository.update(parent.id, { is_deactivated: true });
 
       await accountDeletionService.permanentlyPurgeParent(parent.id);
 
@@ -475,6 +595,59 @@ describe('AccountDeletionService', () => {
     it('is a no-op if parent is not found', async () => {
       await expect(
         accountDeletionService.permanentlyPurgeParent('00000000-0000-0000-0000-000000000000'),
+      ).resolves.not.toThrow();
+    });
+  });
+
+  // ─── recordPurgeFailure ───────────────────────────────────────────────────────
+
+  describe('recordPurgeFailure', () => {
+    it('sends a purge failure alert email with job details', async () => {
+      const fakeJob = {
+        id: 'job-999',
+        name: 'purge-student-account',
+        data: { studentId: '00000000-0000-0000-0000-000000000abc' },
+      } as any;
+      const fakeError = new Error('DB connection lost');
+
+      await accountDeletionService.recordPurgeFailure(fakeJob, fakeError);
+
+      expect(mockEmailProducer.sendPurgeFailureAlert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          jobId: 'job-999',
+          accountId: '00000000-0000-0000-0000-000000000abc',
+          errorMessage: 'DB connection lost',
+        }),
+      );
+    });
+
+    it('handles parent purge failure jobs correctly', async () => {
+      const fakeJob = {
+        id: 'job-888',
+        name: 'purge-parent-account',
+        data: { parentId: '00000000-0000-0000-0000-000000000def' },
+      } as any;
+
+      await accountDeletionService.recordPurgeFailure(fakeJob, new Error('timeout'));
+
+      expect(mockEmailProducer.sendPurgeFailureAlert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          accountId: '00000000-0000-0000-0000-000000000def',
+        }),
+      );
+    });
+
+    it('does not throw if alert email itself fails', async () => {
+      mockEmailProducer.sendPurgeFailureAlert.mockRejectedValueOnce(new Error('smtp down'));
+
+      const fakeJob = {
+        id: 'job-777',
+        name: 'purge-student-account',
+        data: { studentId: '00000000-0000-0000-0000-000000000111' },
+      } as any;
+
+      await expect(
+        accountDeletionService.recordPurgeFailure(fakeJob, new Error('original error')),
       ).resolves.not.toThrow();
     });
   });
