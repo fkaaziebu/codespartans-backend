@@ -48,6 +48,7 @@ jobs:
           JWT_SECRET=test-jwt-secret-for-ci
           DATABASE_URL=postgresql://postgres:postgres@localhost:5432/codespartans-test-db?sslmode=disable
           GENPOP_EMAIL=genpop@codespartans.com
+          ACCOUNT_DELETION_GRACE_DAYS=90
           EOF
 
       - name: Run unit tests

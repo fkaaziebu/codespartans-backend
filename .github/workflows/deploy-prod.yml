@@ -48,6 +48,7 @@ jobs:
           JWT_SECRET=test-jwt-secret-for-ci
           DATABASE_URL=postgresql://postgres:postgres@localhost:5432/codespartans-test-db?sslmode=disable
           GENPOP_EMAIL=genpop@codespartans.com
+          ACCOUNT_DELETION_GRACE_DAYS=90
           EOF
 
       - name: Run unit tests
@@ -117,7 +118,7 @@ jobs:
           PAYSTACK_SECRET_KEY=sk_test_fake
           ANTHROPIC_API_KEY=sk-ant-fake
           PAYMENT_RETENTION_YEARS=7
-          ADMIN_EMAIL=admin@ci.test
+          ADMIN_EMAIL=admin@example.com
           REDIS_URL=redis://localhost:6379
           ACCOUNT_DELETION_GRACE_DAYS=90
           EOF
