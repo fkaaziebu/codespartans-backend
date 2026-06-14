@@ -29,7 +29,8 @@ if (fs.existsSync(envPath)) {
 const defaults: Record<string, string> = {
   PORT: '4002',
   JWT_SECRET: 'test-jwt-secret',
-  DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/codespartans-test-db?sslmode=disable',
+  DATABASE_URL:
+    'postgresql://postgres:postgres@localhost:5432/codespartans-test-db?sslmode=disable',
   DB_USERNAME: 'postgres',
   DB_PASSWORD: 'postgres',
   DB_HOST: 'localhost',
@@ -42,6 +43,9 @@ const defaults: Record<string, string> = {
   GMAIL_USER: 'ci@gmail.test',
   EMAIL_HOST: 'smtp.gmail.com',
   STUDENT_URL: 'http://localhost:3000',
+  MEILI_MASTER_KEY: 'password',
+  MEILI_URL: 'http://127.0.0.1:7700',
+  MEILI_INDEX: 'codespartans',
   PARENT_URL: 'http://localhost:3001',
   PAYSTACK_SECRET_KEY: 'sk_test_fake',
   ANTHROPIC_API_KEY: 'sk-ant-fake',
