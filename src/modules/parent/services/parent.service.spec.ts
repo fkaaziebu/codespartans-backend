@@ -1,8 +1,10 @@
 import {
   BadRequestException,
+  ForbiddenException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -44,6 +46,7 @@ import { TestAssignmentStatus } from '../../simulation/entities/test_assignment.
 import { ClassLevel } from '../entities/child.entity';
 import { Gender } from '../entities/parent.entity';
 import { HashHelper } from '../../../helpers';
+import { AccountStatus } from '../../auth/types/account-deletion-response.type';
 import { AccountDeletionService } from '../../auth/services/account-deletion.service';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { SignupProducer } from '../../auth/services/signup.producer';
@@ -76,6 +79,7 @@ describe('ParentService', () => {
     sendParentPasswordResetEmail: jest.fn().mockResolvedValue(undefined),
     sendAccountRestoredNotice: jest.fn().mockResolvedValue(undefined),
     sendParentAccountAlreadyExistsEmail: jest.fn().mockResolvedValue(undefined),
+    sendCancellationOtpEmail: jest.fn().mockResolvedValue(undefined),
   };
 
   const mockSignupProducer = {
@@ -84,6 +88,13 @@ describe('ParentService', () => {
 
   const mockAccountDeletionService = {
     restoreParent: jest.fn().mockResolvedValue(undefined),
+    restoreChild: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockCacheManager = {
+    get: jest.fn().mockResolvedValue(null),
+    set: jest.fn().mockResolvedValue(undefined),
+    del: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeAll(async () => {
@@ -122,6 +133,7 @@ describe('ParentService', () => {
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: SignupProducer, useValue: mockSignupProducer },
         { provide: AccountDeletionService, useValue: mockAccountDeletionService },
+        { provide: CACHE_MANAGER, useValue: mockCacheManager },
       ],
     }).compile();
 
@@ -150,6 +162,7 @@ describe('ParentService', () => {
       await repository.query(`TRUNCATE "${entity.tableName}" CASCADE;`);
     }
     jest.clearAllMocks();
+    mockCacheManager.get.mockResolvedValue(null);
   });
 
   afterAll(async () => {
@@ -243,8 +256,6 @@ describe('ParentService', () => {
     student.organizations = [org];
     await studentRepository.save(student);
 
-    // Return a minimal object satisfying the Course instructor FK
-    // (Instructor entity is separate; we use a real Instructor row)
     const { Instructor } = await import('../../auth/entities/instructor.entity');
     const instructor = new Instructor();
     instructor.name = 'Test Instructor';
@@ -537,7 +548,7 @@ describe('ParentService', () => {
       );
     });
 
-    it('restores account and returns token if deactivated within 90-day grace period', async () => {
+    it('returns pending-deletion token and sends OTP when deactivated within grace period', async () => {
       await registerAndVerifyParent();
       await parentRepository.update(
         { email: parentInfo.email },
@@ -554,9 +565,12 @@ describe('ParentService', () => {
       });
 
       expect(response.token).toBeDefined();
-      expect(mockAccountDeletionService.restoreParent).toHaveBeenCalledWith(
+      expect(response.account_status).toBe(AccountStatus.PENDING_DELETION);
+      expect(response.deletion_scheduled_for).toBeInstanceOf(Date);
+      expect(mockEmailProducer.sendCancellationOtpEmail).toHaveBeenCalledWith(
         expect.objectContaining({ email: parentInfo.email }),
       );
+      expect(mockAccountDeletionService.restoreParent).not.toHaveBeenCalled();
     });
   });
 
@@ -595,6 +609,39 @@ describe('ParentService', () => {
       await expect(
         parentService.refreshParentToken(loginResponse.token),
       ).rejects.toThrow(new UnauthorizedException('Invalid token type'));
+    });
+
+    it('throws UnauthorizedException when account is deactivated', async () => {
+      await registerAndVerifyParent();
+      const loginResponse = await parentService.loginParent({
+        email: parentInfo.email,
+        password: parentInfo.password,
+      });
+
+      mockCacheManager.get.mockResolvedValueOnce('1');
+
+      await expect(
+        parentService.refreshParentToken(loginResponse.refresh_token),
+      ).rejects.toThrow(new UnauthorizedException('Account has been deactivated'));
+    });
+
+    it('throws UnauthorizedException when password was recently changed', async () => {
+      await registerAndVerifyParent();
+      const loginResponse = await parentService.loginParent({
+        email: parentInfo.email,
+        password: parentInfo.password,
+      });
+
+      // First cache check (deactivated) returns null, second (pw_changed) returns '1'
+      mockCacheManager.get
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce('1');
+
+      await expect(
+        parentService.refreshParentToken(loginResponse.refresh_token),
+      ).rejects.toThrow(
+        new UnauthorizedException('Password was recently changed. Please log in again.'),
+      );
     });
   });
 
@@ -666,6 +713,207 @@ describe('ParentService', () => {
         }),
       ).rejects.toThrow(
         new BadRequestException('Invalid password reset details'),
+      );
+    });
+  });
+
+  describe('changeParentPassword', () => {
+    it('changes the password and sets pw_changed cache flag', async () => {
+      await registerAndVerifyParent();
+
+      const response = await parentService.changeParentPassword({
+        email: parentInfo.email,
+        currentPassword: parentInfo.password,
+        newPassword: 'newSecurePassword',
+      });
+
+      expect(response.message).toBe('Password changed successfully');
+
+      const updated = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+      expect(await HashHelper.compare('newSecurePassword', updated.password)).toBe(true);
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        expect.stringContaining('pw_changed:'),
+        '1',
+        expect.any(Number),
+      );
+    });
+
+    it('throws BadRequestException if current password is incorrect', async () => {
+      await registerAndVerifyParent();
+
+      await expect(
+        parentService.changeParentPassword({
+          email: parentInfo.email,
+          currentPassword: 'wrongpassword',
+          newPassword: 'newpass',
+        }),
+      ).rejects.toThrow(new BadRequestException('Current password is incorrect'));
+    });
+
+    it('throws BadRequestException if parent does not exist', async () => {
+      await expect(
+        parentService.changeParentPassword({
+          email: 'nobody@test.com',
+          currentPassword: 'any',
+          newPassword: 'new',
+        }),
+      ).rejects.toThrow(new BadRequestException('Invalid credentials'));
+    });
+  });
+
+  describe('verifyCancellationOtp', () => {
+    it('returns success when OTP matches the cache', async () => {
+      await registerAndVerifyParent();
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
+      mockCacheManager.get.mockResolvedValueOnce('654321');
+
+      const result = await parentService.verifyCancellationOtp(parent.id, '654321');
+
+      expect(result.message).toContain('OTP verified');
+      expect(mockCacheManager.del).toHaveBeenCalledWith(`cancel_otp:${parent.id}`);
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        `cancel_otp_verified:${parent.id}`,
+        '1',
+        expect.any(Number),
+      );
+    });
+
+    it('throws BadRequestException if OTP does not match', async () => {
+      await registerAndVerifyParent();
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
+      mockCacheManager.get.mockResolvedValueOnce('111111');
+
+      await expect(
+        parentService.verifyCancellationOtp(parent.id, '654321'),
+      ).rejects.toThrow(new BadRequestException('Invalid or expired OTP.'));
+    });
+
+    it('throws BadRequestException if no OTP is in cache', async () => {
+      await registerAndVerifyParent();
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
+      // cache returns null (default)
+      await expect(
+        parentService.verifyCancellationOtp(parent.id, '654321'),
+      ).rejects.toThrow(new BadRequestException('Invalid or expired OTP.'));
+    });
+  });
+
+  describe('cancelParentAccountDeletion', () => {
+    it('restores a deactivated parent after OTP verification and returns token', async () => {
+      await registerAndVerifyParent();
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+      await parentRepository.update(parent.id, {
+        is_deactivated: true,
+        deactivated_at: new Date(),
+      });
+
+      mockCacheManager.get.mockResolvedValueOnce('1');
+
+      const response = await parentService.cancelParentAccountDeletion(parent.id);
+
+      expect(response.token).toBeDefined();
+      expect(response.refresh_token).toBeDefined();
+      expect(response.account_status).toBe(AccountStatus.ACTIVE);
+      expect(mockAccountDeletionService.restoreParent).toHaveBeenCalledWith(
+        expect.objectContaining({ id: parent.id }),
+        null,
+      );
+    });
+
+    it('throws UnauthorizedException when OTP was not verified', async () => {
+      await registerAndVerifyParent();
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
+      await expect(
+        parentService.cancelParentAccountDeletion(parent.id),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('throws UnauthorizedException if parent is not deactivated', async () => {
+      await registerAndVerifyParent();
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
+      mockCacheManager.get.mockResolvedValueOnce('1');
+
+      await expect(
+        parentService.cancelParentAccountDeletion(parent.id),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('throws UnauthorizedException if parent does not exist', async () => {
+      mockCacheManager.get.mockResolvedValueOnce('1');
+
+      await expect(
+        parentService.cancelParentAccountDeletion('00000000-0000-0000-0000-000000000000'),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('cancelChildDeletion', () => {
+    it('restores a deactivated child student account', async () => {
+      const { parent, child } = await setupParentWithChild();
+
+      // Deactivate the child's student
+      await studentRepository.update(child.student.id, {
+        is_deactivated: true,
+        deactivated_at: new Date(),
+      });
+
+      const result = await parentService.cancelChildDeletion(parent.email, child.id);
+
+      expect(result.status).toBe(AccountStatus.ACTIVE);
+      expect(result.deletionScheduledFor).toBeNull();
+      expect(mockAccountDeletionService.restoreChild).toHaveBeenCalledWith(
+        parent.id,
+        expect.objectContaining({ id: child.id }),
+        null,
+      );
+    });
+
+    it('throws NotFoundException if child does not exist', async () => {
+      await registerAndVerifyParent();
+
+      await expect(
+        parentService.cancelChildDeletion(
+          parentInfo.email,
+          '00000000-0000-0000-0000-000000000000',
+        ),
+      ).rejects.toThrow(new NotFoundException('Child not found.'));
+    });
+
+    it('throws ForbiddenException if requesting parent email does not match child', async () => {
+      const { child } = await setupParentWithChild();
+
+      await expect(
+        parentService.cancelChildDeletion('wrongparent@test.com', child.id),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('throws NotFoundException if child student is not deactivated', async () => {
+      const { parent, child } = await setupParentWithChild();
+
+      // Child student is active (not deactivated)
+      await expect(
+        parentService.cancelChildDeletion(parent.email, child.id),
+      ).rejects.toThrow(
+        new NotFoundException('No pending deletion found for this child account.'),
       );
     });
   });
@@ -927,6 +1175,21 @@ describe('ParentService', () => {
       await expect(
         parentService.loginChild(temp_token, '000000'),
       ).rejects.toThrow(new UnauthorizedException('Invalid pin'));
+    });
+
+    it('throws UnauthorizedException when child student is pending deletion', async () => {
+      const { child } = await setupParentWithChild();
+      const { temp_token } = await parentService.verifyChildUsername(child.username);
+
+      // Deactivate the child's student
+      await studentRepository.update(child.student.id, {
+        is_deactivated: true,
+        deactivated_at: new Date(),
+      });
+
+      await expect(
+        parentService.loginChild(temp_token, '000000'),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 

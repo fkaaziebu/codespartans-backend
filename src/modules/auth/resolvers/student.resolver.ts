@@ -1,7 +1,12 @@
 import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { RequestMetadata } from '../entities/deletion-audit-log.entity';
 import { Student as StudentTypeClass } from 'src/modules/auth/entities/student.entity';
-import { GqlJwtAuthGuard } from 'src/helpers/guards';
+import {
+  GqlJwtAuthGuard,
+  GqlPendingDeletionGuard,
+  GqlThrottlerGuard,
+} from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { StudentService } from '../services/student.service';
 import { AccountDeletionService } from '../services/account-deletion.service';
@@ -13,6 +18,15 @@ import {
   RegisterResponse,
   StudentLoginResponse,
 } from '../types';
+import { Throttle } from '@nestjs/throttler';
+
+function extractMeta(req: any): RequestMetadata {
+  const forwarded = req.headers?.['x-forwarded-for'] as string | undefined;
+  return {
+    ip: forwarded?.split(',')[0]?.trim() ?? req.ip ?? null,
+    userAgent: (req.headers?.['user-agent'] as string) ?? null,
+  };
+}
 
 @Resolver()
 export class StudentResolver {
@@ -21,6 +35,8 @@ export class StudentResolver {
     private readonly accountDeletionService: AccountDeletionService,
   ) {}
   // Queries
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Query(() => StudentLoginResponse)
   async loginStudent(
     @Args('email') email: string,
@@ -51,6 +67,8 @@ export class StudentResolver {
   }
 
   // Mutations
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => RegisterResponse)
   async registerStudent(
     @Args('name') name: string,
@@ -80,11 +98,15 @@ export class StudentResolver {
     });
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => PasswordResetResponse)
   async resendAccountValidationCode(@Args('email') email: string) {
     return this.studentService.resendAccountValidationCode({ email });
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => PasswordResetResponse)
   async requestStudentPasswordReset(@Args('email') email: string) {
     return this.studentService.requestStudentPasswordReset({
@@ -106,6 +128,40 @@ export class StudentResolver {
   }
 
   @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => PasswordResetResponse)
+  async changePassword(
+    @Args('currentPassword') currentPassword: string,
+    @Args('newPassword') newPassword: string,
+    @Context() context,
+  ) {
+    const { email, role } = context.req.user;
+    if (role === 'CHILD') {
+      throw new ForbiddenException(
+        'Children cannot use changePassword. Use changePin instead.',
+      );
+    }
+    return this.studentService.changePassword({
+      email,
+      currentPassword,
+      newPassword,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => PasswordResetResponse)
+  async changePin(
+    @Args('currentPin') currentPin: string,
+    @Args('newPin') newPin: string,
+    @Context() context,
+  ) {
+    const { email, role } = context.req.user;
+    if (role !== 'CHILD') {
+      throw new ForbiddenException('Only child accounts can use changePin.');
+    }
+    return this.studentService.changePin({ email, currentPin, newPin });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AccountDeletionResponse)
   async requestStudentAccountDeletion(@Context() context) {
     const { id, role } = context.req.user;
@@ -114,6 +170,29 @@ export class StudentResolver {
         'Children cannot delete their own accounts.',
       );
     }
-    return this.accountDeletionService.requestStudentAccountDeletion(id);
+    return this.accountDeletionService.requestStudentAccountDeletion(
+      id,
+      extractMeta(context.req),
+    );
+  }
+
+  @UseGuards(GqlPendingDeletionGuard)
+  @Mutation(() => PasswordResetResponse)
+  async verifyCancellationOtp(
+    @Args('otp') otp: string,
+    @Context() context,
+  ) {
+    const { id } = context.req.user;
+    return this.studentService.verifyCancellationOtp(id, otp);
+  }
+
+  @UseGuards(GqlPendingDeletionGuard)
+  @Mutation(() => StudentLoginResponse)
+  async cancelStudentAccountDeletion(@Context() context) {
+    const { id } = context.req.user;
+    return this.studentService.cancelStudentAccountDeletion(
+      id,
+      extractMeta(context.req),
+    );
   }
 }

@@ -22,4 +22,7 @@ export const configValidationSchema = Joi.object({
   SCHOOL_DEMO_URL: Joi.string().default('http://localhost:3000'),
   PARENT_URL: Joi.string().default('http://localhost:3000'),
   ANTHROPIC_API_KEY: Joi.string().required(),
+  ACCOUNT_DELETION_GRACE_DAYS: Joi.number().default(90),
+  PAYMENT_RETENTION_YEARS: Joi.number().integer().min(1).required(),
+  ADMIN_EMAIL: Joi.string().email().required(),
 });

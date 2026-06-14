@@ -12,7 +12,15 @@
 
     <p style="margin: 0 0 16px 0;">We've received your request to delete your Examforge account. Your account has been deactivated and will be permanently deleted on <strong>{{gracePeriodEnd}}</strong>.</p>
 
-    <p style="margin: 0 0 24px 0;">If you change your mind, simply log in to your account before that date and your account will be fully restored.</p>
+    {{#if isParent}}
+    {{#if childCount}}
+    <p style="margin: 0 0 16px 0;"><strong>Note:</strong> {{childCount}} linked child account(s) have also been deactivated and will be permanently deleted on the same date.</p>
+    {{/if}}
+    {{/if}}
+
+    <p style="margin: 0 0 24px 0;">If you change your mind, log in before that date and your account will be fully restored.</p>
+
+    <a href="{{{loginUrl}}}" style="display: inline-block; padding: 10px 20px; background-color: #1d4ed8; color: #fff; text-decoration: none; border-radius: 4px; font-weight: 500; margin-bottom: 24px;">Log in to cancel deletion</a>
 
     <div style="padding: 16px; background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px; margin-bottom: 24px;">
       <p style="margin: 0; font-size: 14px; color: #92400e;"><strong>Note:</strong> After {{gracePeriodEnd}}, all your personal data will be permanently erased and cannot be recovered.</p>

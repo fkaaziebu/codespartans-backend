@@ -264,10 +264,19 @@ export class EmailService {
     to: string,
     name: string,
     gracePeriodEnd: string,
+    userType: 'student' | 'parent',
+    childCount = 0,
   ): Promise<void> {
+    const baseUrl = userType === 'parent'
+      ? this.configService.get<string>('PARENT_URL', 'http://localhost:3001')
+      : this.configService.get<string>('STUDENT_URL', 'http://localhost:3000');
+    const loginUrl = `${baseUrl}/login`;
     const html = this.compileTemplate('account-deletion-notice', {
       name,
       gracePeriodEnd,
+      loginUrl,
+      isParent: userType === 'parent',
+      childCount,
     });
 
     try {
@@ -275,6 +284,26 @@ export class EmailService {
     } catch (error) {
       console.error('Failed to send account deletion notice email:', error);
       throw new Error('Failed to send account deletion notice email');
+    }
+  }
+
+  async sendChildDeletionNoticeEmail(
+    to: string,
+    parentName: string,
+    childName: string,
+    gracePeriodEnd: string,
+  ): Promise<void> {
+    const html = this.compileTemplate('child-deletion-notice', {
+      parentName,
+      childName,
+      gracePeriodEnd,
+    });
+
+    try {
+      await this.sendMail(to, 'Child Account Deletion Requested – Examforge', '', html);
+    } catch (error) {
+      console.error('Failed to send child deletion notice email:', error);
+      throw new Error('Failed to send child deletion notice email');
     }
   }
 
@@ -293,13 +322,59 @@ export class EmailService {
     to: string,
     name: string,
   ): Promise<void> {
-    const html = this.compileTemplate('account-purged', { name });
+    const retentionYears = this.configService.get<number>(
+      'PAYMENT_RETENTION_YEARS',
+    );
+    const html = this.compileTemplate('account-purged', {
+      name,
+      retentionYears,
+    });
 
     try {
       await this.sendMail(to, 'Your Account Has Been Deleted – Examforge', '', html);
     } catch (error) {
       console.error('Failed to send account purged confirmation email:', error);
       throw new Error('Failed to send account purged confirmation email');
+    }
+  }
+
+  async sendCancellationOtpEmail(
+    to: string,
+    name: string,
+    otp: string,
+  ): Promise<void> {
+    const html = this.compileTemplate('cancellation-otp', { name, otp });
+
+    try {
+      await this.sendMail(to, 'Cancel your account deletion – verification code', '', html);
+    } catch (error) {
+      console.error('Failed to send cancellation OTP email:', error);
+      throw new Error('Failed to send cancellation OTP email');
+    }
+  }
+
+  async sendPurgeFailureAlertEmail(
+    jobId: string,
+    accountId: string,
+    errorMessage: string,
+  ): Promise<void> {
+    const adminEmail = this.configService.get<string>('ADMIN_EMAIL');
+    const html = this.compileTemplate('purge-failure-alert', {
+      jobId,
+      accountId,
+      errorMessage,
+      occurredAt: new Date().toISOString(),
+    });
+
+    try {
+      await this.sendMail(
+        adminEmail,
+        `[ACTION REQUIRED] Account purge failed – job ${jobId}`,
+        '',
+        html,
+      );
+    } catch (error) {
+      console.error('Failed to send purge failure alert email:', error);
     }
   }
 

@@ -3,6 +3,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -13,22 +14,28 @@ import { ILike, Repository } from 'typeorm';
 import { Cart } from '../../inventory/entities/cart.entity';
 import { Organization } from '../entities/organization.entity';
 import { Student } from '../entities/student.entity';
+import { Child } from '../../parent/entities/child.entity';
 import { HashHelper, PaginateHelper } from '../../../helpers';
 import { PaginationInput } from '../../../helpers/inputs';
 import { StudentLoginResponse } from '../types';
+import { AccountStatus } from '../types/account-deletion-response.type';
 import { v4 as uuidv4 } from 'uuid';
 import { EmailProducer } from './email.producer';
 import { SignupProducer } from './signup.producer';
 import { LoginBodyDto } from '../dto/login-body.dto';
 import { AccountDeletionService } from './account-deletion.service';
+import { RequestMetadata } from '../entities/deletion-audit-log.entity';
 
 const FIVE_MIN_MS = 5 * 60 * 1000;
+const TTL_30D_MS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class StudentService {
   constructor(
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
+    @InjectRepository(Child)
+    private childRepository: Repository<Child>,
     private jwtService: JwtService,
     private configService: ConfigService,
     private readonly emailProducer: EmailProducer,
@@ -210,9 +217,36 @@ export class StudentService {
       },
     );
 
-    // Restore outside transaction to avoid write-lock deadlock
     if (student.is_deactivated) {
-      await this.accountDeletionService.restoreStudent(student);
+      const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
+      const deletionScheduledFor = new Date(
+        new Date(student.deactivated_at).getTime() + NINETY_DAYS_MS,
+      );
+      const pendingToken = this.jwtService.sign(
+        {
+          id: student.id,
+          name: student.name,
+          email: student.email,
+          role: 'STUDENT',
+          type: 'pending_deletion',
+        },
+        { expiresIn: '15m' },
+      );
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      await this.cacheManager.set(`cancel_otp:${student.id}`, otp, 10 * 60 * 1000);
+      await this.emailProducer.sendCancellationOtpEmail({
+        email: student.email,
+        name: student.name,
+        otp,
+      });
+
+      return {
+        ...student,
+        token: pendingToken,
+        account_status: AccountStatus.PENDING_DELETION,
+        deletion_scheduled_for: deletionScheduledFor,
+      };
     }
 
     const payload: {
@@ -237,6 +271,65 @@ export class StudentService {
       ...student,
       token: access_token,
       refresh_token,
+    };
+  }
+
+  async verifyCancellationOtp(
+    studentId: string,
+    otp: string,
+  ): Promise<{ message: string }> {
+    const stored = await this.cacheManager.get<string>(`cancel_otp:${studentId}`);
+    if (!stored || stored !== otp) {
+      throw new BadRequestException('Invalid or expired OTP.');
+    }
+    await this.cacheManager.del(`cancel_otp:${studentId}`);
+    await this.cacheManager.set(`cancel_otp_verified:${studentId}`, '1', 10 * 60 * 1000);
+    return { message: 'OTP verified. You may now cancel deletion.' };
+  }
+
+  async cancelStudentAccountDeletion(
+    studentId: string,
+    meta?: RequestMetadata,
+  ): Promise<StudentLoginResponse> {
+    const verified = await this.cacheManager.get(`cancel_otp_verified:${studentId}`);
+    if (!verified) {
+      throw new UnauthorizedException(
+        'Email verification required before cancelling deletion.',
+      );
+    }
+    await this.cacheManager.del(`cancel_otp_verified:${studentId}`);
+
+    const student = await this.studentRepository.findOne({
+      where: { id: studentId },
+      relations: ['organizations'],
+    });
+
+    if (!student || !student.is_deactivated) {
+      throw new UnauthorizedException(
+        'No pending deletion found for this account.',
+      );
+    }
+
+    await this.accountDeletionService.restoreStudent(student, meta ?? null);
+
+    const payload = {
+      id: student.id,
+      name: student.name,
+      email: student.email,
+      role: 'STUDENT' as const,
+    };
+
+    const token = this.jwtService.sign(payload);
+    const refresh_token = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      { expiresIn: '30d' },
+    );
+
+    return {
+      ...student,
+      token,
+      refresh_token,
+      account_status: AccountStatus.ACTIVE,
     };
   }
 
@@ -336,6 +429,16 @@ export class StudentService {
       throw new BadRequestException('Invalid token type');
     }
 
+    const isDeactivated = await this.cacheManager.get(`deactivated:${payload.id}`);
+    if (isDeactivated) {
+      throw new UnauthorizedException('Account has been deactivated');
+    }
+
+    const pwChanged = await this.cacheManager.get(`pw_changed:${payload.id}`);
+    if (pwChanged) {
+      throw new UnauthorizedException('Password was recently changed. Please log in again.');
+    }
+
     const {
       type: _type,
       iat: _iat,
@@ -386,7 +489,9 @@ export class StudentService {
     password: string;
     token: string;
   }) {
-    return this.studentRepository.manager.transaction(
+    let studentId: string;
+
+    const result = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         // Get Student
         const student = await transactionalEntityManager.findOne(Student, {
@@ -397,6 +502,8 @@ export class StudentService {
         if (!student || student.reset_token !== token) {
           throw new BadRequestException('Invalid Password reset details');
         }
+
+        studentId = student.id;
 
         // Clean things up
         student.reset_token = '';
@@ -409,6 +516,86 @@ export class StudentService {
         };
       },
     );
+
+    await this.cacheManager.set(`pw_changed:${studentId}`, '1', TTL_30D_MS);
+    return result;
+  }
+
+  async changePassword({
+    email,
+    currentPassword,
+    newPassword,
+  }: {
+    email: string;
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<{ message: string }> {
+    let studentId: string;
+
+    const result = await this.studentRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const student = await transactionalEntityManager.findOne(Student, {
+          where: { email },
+        });
+
+        if (!student) {
+          throw new BadRequestException('Invalid credentials');
+        }
+
+        const isValid = await HashHelper.compare(currentPassword, student.password);
+        if (!isValid) {
+          throw new BadRequestException('Current password is incorrect');
+        }
+
+        studentId = student.id;
+        student.password = await HashHelper.encrypt(newPassword);
+        await transactionalEntityManager.save(student);
+
+        return { message: 'Password changed successfully' };
+      },
+    );
+
+    await this.cacheManager.set(`pw_changed:${studentId}`, '1', TTL_30D_MS);
+    return result;
+  }
+
+  async changePin({
+    email,
+    currentPin,
+    newPin,
+  }: {
+    email: string;
+    currentPin: string;
+    newPin: string;
+  }): Promise<{ message: string }> {
+    let studentId: string;
+
+    const result = await this.childRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const child = await transactionalEntityManager.findOne(Child, {
+          where: { student: { email } },
+          relations: ['student'],
+        });
+
+        if (!child) {
+          throw new BadRequestException('Child account not found');
+        }
+
+        const isValid = await HashHelper.compare(currentPin, child.pin);
+        if (!isValid) {
+          throw new UnauthorizedException('Current pin is incorrect');
+        }
+
+        studentId = child.student.id;
+        child.pin = await HashHelper.encrypt(newPin);
+        await transactionalEntityManager.save(Child, child);
+
+        return { message: 'Pin changed successfully' };
+      },
+    );
+
+    await this.cacheManager.set(`pw_changed:${studentId}`, '1', TTL_30D_MS);
+    return result;
   }
 
   async validateGoogleUser(googleUser: LoginBodyDto) {

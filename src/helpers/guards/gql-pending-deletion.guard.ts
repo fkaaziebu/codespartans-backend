@@ -1,13 +1,13 @@
 import {
   ExecutionContext,
+  ForbiddenException,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class GqlJwtAuthGuard extends AuthGuard('jwt') {
+export class GqlPendingDeletionGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().req;
@@ -16,9 +16,9 @@ export class GqlJwtAuthGuard extends AuthGuard('jwt') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     await super.canActivate(context);
     const req = GqlExecutionContext.create(context).getContext().req;
-    if (req.user?.is_pending_deletion) {
-      throw new UnauthorizedException(
-        'Your account is scheduled for deletion. Cancel the deletion first.',
+    if (!req.user?.is_pending_deletion) {
+      throw new ForbiddenException(
+        'This action requires a pending-deletion token.',
       );
     }
     return true;

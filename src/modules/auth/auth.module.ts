@@ -6,6 +6,7 @@ import { Admin } from './entities/admin.entity';
 import { Instructor } from './entities/instructor.entity';
 import { Organization } from './entities/organization.entity';
 import { Student } from './entities/student.entity';
+import { Child } from '../parent/entities/child.entity';
 import { GoogleStrategy, JwtStrategy } from '../../helpers/strategies';
 import {
   AdminResolver,
@@ -41,7 +42,7 @@ import { AccountDeletionModule } from './account-deletion.module';
         },
       }),
     }),
-    TypeOrmModule.forFeature([Admin, Instructor, Organization, Student]),
+    TypeOrmModule.forFeature([Admin, Instructor, Organization, Student, Child]),
     AccountDeletionModule,
   ],
   controllers: [StudentController],

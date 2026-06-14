@@ -2,10 +2,11 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Throttle } from '@nestjs/throttler';
 import { AccountDeletionService } from 'src/modules/auth/services/account-deletion.service';
+import { RequestMetadata } from 'src/modules/auth/entities/deletion-audit-log.entity';
 import { AccountDeletionResponse } from 'src/modules/auth/types';
 import { Course } from 'src/modules/inventory/entities/course.entity';
 import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
-import { GqlJwtAuthGuard, GqlThrottlerGuard } from 'src/helpers/guards';
+import { GqlJwtAuthGuard, GqlPendingDeletionGuard, GqlThrottlerGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { RefreshTokenResponse } from 'src/modules/auth/types';
 import { Category } from 'src/modules/inventory/entities/category.entity';
@@ -35,6 +36,14 @@ import {
   StreakResponse,
   VerifyChildUsernameResponse,
 } from '../types';
+
+function extractMeta(req: any): RequestMetadata {
+  const forwarded = req.headers?.['x-forwarded-for'] as string | undefined;
+  return {
+    ip: forwarded?.split(',')[0]?.trim() ?? req.ip ?? null,
+    userAgent: (req.headers?.['user-agent'] as string) ?? null,
+  };
+}
 
 @Resolver()
 export class ParentResolver {
@@ -88,6 +97,17 @@ export class ParentResolver {
     @Args('password') password: string,
   ) {
     return this.parentService.resetParentPassword({ email, token, password });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => RegisterParentResponse)
+  async changeParentPassword(
+    @Args('currentPassword') currentPassword: string,
+    @Args('newPassword') newPassword: string,
+    @Context() context,
+  ) {
+    const { email } = context.req.user;
+    return this.parentService.changeParentPassword({ email, currentPassword, newPassword });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -268,13 +288,37 @@ export class ParentResolver {
   @Mutation(() => AccountDeletionResponse)
   async requestParentAccountDeletion(@Context() context) {
     const { id } = context.req.user;
-    return this.accountDeletionService.requestParentAccountDeletion(id);
+    return this.accountDeletionService.requestParentAccountDeletion(id, extractMeta(context.req));
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AccountDeletionResponse)
   async deleteChild(@Args('childId') childId: string, @Context() context) {
     const { email } = context.req.user;
-    return this.accountDeletionService.deleteChild(email, childId);
+    return this.accountDeletionService.deleteChild(email, childId, extractMeta(context.req));
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => AccountDeletionResponse)
+  async cancelChildDeletion(@Args('childId') childId: string, @Context() context) {
+    const { email } = context.req.user;
+    return this.parentService.cancelChildDeletion(email, childId, extractMeta(context.req));
+  }
+
+  @UseGuards(GqlPendingDeletionGuard)
+  @Mutation(() => RegisterParentResponse)
+  async verifyCancellationOtp(
+    @Args('otp') otp: string,
+    @Context() context,
+  ) {
+    const { id } = context.req.user;
+    return this.parentService.verifyCancellationOtp(id, otp);
+  }
+
+  @UseGuards(GqlPendingDeletionGuard)
+  @Mutation(() => LoginParentResponse)
+  async cancelParentAccountDeletion(@Context() context) {
+    const { id } = context.req.user;
+    return this.parentService.cancelParentAccountDeletion(id, extractMeta(context.req));
   }
 }

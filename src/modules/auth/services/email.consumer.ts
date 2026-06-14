@@ -95,10 +95,22 @@ export class EmailConsumer extends WorkerHost {
         break;
       }
       case 'send-account-deletion-notice': {
-        const { email, name, gracePeriodEnd } = job.data;
+        const { email, name, gracePeriodEnd, userType, childCount } = job.data;
         await this.emailService.sendAccountDeletionNoticeEmail(
           email,
           name,
+          gracePeriodEnd,
+          userType,
+          childCount,
+        );
+        break;
+      }
+      case 'send-child-deletion-notice': {
+        const { parentEmail, parentName, childName, gracePeriodEnd } = job.data;
+        await this.emailService.sendChildDeletionNoticeEmail(
+          parentEmail,
+          parentName,
+          childName,
           gracePeriodEnd,
         );
         break;
@@ -116,6 +128,20 @@ export class EmailConsumer extends WorkerHost {
       case 'send-parent-account-already-exists': {
         const { email, name } = job.data;
         await this.emailService.sendParentAccountAlreadyExistsEmail(email, name);
+        break;
+      }
+      case 'send-purge-failure-alert': {
+        const { jobId, accountId, errorMessage } = job.data;
+        await this.emailService.sendPurgeFailureAlertEmail(
+          jobId,
+          accountId,
+          errorMessage,
+        );
+        break;
+      }
+      case 'send-cancellation-otp': {
+        const { email, name, otp } = job.data;
+        await this.emailService.sendCancellationOtpEmail(email, name, otp);
         break;
       }
     }
