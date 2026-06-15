@@ -16,6 +16,7 @@ import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import { StudentService } from '../services';
 import {
   AttemptConnection,
+  CategoryCountdownResponse,
   StudentCourseResponse,
   StudentStatsResponse,
   SubjectProgressResponse,
@@ -285,5 +286,11 @@ export class StudentResolver {
       checkoutFromCart,
       courseId,
     });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => CategoryCountdownResponse)
+  getCategoryCountdown(@Args('categoryId') categoryId: string) {
+    return this.studentService.getCategoryCountdown({ categoryId });
   }
 }

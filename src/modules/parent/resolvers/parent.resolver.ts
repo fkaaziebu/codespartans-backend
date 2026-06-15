@@ -6,7 +6,11 @@ import { RequestMetadata } from 'src/modules/auth/entities/deletion-audit-log.en
 import { AccountDeletionResponse } from 'src/modules/auth/types';
 import { Course } from 'src/modules/inventory/entities/course.entity';
 import { TestAssignment } from 'src/modules/simulation/entities/test_assignment.entity';
-import { GqlJwtAuthGuard, GqlPendingDeletionGuard, GqlThrottlerGuard } from 'src/helpers/guards';
+import {
+  GqlJwtAuthGuard,
+  GqlPendingDeletionGuard,
+  GqlThrottlerGuard,
+} from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { RefreshTokenResponse } from 'src/modules/auth/types';
 import { Category } from 'src/modules/inventory/entities/category.entity';
@@ -107,7 +111,11 @@ export class ParentResolver {
     @Context() context,
   ) {
     const { email } = context.req.user;
-    return this.parentService.changeParentPassword({ email, currentPassword, newPassword });
+    return this.parentService.changeParentPassword({
+      email,
+      currentPassword,
+      newPassword,
+    });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -228,11 +236,15 @@ export class ParentResolver {
     return this.parentService.listChildStreak(email, childId, month, year);
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => VerifyChildUsernameResponse)
   async verifyChildUsername(@Args('input') input: VerifyChildUsernameInput) {
     return this.parentService.verifyChildUsername(input.username);
   }
 
+  @Throttle({ default: { limit: 3, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => LoginChildResponse)
   async loginChild(@Args('input') input: LoginChildInput) {
     return this.parentService.loginChild(input.temp_token, input.pin);
@@ -288,29 +300,40 @@ export class ParentResolver {
   @Mutation(() => AccountDeletionResponse)
   async requestParentAccountDeletion(@Context() context) {
     const { id } = context.req.user;
-    return this.accountDeletionService.requestParentAccountDeletion(id, extractMeta(context.req));
+    return this.accountDeletionService.requestParentAccountDeletion(
+      id,
+      extractMeta(context.req),
+    );
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AccountDeletionResponse)
   async deleteChild(@Args('childId') childId: string, @Context() context) {
     const { email } = context.req.user;
-    return this.accountDeletionService.deleteChild(email, childId, extractMeta(context.req));
+    return this.accountDeletionService.deleteChild(
+      email,
+      childId,
+      extractMeta(context.req),
+    );
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AccountDeletionResponse)
-  async cancelChildDeletion(@Args('childId') childId: string, @Context() context) {
+  async cancelChildDeletion(
+    @Args('childId') childId: string,
+    @Context() context,
+  ) {
     const { email } = context.req.user;
-    return this.parentService.cancelChildDeletion(email, childId, extractMeta(context.req));
+    return this.parentService.cancelChildDeletion(
+      email,
+      childId,
+      extractMeta(context.req),
+    );
   }
 
   @UseGuards(GqlPendingDeletionGuard)
   @Mutation(() => RegisterParentResponse)
-  async verifyCancellationOtp(
-    @Args('otp') otp: string,
-    @Context() context,
-  ) {
+  async verifyCancellationOtp(@Args('otp') otp: string, @Context() context) {
     const { id } = context.req.user;
     return this.parentService.verifyCancellationOtp(id, otp);
   }
@@ -319,6 +342,9 @@ export class ParentResolver {
   @Mutation(() => LoginParentResponse)
   async cancelParentAccountDeletion(@Context() context) {
     const { id } = context.req.user;
-    return this.parentService.cancelParentAccountDeletion(id, extractMeta(context.req));
+    return this.parentService.cancelParentAccountDeletion(
+      id,
+      extractMeta(context.req),
+    );
   }
 }

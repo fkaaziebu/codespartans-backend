@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -25,6 +25,14 @@ export class Category {
   @Field()
   @Column()
   avatar_url: string;
+
+  @Field(() => Date, { nullable: true })
+  @Column({ type: 'date', nullable: true })
+  date_of_exams: Date | null;
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'int', nullable: true })
+  exam_duration_days: number | null;
 
   @Field(() => Organization, { nullable: true })
   @ManyToOne(

@@ -1406,10 +1406,19 @@ export class ParentService {
   async verifyChildUsername(
     username: string,
   ): Promise<VerifyChildUsernameResponse> {
-    const child = await this.childRepository.findOne({ where: { username } });
+    const child = await this.childRepository.findOne({
+      where: { username },
+      relations: ['student'],
+    });
 
     if (!child) {
       throw new NotFoundException('Username not found');
+    }
+
+    if (child.student?.is_deactivated) {
+      throw new UnauthorizedException(
+        'This account is pending deletion. Contact your parent to cancel.',
+      );
     }
 
     const payload = {

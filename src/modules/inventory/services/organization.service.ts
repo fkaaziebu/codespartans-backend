@@ -435,4 +435,35 @@ export class OrganizationService {
       },
     );
   }
+
+  async updateCategoryCountdown({
+    email,
+    categoryId,
+    dateOfExams,
+    examDurationDays,
+  }: {
+    email: string;
+    categoryId: string;
+    dateOfExams: Date;
+    examDurationDays: number;
+  }): Promise<boolean> {
+    return await this.organizationRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const category = await transactionalEntityManager.findOne(Category, {
+          where: { id: categoryId, organization: { email } },
+        });
+
+        if (!category) {
+          throw new NotFoundException(
+            'Category does not exist or does not belong to this organization',
+          );
+        }
+
+        category.date_of_exams = dateOfExams;
+        category.exam_duration_days = examDurationDays;
+        await transactionalEntityManager.save(Category, category);
+        return true;
+      },
+    );
+  }
 }

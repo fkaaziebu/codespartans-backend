@@ -556,4 +556,60 @@ describe('OrganizationService', () => {
       ).rejects.toThrow(new NotFoundException('Category does not exist'));
     });
   });
+
+  describe('updateCategoryCountdown', () => {
+    it('sets date_of_exams and exam_duration_days on the category', async () => {
+      const { organization } = await setupData();
+
+      const category = await organizationService.createCategory({
+        email: organization.email,
+        categoryInfo: { avatar_url: 'https://example.com/cat.jpg', name: 'BECE' },
+      });
+
+      const dateOfExams = new Date('2026-09-12');
+      const result = await organizationService.updateCategoryCountdown({
+        email: organization.email,
+        categoryId: category.id,
+        dateOfExams,
+        examDurationDays: 5,
+      });
+
+      expect(result).toBe(true);
+
+      const org = await getOrganization(organization.email);
+      const saved = org.organizational_categories.find((c) => c.id === category.id);
+      expect(saved.exam_duration_days).toBe(5);
+    });
+
+    it('throws NotFoundException when org email is wrong', async () => {
+      const { organization } = await setupData();
+
+      const category = await organizationService.createCategory({
+        email: organization.email,
+        categoryInfo: { avatar_url: '', name: 'BECE' },
+      });
+
+      await expect(
+        organizationService.updateCategoryCountdown({
+          email: 'nobody@test.com',
+          categoryId: category.id,
+          dateOfExams: new Date('2026-09-12'),
+          examDurationDays: 3,
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws NotFoundException when category does not belong to the organization', async () => {
+      const { organization } = await setupData();
+
+      await expect(
+        organizationService.updateCategoryCountdown({
+          email: organization.email,
+          categoryId: '00000000-0000-0000-0000-000000000000',
+          dateOfExams: new Date('2026-09-12'),
+          examDurationDays: 3,
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
 });

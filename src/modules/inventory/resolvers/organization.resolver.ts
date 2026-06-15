@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Category as CategoryTypeClass } from 'src/modules/inventory/entities/category.entity';
 import { Version as VersionTypeClass } from 'src/modules/review/entities/version.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
@@ -135,6 +135,24 @@ export class OrganizationResolver {
       email,
       categoryId,
       courseIds,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => Boolean)
+  updateCategoryCountdown(
+    @Context() context,
+    @Args('categoryId') categoryId: string,
+    @Args('dateOfExams') dateOfExams: Date,
+    @Args('examDurationDays', { type: () => Int }) examDurationDays: number,
+  ) {
+    const { email } = context.req.user;
+
+    return this.organizationService.updateCategoryCountdown({
+      email,
+      categoryId,
+      dateOfExams,
+      examDurationDays,
     });
   }
 }

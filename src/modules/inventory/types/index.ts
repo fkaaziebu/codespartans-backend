@@ -13,3 +13,4 @@ export { WeakSubjectAreaResponse } from './weak-subject-area-response.type';
 export { TestScoreHistoryResponse } from './test-score-history-response.type';
 export { TestSuiteConnection } from './test-suite-connection.type';
 export { TestTopicProgressResponse } from './test-topic-progress-response.type';
+export { CategoryCountdownResponse } from './category-countdown-response.type';
