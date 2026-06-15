@@ -1412,6 +1412,12 @@ export class ParentService {
       throw new NotFoundException('Username not found');
     }
 
+    if (child.student?.is_deactivated) {
+      throw new UnauthorizedException(
+        'This account is pending deletion. Contact your parent to cancel.',
+      );
+    }
+
     const payload = {
       id: child.id,
       username: child.username,
