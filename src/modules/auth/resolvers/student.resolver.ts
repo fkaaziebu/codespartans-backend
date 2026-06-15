@@ -1,4 +1,5 @@
 import { ForbiddenException, UseGuards } from '@nestjs/common';
+import { ParsePinPipe } from '../../../helpers/pipes/parse-pin.pipe';
 import { ConfigService } from '@nestjs/config';
 import {
   Args,
@@ -178,7 +179,7 @@ export class StudentResolver {
   @Mutation(() => PasswordResetResponse)
   async changePin(
     @Args('currentPin') currentPin: string,
-    @Args('newPin') newPin: string,
+    @Args('newPin', ParsePinPipe) newPin: string,
     @Context() context,
   ) {
     const { email, role } = context.req.user;
