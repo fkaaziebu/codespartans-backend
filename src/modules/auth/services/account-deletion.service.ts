@@ -55,7 +55,10 @@ export class AccountDeletionService {
   ) {
     this.gracePeriodMs =
       this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
-      24 * 60 * 60 * 1000;
+      24 *
+      60 *
+      60 *
+      1000;
   }
 
   // ─── public API ──────────────────────────────────────────────────────────────
@@ -89,7 +92,9 @@ export class AccountDeletionService {
 
         if (student.is_deactivated) {
           alreadyDeactivated = true;
-          return new Date(student.deactivated_at!.getTime() + this.gracePeriodMs);
+          return new Date(
+            student.deactivated_at!.getTime() + this.gracePeriodMs,
+          );
         }
 
         await this.deactivateStudentInTx(em, student);
@@ -164,7 +169,9 @@ export class AccountDeletionService {
 
         if (parent.is_deactivated) {
           alreadyDeactivated = true;
-          return new Date(parent.deactivated_at!.getTime() + this.gracePeriodMs);
+          return new Date(
+            parent.deactivated_at!.getTime() + this.gracePeriodMs,
+          );
         }
 
         for (const child of parent.children ?? []) {
@@ -457,10 +464,10 @@ export class AccountDeletionService {
       meta,
     });
 
-    await this.emailProducer.sendAccountRestoredNotice({
-      email: student.email,
-      name: student.name,
-    });
+    // await this.emailProducer.sendAccountRestoredNotice({
+    //   email: student.email,
+    //   name: student.name,
+    // });
   }
 
   async permanentlyPurgeStudent(studentId: string): Promise<void> {
