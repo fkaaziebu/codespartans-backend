@@ -237,12 +237,14 @@ export class ParentResolver {
   }
 
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => VerifyChildUsernameResponse)
   async verifyChildUsername(@Args('input') input: VerifyChildUsernameInput) {
     return this.parentService.verifyChildUsername(input.username);
   }
 
   @Throttle({ default: { limit: 3, ttl: 60_000 } })
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => LoginChildResponse)
   async loginChild(@Args('input') input: LoginChildInput) {
     return this.parentService.loginChild(input.temp_token, input.pin);
