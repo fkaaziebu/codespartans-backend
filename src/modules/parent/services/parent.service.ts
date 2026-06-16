@@ -149,6 +149,7 @@ export class ParentService {
       email: string;
       role: 'PARENT';
       type: string;
+      iat: number;
     };
 
     try {
@@ -169,7 +170,7 @@ export class ParentService {
     }
 
     const pwChanged = await this.cacheManager.get(`pw_changed:${payload.id}`);
-    if (pwChanged) {
+    if (pwChanged && payload.iat < Number(pwChanged)) {
       throw new UnauthorizedException(
         'Password was recently changed. Please log in again.',
       );
@@ -519,7 +520,7 @@ export class ParentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${parentId}`, '1', TTL_30D_MS);
+    await this.cacheManager.set(`pw_changed:${parentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
     return result;
   }
 
@@ -560,7 +561,7 @@ export class ParentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${parentId}`, '1', TTL_30D_MS);
+    await this.cacheManager.set(`pw_changed:${parentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
     return result;
   }
 

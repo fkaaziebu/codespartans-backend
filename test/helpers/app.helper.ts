@@ -9,6 +9,7 @@ import { EmailProducer } from '../../src/modules/auth/services/email.producer';
 import { SignupProducer } from '../../src/modules/auth/services/signup.producer';
 import { AccountDeletionProducer } from '../../src/modules/auth/services/account-deletion.producer';
 import { SetupDbService } from '../../src/setup-db-2.service';
+import { SemanticCacheService } from '../../src/modules/simulation/services/semantic-cache.service';
 import { GqlThrottlerGuard } from 'src/helpers/guards';
 
 export interface EmailCall {
@@ -92,6 +93,8 @@ export async function createTestApp(): Promise<TestApp> {
     .useValue(mockSignupProducer)
     .overrideProvider(AccountDeletionProducer)
     .useValue(mockAccountDeletionProducer)
+    .overrideProvider(SemanticCacheService)
+    .useValue({ findSimilar: jest.fn().mockResolvedValue(null), store: jest.fn().mockResolvedValue(undefined) })
     .overrideGuard(GqlThrottlerGuard)
     .useValue({
       getRequestResponse: (req, res) => ({ req, res }),

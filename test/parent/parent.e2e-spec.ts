@@ -374,6 +374,205 @@ describe('Parent (e2e)', () => {
     });
   });
 
+  // ─── Flow 6: pw_changed token invalidation ─────────────────────────────────
+
+  describe('Flow 6: pw_changed token invalidation', () => {
+    it('6.1 old parent token rejected after changeParentPassword, fresh login works', async () => {
+      await registerAndVerifyParent();
+      const oldToken = await loginParent(parentInput.email, parentInput.password);
+      const newPassword = 'NewParentPw1!';
+
+      // Wait for a new JWT second so oldToken.iat < pw_changed_seconds
+      await new Promise((r) => setTimeout(r, 1100));
+
+      await gql(
+        app,
+        `mutation { changeParentPassword(currentPassword: "${parentInput.password}", newPassword: "${newPassword}") { message } }`,
+        undefined,
+        oldToken,
+      );
+
+      // Old token must be rejected
+      const oldRes = await gql(
+        app,
+        `query { listChildren { count } }`,
+        undefined,
+        oldToken,
+      );
+      expect(oldRes.errors).toBeDefined();
+
+      // Fresh login with new password returns a working token
+      const freshLoginRes = await gql(
+        app,
+        `mutation($input: LoginParentInput!) { loginParent(input: $input) { token } }`,
+        { input: { email: parentInput.email, password: newPassword } },
+      );
+      expect(freshLoginRes.errors).toBeUndefined();
+      const freshToken = (freshLoginRes.data.loginParent as { token: string })
+        .token;
+
+      const listRes = await gql(
+        app,
+        `query { listChildren { count } }`,
+        undefined,
+        freshToken,
+      );
+      expect(listRes.errors).toBeUndefined();
+    });
+
+    it('6.2 old parent token rejected after resetParentPassword, fresh login works', async () => {
+      await registerAndVerifyParent();
+      const oldToken = await loginParent(parentInput.email, parentInput.password);
+      const newPassword = 'ResetParentPw2!';
+
+      // Wait for a new JWT second so oldToken.iat < pw_changed_seconds
+      await new Promise((r) => setTimeout(r, 1100));
+
+      await gql(
+        app,
+        `mutation { requestParentPasswordReset(email: "${parentInput.email}") { message } }`,
+      );
+      const resetData = emailCapture.getLast('sendParentPasswordResetEmail') as {
+        resetCode: string;
+      };
+
+      await gql(
+        app,
+        `mutation { resetParentPassword(email: "${parentInput.email}", token: "${resetData.resetCode}", password: "${newPassword}") { message } }`,
+      );
+
+      // Old token must be rejected
+      const oldRes = await gql(
+        app,
+        `query { listChildren { count } }`,
+        undefined,
+        oldToken,
+      );
+      expect(oldRes.errors).toBeDefined();
+
+      // Fresh login with new password returns a working token
+      const freshLoginRes = await gql(
+        app,
+        `mutation($input: LoginParentInput!) { loginParent(input: $input) { token } }`,
+        { input: { email: parentInput.email, password: newPassword } },
+      );
+      expect(freshLoginRes.errors).toBeUndefined();
+      const freshToken = (freshLoginRes.data.loginParent as { token: string })
+        .token;
+
+      const listRes = await gql(
+        app,
+        `query { listChildren { count } }`,
+        undefined,
+        freshToken,
+      );
+      expect(listRes.errors).toBeUndefined();
+    });
+
+    it('6.3 old child token rejected after changePin, fresh login with new PIN works', async () => {
+      await registerAndVerifyParent();
+      const parentToken = await loginParent(
+        parentInput.email,
+        parentInput.password,
+      );
+
+      // Setup a child and capture credentials
+      const setupRes = await gql(
+        app,
+        `mutation($input: SetupParentAccountInput!) { setupParentAccount(input: $input) { username pin } }`,
+        {
+          input: {
+            children: [
+              {
+                full_name: 'Token Child',
+                class_level: 'JHS1',
+                target_exam: testCategory.id,
+              },
+            ],
+          },
+        },
+        parentToken,
+      );
+      const { username, pin: originalPin } = (
+        setupRes.data.setupParentAccount as Array<{
+          username: string;
+          pin: string;
+        }>
+      )[0];
+
+      // Login as child (two-step: verifyChildUsername → loginChild)
+      const verifyRes = await gql(
+        app,
+        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
+        { input: { username } },
+      );
+      const tempToken = (
+        verifyRes.data.verifyChildUsername as { temp_token: string }
+      ).temp_token;
+
+      const childLoginRes = await gql(
+        app,
+        `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
+        { input: { temp_token: tempToken, pin: originalPin } },
+      );
+      const oldChildToken = (
+        childLoginRes.data.loginChild as { token: string }
+      ).token;
+
+      // Wait for a new JWT second so oldChildToken.iat < pw_changed_seconds
+      await new Promise((r) => setTimeout(r, 1100));
+
+      // Change PIN as child (must be exactly 6 digits per ParsePinPipe)
+      const newPin = '567890';
+      await gql(
+        app,
+        `mutation { changePin(currentPin: "${originalPin}", newPin: "${newPin}") { message } }`,
+        undefined,
+        oldChildToken,
+      );
+
+      // Old child token must be rejected
+      const oldRes = await gql(
+        app,
+        `query { studentProfile { name } }`,
+        undefined,
+        oldChildToken,
+      );
+      expect(oldRes.errors).toBeDefined();
+
+      // Fresh child login with new PIN returns a working token
+      const verifyRes2 = await gql(
+        app,
+        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
+        { input: { username } },
+      );
+      const tempToken2 = (
+        verifyRes2.data.verifyChildUsername as { temp_token: string }
+      ).temp_token;
+
+      const newChildLoginRes = await gql(
+        app,
+        `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
+        { input: { temp_token: tempToken2, pin: newPin } },
+      );
+      expect(newChildLoginRes.errors).toBeUndefined();
+      const newChildToken = (
+        newChildLoginRes.data.loginChild as { token: string }
+      ).token;
+
+      const profileRes = await gql(
+        app,
+        `query { studentProfile { name } }`,
+        undefined,
+        newChildToken,
+      );
+      expect(profileRes.errors).toBeUndefined();
+      expect((profileRes.data.studentProfile as { name: string }).name).toBe(
+        'Token Child',
+      );
+    });
+  });
+
   // ─── Flow 5: Parent Account Deletion & Cancellation ───────────────────────
 
   describe('Flow 5: parent account deletion and cancellation', () => {
