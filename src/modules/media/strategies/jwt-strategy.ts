@@ -29,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Account has been deactivated');
     }
     const pwChanged = await this.cacheManager.get(`pw_changed:${payload.id}`);
-    if (pwChanged) {
+    if (pwChanged && payload.iat < Number(pwChanged)) {
       throw new UnauthorizedException(
         'Password was recently changed. Please log in again.',
       );

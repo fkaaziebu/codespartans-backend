@@ -436,6 +436,7 @@ export class StudentService {
       email: string;
       role: 'STUDENT';
       type: string;
+      iat: number;
     };
 
     try {
@@ -456,7 +457,7 @@ export class StudentService {
     }
 
     const pwChanged = await this.cacheManager.get(`pw_changed:${payload.id}`);
-    if (pwChanged) {
+    if (pwChanged && payload.iat < Number(pwChanged)) {
       throw new UnauthorizedException(
         'Password was recently changed. Please log in again.',
       );
@@ -540,7 +541,7 @@ export class StudentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${studentId}`, '1', TTL_30D_MS);
+    await this.cacheManager.set(`pw_changed:${studentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
     return result;
   }
 
@@ -581,7 +582,7 @@ export class StudentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${studentId}`, '1', TTL_30D_MS);
+    await this.cacheManager.set(`pw_changed:${studentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
     return result;
   }
 
@@ -620,7 +621,7 @@ export class StudentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${studentId}`, '1', TTL_30D_MS);
+    await this.cacheManager.set(`pw_changed:${studentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
     return result;
   }
 

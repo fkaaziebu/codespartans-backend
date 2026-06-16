@@ -632,10 +632,11 @@ describe('ParentService', () => {
         password: parentInfo.password,
       });
 
-      // First cache check (deactivated) returns null, second (pw_changed) returns '1'
+      // First cache check (deactivated) returns null, second (pw_changed) returns a future timestamp
+      // so that payload.iat < Number(pwChanged) is true and the token is rejected
       mockCacheManager.get
         .mockResolvedValueOnce(null)
-        .mockResolvedValueOnce('1');
+        .mockResolvedValueOnce(String(Math.floor(Date.now() / 1000) + 3600));
 
       await expect(
         parentService.refreshParentToken(loginResponse.refresh_token),
@@ -735,7 +736,7 @@ describe('ParentService', () => {
       expect(await HashHelper.compare('newSecurePassword', updated.password)).toBe(true);
       expect(mockCacheManager.set).toHaveBeenCalledWith(
         expect.stringContaining('pw_changed:'),
-        '1',
+        expect.stringMatching(/^\d+$/),
         expect.any(Number),
       );
     });

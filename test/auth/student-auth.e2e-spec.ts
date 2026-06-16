@@ -300,6 +300,124 @@ describe('Student Auth (e2e)', () => {
     });
   });
 
+  // ─── Flow 2: pw_changed token invalidation ─────────────────────────────────
+
+  describe('Flow 2: pw_changed token invalidation', () => {
+    const email = 'pw-invalidation@example.com';
+    const password = 'Password123!';
+    const name = 'Token Test Student';
+
+    async function registerVerifyAndLogin(): Promise<string> {
+      await gql(
+        app,
+        `mutation { registerStudent(name: "${name}", email: "${email}", password: "${password}") { message } }`,
+      );
+      const emailData = emailCapture.getLast('sendAccountValidationEmail') as {
+        validationCode: string;
+      };
+      await gql(
+        app,
+        `mutation { completeStudentAccountValidation(email: "${email}", validation_code: "${emailData.validationCode}") { message } }`,
+      );
+      const loginRes = await gql(
+        app,
+        `query { loginStudent(email: "${email}", password: "${password}") { token } }`,
+      );
+      return (loginRes.data.loginStudent as { token: string }).token;
+    }
+
+    it('2.1 old token is rejected after changePassword, fresh login token works', async () => {
+      const oldToken = await registerVerifyAndLogin();
+      const newPassword = 'NewPass456!';
+
+      // Wait for a new JWT second so oldToken.iat < pw_changed_seconds
+      await new Promise((r) => setTimeout(r, 1100));
+
+      await gql(
+        app,
+        `mutation { changePassword(currentPassword: "${password}", newPassword: "${newPassword}") { message } }`,
+        undefined,
+        oldToken,
+      );
+
+      // Old token must be rejected
+      const oldTokenRes = await gql(
+        app,
+        `query { studentProfile { name } }`,
+        undefined,
+        oldToken,
+      );
+      expect(oldTokenRes.errors).toBeDefined();
+
+      // Fresh login with new password returns a working token
+      const freshLoginRes = await gql(
+        app,
+        `query { loginStudent(email: "${email}", password: "${newPassword}") { token } }`,
+      );
+      expect(freshLoginRes.errors).toBeUndefined();
+      const freshToken = (freshLoginRes.data.loginStudent as { token: string })
+        .token;
+
+      const profileRes = await gql(
+        app,
+        `query { studentProfile { name } }`,
+        undefined,
+        freshToken,
+      );
+      expect(profileRes.errors).toBeUndefined();
+      expect((profileRes.data.studentProfile as { name: string }).name).toBe(
+        name,
+      );
+    });
+
+    it('2.2 old token is rejected after resetStudentPassword, fresh login token works', async () => {
+      const oldToken = await registerVerifyAndLogin();
+      const newPassword = 'ResetPass789!';
+
+      // Wait for a new JWT second so oldToken.iat < pw_changed_seconds
+      await new Promise((r) => setTimeout(r, 1100));
+
+      await gql(
+        app,
+        `mutation { requestStudentPasswordReset(email: "${email}") { message } }`,
+      );
+      const resetData = emailCapture.getLast('sendPasswordResetEmail') as {
+        resetCode: string;
+      };
+
+      await gql(
+        app,
+        `mutation { resetStudentPassword(email: "${email}", token: "${resetData.resetCode}", password: "${newPassword}") { message } }`,
+      );
+
+      // Old token must be rejected
+      const oldTokenRes = await gql(
+        app,
+        `query { studentProfile { name } }`,
+        undefined,
+        oldToken,
+      );
+      expect(oldTokenRes.errors).toBeDefined();
+
+      // Fresh login with new password returns a working token
+      const freshLoginRes = await gql(
+        app,
+        `query { loginStudent(email: "${email}", password: "${newPassword}") { token } }`,
+      );
+      expect(freshLoginRes.errors).toBeUndefined();
+      const freshToken = (freshLoginRes.data.loginStudent as { token: string })
+        .token;
+
+      const profileRes = await gql(
+        app,
+        `query { studentProfile { name } }`,
+        undefined,
+        freshToken,
+      );
+      expect(profileRes.errors).toBeUndefined();
+    });
+  });
+
   // ─── Flow 3: Account Deletion & Cancellation ───────────────────────────────
 
   describe('Flow 3: account deletion and cancellation', () => {

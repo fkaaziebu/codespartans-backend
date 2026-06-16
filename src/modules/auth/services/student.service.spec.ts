@@ -553,10 +553,11 @@ describe('StudentService', () => {
       await registerAndValidateStudent();
       const loginResponse = await studentService.loginStudent(studentInfo);
 
-      // First call (deactivated check) returns null, second (pw_changed) returns '1'
+      // First call (deactivated check) returns null, second (pw_changed) returns a future timestamp
+      // so that payload.iat < Number(pwChanged) is true and the token is rejected
       mockCacheManager.get
         .mockResolvedValueOnce(null)
-        .mockResolvedValueOnce('1');
+        .mockResolvedValueOnce(String(Math.floor(Date.now() / 1000) + 3600));
 
       await expect(
         studentService.refreshStudentToken({
@@ -626,7 +627,7 @@ describe('StudentService', () => {
       ).toBe(true);
       expect(mockCacheManager.set).toHaveBeenCalledWith(
         expect.stringContaining('pw_changed:'),
-        '1',
+        expect.stringMatching(/^\d+$/),
         expect.any(Number),
       );
     });
@@ -676,7 +677,7 @@ describe('StudentService', () => {
       expect(await HashHelper.compare('newSecurePassword', updated.password)).toBe(true);
       expect(mockCacheManager.set).toHaveBeenCalledWith(
         expect.stringContaining('pw_changed:'),
-        '1',
+        expect.stringMatching(/^\d+$/),
         expect.any(Number),
       );
     });

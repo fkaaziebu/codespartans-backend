@@ -8,6 +8,7 @@ import { Student } from 'src/modules/auth/entities/student.entity';
 import { Child } from 'src/modules/parent/entities/child.entity';
 import { JwtStrategy } from 'src/helpers/strategies';
 import { Recommendation } from './entities/recommendation.entity';
+import { SemanticCache } from './entities/semantic_cache.entity';
 import { SubmittedAnswer } from './entities/sumitted_answer.entity';
 import { Test } from './entities/test.entity';
 import { TestAssignment } from './entities/test_assignment.entity';
@@ -20,6 +21,7 @@ import { InsightService } from './services/insight.service';
 import { MarkAnswerConsumer } from './services/mark-answer.consumer';
 import { MarkAnswerProducer } from './services/mark-answer.producer';
 import { MarkAnswerService } from './services/mark-answer.service';
+import { SemanticCacheService } from './services/semantic-cache.service';
 import { TestTimerService } from './services/test-timer.service';
 
 @Module({
@@ -42,6 +44,7 @@ import { TestTimerService } from './services/test-timer.service';
     TypeOrmModule.forFeature([
       Child,
       Recommendation,
+      SemanticCache,
       Student,
       SubmittedAnswer,
       Test,
@@ -58,6 +61,7 @@ import { TestTimerService } from './services/test-timer.service';
     StudentResolver,
     StudentGateway,
     MarkAnswerProducer,
+    SemanticCacheService,
     MarkAnswerService,
     MarkAnswerConsumer,
   ],
