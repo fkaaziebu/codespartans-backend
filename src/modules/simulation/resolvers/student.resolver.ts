@@ -29,10 +29,10 @@ export class StudentResolver {
     @Args('filter', { type: () => SuiteFilterInput, nullable: true })
     filter?: SuiteFilterInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.getSubscribedCourseDetails({
-      email,
+      id,
       courseId,
       filter,
     });
@@ -41,10 +41,10 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Query(() => QuestionTypeClass)
   getQuestion(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.getQuestion({
-      email,
+      id,
       testId,
     });
   }
@@ -52,24 +52,24 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => WeeklyInsight, { nullable: true })
   getWeeklyInsight(@Context() context) {
-    const { email } = context.req.user;
-    return this.insightService.getWeeklyInsight({ email });
+    const { id } = context.req.user;
+    return this.insightService.getWeeklyInsight({ id });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => TestTypeClass)
   testStats(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.testStats({ email, testId });
+    return this.studentService.testStats({ id, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [SubmittedAnswerTypeClass])
   getAllAttemptedQuestions(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.getAllAttemptedQuestions({ email, testId });
+    return this.studentService.getAllAttemptedQuestions({ id, testId });
   }
 
   // Mutations
@@ -81,10 +81,10 @@ export class StudentResolver {
     @Args('mode', { type: () => TestModeType, nullable: true })
     mode?: TestModeType,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.startTest({
-      email,
+      id,
       suiteId,
       mode,
     });
@@ -93,10 +93,10 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => TestTypeClass)
   pauseTest(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.pauseTest({
-      email,
+      id,
       testId,
     });
   }
@@ -104,10 +104,10 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => TestTypeClass)
   resumeTest(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.resumeTest({
-      email,
+      id,
       testId,
     });
   }
@@ -115,10 +115,10 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
   @Mutation(() => TestTypeClass)
   endTest(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.endTest({
-      email,
+      id,
       testId,
     });
   }
@@ -133,10 +133,10 @@ export class StudentResolver {
     @Args('answer') answer: string,
     @Args('isFlagged') isFlagged: boolean,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.submitAnswer({
-      email,
+      id,
       testId,
       questionId,
       timeRange,
@@ -148,8 +148,8 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [TestAssignment])
   listMyAssignments(@Context() context) {
-    const { email } = context.req.user;
-    return this.studentService.listMyAssignments({ email });
+    const { id } = context.req.user;
+    return this.studentService.listMyAssignments({ id });
   }
 
   @UseGuards(GqlJwtAuthGuard, SubscriptionGuard)
@@ -160,7 +160,7 @@ export class StudentResolver {
     @Args('mode', { type: () => TestModeType, nullable: true })
     mode?: TestModeType,
   ) {
-    const { email } = context.req.user;
-    return this.studentService.startAssignedTest({ email, assignmentId, mode });
+    const { id } = context.req.user;
+    return this.studentService.startAssignedTest({ id, assignmentId, mode });
   }
 }

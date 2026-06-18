@@ -47,13 +47,9 @@ export class InstructorService {
 
         const payload: {
           id: string;
-          name: string;
-          email: string;
           role: 'INSTRUCTOR';
         } = {
           id: instructor.id,
-          name: instructor.name,
-          email: instructor.email,
           role: 'INSTRUCTOR',
         };
 

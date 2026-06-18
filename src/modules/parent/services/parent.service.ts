@@ -39,7 +39,6 @@ import { RequestMetadata } from '../../auth/entities/deletion-audit-log.entity';
 import { Child, ClassLevel } from '../entities/child.entity';
 import { Gender, Parent } from '../entities/parent.entity';
 
-const TTL_30D_MS = 30 * 24 * 60 * 60 * 1000;
 import {
   ActivityConnection,
   ChildStatsResponse,
@@ -53,6 +52,7 @@ import {
 @Injectable()
 export class ParentService {
   private readonly gracePeriodMs: number;
+  private readonly refreshTokenTtlMs: number;
   constructor(
     @InjectRepository(Parent)
     private parentRepository: Repository<Parent>,
@@ -77,6 +77,8 @@ export class ParentService {
       60 *
       60 *
       1000;
+    this.refreshTokenTtlMs =
+      this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') * 60 * 60 * 1000;
   }
 
   async registerParent({
@@ -142,11 +144,9 @@ export class ParentService {
 
   async refreshParentToken(
     refresh_token: string,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{ access_token: string; refresh_token: string }> {
     let payload: {
       id: string;
-      name: string;
-      email: string;
       role: 'PARENT';
       type: string;
       iat: number;
@@ -175,6 +175,10 @@ export class ParentService {
         'Password was recently changed. Please log in again.',
       );
     }
+    const loggedOut = await this.cacheManager.get(`logged_out:${payload.id}`);
+    if (loggedOut && payload.iat <= Number(loggedOut)) {
+      throw new UnauthorizedException('Logged out. Please log in again.');
+    }
 
     const {
       type: _type,
@@ -183,7 +187,24 @@ export class ParentService {
       ...tokenPayload
     } = payload as any;
     const access_token = this.jwtService.sign(tokenPayload);
-    return { access_token };
+    const new_refresh_token = this.jwtService.sign(
+      { ...tokenPayload, type: 'refresh' },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
+    );
+    return { access_token, refresh_token: new_refresh_token };
+  }
+
+  async logoutParent({
+    userId,
+  }: {
+    userId: string;
+  }): Promise<{ message: string }> {
+    await this.cacheManager.set(
+      `logged_out:${userId}`,
+      Math.floor(Date.now() / 1000).toString(),
+      this.refreshTokenTtlMs,
+    );
+    return { message: 'Logged out successfully' };
   }
 
   async resendParentAccountValidationCode(
@@ -314,8 +335,6 @@ export class ParentService {
       const pendingToken = this.jwtService.sign(
         {
           id: foundParent.id,
-          name: `${foundParent.first_name} ${foundParent.last_name}`,
-          email: foundParent.email,
           role: 'PARENT',
           type: 'pending_deletion',
         },
@@ -344,15 +363,13 @@ export class ParentService {
 
     const payload = {
       id: foundParent.id,
-      name: `${foundParent.first_name} ${foundParent.last_name}`,
-      email: foundParent.email,
       role: 'PARENT' as const,
     };
 
     const token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: '30d' },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
     );
 
     return { ...foundParent, token, refresh_token };
@@ -406,15 +423,13 @@ export class ParentService {
 
     const payload = {
       id: parent.id,
-      name: `${parent.first_name} ${parent.last_name}`,
-      email: parent.email,
       role: 'PARENT' as const,
     };
 
     const token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: '30d' },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
     );
 
     return {
@@ -426,7 +441,7 @@ export class ParentService {
   }
 
   async cancelChildDeletion(
-    parentEmail: string,
+    parentId: string,
     childId: string,
     meta: RequestMetadata | null = null,
   ) {
@@ -439,7 +454,7 @@ export class ParentService {
       throw new NotFoundException('Child not found.');
     }
 
-    if (child.parent.email !== parentEmail) {
+    if (child.parent.id !== parentId) {
       throw new ForbiddenException(
         'You are not authorized to restore this child account.',
       );
@@ -520,16 +535,16 @@ export class ParentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${parentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
+    await this.cacheManager.set(`pw_changed:${parentId}`, Math.floor(Date.now() / 1000).toString(), this.refreshTokenTtlMs);
     return result;
   }
 
   async changeParentPassword({
-    email,
+    id,
     currentPassword,
     newPassword,
   }: {
-    email: string;
+    id: string;
     currentPassword: string;
     newPassword: string;
   }): Promise<{ message: string }> {
@@ -538,7 +553,7 @@ export class ParentService {
     const result = await this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const parent = await transactionalEntityManager.findOne(Parent, {
-          where: { email },
+          where: { id },
         });
 
         if (!parent) {
@@ -561,12 +576,12 @@ export class ParentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${parentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
+    await this.cacheManager.set(`pw_changed:${parentId}`, Math.floor(Date.now() / 1000).toString(), this.refreshTokenTtlMs);
     return result;
   }
 
   async setupParentAccount(
-    parentEmail: string,
+    parentId: string,
     children: Array<{
       full_name: string;
       class_level: ClassLevel;
@@ -577,7 +592,7 @@ export class ParentService {
     return this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const parent = await transactionalEntityManager.findOne(Parent, {
-          where: { email: parentEmail },
+          where: { id: parentId },
         });
 
         if (!parent) {
@@ -663,7 +678,7 @@ export class ParentService {
   }
 
   async addChild(
-    parentEmail: string,
+    parentId: string,
     {
       full_name,
       class_level,
@@ -679,7 +694,7 @@ export class ParentService {
     return this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const parent = await transactionalEntityManager.findOne(Parent, {
-          where: { email: parentEmail },
+          where: { id: parentId },
         });
 
         if (!parent) {
@@ -755,13 +770,13 @@ export class ParentService {
   }
 
   async resetChildPin(
-    parentEmail: string,
+    parentId: string,
     childId: string,
   ): Promise<{ message: string; pin: string }> {
     return this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const child = await transactionalEntityManager.findOne(Child, {
-          where: { id: childId, parent: { email: parentEmail } },
+          where: { id: childId, parent: { id: parentId } },
           relations: ['student'],
         });
 
@@ -786,13 +801,13 @@ export class ParentService {
   }
 
   async shareChildLogin(
-    parentEmail: string,
+    parentId: string,
     childId: string,
   ): Promise<{ message: string }> {
     return this.childRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const child = await transactionalEntityManager.findOne(Child, {
-          where: { id: childId, parent: { email: parentEmail } },
+          where: { id: childId, parent: { id: parentId } },
           relations: ['student'],
         });
 
@@ -834,11 +849,11 @@ export class ParentService {
     });
   }
 
-  async listChildren(parentEmail: string, pagination?: PaginationInput) {
+  async listChildren(parentId: string, pagination?: PaginationInput) {
     return this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const parent = await transactionalEntityManager.findOne(Parent, {
-          where: { email: parentEmail },
+          where: { id: parentId },
           relations: ['children.student.subscribed_categories'],
         });
 
@@ -856,11 +871,11 @@ export class ParentService {
   }
 
   async getChildStats(
-    parentEmail: string,
+    parentId: string,
     childId: string,
   ): Promise<ChildStatsResponse> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: [
         'student.tests.submitted_answers.question',
         'student.tests.time_events',
@@ -975,12 +990,12 @@ export class ParentService {
   }
 
   async getChildSubjectProgress(
-    parentEmail: string,
+    parentId: string,
     childId: string,
     courseId?: string,
   ): Promise<SubjectProgressResponse[]> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: [
         'student.tests.submitted_answers',
         'student.tests.test_suite.course_version.course',
@@ -1055,12 +1070,12 @@ export class ParentService {
   }
 
   async getChildTestsHistory(
-    parentEmail: string,
+    parentId: string,
     childId: string,
     pagination?: PaginationInput,
   ): Promise<AttemptConnection> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: [
         'student.tests.test_suite.course_version.course',
         'student.tests.submitted_answers.question',
@@ -1174,11 +1189,11 @@ export class ParentService {
   }
 
   async getChildWeakAreas(
-    parentEmail: string,
+    parentId: string,
     childId: string,
   ): Promise<WeakSubjectAreaResponse[]> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: [
         'student.tests.submitted_answers.question',
         'student.tests.test_suite.questions',
@@ -1269,12 +1284,12 @@ export class ParentService {
   }
 
   async getChildActivity(
-    parentEmail: string,
+    parentId: string,
     childId: string,
     pagination?: PaginationInput,
   ): Promise<ActivityConnection> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: [
         'student.tests.submitted_answers.question',
         'student.tests.time_events',
@@ -1325,11 +1340,11 @@ export class ParentService {
   }
 
   async getChildStreak(
-    parentEmail: string,
+    parentId: string,
     childId: string,
   ): Promise<StreakResponse> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: ['student.tests.time_events'],
     });
 
@@ -1358,13 +1373,13 @@ export class ParentService {
   }
 
   async listChildStreak(
-    parentEmail: string,
+    parentId: string,
     childId: string,
     month: number,
     year: number,
   ): Promise<{ date: string; is_active: boolean }[]> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: ['student.tests.time_events'],
     });
 
@@ -1473,22 +1488,20 @@ export class ParentService {
 
     const tokenPayload = {
       id: child.student.id,
-      name: child.student.name,
-      email: child.student.email,
       role: 'CHILD' as const,
     };
 
     const token = this.jwtService.sign(tokenPayload);
     const refresh_token = this.jwtService.sign(
       { ...tokenPayload, type: 'refresh' },
-      { expiresIn: '30d' },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
     );
 
     return { ...child, token, refresh_token };
   }
 
   async assignTestToChild(
-    parentEmail: string,
+    parentId: string,
     childId: string,
     suiteId: string,
     note?: string,
@@ -1496,7 +1509,7 @@ export class ParentService {
     return this.parentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const child = await transactionalEntityManager.findOne(Child, {
-          where: { id: childId, parent: { email: parentEmail } },
+          where: { id: childId, parent: { id: parentId } },
           relations: ['parent'],
         });
 
@@ -1525,11 +1538,11 @@ export class ParentService {
   }
 
   async listChildCourses(
-    parentEmail: string,
+    parentId: string,
     childId: string,
   ): Promise<Course[]> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: [
         'student',
         'student.subscribed_courses',
@@ -1545,11 +1558,11 @@ export class ParentService {
   }
 
   async listChildAssignments(
-    parentEmail: string,
+    parentId: string,
     childId: string,
   ): Promise<TestAssignment[]> {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
     });
 
     if (!child) {
@@ -1563,7 +1576,7 @@ export class ParentService {
     });
   }
 
-  async listParentAlerts(parentEmail: string): Promise<
+  async listParentAlerts(parentId: string): Promise<
     {
       id: string;
       alert_type: string;
@@ -1577,7 +1590,7 @@ export class ParentService {
     }[]
   > {
     const parent = await this.parentRepository.findOne({
-      where: { email: parentEmail },
+      where: { id: parentId },
       relations: [
         'children.student.tests.submitted_answers.question',
         'children.student.tests.time_events',
@@ -1784,7 +1797,7 @@ export class ParentService {
   }
 
   async listChildMonthlyReports(
-    parentEmail: string,
+    parentId: string,
     childId: string,
   ): Promise<
     {
@@ -1796,7 +1809,7 @@ export class ParentService {
     }[]
   > {
     const child = await this.childRepository.findOne({
-      where: { id: childId, parent: { email: parentEmail } },
+      where: { id: childId, parent: { id: parentId } },
       relations: [
         'student.tests.submitted_answers.question',
         'student.tests.time_events',

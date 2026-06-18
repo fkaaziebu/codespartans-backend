@@ -43,13 +43,9 @@ export class AdminService {
 
         const payload: {
           id: string;
-          name: string;
-          email: string;
           role: 'ADMIN';
         } = {
           id: admin.id,
-          name: admin.name,
-          email: admin.email,
           role: 'ADMIN',
         };
 

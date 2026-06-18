@@ -259,8 +259,6 @@ export class DemoService {
 
     const payload = {
       id: org.id,
-      name: org.name,
-      email: org.email,
       role: 'ORGANIZATION',
     };
 
@@ -349,15 +347,13 @@ export class DemoService {
 
     const payload = {
       id: student.id,
-      name: student.name,
-      email: student.email,
       role: 'STUDENT',
     };
 
     const access_token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: '30d' },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
     );
 
     return {
@@ -436,15 +432,13 @@ export class DemoService {
 
     const payload = {
       id: parent.id,
-      name: `${parent.first_name} ${parent.last_name}`,
-      email: parent.email,
       role: 'PARENT' as const,
     };
 
     const token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: '30d' },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
     );
 
     return {
@@ -464,23 +458,23 @@ export class DemoService {
     return result;
   }
 
-  async initiatePayment(email: string, planId: string, role: string, childrenIds: string[] = []) {
-    return this.paymentService.initiatePayment(email, planId, role, childrenIds);
+  async initiatePayment(id: string, planId: string, role: string, childrenIds: string[] = []) {
+    return this.paymentService.initiatePayment(id, planId, role, childrenIds);
   }
 
-  async getMySubscription(parentEmail: string) {
-    return this.paymentService.getParentSubscription(parentEmail);
+  async getMySubscription(parentId: string) {
+    return this.paymentService.getParentSubscription(parentId);
   }
 
-  async listMySubscriptions(parentEmail: string) {
-    return this.paymentService.listParentSubscriptions(parentEmail);
+  async listMySubscriptions(parentId: string) {
+    return this.paymentService.listParentSubscriptions(parentId);
   }
 
-  async getMyStudentSubscription(studentEmail: string) {
-    return this.paymentService.getStudentSubscription(studentEmail);
+  async getMyStudentSubscription(studentId: string) {
+    return this.paymentService.getStudentSubscription(studentId);
   }
 
-  async listMyStudentSubscriptions(studentEmail: string) {
-    return this.paymentService.listStudentSubscriptions(studentEmail);
+  async listMyStudentSubscriptions(studentId: string) {
+    return this.paymentService.listStudentSubscriptions(studentId);
   }
 }

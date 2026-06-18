@@ -21,10 +21,10 @@ export class OrganizationResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => StatsResponse)
   getStats(@Context() context) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.organizationService.getStats({
-      email,
+      id,
     });
   }
 
@@ -35,10 +35,10 @@ export class OrganizationResolver {
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.organizationService.listInstructorsPaginated({
-      email,
+      id,
       searchTerm,
       pagination,
     });
@@ -51,10 +51,10 @@ export class OrganizationResolver {
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.organizationService.listAdminsPaginated({
-      email,
+      id,
       searchTerm,
       pagination,
     });
@@ -67,10 +67,10 @@ export class OrganizationResolver {
     @Args('filter', { nullable: true }) filter?: RequestedReviewFilterInput,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.organizationService.listRequestedReviewsPaginated({
-      email,
+      id,
       filter,
       pagination,
     });
@@ -83,10 +83,10 @@ export class OrganizationResolver {
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.organizationService.listCoursesPaginated({
-      email,
+      id,
       searchTerm,
       pagination,
     });
@@ -100,10 +100,10 @@ export class OrganizationResolver {
     @Args('versionId') versionId: string,
     @Args('adminId') adminId: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.organizationService.assignCourseVersionForReview({
-      email,
+      id,
       versionId,
       adminId,
     });
@@ -116,9 +116,9 @@ export class OrganizationResolver {
     @Args('categoryInfo', { type: () => CategoryInfoInput!, nullable: false })
     categoryInfo: CategoryInfoInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.organizationService.createCategory({ email, categoryInfo });
+    return this.organizationService.createCategory({ id, categoryInfo });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -129,10 +129,10 @@ export class OrganizationResolver {
     @Args('courseIds', { type: () => [String!]!, nullable: false })
     courseIds: string[],
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.organizationService.addCoursesToCategory({
-      email,
+      id,
       categoryId,
       courseIds,
     });
@@ -146,10 +146,10 @@ export class OrganizationResolver {
     @Args('dateOfExams') dateOfExams: Date,
     @Args('examDurationDays', { type: () => Int }) examDurationDays: number,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.organizationService.updateCategoryCountdown({
-      email,
+      id,
       categoryId,
       dateOfExams,
       examDurationDays,

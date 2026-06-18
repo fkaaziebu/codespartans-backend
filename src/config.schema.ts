@@ -23,6 +23,8 @@ export const configValidationSchema = Joi.object({
   PARENT_URL: Joi.string().default('http://localhost:3000'),
   ANTHROPIC_API_KEY: Joi.string().required(),
   ACCOUNT_DELETION_GRACE_DAYS: Joi.number().default(90),
+  REFRESH_TOKEN_TTL_HOURS: Joi.number().integer().min(1).default(24),
+  DELETION_CACHE_TTL_DAYS: Joi.number().integer().min(1).default(30),
   PAYMENT_RETENTION_YEARS: Joi.number().integer().min(1).required(),
   ADMIN_EMAIL: Joi.string().email().required(),
 });

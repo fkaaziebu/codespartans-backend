@@ -669,4 +669,68 @@ describe('Parent (e2e)', () => {
       expect((finalLogin.data.loginParent as { token: string }).token).toBeDefined();
     });
   });
+
+  // ─── Flow 7: Logout ────────────────────────────────────────────────────────
+
+  describe('Flow 7: logout', () => {
+    it('7.1 returns a success message', async () => {
+      await registerAndVerifyParent();
+      const accessToken = await loginParent(parentInput.email, parentInput.password);
+
+      const res = await gql(
+        app,
+        `mutation { logoutParent { message } }`,
+        undefined,
+        accessToken,
+      );
+      expect(res.errors).toBeUndefined();
+      expect((res.data.logoutParent as { message: string }).message).toBe(
+        'Logged out successfully',
+      );
+    });
+
+    it('7.2 old access token is rejected after logout', async () => {
+      await registerAndVerifyParent();
+      const accessToken = await loginParent(parentInput.email, parentInput.password);
+      await gql(
+        app,
+        `mutation { logoutParent { message } }`,
+        undefined,
+        accessToken,
+      );
+
+      const res = await gql(
+        app,
+        `mutation { logoutParent { message } }`,
+        undefined,
+        accessToken,
+      );
+      expect(res.errors).toBeDefined();
+    });
+
+    it('7.3 refresh token is rejected after logout', async () => {
+      await registerAndVerifyParent();
+      const loginRes = await gql(
+        app,
+        `mutation($input: LoginParentInput!) { loginParent(input: $input) { token refresh_token } }`,
+        { input: { email: parentInput.email, password: parentInput.password } },
+      );
+      const { token, refresh_token } = loginRes.data.loginParent as {
+        token: string;
+        refresh_token: string;
+      };
+      await gql(
+        app,
+        `mutation { logoutParent { message } }`,
+        undefined,
+        token,
+      );
+
+      const res = await gql(
+        app,
+        `mutation { refreshParentToken(refresh_token: "${refresh_token}") { access_token } }`,
+      );
+      expect(res.errors).toBeDefined();
+    });
+  });
 });

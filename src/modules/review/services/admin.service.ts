@@ -25,18 +25,18 @@ export class AdminService {
   ) {}
 
   async listQuestionsForVersionPaginated({
-    email,
+    id,
     versionId,
     searchTerm,
     pagination,
   }: {
-    email: string;
+    id: string;
     versionId?: string;
     searchTerm?: string;
     pagination?: PaginationInput;
   }) {
     const questions = await this.listQuestionsForVersion({
-      email,
+      id,
       versionId,
       searchTerm,
     });
@@ -50,11 +50,11 @@ export class AdminService {
   }
 
   async listQuestionsForVersion({
-    email,
+    id,
     versionId,
     searchTerm,
   }: {
-    email: string;
+    id: string;
     versionId: string;
     searchTerm?: string;
   }): Promise<Question[]> {
@@ -68,7 +68,7 @@ export class AdminService {
             version: {
               id: versionId,
               assigned_admin: {
-                email,
+                id,
               },
             },
           },
@@ -80,16 +80,16 @@ export class AdminService {
   }
 
   async listAssignedVersionsPaginated({
-    email,
+    id,
     searchTerm,
     pagination,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
     pagination?: PaginationInput;
   }) {
     const versions = await this.listAssignedVersions({
-      email,
+      id,
       searchTerm,
     });
 
@@ -100,10 +100,10 @@ export class AdminService {
   }
 
   async listAssignedVersions({
-    email,
+    id,
     searchTerm,
   }: {
-    email: string;
+    id: string;
     searchTerm: string;
   }): Promise<Version[]> {
     return this.adminRepository.manager.transaction(
@@ -114,7 +114,7 @@ export class AdminService {
               title: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
             },
             assigned_admin: {
-              email,
+              id,
             },
           },
           relations: ['course', 'review_request', 'reviews', 'questions'],
@@ -130,10 +130,10 @@ export class AdminService {
   }
 
   async getCourseVersion({
-    email,
+    id,
     versionId,
   }: {
-    email: string;
+    id: string;
     versionId: string;
   }): Promise<Version> {
     return this.adminRepository.manager.transaction(
@@ -142,7 +142,7 @@ export class AdminService {
           where: {
             id: versionId,
             assigned_admin: {
-              email,
+              id,
             },
           },
           relations: [
@@ -170,10 +170,10 @@ export class AdminService {
   }
 
   async getVersionReview({
-    email,
+    id,
     reviewId,
   }: {
-    email: string;
+    id: string;
     reviewId: string;
   }): Promise<Review> {
     return this.adminRepository.manager.transaction(
@@ -183,7 +183,7 @@ export class AdminService {
             id: reviewId,
             course_version: {
               assigned_admin: {
-                email,
+                id,
               },
             },
           },
@@ -200,18 +200,18 @@ export class AdminService {
   }
 
   async addCourseVersionReview({
-    email,
+    id,
     versionId,
     reviewInfo,
   }: {
-    email: string;
+    id: string;
     versionId: string;
     reviewInfo: ReviewInfoInput;
   }): Promise<ReviewTypeClass> {
     return await this.adminRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const admin = await transactionalEntityManager.findOne(Admin, {
-          where: { email },
+          where: { id },
         });
 
         if (!admin) {
@@ -224,7 +224,7 @@ export class AdminService {
             where: {
               id: versionId,
               assigned_admin: {
-                email,
+                id,
               },
             },
           },
@@ -245,18 +245,18 @@ export class AdminService {
   }
 
   async addReviewIssue({
-    email,
+    id,
     reviewId,
     issueInfo,
   }: {
-    email: string;
+    id: string;
     reviewId: string;
     issueInfo: IssueInfoInput;
   }): Promise<IssueTypeClass> {
     return await this.adminRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const admin = await transactionalEntityManager.findOne(Admin, {
-          where: { email },
+          where: { id },
         });
 
         if (!admin) {
@@ -268,7 +268,7 @@ export class AdminService {
             id: reviewId,
             course_version: {
               assigned_admin: {
-                email,
+                id,
               },
             },
           },
@@ -288,16 +288,16 @@ export class AdminService {
   }
 
   async closeIssue({
-    email,
+    id,
     issueId,
   }: {
-    email: string;
+    id: string;
     issueId: string;
   }): Promise<IssueTypeClass> {
     return await this.adminRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const admin = await transactionalEntityManager.findOne(Admin, {
-          where: { email },
+          where: { id },
         });
 
         if (!admin) {
@@ -310,7 +310,7 @@ export class AdminService {
             review: {
               course_version: {
                 assigned_admin: {
-                  email,
+                  id,
                 },
               },
             },
@@ -329,16 +329,16 @@ export class AdminService {
   }
 
   async closeReview({
-    email,
+    id,
     reviewId,
   }: {
-    email: string;
+    id: string;
     reviewId: string;
   }): Promise<ReviewTypeClass> {
     return await this.adminRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const admin = await transactionalEntityManager.findOne(Admin, {
-          where: { email },
+          where: { id },
         });
 
         if (!admin) {
@@ -350,7 +350,7 @@ export class AdminService {
             id: reviewId,
             course_version: {
               assigned_admin: {
-                email,
+                id,
               },
             },
           },
@@ -368,16 +368,16 @@ export class AdminService {
   }
 
   async approveCourseVersion({
-    email,
+    id,
     versionId,
   }: {
-    email: string;
+    id: string;
     versionId: string;
   }): Promise<VersionTypeClass> {
     return await this.adminRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const admin = await transactionalEntityManager.findOne(Admin, {
-          where: { email },
+          where: { id },
         });
 
         if (!admin) {
@@ -390,7 +390,7 @@ export class AdminService {
             where: {
               id: versionId,
               assigned_admin: {
-                email,
+                id,
               },
             },
             relations: ['course'],

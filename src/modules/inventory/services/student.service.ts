@@ -60,17 +60,17 @@ export class StudentService {
   ) {}
 
   async getOrganizationCourse({
-    email,
+    id,
     courseId,
   }: {
-    email: string;
+    id: string;
     courseId: string;
   }): Promise<Course> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await this.studentRepository.findOne({
           where: {
-            email,
+            id,
           },
           relations: ['subscribed_courses', 'cart.courses'],
         });
@@ -84,7 +84,7 @@ export class StudentService {
             id: courseId,
             organization: {
               students: {
-                email,
+                id,
               },
             },
           },
@@ -111,20 +111,20 @@ export class StudentService {
   }
 
   async listOrganizationCoursesPaginated({
-    email,
+    id,
     organizationId,
     searchTerm,
     pagination,
     filter,
   }: {
-    email: string;
+    id: string;
     organizationId?: string;
     searchTerm?: string;
     pagination?: PaginationInput;
     filter?: CourseFilterInput;
   }) {
     const courses = await this.listOrganizationCourses({
-      email,
+      id,
       organizationId,
       searchTerm,
       filter,
@@ -137,19 +137,19 @@ export class StudentService {
   }
 
   async listOrganizationCourses({
-    email,
+    id,
     organizationId,
     searchTerm,
     filter,
   }: {
-    email: string;
+    id: string;
     organizationId?: string;
     searchTerm?: string;
     filter?: CourseFilterInput;
   }): Promise<Course[]> {
     const student = await this.studentRepository.findOne({
       where: {
-        email,
+        id,
       },
       relations: ['subscribed_courses'],
     });
@@ -163,7 +163,7 @@ export class StudentService {
         organization: {
           id: organizationId ?? undefined,
           students: {
-            email,
+            id,
           },
         },
         title: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
@@ -195,10 +195,10 @@ export class StudentService {
     }));
   }
 
-  async listCartCourses({ email }: { email: string }): Promise<Course[]> {
+  async listCartCourses({ id }: { id: string }): Promise<Course[]> {
     const student = await this.studentRepository.findOne({
       where: {
-        email,
+        id,
       },
       relations: ['cart.courses'],
     });
@@ -210,10 +210,10 @@ export class StudentService {
     return student.cart.courses || [];
   }
 
-  async listCartCategories({ email }: { email: string }): Promise<Category[]> {
+  async listCartCategories({ id }: { id: string }): Promise<Category[]> {
     const student = await this.studentRepository.findOne({
       where: {
-        email,
+        id,
       },
       relations: ['cart.categories'],
     });
@@ -226,13 +226,13 @@ export class StudentService {
   }
 
   async listOrganizationCategories({
-    email,
+    id,
     searchTerm,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
   }): Promise<Category[]> {
-    const cacheKey = `student-org-categories:${email}`;
+    const cacheKey = `student-org-categories:${id}`;
     if (!searchTerm) {
       const cached = await this.cacheManager.get<Category[]>(cacheKey);
       if (cached) return cached;
@@ -240,7 +240,7 @@ export class StudentService {
 
     const student = await this.studentRepository.findOne({
       where: {
-        email,
+        id,
       },
       relations: ['organizations'],
     });
@@ -249,12 +249,12 @@ export class StudentService {
       throw new NotFoundException('Student not found');
     }
 
-    const organizationEmail = student.organizations.at(0).email;
+    const organizationId = student.organizations.at(0).id;
 
     const categories = await this.categoryRepository.find({
       where: {
         organization: {
-          email: organizationEmail,
+          id: organizationId,
         },
         name: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
       },
@@ -268,16 +268,16 @@ export class StudentService {
   }
 
   async addCourseToCart({
-    email,
+    id,
     courseId,
   }: {
-    email: string;
+    id: string;
     courseId: string;
   }): Promise<CartTypeClass> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
-          where: { email },
+          where: { id },
           relations: ['cart.courses'],
         });
 
@@ -290,7 +290,7 @@ export class StudentService {
             id: courseId,
             organization: {
               students: {
-                email,
+                id,
               },
             },
           },
@@ -308,16 +308,16 @@ export class StudentService {
   }
 
   async removeCourseFromCart({
-    email,
+    id,
     courseId,
   }: {
-    email: string;
+    id: string;
     courseId: string;
   }): Promise<CartTypeClass> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
-          where: { email },
+          where: { id },
           relations: ['cart.courses'],
         });
 
@@ -335,16 +335,16 @@ export class StudentService {
   }
 
   async addCategoryToCart({
-    email,
+    id,
     categoryId,
   }: {
-    email: string;
+    id: string;
     categoryId: string;
   }): Promise<CartTypeClass> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
-          where: { email },
+          where: { id },
           relations: ['cart.categories'],
         });
 
@@ -357,7 +357,7 @@ export class StudentService {
             id: categoryId,
             organization: {
               students: {
-                email,
+                id,
               },
             },
           },
@@ -376,12 +376,12 @@ export class StudentService {
   }
 
   async createCheckout({
-    email,
+    id,
     courseId,
     checkoutFromCart,
     autoApproveSubscription,
   }: {
-    email: string;
+    id: string;
     courseId?: string;
     checkoutFromCart?: boolean;
     autoApproveSubscription: boolean;
@@ -389,7 +389,7 @@ export class StudentService {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
-          where: { email },
+          where: { id },
           relations: [
             'cart.courses',
             'cart.categories.courses',
@@ -431,7 +431,7 @@ export class StudentService {
                 id: courseId,
                 organization: {
                   students: {
-                    email,
+                    id,
                   },
                 },
               },
@@ -492,7 +492,7 @@ export class StudentService {
               id: courseId,
               organization: {
                 students: {
-                  email,
+                  id,
                 },
               },
             },
@@ -530,18 +530,18 @@ export class StudentService {
   }
 
   async completeSetup({
-    email,
+    id,
     categoryId,
     courseIds,
   }: {
-    email: string;
+    id: string;
     categoryId: string;
     courseIds: string[];
   }): Promise<StudentTypeClass> {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
-          where: { email },
+          where: { id },
           relations: [
             'cart.courses',
             'cart.categories.courses',
@@ -568,7 +568,7 @@ export class StudentService {
             id: categoryId,
             organization: {
               students: {
-                email,
+                id,
               },
             },
           },
@@ -597,18 +597,18 @@ export class StudentService {
   }
 
   async listAttempts({
-    email,
+    id,
     searchTerm,
     filter,
     pagination,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
     filter?: AttemptFilterInput;
     pagination?: PaginationInput;
   }) {
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
       relations: [
         'tests.test_suite.course_version.course',
         'tests.test_suite.questions',
@@ -740,9 +740,9 @@ export class StudentService {
     return PaginateHelper.paginate(attempts, pagination, (t) => t.id);
   }
 
-  async getActiveTest({ email }: { email: string }) {
+  async getActiveTest({ id }: { id: string }) {
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
       relations: [
         'tests.submitted_answers.question',
         'tests.test_suite.questions',
@@ -771,9 +771,9 @@ export class StudentService {
     };
   }
 
-  async getTest({ email, testId }: { email: string; testId: string }) {
+  async getTest({ id, testId }: { id: string; testId: string }) {
     const test = await this.testRepository.findOne({
-      where: { id: testId, student: { email } },
+      where: { id: testId, student: { id } },
       relations: [
         'submitted_answers.question',
         'test_suite.questions',
@@ -797,13 +797,13 @@ export class StudentService {
     };
   }
 
-  async getStats({ email }: { email: string }): Promise<StudentStatsResponse> {
-    const cacheKey = `student-stats:${email}`;
+  async getStats({ id }: { id: string }): Promise<StudentStatsResponse> {
+    const cacheKey = `student-stats:${id}`;
     const cached = await this.cacheManager.get<StudentStatsResponse>(cacheKey);
     if (cached) return cached;
 
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
       relations: [
         'tests.submitted_answers.question',
         'tests.time_events',
@@ -930,19 +930,20 @@ export class StudentService {
   }
 
   async studentSubjectProgress({
-    email,
+    id,
     testId,
   }: {
-    email: string;
+    id: string;
     testId?: string;
   }): Promise<SubjectProgressResponse[]> {
-    const cacheKey = `student-subject-progress:${email}:${testId ?? 'all'}`;
+    const cacheKey = `student-subject-progress:${id}:${testId ?? 'all'}`;
     const ttl = testId ? THIRTY_DAYS_MS : SEVEN_DAYS_MS;
-    const cached = await this.cacheManager.get<SubjectProgressResponse[]>(cacheKey);
+    const cached =
+      await this.cacheManager.get<SubjectProgressResponse[]>(cacheKey);
     if (cached) return cached;
 
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
       relations: [
         'tests.submitted_answers',
         'tests.test_suite.course_version.course',
@@ -1028,18 +1029,19 @@ export class StudentService {
   }
 
   async studentTestTopicProgress({
-    email,
+    id,
     testId,
   }: {
-    email: string;
+    id: string;
     testId: string;
   }): Promise<TestTopicProgressResponse[]> {
-    const cacheKey = `student-topic-progress:${email}:${testId}`;
-    const cached = await this.cacheManager.get<TestTopicProgressResponse[]>(cacheKey);
+    const cacheKey = `student-topic-progress:${id}:${testId}`;
+    const cached =
+      await this.cacheManager.get<TestTopicProgressResponse[]>(cacheKey);
     if (cached) return cached;
 
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
       relations: [
         'tests.submitted_answers.question',
         'tests.test_suite.questions',
@@ -1098,19 +1100,20 @@ export class StudentService {
   }
 
   async weakSubjectAreas({
-    email,
+    id,
     testId,
   }: {
-    email: string;
+    id: string;
     testId?: string;
   }): Promise<WeakSubjectAreaResponse[]> {
-    const cacheKey = `student-weak-areas:${email}:${testId ?? 'all'}`;
+    const cacheKey = `student-weak-areas:${id}:${testId ?? 'all'}`;
     const ttl = testId ? THIRTY_DAYS_MS : SEVEN_DAYS_MS;
-    const cached = await this.cacheManager.get<WeakSubjectAreaResponse[]>(cacheKey);
+    const cached =
+      await this.cacheManager.get<WeakSubjectAreaResponse[]>(cacheKey);
     if (cached) return cached;
 
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
       relations: [
         'tests.submitted_answers.question',
         'tests.test_suite.questions',
@@ -1195,19 +1198,20 @@ export class StudentService {
   }
 
   async getTestScoreHistory({
-    email,
+    id,
     testId,
   }: {
-    email: string;
+    id: string;
     testId?: string;
   }): Promise<TestScoreHistoryResponse[]> {
-    const cacheKey = `student-score-history:${email}:${testId ?? 'all'}`;
+    const cacheKey = `student-score-history:${id}:${testId ?? 'all'}`;
     const ttl = testId ? THIRTY_DAYS_MS : SEVEN_DAYS_MS;
-    const cached = await this.cacheManager.get<TestScoreHistoryResponse[]>(cacheKey);
+    const cached =
+      await this.cacheManager.get<TestScoreHistoryResponse[]>(cacheKey);
     if (cached) return cached;
 
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
       relations: [
         'tests.submitted_answers.question',
         'tests.time_events',
@@ -1272,15 +1276,15 @@ export class StudentService {
   }
 
   async changeStudentPassword({
-    email,
+    id,
     currentPassword,
     newPassword,
   }: {
-    email: string;
+    id: string;
     currentPassword: string;
     newPassword: string;
   }): Promise<StudentTypeClass> {
-    const student = await this.studentRepository.findOne({ where: { email } });
+    const student = await this.studentRepository.findOne({ where: { id } });
 
     if (!student) {
       throw new NotFoundException('Student not found');
@@ -1296,18 +1300,18 @@ export class StudentService {
   }
 
   async listCourseSuitesPaginated({
-    email,
+    id,
     courseId,
     suiteTypes,
     pagination,
   }: {
-    email: string;
+    id: string;
     courseId: string;
     suiteTypes?: SuiteType[];
     pagination?: PaginationInput;
   }) {
     const student = await this.studentRepository.findOne({
-      where: { email, subscribed_courses: { id: courseId } },
+      where: { id, subscribed_courses: { id: courseId } },
     });
 
     if (!student) {
@@ -1335,16 +1339,19 @@ export class StudentService {
   }
 
   async getCurrentStreakCount({
-    email,
+    id,
   }: {
-    email: string;
+    id: string;
   }): Promise<{ current_streak: number; best_streak: number }> {
-    const cacheKey = `student-streak:${email}`;
-    const cached = await this.cacheManager.get<{ current_streak: number; best_streak: number }>(cacheKey);
+    const cacheKey = `student-streak:${id}`;
+    const cached = await this.cacheManager.get<{
+      current_streak: number;
+      best_streak: number;
+    }>(cacheKey);
     if (cached) return cached;
 
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
       relations: ['tests.time_events'],
     });
 

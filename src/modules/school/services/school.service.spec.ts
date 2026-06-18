@@ -53,7 +53,8 @@ describe('SchoolService', () => {
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
             secret: configService.get<string>('JWT_SECRET') || 'test-secret',
-            secretOrPrivateKey: configService.get('JWT_SECRET') || 'test-secret',
+            secretOrPrivateKey:
+              configService.get('JWT_SECRET') || 'test-secret',
             signOptions: { expiresIn: '1h' },
           }),
           inject: [ConfigService],
@@ -75,14 +76,28 @@ describe('SchoolService', () => {
 
     dataSource = module.get<DataSource>(DataSource);
     schoolService = module.get<SchoolService>(SchoolService);
-    organizationRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
-    categoryRepository = module.get<Repository<Category>>(getRepositoryToken(Category));
-    courseRepository = module.get<Repository<Course>>(getRepositoryToken(Course));
-    versionRepository = module.get<Repository<Version>>(getRepositoryToken(Version));
-    instructorRepository = module.get<Repository<Instructor>>(getRepositoryToken(Instructor));
+    organizationRepository = module.get<Repository<Organization>>(
+      getRepositoryToken(Organization),
+    );
+    categoryRepository = module.get<Repository<Category>>(
+      getRepositoryToken(Category),
+    );
+    courseRepository = module.get<Repository<Course>>(
+      getRepositoryToken(Course),
+    );
+    versionRepository = module.get<Repository<Version>>(
+      getRepositoryToken(Version),
+    );
+    instructorRepository = module.get<Repository<Instructor>>(
+      getRepositoryToken(Instructor),
+    );
     cartRepository = module.get<Repository<Cart>>(getRepositoryToken(Cart));
-    studentRepository = module.get<Repository<Student>>(getRepositoryToken(Student));
-    schoolStudentRepository = module.get<Repository<SchoolStudent>>(getRepositoryToken(SchoolStudent));
+    studentRepository = module.get<Repository<Student>>(
+      getRepositoryToken(Student),
+    );
+    schoolStudentRepository = module.get<Repository<SchoolStudent>>(
+      getRepositoryToken(SchoolStudent),
+    );
   });
 
   beforeEach(async () => {
@@ -101,7 +116,11 @@ describe('SchoolService', () => {
 
   // ─── helpers ────────────────────────────────────────────────────────────────
 
-  const orgInfo = { name: 'Test School', email: 'school@test.com', password: 'password' };
+  const orgInfo = {
+    name: 'Test School',
+    email: 'school@test.com',
+    password: 'password',
+  };
 
   const setupOrg = async () => {
     const org = new Organization();
@@ -150,7 +169,7 @@ describe('SchoolService', () => {
   };
 
   const enrollStudent = async (org: Organization, category: Category) => {
-    return schoolService.addSchoolStudent(org.email, {
+    return schoolService.addSchoolStudent(org.id, {
       full_name: 'Alice Student',
       class_level: ClassLevel.JHS1,
       target_exam: category.id,
@@ -182,7 +201,7 @@ describe('SchoolService', () => {
 
     it('throws NotFoundException if organization does not exist', async () => {
       await expect(
-        schoolService.addSchoolStudent('nobody@test.com', {
+        schoolService.addSchoolStudent('00000000-0000-0000-0000-000000000000', {
           full_name: 'Bob',
           class_level: ClassLevel.JHS1,
           target_exam: '00000000-0000-0000-0000-000000000000',
@@ -194,7 +213,7 @@ describe('SchoolService', () => {
       const org = await setupOrg();
 
       await expect(
-        schoolService.addSchoolStudent(org.email, {
+        schoolService.addSchoolStudent(org.id, {
           full_name: 'Bob',
           class_level: ClassLevel.JHS1,
           target_exam: '00000000-0000-0000-0000-000000000000',
@@ -210,9 +229,17 @@ describe('SchoolService', () => {
       const org = await setupOrg();
       const { category } = await setupCategory(org);
 
-      const results = await schoolService.bulkEnrollStudents(org.email, [
-        { full_name: 'Alice A', class_level: ClassLevel.JHS1, target_exam: category.id },
-        { full_name: 'Bob B', class_level: ClassLevel.SHS1, target_exam: category.id },
+      const results = await schoolService.bulkEnrollStudents(org.id, [
+        {
+          full_name: 'Alice A',
+          class_level: ClassLevel.JHS1,
+          target_exam: category.id,
+        },
+        {
+          full_name: 'Bob B',
+          class_level: ClassLevel.SHS1,
+          target_exam: category.id,
+        },
       ]);
 
       expect(results).toHaveLength(2);
@@ -229,7 +256,10 @@ describe('SchoolService', () => {
 
     it('throws NotFoundException if organization does not exist', async () => {
       await expect(
-        schoolService.bulkEnrollStudents('nobody@test.com', []),
+        schoolService.bulkEnrollStudents(
+          '00000000-0000-0000-0000-000000000000',
+          [],
+        ),
       ).rejects.toThrow(new NotFoundException('Organization not found'));
     });
   });
@@ -242,7 +272,7 @@ describe('SchoolService', () => {
       const { category } = await setupCategory(org);
       await enrollStudent(org, category);
 
-      const result = await schoolService.listSchoolStudents(org.email);
+      const result = await schoolService.listSchoolStudents(org.id);
 
       expect(result.edges).toHaveLength(1);
       expect(result.count).toBe(1);
@@ -253,16 +283,21 @@ describe('SchoolService', () => {
       const { category } = await setupCategory(org);
       await enrollStudent(org, category);
 
-      const match = await schoolService.listSchoolStudents(org.email, 'Alice');
+      const match = await schoolService.listSchoolStudents(org.id, 'Alice');
       expect(match.edges).toHaveLength(1);
 
-      const empty = await schoolService.listSchoolStudents(org.email, 'NonExistent');
+      const empty = await schoolService.listSchoolStudents(
+        org.id,
+        'NonExistent',
+      );
       expect(empty.edges).toHaveLength(0);
     });
 
     it('throws NotFoundException if organization does not exist', async () => {
       await expect(
-        schoolService.listSchoolStudents('nobody@test.com'),
+        schoolService.listSchoolStudents(
+          '00000000-0000-0000-0000-000000000000',
+        ),
       ).rejects.toThrow(new NotFoundException('Organization not found'));
     });
   });
@@ -280,12 +315,14 @@ describe('SchoolService', () => {
       });
       const oldPin = ss.pin;
 
-      const result = await schoolService.resetStudentPin(org.email, ss.id);
+      const result = await schoolService.resetStudentPin(org.id, ss.id);
 
       expect(result.message).toBe('PIN reset successfully');
       expect(result.pin).toHaveLength(6);
 
-      const updated = await schoolStudentRepository.findOne({ where: { id: ss.id } });
+      const updated = await schoolStudentRepository.findOne({
+        where: { id: ss.id },
+      });
       expect(updated.pin).not.toBe(oldPin);
     });
 
@@ -293,7 +330,10 @@ describe('SchoolService', () => {
       const org = await setupOrg();
 
       await expect(
-        schoolService.resetStudentPin(org.email, '00000000-0000-0000-0000-000000000000'),
+        schoolService.resetStudentPin(
+          org.id,
+          '00000000-0000-0000-0000-000000000000',
+        ),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -310,7 +350,7 @@ describe('SchoolService', () => {
         where: { full_name: 'Alice Student' },
       });
 
-      const result = await schoolService.shareStudentLogin(org.email, ss.id);
+      const result = await schoolService.shareStudentLogin(org.id, ss.id);
 
       expect(result.message).toContain(ss.username);
       expect(result.message).toContain('Alice Student');
@@ -320,7 +360,10 @@ describe('SchoolService', () => {
       const org = await setupOrg();
 
       await expect(
-        schoolService.shareStudentLogin(org.email, '00000000-0000-0000-0000-000000000000'),
+        schoolService.shareStudentLogin(
+          org.id,
+          '00000000-0000-0000-0000-000000000000',
+        ),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -337,11 +380,13 @@ describe('SchoolService', () => {
         where: { full_name: 'Alice Student' },
       });
 
-      const result = await schoolService.removeSchoolStudent(org.email, ss.id);
+      const result = await schoolService.removeSchoolStudent(org.id, ss.id);
 
       expect(result.message).toBe('Student removed from school successfully');
 
-      const deleted = await schoolStudentRepository.findOne({ where: { id: ss.id } });
+      const deleted = await schoolStudentRepository.findOne({
+        where: { id: ss.id },
+      });
       expect(deleted).toBeNull();
     });
 
@@ -349,7 +394,10 @@ describe('SchoolService', () => {
       const org = await setupOrg();
 
       await expect(
-        schoolService.removeSchoolStudent(org.email, '00000000-0000-0000-0000-000000000000'),
+        schoolService.removeSchoolStudent(
+          org.id,
+          '00000000-0000-0000-0000-000000000000',
+        ),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -390,7 +438,9 @@ describe('SchoolService', () => {
         where: { full_name: 'Alice Student' },
       });
 
-      const { temp_token } = await schoolService.verifyStudentUsername(ss.username);
+      const { temp_token } = await schoolService.verifyStudentUsername(
+        ss.username,
+      );
       const response = await schoolService.loginSchoolStudent(temp_token, pin);
 
       expect(response.token).toBeDefined();
@@ -412,7 +462,9 @@ describe('SchoolService', () => {
         where: { full_name: 'Alice Student' },
       });
 
-      const { temp_token } = await schoolService.verifyStudentUsername(ss.username);
+      const { temp_token } = await schoolService.verifyStudentUsername(
+        ss.username,
+      );
 
       await expect(
         schoolService.loginSchoolStudent(temp_token, '000000'),
@@ -429,10 +481,15 @@ describe('SchoolService', () => {
       });
 
       // Get a real token, then use it with loginSchoolStudent (type mismatch)
-      const { temp_token } = await schoolService.verifyStudentUsername(ss.username);
+      const { temp_token } = await schoolService.verifyStudentUsername(
+        ss.username,
+      );
 
       // First login succeeds to get a long-lived token
-      const loginResponse = await schoolService.loginSchoolStudent(temp_token, pin);
+      const loginResponse = await schoolService.loginSchoolStudent(
+        temp_token,
+        pin,
+      );
 
       await expect(
         schoolService.loginSchoolStudent(loginResponse.token, pin),

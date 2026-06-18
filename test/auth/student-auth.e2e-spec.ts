@@ -418,6 +418,88 @@ describe('Student Auth (e2e)', () => {
     });
   });
 
+  // ─── Flow 4: Logout ────────────────────────────────────────────────────────
+
+  describe('Flow 4: logout', () => {
+    const email = 'logout-student@example.com';
+    const password = 'Password123!';
+    const name = 'Logout Student';
+
+    async function registerVerifyAndLogin(): Promise<{
+      accessToken: string;
+      refreshToken: string;
+    }> {
+      await gql(
+        app,
+        `mutation { registerStudent(name: "${name}", email: "${email}", password: "${password}") { message } }`,
+      );
+      const emailData = emailCapture.getLast(
+        'sendAccountValidationEmail',
+      ) as { validationCode: string };
+      await gql(
+        app,
+        `mutation { completeStudentAccountValidation(email: "${email}", validation_code: "${emailData.validationCode}") { message } }`,
+      );
+      const loginRes = await gql(
+        app,
+        `query { loginStudent(email: "${email}", password: "${password}") { token refresh_token } }`,
+      );
+      const { token, refresh_token } = loginRes.data.loginStudent as {
+        token: string;
+        refresh_token: string;
+      };
+      return { accessToken: token, refreshToken: refresh_token };
+    }
+
+    it('4.1 returns a success message', async () => {
+      const { accessToken } = await registerVerifyAndLogin();
+      const res = await gql(
+        app,
+        `mutation { logoutStudent { message } }`,
+        undefined,
+        accessToken,
+      );
+      expect(res.errors).toBeUndefined();
+      expect((res.data.logoutStudent as { message: string }).message).toBe(
+        'Logged out successfully',
+      );
+    });
+
+    it('4.2 old access token is rejected after logout', async () => {
+      const { accessToken } = await registerVerifyAndLogin();
+      await gql(
+        app,
+        `mutation { logoutStudent { message } }`,
+        undefined,
+        accessToken,
+      );
+
+      const res = await gql(
+        app,
+        `query { studentProfile { name } }`,
+        undefined,
+        accessToken,
+      );
+      expect(res.errors).toBeDefined();
+    });
+
+    it('4.3 refresh token is rejected after logout', async () => {
+      const { accessToken, refreshToken } = await registerVerifyAndLogin();
+      await gql(
+        app,
+        `mutation { logoutStudent { message } }`,
+        undefined,
+        accessToken,
+      );
+
+      const res = await gql(
+        app,
+        `mutation { refreshStudentToken(refresh_token: "${refreshToken}") { access_token } }`,
+      );
+      expect(res.errors).toBeDefined();
+    });
+  });
+
   // ─── Flow 3: Account Deletion & Cancellation ───────────────────────────────
 
   describe('Flow 3: account deletion and cancellation', () => {

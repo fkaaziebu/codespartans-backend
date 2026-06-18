@@ -202,7 +202,7 @@ describe('InstructorService', () => {
       const { instructor } = await setupData();
 
       const result = await instructorService.listCourses({
-        email: instructor.email,
+        id: instructor.id,
       });
 
       expect(result).toHaveLength(1);
@@ -213,13 +213,13 @@ describe('InstructorService', () => {
       const { instructor } = await setupData();
 
       const match = await instructorService.listCourses({
-        email: instructor.email,
+        id: instructor.id,
         searchTerm: 'Test',
       });
       expect(match).toHaveLength(1);
 
       const empty = await instructorService.listCourses({
-        email: instructor.email,
+        id: instructor.id,
         searchTerm: 'NonExistent',
       });
       expect(empty).toHaveLength(0);
@@ -231,7 +231,7 @@ describe('InstructorService', () => {
       const { instructor } = await setupData();
 
       const result = await instructorService.listCoursesPaginated({
-        email: instructor.email,
+        id: instructor.id,
       });
 
       expect(result.edges).toHaveLength(1);
@@ -250,7 +250,7 @@ describe('InstructorService', () => {
       await courseRepository.save(course);
 
       const result = await instructorService.getCourse({
-        email: instructor.email,
+        id: instructor.id,
         courseId: course.id,
       });
 
@@ -267,7 +267,7 @@ describe('InstructorService', () => {
       const { instructor, version } = await setupData();
 
       const result = await instructorService.listQuestionsForVersion({
-        email: instructor.email,
+        id: instructor.id,
         versionId: version.id,
       });
 
@@ -279,14 +279,14 @@ describe('InstructorService', () => {
       const { instructor, version } = await setupData();
 
       const match = await instructorService.listQuestionsForVersion({
-        email: instructor.email,
+        id: instructor.id,
         versionId: version.id,
         searchTerm: 'Heyyaaa',
       });
       expect(match).toHaveLength(1);
 
       const empty = await instructorService.listQuestionsForVersion({
-        email: instructor.email,
+        id: instructor.id,
         versionId: version.id,
         searchTerm: 'NonExistent',
       });
@@ -299,7 +299,7 @@ describe('InstructorService', () => {
       const { instructor, version } = await setupData();
 
       const result = await instructorService.listQuestionsForVersionPaginated({
-        email: instructor.email,
+        id: instructor.id,
         versionId: version.id,
       });
 
@@ -315,7 +315,7 @@ describe('InstructorService', () => {
       const { instructor, version } = await setupData();
 
       const result = await instructorService.getCourseVersion({
-        email: instructor.email,
+        id: instructor.id,
         versionId: version.id,
       });
 
@@ -333,7 +333,7 @@ describe('InstructorService', () => {
       const { instructor, review } = await setupData();
 
       const result = await instructorService.getVersionReview({
-        email: instructor.email,
+        id: instructor.id,
         reviewId: review.id,
       });
 
@@ -352,7 +352,7 @@ describe('InstructorService', () => {
       expect(issue.status).toBe(IssueStatusType.OPEN);
 
       const result = await instructorService.updateIssueStatus({
-        email: instructor.email,
+        id: instructor.id,
         issueId: issue.id,
         issueStatus: IssueStatusType.IN_PROGRESS,
         response: 'Working on it',
@@ -374,7 +374,7 @@ describe('InstructorService', () => {
 
       await expect(
         instructorService.updateIssueStatus({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           issueId: issue.id,
           issueStatus: IssueStatusType.IN_PROGRESS,
           response: 'OK',
@@ -387,7 +387,7 @@ describe('InstructorService', () => {
 
       await expect(
         instructorService.updateIssueStatus({
-          email: instructor.email,
+          id: instructor.id,
           issueId: '00000000-0000-0000-0000-000000000000',
           issueStatus: IssueStatusType.CLOSED,
           response: 'Done',

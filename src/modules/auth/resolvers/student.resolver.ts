@@ -23,6 +23,7 @@ import { AccountDeletionService } from '../services/account-deletion.service';
 import {
   AccountDeletionResponse,
   AccountStatus,
+  LogoutResponse,
   OrganizationConnection,
   PasswordResetResponse,
   RefreshTokenResponse,
@@ -79,8 +80,8 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => StudentTypeClass)
   async studentProfile(@Context() context) {
-    const { email } = context.req.user;
-    return this.studentService.studentProfile({ email });
+    const { id } = context.req.user;
+    return this.studentService.studentProfile({ id });
   }
 
   @Query(() => OrganizationConnection)
@@ -113,6 +114,13 @@ export class StudentResolver {
   @Mutation(() => RefreshTokenResponse)
   async refreshStudentToken(@Args('refresh_token') refresh_token: string) {
     return this.studentService.refreshStudentToken({ refresh_token });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => LogoutResponse)
+  async logoutStudent(@Context() context) {
+    const { id } = context.req.user;
+    return this.studentService.logoutStudent({ userId: id });
   }
 
   @Mutation(() => PasswordResetResponse)
@@ -162,14 +170,14 @@ export class StudentResolver {
     @Args('newPassword') newPassword: string,
     @Context() context,
   ) {
-    const { email, role } = context.req.user;
+    const { id, role } = context.req.user;
     if (role === 'CHILD') {
       throw new ForbiddenException(
         'Children cannot use changePassword. Use changePin instead.',
       );
     }
     return this.studentService.changePassword({
-      email,
+      id,
       currentPassword,
       newPassword,
     });
@@ -182,11 +190,11 @@ export class StudentResolver {
     @Args('newPin', ParsePinPipe) newPin: string,
     @Context() context,
   ) {
-    const { email, role } = context.req.user;
+    const { id, role } = context.req.user;
     if (role !== 'CHILD') {
       throw new ForbiddenException('Only child accounts can use changePin.');
     }
-    return this.studentService.changePin({ email, currentPin, newPin });
+    return this.studentService.changePin({ id, currentPin, newPin });
   }
 
   @UseGuards(GqlJwtAuthGuard)

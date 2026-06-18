@@ -176,9 +176,12 @@ describe('OrganizationService', () => {
   describe('registerAdmin', () => {
     it('creates and returns an admin for an existing organization', async () => {
       await organizationService.registerOrganization(organizationInfo);
+      const org = await organizationRepository.findOne({
+        where: { email: organizationInfo.email },
+      });
 
       const admin = await organizationService.registerAdmin({
-        organizationEmail: organizationInfo.email,
+        organizationId: org.id,
         name: 'Test Admin',
         email: 'admin@test.com',
         password: 'password',
@@ -199,7 +202,7 @@ describe('OrganizationService', () => {
     it('throws NotFoundException if organization is not found', async () => {
       await expect(
         organizationService.registerAdmin({
-          organizationEmail: 'nonexistent@org.com',
+          organizationId: '00000000-0000-0000-0000-000000000000',
           name: 'Test Admin',
           email: 'admin@test.com',
           password: 'password',
@@ -209,9 +212,12 @@ describe('OrganizationService', () => {
 
     it('throws an error if admin email is already registered', async () => {
       await organizationService.registerOrganization(organizationInfo);
+      const org = await organizationRepository.findOne({
+        where: { email: organizationInfo.email },
+      });
 
       await organizationService.registerAdmin({
-        organizationEmail: organizationInfo.email,
+        organizationId: org.id,
         name: 'Test Admin',
         email: 'admin@test.com',
         password: 'password',
@@ -219,7 +225,7 @@ describe('OrganizationService', () => {
 
       await expect(
         organizationService.registerAdmin({
-          organizationEmail: organizationInfo.email,
+          organizationId: org.id,
           name: 'Another Admin',
           email: 'admin@test.com',
           password: 'password',
@@ -231,9 +237,12 @@ describe('OrganizationService', () => {
   describe('registerInstructor', () => {
     it('creates and returns an instructor for an existing organization', async () => {
       await organizationService.registerOrganization(organizationInfo);
+      const org = await organizationRepository.findOne({
+        where: { email: organizationInfo.email },
+      });
 
       const instructor = await organizationService.registerInstructor({
-        organizationEmail: organizationInfo.email,
+        organizationId: org.id,
         name: 'Test Instructor',
         email: 'instructor@test.com',
         password: 'password',
@@ -254,7 +263,7 @@ describe('OrganizationService', () => {
     it('throws NotFoundException if organization is not found', async () => {
       await expect(
         organizationService.registerInstructor({
-          organizationEmail: 'nonexistent@org.com',
+          organizationId: '00000000-0000-0000-0000-000000000000',
           name: 'Test Instructor',
           email: 'instructor@test.com',
           password: 'password',
@@ -264,9 +273,12 @@ describe('OrganizationService', () => {
 
     it('throws BadRequestException if instructor email is already registered', async () => {
       await organizationService.registerOrganization(organizationInfo);
+      const org = await organizationRepository.findOne({
+        where: { email: organizationInfo.email },
+      });
 
       await organizationService.registerInstructor({
-        organizationEmail: organizationInfo.email,
+        organizationId: org.id,
         name: 'Test Instructor',
         email: 'instructor@test.com',
         password: 'password',
@@ -274,7 +286,7 @@ describe('OrganizationService', () => {
 
       await expect(
         organizationService.registerInstructor({
-          organizationEmail: organizationInfo.email,
+          organizationId: org.id,
           name: 'Another Instructor',
           email: 'instructor@test.com',
           password: 'password',

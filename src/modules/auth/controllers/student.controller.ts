@@ -67,8 +67,6 @@ export class StudentController {
       const pendingToken = this.jwtService.sign(
         {
           id: user.id,
-          name: user.name,
-          email: user.email,
           role: 'STUDENT',
           type: 'pending_deletion',
         },
@@ -90,20 +88,16 @@ export class StudentController {
 
     const payload: {
       id: string;
-      name: string;
-      email: string;
       role: 'STUDENT';
     } = {
       id: user.id,
-      name: user.name,
-      email: user.email,
       role: 'STUDENT',
     };
 
     const access_token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: '30d' },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
     );
 
     res.redirect(

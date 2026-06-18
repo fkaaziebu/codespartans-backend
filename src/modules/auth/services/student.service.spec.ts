@@ -325,10 +325,11 @@ describe('StudentService', () => {
   describe('studentProfile', () => {
     it('returns the student with organizations', async () => {
       await registerAndValidateStudent();
-
-      const profile = await studentService.studentProfile({
-        email: studentInfo.email,
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
       });
+
+      const profile = await studentService.studentProfile({ id: student.id });
 
       expect(profile).toBeDefined();
       expect(profile.email).toBe(studentInfo.email);
@@ -337,7 +338,9 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.studentProfile({ email: 'nonexistent@test.com' }),
+        studentService.studentProfile({
+          id: '00000000-0000-0000-0000-000000000000',
+        }),
       ).rejects.toThrow(new NotFoundException('Student does not exist'));
     });
   });
@@ -662,9 +665,12 @@ describe('StudentService', () => {
   describe('changePassword', () => {
     it('changes the password and sets pw_changed cache flag', async () => {
       await registerAndValidateStudent();
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
 
       const response = await studentService.changePassword({
-        email: studentInfo.email,
+        id: student.id,
         currentPassword: studentInfo.password,
         newPassword: 'newSecurePassword',
       });
@@ -684,10 +690,13 @@ describe('StudentService', () => {
 
     it('throws BadRequestException if current password is incorrect', async () => {
       await registerAndValidateStudent();
+      const student = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+      });
 
       await expect(
         studentService.changePassword({
-          email: studentInfo.email,
+          id: student.id,
           currentPassword: 'wrongpassword',
           newPassword: 'newpass',
         }),
@@ -697,7 +706,7 @@ describe('StudentService', () => {
     it('throws BadRequestException if student does not exist', async () => {
       await expect(
         studentService.changePassword({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           currentPassword: 'any',
           newPassword: 'new',
         }),
@@ -745,7 +754,7 @@ describe('StudentService', () => {
       await childRepository.save(child);
 
       const response = await studentService.changePin({
-        email: childStudent.email,
+        id: childStudent.id,
         currentPin: '1234',
         newPin: '5678',
       });
@@ -796,7 +805,7 @@ describe('StudentService', () => {
 
       await expect(
         studentService.changePin({
-          email: childStudent.email,
+          id: childStudent.id,
           currentPin: '0000',
           newPin: '5678',
         }),
@@ -806,7 +815,7 @@ describe('StudentService', () => {
     it('throws BadRequestException if no child found for the email', async () => {
       await expect(
         studentService.changePin({
-          email: 'nobody@child.local',
+          id: '00000000-0000-0000-0000-000000000000',
           currentPin: '1234',
           newPin: '5678',
         }),
@@ -917,6 +926,32 @@ describe('StudentService', () => {
       await expect(
         studentService.cancelStudentAccountDeletion('00000000-0000-0000-0000-000000000000'),
       ).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('logoutStudent', () => {
+    it('returns success message', async () => {
+      const response = await studentService.logoutStudent({
+        userId: '00000000-0000-0000-0000-000000000001',
+      });
+      expect(response).toEqual({ message: 'Logged out successfully' });
+    });
+
+    it('stores a Unix timestamp in cache under the logged_out key', async () => {
+      const userId = '00000000-0000-0000-0000-000000000001';
+      const before = Math.floor(Date.now() / 1000);
+
+      await studentService.logoutStudent({ userId });
+
+      const after = Math.floor(Date.now() / 1000);
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        `logged_out:${userId}`,
+        expect.stringMatching(/^\d+$/),
+        expect.any(Number),
+      );
+      const storedTimestamp = Number(mockCacheManager.set.mock.calls[0][1]);
+      expect(storedTimestamp).toBeGreaterThanOrEqual(before);
+      expect(storedTimestamp).toBeLessThanOrEqual(after);
     });
   });
 

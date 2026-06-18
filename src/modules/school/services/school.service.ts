@@ -39,12 +39,12 @@ export class SchoolService {
   ) {}
 
   async addSchoolStudent(
-    orgEmail: string,
+    orgId: string,
     input: AddSchoolStudentInput,
   ): Promise<{ message: string; pin: string }> {
     return this.orgRepo.manager.transaction(async (em) => {
       const org = await em.findOne(Organization, {
-        where: { email: orgEmail },
+        where: { id: orgId },
       });
 
       if (!org) throw new NotFoundException('Organization not found');
@@ -97,12 +97,12 @@ export class SchoolService {
   }
 
   async bulkEnrollStudents(
-    orgEmail: string,
+    orgId: string,
     students: AddSchoolStudentInput[],
   ): Promise<EnrollStudentResult[]> {
     return this.orgRepo.manager.transaction(async (em) => {
       const org = await em.findOne(Organization, {
-        where: { email: orgEmail },
+        where: { id: orgId },
       });
 
       if (!org) throw new NotFoundException('Organization not found');
@@ -161,12 +161,12 @@ export class SchoolService {
   }
 
   async resetStudentPin(
-    orgEmail: string,
+    orgId: string,
     studentId: string,
   ): Promise<{ message: string; pin: string }> {
     return this.orgRepo.manager.transaction(async (em) => {
       const schoolStudent = await em.findOne(SchoolStudent, {
-        where: { id: studentId, organization: { email: orgEmail } },
+        where: { id: studentId, organization: { id: orgId } },
         relations: ['student'],
       });
 
@@ -190,12 +190,12 @@ export class SchoolService {
   }
 
   async shareStudentLogin(
-    orgEmail: string,
+    orgId: string,
     studentId: string,
   ): Promise<{ message: string }> {
     return this.orgRepo.manager.transaction(async (em) => {
       const schoolStudent = await em.findOne(SchoolStudent, {
-        where: { id: studentId, organization: { email: orgEmail } },
+        where: { id: studentId, organization: { id: orgId } },
         relations: ['student'],
       });
 
@@ -229,11 +229,11 @@ export class SchoolService {
   }
 
   async listSchoolStudents(
-    orgEmail: string,
+    orgId: string,
     searchTerm?: string,
     pagination?: PaginationInput,
   ) {
-    const org = await this.orgRepo.findOne({ where: { email: orgEmail } });
+    const org = await this.orgRepo.findOne({ where: { id: orgId } });
 
     if (!org) throw new NotFoundException('Organization not found');
 
@@ -256,12 +256,12 @@ export class SchoolService {
   }
 
   async removeSchoolStudent(
-    orgEmail: string,
+    orgId: string,
     studentId: string,
   ): Promise<{ message: string }> {
     return this.orgRepo.manager.transaction(async (em) => {
       const schoolStudent = await em.findOne(SchoolStudent, {
-        where: { id: studentId, organization: { email: orgEmail } },
+        where: { id: studentId, organization: { id: orgId } },
         relations: ['student'],
       });
 
@@ -278,7 +278,7 @@ export class SchoolService {
 
         if (student) {
           student.organizations = student.organizations.filter(
-            (o) => o.email !== orgEmail,
+            (o) => o.id !== orgId,
           );
           await em.save(Student, student);
         }
@@ -351,15 +351,13 @@ export class SchoolService {
 
     const tokenPayload = {
       id: schoolStudent.student.id,
-      name: schoolStudent.student.name,
-      email: schoolStudent.student.email,
       role: 'STUDENT' as const,
     };
 
     const token = this.jwtService.sign(tokenPayload);
     const refresh_token = this.jwtService.sign(
       { ...tokenPayload, type: 'refresh' },
-      { expiresIn: '30d' },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
     );
 
     return { ...schoolStudent, token, refresh_token };

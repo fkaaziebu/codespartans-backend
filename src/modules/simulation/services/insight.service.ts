@@ -37,13 +37,13 @@ export class InsightService {
     });
   }
 
-  async getWeeklyInsight({ email }: { email: string }): Promise<WeeklyInsight> {
+  async getWeeklyInsight({ id }: { id: string }): Promise<WeeklyInsight> {
     const now = new Date();
     const weekStart = new Date(now);
     weekStart.setDate(now.getDate() - ((now.getDay() + 6) % 7));
     weekStart.setHours(0, 0, 0, 0);
 
-    const student = await this.studentRepository.findOne({ where: { email } });
+    const student = await this.studentRepository.findOne({ where: { id } });
     if (!student) {
       throw new NotFoundException('Student not found');
     }
@@ -148,11 +148,11 @@ Respond with only a raw JSON object — no markdown, no code fences, no extra ke
       const ttl = this.msUntilNextMonday(now);
       await this.cacheManager.set(cacheKey, result, ttl);
 
-      this.logger.log(`Generated weekly insight for ${email}`);
+      this.logger.log(`Generated weekly insight for ${id}`);
       return result;
     } catch (err) {
       this.logger.error(
-        `Failed to generate weekly insight for ${email}: ${(err as Error).message}`,
+        `Failed to generate weekly insight for ${id}: ${(err as Error).message}`,
       );
       throw new BadRequestException('Failed to generate weekly insight');
     }

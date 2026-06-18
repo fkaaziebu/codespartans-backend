@@ -12,7 +12,7 @@ import {
   GqlThrottlerGuard,
 } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
-import { RefreshTokenResponse } from 'src/modules/auth/types';
+import { LogoutResponse, RefreshTokenResponse } from 'src/modules/auth/types';
 import { Category } from 'src/modules/inventory/entities/category.entity';
 import { AttemptConnection } from 'src/modules/inventory/types';
 import { SubjectProgressResponse } from 'src/modules/inventory/types/subject-progress-response.type';
@@ -87,6 +87,13 @@ export class ParentResolver {
     return this.parentService.refreshParentToken(refresh_token);
   }
 
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => LogoutResponse)
+  async logoutParent(@Context() context) {
+    const { id } = context.req.user;
+    return this.parentService.logoutParent({ userId: id });
+  }
+
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @UseGuards(GqlThrottlerGuard)
   @Mutation(() => RegisterParentResponse)
@@ -110,9 +117,9 @@ export class ParentResolver {
     @Args('newPassword') newPassword: string,
     @Context() context,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
     return this.parentService.changeParentPassword({
-      email,
+      id,
       currentPassword,
       newPassword,
     });
@@ -124,29 +131,29 @@ export class ParentResolver {
     @Args('input') input: SetupParentAccountInput,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.setupParentAccount(email, input.children);
+    const { id } = context.req.user;
+    return this.parentService.setupParentAccount(id, input.children);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AddChildResponse)
   async addChild(@Args('input') input: AddChildInput, @Context() context) {
-    const { email } = context.req.user;
-    return this.parentService.addChild(email, input);
+    const { id } = context.req.user;
+    return this.parentService.addChild(id, input);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AddChildResponse)
   async resetChildPin(@Args('childId') childId: string, @Context() context) {
-    const { email } = context.req.user;
-    return this.parentService.resetChildPin(email, childId);
+    const { id } = context.req.user;
+    return this.parentService.resetChildPin(id, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => RegisterParentResponse)
   async shareChildLogin(@Args('childId') childId: string, @Context() context) {
-    const { email } = context.req.user;
-    return this.parentService.shareChildLogin(email, childId);
+    const { id } = context.req.user;
+    return this.parentService.shareChildLogin(id, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -163,15 +170,15 @@ export class ParentResolver {
     @Context() context,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.listChildren(email, pagination);
+    const { id } = context.req.user;
+    return this.parentService.listChildren(id, pagination);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => ChildStatsResponse)
   async getChildStats(@Args('childId') childId: string, @Context() context) {
-    const { email } = context.req.user;
-    return this.parentService.getChildStats(email, childId);
+    const { id } = context.req.user;
+    return this.parentService.getChildStats(id, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -181,8 +188,8 @@ export class ParentResolver {
     @Context() context,
     @Args('courseId', { nullable: true }) courseId?: string,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.getChildSubjectProgress(email, childId, courseId);
+    const { id } = context.req.user;
+    return this.parentService.getChildSubjectProgress(id, childId, courseId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -192,8 +199,8 @@ export class ParentResolver {
     @Context() context,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.getChildTestsHistory(email, childId, pagination);
+    const { id } = context.req.user;
+    return this.parentService.getChildTestsHistory(id, childId, pagination);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -202,8 +209,8 @@ export class ParentResolver {
     @Args('childId') childId: string,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.getChildWeakAreas(email, childId);
+    const { id } = context.req.user;
+    return this.parentService.getChildWeakAreas(id, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -213,15 +220,15 @@ export class ParentResolver {
     @Context() context,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.getChildActivity(email, childId, pagination);
+    const { id } = context.req.user;
+    return this.parentService.getChildActivity(id, childId, pagination);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => StreakResponse)
   async getChildStreak(@Args('childId') childId: string, @Context() context) {
-    const { email } = context.req.user;
-    return this.parentService.getChildStreak(email, childId);
+    const { id } = context.req.user;
+    return this.parentService.getChildStreak(id, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -232,8 +239,8 @@ export class ParentResolver {
     @Args('year', { type: () => Int }) year: number,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.listChildStreak(email, childId, month, year);
+    const { id } = context.req.user;
+    return this.parentService.listChildStreak(id, childId, month, year);
   }
 
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
@@ -258,15 +265,15 @@ export class ParentResolver {
     @Context() context,
     @Args('note', { nullable: true }) note?: string,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.assignTestToChild(email, childId, suiteId, note);
+    const { id } = context.req.user;
+    return this.parentService.assignTestToChild(id, childId, suiteId, note);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [AlertResponse])
   async listParentAlerts(@Context() context) {
-    const { email } = context.req.user;
-    return this.parentService.listParentAlerts(email);
+    const { id } = context.req.user;
+    return this.parentService.listParentAlerts(id);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -275,15 +282,15 @@ export class ParentResolver {
     @Args('childId') childId: string,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.listChildMonthlyReports(email, childId);
+    const { id } = context.req.user;
+    return this.parentService.listChildMonthlyReports(id, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [Course])
   async listChildCourses(@Args('childId') childId: string, @Context() context) {
-    const { email } = context.req.user;
-    return this.parentService.listChildCourses(email, childId);
+    const { id } = context.req.user;
+    return this.parentService.listChildCourses(id, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -292,8 +299,8 @@ export class ParentResolver {
     @Args('childId') childId: string,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.parentService.listChildAssignments(email, childId);
+    const { id } = context.req.user;
+    return this.parentService.listChildAssignments(id, childId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -309,9 +316,9 @@ export class ParentResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => AccountDeletionResponse)
   async deleteChild(@Args('childId') childId: string, @Context() context) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
     return this.accountDeletionService.deleteChild(
-      email,
+      id,
       childId,
       extractMeta(context.req),
     );
@@ -323,9 +330,9 @@ export class ParentResolver {
     @Args('childId') childId: string,
     @Context() context,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
     return this.parentService.cancelChildDeletion(
-      email,
+      id,
       childId,
       extractMeta(context.req),
     );

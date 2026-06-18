@@ -35,7 +35,7 @@ import { BullModule } from '@nestjs/bullmq';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: 86400 },
+        signOptions: { expiresIn: 900 },
       }),
     }),
     TypeOrmModule.forFeature([

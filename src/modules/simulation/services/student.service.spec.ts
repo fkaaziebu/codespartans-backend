@@ -97,7 +97,8 @@ describe('StudentService', () => {
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
             secret: configService.get<string>('JWT_SECRET') || 'test-secret',
-            secretOrPrivateKey: configService.get('JWT_SECRET') || 'test-secret',
+            secretOrPrivateKey:
+              configService.get('JWT_SECRET') || 'test-secret',
             signOptions: { expiresIn: '1h' },
           }),
           inject: [ConfigService],
@@ -122,11 +123,17 @@ describe('StudentService', () => {
         { provide: MarkAnswerService, useValue: mockMarkAnswerService },
         {
           provide: InsightService,
-          useValue: { invalidateForStudent: jest.fn().mockResolvedValue(undefined) },
+          useValue: {
+            invalidateForStudent: jest.fn().mockResolvedValue(undefined),
+          },
         },
         {
           provide: CACHE_MANAGER,
-          useValue: { get: jest.fn().mockResolvedValue(null), set: jest.fn().mockResolvedValue(undefined), del: jest.fn().mockResolvedValue(undefined) },
+          useValue: {
+            get: jest.fn().mockResolvedValue(null),
+            set: jest.fn().mockResolvedValue(undefined),
+            del: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();
@@ -134,16 +141,34 @@ describe('StudentService', () => {
     dataSource = module.get<DataSource>(DataSource);
     studentService = module.get<StudentService>(StudentService);
     adminRepository = module.get<Repository<Admin>>(getRepositoryToken(Admin));
-    instructorRepository = module.get<Repository<Instructor>>(getRepositoryToken(Instructor));
-    organizationRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
-    studentRepository = module.get<Repository<Student>>(getRepositoryToken(Student));
-    courseRepository = module.get<Repository<Course>>(getRepositoryToken(Course));
-    versionRepository = module.get<Repository<Version>>(getRepositoryToken(Version));
-    testSuiteRepository = module.get<Repository<TestSuite>>(getRepositoryToken(TestSuite));
-    questionRepository = module.get<Repository<Question>>(getRepositoryToken(Question));
-    testAssignmentRepository = module.get<Repository<TestAssignment>>(getRepositoryToken(TestAssignment));
+    instructorRepository = module.get<Repository<Instructor>>(
+      getRepositoryToken(Instructor),
+    );
+    organizationRepository = module.get<Repository<Organization>>(
+      getRepositoryToken(Organization),
+    );
+    studentRepository = module.get<Repository<Student>>(
+      getRepositoryToken(Student),
+    );
+    courseRepository = module.get<Repository<Course>>(
+      getRepositoryToken(Course),
+    );
+    versionRepository = module.get<Repository<Version>>(
+      getRepositoryToken(Version),
+    );
+    testSuiteRepository = module.get<Repository<TestSuite>>(
+      getRepositoryToken(TestSuite),
+    );
+    questionRepository = module.get<Repository<Question>>(
+      getRepositoryToken(Question),
+    );
+    testAssignmentRepository = module.get<Repository<TestAssignment>>(
+      getRepositoryToken(TestAssignment),
+    );
     cartRepository = module.get<Repository<Cart>>(getRepositoryToken(Cart));
-    parentRepository = module.get<Repository<Parent>>(getRepositoryToken(Parent));
+    parentRepository = module.get<Repository<Parent>>(
+      getRepositoryToken(Parent),
+    );
     childRepository = module.get<Repository<Child>>(getRepositoryToken(Child));
   });
 
@@ -255,12 +280,21 @@ describe('StudentService', () => {
     student.cart = cart;
     await studentRepository.save(student);
 
-    return { organization, admin, instructor, course, version, suite, questions, student };
+    return {
+      organization,
+      admin,
+      instructor,
+      course,
+      version,
+      suite,
+      questions,
+      student,
+    };
   };
 
   /** Start a test and return both the test and the student */
-  const startTest = async (suiteId: string) => {
-    const test = await studentService.startTest({ email: studentEmail, suiteId });
+  const startTest = async (suiteId: string, studentId: string) => {
+    const test = await studentService.startTest({ id: studentId, suiteId });
     return test;
   };
 
@@ -270,7 +304,7 @@ describe('StudentService', () => {
     it('creates an ON_GOING test and stores a STARTED time event', async () => {
       const { suite, student } = await setupData();
 
-      const response = await startTest(suite.id);
+      const response = await startTest(suite.id, student.id);
 
       expect(response.status).toBe(TestStatusType.ON_GOING);
       expect(mockTimerService.startTimer).toHaveBeenCalled();
@@ -283,20 +317,20 @@ describe('StudentService', () => {
     });
 
     it('throws ConflictException if student already has an ongoing test', async () => {
-      const { suite } = await setupData();
-      await startTest(suite.id);
+      const { suite, student } = await setupData();
+      await startTest(suite.id, student.id);
 
-      await expect(startTest(suite.id)).rejects.toThrow(
+      await expect(startTest(suite.id, student.id)).rejects.toThrow(
         new ConflictException('You already have an ongoing test'),
       );
     });
 
     it('throws NotFoundException if student does not have access to the suite', async () => {
-      await setupData();
+      const { student } = await setupData();
 
       await expect(
         studentService.startTest({
-          email: studentEmail,
+          id: student.id,
           suiteId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(NotFoundException);
@@ -308,10 +342,10 @@ describe('StudentService', () => {
   describe('pauseTest', () => {
     it('pauses an ongoing test and adds a PAUSED time event', async () => {
       const { suite, student } = await setupData();
-      const test = await startTest(suite.id);
+      const test = await startTest(suite.id, student.id);
 
       const response = await studentService.pauseTest({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
       });
 
@@ -326,11 +360,11 @@ describe('StudentService', () => {
     });
 
     it('throws NotFoundException if student does not own the test', async () => {
-      await setupData();
+      const { student } = await setupData();
 
       await expect(
         studentService.pauseTest({
-          email: studentEmail,
+          id: student.id,
           testId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(NotFoundException);
@@ -342,11 +376,11 @@ describe('StudentService', () => {
   describe('resumeTest', () => {
     it('resumes a paused test and adds a RESUMED time event', async () => {
       const { suite, student } = await setupData();
-      const test = await startTest(suite.id);
-      await studentService.pauseTest({ email: studentEmail, testId: test.id });
+      const test = await startTest(suite.id, student.id);
+      await studentService.pauseTest({ id: student.id, testId: test.id });
 
       const response = await studentService.resumeTest({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
       });
 
@@ -366,10 +400,10 @@ describe('StudentService', () => {
   describe('endTest', () => {
     it('ends a test and adds an ENDED time event', async () => {
       const { suite, student } = await setupData();
-      const test = await startTest(suite.id);
+      const test = await startTest(suite.id, student.id);
 
       const response = await studentService.endTest({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
       });
 
@@ -384,11 +418,11 @@ describe('StudentService', () => {
     });
 
     it('throws NotFoundException if student does not own the test', async () => {
-      await setupData();
+      const { student } = await setupData();
 
       await expect(
         studentService.endTest({
-          email: studentEmail,
+          id: student.id,
           testId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(NotFoundException);
@@ -399,11 +433,11 @@ describe('StudentService', () => {
 
   describe('getQuestion', () => {
     it('returns an unanswered question from the test suite', async () => {
-      const { suite } = await setupData();
-      const test = await startTest(suite.id);
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
 
       const response = await studentService.getQuestion({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
       });
 
@@ -412,12 +446,12 @@ describe('StudentService', () => {
     });
 
     it('throws BadRequestException when all questions have been answered', async () => {
-      const { suite, questions } = await setupData();
-      const test = await startTest(suite.id);
+      const { suite, student, questions } = await setupData();
+      const test = await startTest(suite.id, student.id);
 
       for (const q of questions) {
         await studentService.submitAnswer({
-          email: studentEmail,
+          id: student.id,
           testId: test.id,
           questionId: q.id,
           timeRange: `${Date.now()}#${Date.now() + 1000}`,
@@ -427,7 +461,7 @@ describe('StudentService', () => {
       }
 
       await expect(
-        studentService.getQuestion({ email: studentEmail, testId: test.id }),
+        studentService.getQuestion({ id: student.id, testId: test.id }),
       ).rejects.toThrow(BadRequestException);
     });
   });
@@ -437,10 +471,10 @@ describe('StudentService', () => {
   describe('submitAnswer', () => {
     it('creates a submitted answer and marks it correctly', async () => {
       const { suite, student, questions } = await setupData();
-      const test = await startTest(suite.id);
+      const test = await startTest(suite.id, student.id);
 
       const response = await studentService.submitAnswer({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
         questionId: questions[0].id,
         timeRange: `${Date.now()}#${Date.now() + 1000}`,
@@ -456,11 +490,11 @@ describe('StudentService', () => {
     });
 
     it('marks answer incorrect when answer does not match correct answer', async () => {
-      const { suite, questions } = await setupData();
-      const test = await startTest(suite.id);
+      const { suite, student, questions } = await setupData();
+      const test = await startTest(suite.id, student.id);
 
       const response = await studentService.submitAnswer({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
         questionId: questions[0].id,
         timeRange: `${Date.now()}#${Date.now() + 1000}`,
@@ -472,11 +506,11 @@ describe('StudentService', () => {
     });
 
     it('updates an existing answer on re-submission', async () => {
-      const { suite, questions } = await setupData();
-      const test = await startTest(suite.id);
+      const { suite, student, questions } = await setupData();
+      const test = await startTest(suite.id, student.id);
 
       await studentService.submitAnswer({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
         questionId: questions[0].id,
         timeRange: `${Date.now()}#${Date.now() + 1000}`,
@@ -485,7 +519,7 @@ describe('StudentService', () => {
       });
 
       const updated = await studentService.submitAnswer({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
         questionId: questions[0].id,
         timeRange: `${Date.now()}#${Date.now() + 1000}`,
@@ -497,13 +531,13 @@ describe('StudentService', () => {
     });
 
     it('throws BadRequestException when test is ended', async () => {
-      const { suite, questions } = await setupData();
-      const test = await startTest(suite.id);
-      await studentService.endTest({ email: studentEmail, testId: test.id });
+      const { suite, student, questions } = await setupData();
+      const test = await startTest(suite.id, student.id);
+      await studentService.endTest({ id: student.id, testId: test.id });
 
       await expect(
         studentService.submitAnswer({
-          email: studentEmail,
+          id: student.id,
           testId: test.id,
           questionId: questions[0].id,
           timeRange: `${Date.now()}#${Date.now() + 1000}`,
@@ -518,11 +552,11 @@ describe('StudentService', () => {
 
   describe('getAllAttemptedQuestions', () => {
     it('returns all submitted answers for an ongoing test', async () => {
-      const { suite, questions } = await setupData();
-      const test = await startTest(suite.id);
+      const { suite, student, questions } = await setupData();
+      const test = await startTest(suite.id, student.id);
 
       await studentService.submitAnswer({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
         questionId: questions[0].id,
         timeRange: `${Date.now()}#${Date.now() + 1000}`,
@@ -531,7 +565,7 @@ describe('StudentService', () => {
       });
 
       const result = await studentService.getAllAttemptedQuestions({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
       });
 
@@ -540,13 +574,13 @@ describe('StudentService', () => {
     });
 
     it('throws BadRequestException when test has ended', async () => {
-      const { suite } = await setupData();
-      const test = await startTest(suite.id);
-      await studentService.endTest({ email: studentEmail, testId: test.id });
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+      await studentService.endTest({ id: student.id, testId: test.id });
 
       await expect(
         studentService.getAllAttemptedQuestions({
-          email: studentEmail,
+          id: student.id,
           testId: test.id,
         }),
       ).rejects.toThrow(new BadRequestException('Test has ended'));
@@ -557,12 +591,12 @@ describe('StudentService', () => {
 
   describe('testStats', () => {
     it('returns the ended test with all relations', async () => {
-      const { suite } = await setupData();
-      const test = await startTest(suite.id);
-      await studentService.endTest({ email: studentEmail, testId: test.id });
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+      await studentService.endTest({ id: student.id, testId: test.id });
 
       const result = await studentService.testStats({
-        email: studentEmail,
+        id: student.id,
         testId: test.id,
       });
 
@@ -571,11 +605,11 @@ describe('StudentService', () => {
     });
 
     it('throws BadRequestException when test is not ended', async () => {
-      const { suite } = await setupData();
-      const test = await startTest(suite.id);
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
 
       await expect(
-        studentService.testStats({ email: studentEmail, testId: test.id }),
+        studentService.testStats({ id: student.id, testId: test.id }),
       ).rejects.toThrow(new BadRequestException('Test is not ended'));
     });
   });
@@ -584,10 +618,10 @@ describe('StudentService', () => {
 
   describe('listMyAssignments', () => {
     it('returns empty array for a student without a child profile', async () => {
-      await setupData();
+      const { student } = await setupData();
 
       const result = await studentService.listMyAssignments({
-        email: studentEmail,
+        id: student.id,
       });
 
       expect(result).toHaveLength(0);
@@ -625,7 +659,7 @@ describe('StudentService', () => {
       await testAssignmentRepository.save(assignment);
 
       const result = await studentService.listMyAssignments({
-        email: studentEmail,
+        id: student.id,
       });
 
       expect(result).toHaveLength(1);
@@ -634,7 +668,9 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.listMyAssignments({ email: 'nobody@test.com' }),
+        studentService.listMyAssignments({
+          id: '00000000-0000-0000-0000-000000000000',
+        }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -674,7 +710,7 @@ describe('StudentService', () => {
       await testAssignmentRepository.save(assignment);
 
       const result = await studentService.startAssignedTest({
-        email: studentEmail,
+        id: student.id,
         assignmentId: assignment.id,
       });
 
@@ -714,18 +750,18 @@ describe('StudentService', () => {
 
       await expect(
         studentService.startAssignedTest({
-          email: studentEmail,
+          id: student.id,
           assignmentId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(NotFoundException);
     });
 
     it('throws NotFoundException if student has no child profile', async () => {
-      await setupData();
+      const { student } = await setupData();
 
       await expect(
         studentService.startAssignedTest({
-          email: studentEmail,
+          id: student.id,
           assignmentId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Child profile not found'));

@@ -31,7 +31,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env.test.local' }),
+        ConfigModule.forRoot({
+          isGlobal: true,
+          envFilePath: '.env.test.local',
+        }),
         TypeOrmModule.forRootAsync({
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
@@ -49,9 +52,15 @@ describe('PaymentService — trial-to-paid upgrade', () => {
 
     dataSource = module.get<DataSource>(DataSource);
     paymentService = module.get<PaymentService>(PaymentService);
-    studentRepository = module.get<Repository<Student>>(getRepositoryToken(Student));
-    orgRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
-    planRepository = module.get<Repository<SubscriptionPlan>>(getRepositoryToken(SubscriptionPlan));
+    studentRepository = module.get<Repository<Student>>(
+      getRepositoryToken(Student),
+    );
+    orgRepository = module.get<Repository<Organization>>(
+      getRepositoryToken(Organization),
+    );
+    planRepository = module.get<Repository<SubscriptionPlan>>(
+      getRepositoryToken(SubscriptionPlan),
+    );
     studentSubscriptionRepository = module.get<Repository<StudentSubscription>>(
       getRepositoryToken(StudentSubscription),
     );
@@ -125,7 +134,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
     return orgRepository.save(o);
   };
 
-  const seedActiveTrialForStudent = async (student: Student, plan: SubscriptionPlan) => {
+  const seedActiveTrialForStudent = async (
+    student: Student,
+    plan: SubscriptionPlan,
+  ) => {
     const now = new Date();
     const expiresAt = new Date(now);
     expiresAt.setDate(expiresAt.getDate() + 7);
@@ -141,7 +153,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
     );
   };
 
-  const seedActiveTrialForOrg = async (org: Organization, plan: SubscriptionPlan) => {
+  const seedActiveTrialForOrg = async (
+    org: Organization,
+    plan: SubscriptionPlan,
+  ) => {
     const now = new Date();
     const expiresAt = new Date(now);
     expiresAt.setDate(expiresAt.getDate() + 7);
@@ -157,7 +172,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
     );
   };
 
-  const seedActivePaidSubForStudent = async (student: Student, plan: SubscriptionPlan) => {
+  const seedActivePaidSubForStudent = async (
+    student: Student,
+    plan: SubscriptionPlan,
+  ) => {
     const now = new Date();
     const expiresAt = new Date(now);
     expiresAt.setDate(expiresAt.getDate() + 30);
@@ -173,7 +191,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
     );
   };
 
-  const seedActivePaidSubForOrg = async (org: Organization, plan: SubscriptionPlan) => {
+  const seedActivePaidSubForOrg = async (
+    org: Organization,
+    plan: SubscriptionPlan,
+  ) => {
     const now = new Date();
     const expiresAt = new Date(now);
     expiresAt.setDate(expiresAt.getDate() + 30);
@@ -199,7 +220,7 @@ describe('PaymentService — trial-to-paid upgrade', () => {
 
       const trial = await seedActiveTrialForStudent(student, trialPlan);
 
-      await paymentService.initiatePayment(student.email, newPlan.id, 'STUDENT');
+      await paymentService.initiatePayment(student.id, newPlan.id, 'STUDENT');
 
       const refreshedTrial = await studentSubscriptionRepository.findOne({
         where: { id: trial.id },
@@ -207,7 +228,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
       expect(refreshedTrial.status).toBe(SubscriptionStatus.EXPIRED);
 
       const newSub = await studentSubscriptionRepository.findOne({
-        where: { student: { id: student.id }, status: SubscriptionStatus.ACTIVE },
+        where: {
+          student: { id: student.id },
+          status: SubscriptionStatus.ACTIVE,
+        },
         relations: ['plan'],
       });
       expect(newSub).toBeDefined();
@@ -221,8 +245,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
       await seedActivePaidSubForStudent(student, paidPlan);
 
       await expect(
-        paymentService.initiatePayment(student.email, paidPlan.id, 'STUDENT'),
-      ).rejects.toThrow(new BadRequestException('You already have an active subscription plan'));
+        paymentService.initiatePayment(student.id, paidPlan.id, 'STUDENT'),
+      ).rejects.toThrow(
+        new BadRequestException('You already have an active subscription plan'),
+      );
     });
   });
 
@@ -236,7 +262,7 @@ describe('PaymentService — trial-to-paid upgrade', () => {
 
       const trial = await seedActiveTrialForOrg(org, trialPlan);
 
-      await paymentService.initiatePayment(org.email, newPlan.id, 'ORGANIZATION');
+      await paymentService.initiatePayment(org.id, newPlan.id, 'ORGANIZATION');
 
       const refreshedTrial = await orgSubscriptionRepository.findOne({
         where: { id: trial.id },
@@ -244,7 +270,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
       expect(refreshedTrial.status).toBe(SubscriptionStatus.EXPIRED);
 
       const newSub = await orgSubscriptionRepository.findOne({
-        where: { organization: { id: org.id }, status: SubscriptionStatus.ACTIVE },
+        where: {
+          organization: { id: org.id },
+          status: SubscriptionStatus.ACTIVE,
+        },
         relations: ['plan'],
       });
       expect(newSub).toBeDefined();
@@ -258,8 +287,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
       await seedActivePaidSubForOrg(org, paidPlan);
 
       await expect(
-        paymentService.initiatePayment(org.email, paidPlan.id, 'ORGANIZATION'),
-      ).rejects.toThrow(new BadRequestException('You already have an active subscription plan'));
+        paymentService.initiatePayment(org.id, paidPlan.id, 'ORGANIZATION'),
+      ).rejects.toThrow(
+        new BadRequestException('You already have an active subscription plan'),
+      );
     });
   });
 });
