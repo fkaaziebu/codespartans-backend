@@ -353,7 +353,7 @@ export class DemoService {
     const access_token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h` },
     );
 
     return {
@@ -438,7 +438,7 @@ export class DemoService {
     const token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h` },
     );
 
     return {

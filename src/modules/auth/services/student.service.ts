@@ -52,7 +52,7 @@ export class StudentService {
       60 *
       1000;
     this.refreshTokenTtlMs =
-      this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') *
+      (this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24) *
       60 *
       60 *
       1000;
@@ -275,7 +275,7 @@ export class StudentService {
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
       {
-        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h`,
+        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
       },
     );
 
@@ -341,7 +341,7 @@ export class StudentService {
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
       {
-        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h`,
+        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
       },
     );
 
@@ -476,7 +476,7 @@ export class StudentService {
     const rt = this.jwtService.sign(
       { ...tokenPayload, type: 'refresh' },
       {
-        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h`,
+        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
       },
     );
     return { access_token, refresh_token: rt };

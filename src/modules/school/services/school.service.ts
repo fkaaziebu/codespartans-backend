@@ -357,7 +357,7 @@ export class SchoolService {
     const token = this.jwtService.sign(tokenPayload);
     const refresh_token = this.jwtService.sign(
       { ...tokenPayload, type: 'refresh' },
-      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS')}h` },
+      { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h` },
     );
 
     return { ...schoolStudent, token, refresh_token };
