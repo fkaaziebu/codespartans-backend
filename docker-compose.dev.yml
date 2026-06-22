@@ -39,7 +39,7 @@ services:
     ports:
       - '7701:7700'
     volumes:
-      - ./meili_data:/meili_data
+      - /mnt/prod-data/dev/meilisearch:/meili_data
     networks:
       - codespartans-dev-network
 
@@ -67,11 +67,11 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /mnt/postgres-data-dev
+      device: /mnt/prod-data/dev/postgres
 
   redis_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /mnt/redis-data-dev
+      device: /mnt/prod-data/dev/redis

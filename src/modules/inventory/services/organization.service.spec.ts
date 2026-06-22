@@ -249,7 +249,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const result = await organizationService.listInstructors({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(result).toHaveLength(1);
@@ -260,13 +260,13 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const match = await organizationService.listInstructors({
-        email: organization.email,
+        id: organization.id,
         searchTerm: 'Test Instructor',
       });
       expect(match).toHaveLength(1);
 
       const empty = await organizationService.listInstructors({
-        email: organization.email,
+        id: organization.id,
         searchTerm: 'Nobody',
       });
       expect(empty).toHaveLength(0);
@@ -278,7 +278,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const result = await organizationService.listInstructorsPaginated({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(result.edges).toHaveLength(1);
@@ -291,7 +291,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const result = await organizationService.listAdmins({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(result).toHaveLength(1);
@@ -302,13 +302,13 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const match = await organizationService.listAdmins({
-        email: organization.email,
+        id: organization.id,
         searchTerm: 'Test Admin',
       });
       expect(match).toHaveLength(1);
 
       const empty = await organizationService.listAdmins({
-        email: organization.email,
+        id: organization.id,
         searchTerm: 'Nobody',
       });
       expect(empty).toHaveLength(0);
@@ -320,7 +320,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const result = await organizationService.listAdminsPaginated({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(result.edges).toHaveLength(1);
@@ -333,7 +333,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const result = await organizationService.listCourses({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(result).toHaveLength(2);
@@ -343,7 +343,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const match = await organizationService.listCourses({
-        email: organization.email,
+        id: organization.id,
         searchTerm: 'Second',
       });
       expect(match).toHaveLength(1);
@@ -352,7 +352,7 @@ describe('OrganizationService', () => {
 
     it('throws NotFoundException if organization does not exist', async () => {
       await expect(
-        organizationService.listCourses({ email: 'nobody@test.com' }),
+        organizationService.listCourses({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Organization not found'));
     });
   });
@@ -362,7 +362,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const result = await organizationService.listCoursesPaginated({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(result.edges).toHaveLength(2);
@@ -375,7 +375,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const result = await organizationService.listRequestedReviews({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(result).toHaveLength(1);
@@ -383,7 +383,7 @@ describe('OrganizationService', () => {
 
     it('throws NotFoundException if organization does not exist', async () => {
       await expect(
-        organizationService.listRequestedReviews({ email: 'nobody@test.com' }),
+        organizationService.listRequestedReviews({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Organization not found'));
     });
   });
@@ -393,7 +393,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const result = await organizationService.listRequestedReviewsPaginated({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(result.edges).toHaveLength(1);
@@ -407,7 +407,7 @@ describe('OrganizationService', () => {
       await setupStatsData(version);
 
       const response = await organizationService.getStats({
-        email: organization.email,
+        id: organization.id,
       });
 
       expect(response.total_admins).toBe(1);
@@ -418,7 +418,7 @@ describe('OrganizationService', () => {
 
     it('throws NotFoundException if organization does not exist', async () => {
       await expect(
-        organizationService.getStats({ email: 'nobody@test.com' }),
+        organizationService.getStats({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Organization does not exist'));
     });
   });
@@ -428,7 +428,7 @@ describe('OrganizationService', () => {
       const { organization, admin, version } = await setupData();
 
       const response = await organizationService.assignCourseVersionForReview({
-        email: organization.email,
+        id: organization.id,
         versionId: version.id,
         adminId: admin.id,
       });
@@ -447,7 +447,7 @@ describe('OrganizationService', () => {
 
       await expect(
         organizationService.assignCourseVersionForReview({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           versionId: version.id,
           adminId: admin.id,
         }),
@@ -459,7 +459,7 @@ describe('OrganizationService', () => {
 
       await expect(
         organizationService.assignCourseVersionForReview({
-          email: organization.email,
+          id: organization.id,
           versionId: version.id,
           adminId: '00000000-0000-0000-0000-000000000000',
         }),
@@ -471,7 +471,7 @@ describe('OrganizationService', () => {
 
       await expect(
         organizationService.assignCourseVersionForReview({
-          email: organization.email,
+          id: organization.id,
           versionId: '00000000-0000-0000-0000-000000000000',
           adminId: admin.id,
         }),
@@ -484,7 +484,7 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const response = await organizationService.createCategory({
-        email: organization.email,
+        id: organization.id,
         categoryInfo: {
           avatar_url: 'https://example.com/cat.jpg',
           name: 'Test Category',
@@ -500,7 +500,7 @@ describe('OrganizationService', () => {
     it('throws NotFoundException if organization does not exist', async () => {
       await expect(
         organizationService.createCategory({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           categoryInfo: { avatar_url: '', name: 'Cat' },
         }),
       ).rejects.toThrow(new NotFoundException('Organization does not exist'));
@@ -512,12 +512,12 @@ describe('OrganizationService', () => {
       const { organization, course, course2 } = await setupData();
 
       const category = await organizationService.createCategory({
-        email: organization.email,
+        id: organization.id,
         categoryInfo: { avatar_url: 'https://example.com/cat.jpg', name: 'Cat' },
       });
 
       const response = await organizationService.addCoursesToCategory({
-        email: organization.email,
+        id: organization.id,
         categoryId: category.id,
         courseIds: [course.id, course2.id],
       });
@@ -531,13 +531,13 @@ describe('OrganizationService', () => {
     it('throws NotFoundException if organization does not exist', async () => {
       const { organization, course } = await setupData();
       const category = await organizationService.createCategory({
-        email: organization.email,
+        id: organization.id,
         categoryInfo: { avatar_url: '', name: 'Cat' },
       });
 
       await expect(
         organizationService.addCoursesToCategory({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           categoryId: category.id,
           courseIds: [course.id],
         }),
@@ -549,7 +549,7 @@ describe('OrganizationService', () => {
 
       await expect(
         organizationService.addCoursesToCategory({
-          email: organization.email,
+          id: organization.id,
           categoryId: '00000000-0000-0000-0000-000000000000',
           courseIds: [course.id],
         }),
@@ -562,13 +562,13 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const category = await organizationService.createCategory({
-        email: organization.email,
+        id: organization.id,
         categoryInfo: { avatar_url: 'https://example.com/cat.jpg', name: 'BECE' },
       });
 
       const dateOfExams = new Date('2026-09-12');
       const result = await organizationService.updateCategoryCountdown({
-        email: organization.email,
+        id: organization.id,
         categoryId: category.id,
         dateOfExams,
         examDurationDays: 5,
@@ -585,13 +585,13 @@ describe('OrganizationService', () => {
       const { organization } = await setupData();
 
       const category = await organizationService.createCategory({
-        email: organization.email,
+        id: organization.id,
         categoryInfo: { avatar_url: '', name: 'BECE' },
       });
 
       await expect(
         organizationService.updateCategoryCountdown({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           categoryId: category.id,
           dateOfExams: new Date('2026-09-12'),
           examDurationDays: 3,
@@ -604,7 +604,7 @@ describe('OrganizationService', () => {
 
       await expect(
         organizationService.updateCategoryCountdown({
-          email: organization.email,
+          id: organization.id,
           categoryId: '00000000-0000-0000-0000-000000000000',
           dateOfExams: new Date('2026-09-12'),
           examDurationDays: 3,

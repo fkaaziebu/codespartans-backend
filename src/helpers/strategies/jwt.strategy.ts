@@ -34,6 +34,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         'Password was recently changed. Please log in again.',
       );
     }
+    const loggedOut = await this.cacheManager.get(`logged_out:${payload.id}`);
+    if (loggedOut && payload.iat <= Number(loggedOut)) {
+      throw new UnauthorizedException('Logged out. Please log in again.');
+    }
     return payload;
   }
 }

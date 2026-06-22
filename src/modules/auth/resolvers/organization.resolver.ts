@@ -40,9 +40,9 @@ export class OrganizationResolver {
     @Args('email') email: string,
     @Args('password') password: string,
   ) {
-    const { email: orgEmail } = context.req.user;
+    const { id: organizationId } = context.req.user;
     return this.organizationService.registerInstructor({
-      organizationEmail: orgEmail,
+      organizationId,
       name,
       email,
       password,
@@ -57,10 +57,10 @@ export class OrganizationResolver {
     @Args('email') email: string,
     @Args('password') password: string,
   ) {
-    const { email: orgEmail } = context.req.user;
+    const { id: organizationId } = context.req.user;
 
     return this.organizationService.registerAdmin({
-      organizationEmail: orgEmail,
+      organizationId,
       name,
       email,
       password,

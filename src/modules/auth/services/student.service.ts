@@ -27,11 +27,11 @@ import { AccountDeletionService } from './account-deletion.service';
 import { RequestMetadata } from '../entities/deletion-audit-log.entity';
 
 const FIVE_MIN_MS = 5 * 60 * 1000;
-const TTL_30D_MS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class StudentService {
   private readonly gracePeriodMs: number;
+  private readonly refreshTokenTtlMs: number;
 
   constructor(
     @InjectRepository(Student)
@@ -48,6 +48,11 @@ export class StudentService {
     this.gracePeriodMs =
       this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
       24 *
+      60 *
+      60 *
+      1000;
+    this.refreshTokenTtlMs =
+      (this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24) *
       60 *
       60 *
       1000;
@@ -89,8 +94,8 @@ export class StudentService {
     );
   }
 
-  async studentProfile({ email }: { email: string }) {
-    const cacheKey = `student-profile:${email}`;
+  async studentProfile({ id }: { id: string }) {
+    const cacheKey = `student-profile:${id}`;
     const cached = await this.cacheManager.get<Student>(cacheKey);
     if (cached) return cached;
 
@@ -98,7 +103,7 @@ export class StudentService {
       async (transactionalEntityManager) => {
         const s = await transactionalEntityManager.findOne(Student, {
           where: {
-            email,
+            id,
           },
           relations: ['organizations', 'subscribed_categories'],
         });
@@ -232,8 +237,6 @@ export class StudentService {
       const pendingToken = this.jwtService.sign(
         {
           id: student.id,
-          name: student.name,
-          email: student.email,
           role: 'STUDENT',
           type: 'pending_deletion',
         },
@@ -262,20 +265,18 @@ export class StudentService {
 
     const payload: {
       id: string;
-      name: string;
-      email: string;
       role: 'STUDENT';
     } = {
       id: student.id,
-      name: student.name,
-      email: student.email,
       role: 'STUDENT',
     };
 
     const access_token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: '30d' },
+      {
+        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
+      },
     );
 
     return {
@@ -333,15 +334,15 @@ export class StudentService {
 
     const payload = {
       id: student.id,
-      name: student.name,
-      email: student.email,
       role: 'STUDENT' as const,
     };
 
     const token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(
       { ...payload, type: 'refresh' },
-      { expiresIn: '30d' },
+      {
+        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
+      },
     );
 
     return {
@@ -429,11 +430,9 @@ export class StudentService {
     refresh_token,
   }: {
     refresh_token: string;
-  }): Promise<{ access_token: string }> {
+  }): Promise<{ access_token: string; refresh_token: string }> {
     let payload: {
       id: string;
-      name: string;
-      email: string;
       role: 'STUDENT';
       type: string;
       iat: number;
@@ -462,6 +461,10 @@ export class StudentService {
         'Password was recently changed. Please log in again.',
       );
     }
+    const loggedOut = await this.cacheManager.get(`logged_out:${payload.id}`);
+    if (loggedOut && payload.iat <= Number(loggedOut)) {
+      throw new UnauthorizedException('Logged out. Please log in again.');
+    }
 
     const {
       type: _type,
@@ -470,7 +473,26 @@ export class StudentService {
       ...tokenPayload
     } = payload as any;
     const access_token = this.jwtService.sign(tokenPayload);
-    return { access_token };
+    const rt = this.jwtService.sign(
+      { ...tokenPayload, type: 'refresh' },
+      {
+        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
+      },
+    );
+    return { access_token, refresh_token: rt };
+  }
+
+  async logoutStudent({
+    userId,
+  }: {
+    userId: string;
+  }): Promise<{ message: string }> {
+    await this.cacheManager.set(
+      `logged_out:${userId}`,
+      Math.floor(Date.now() / 1000).toString(),
+      this.refreshTokenTtlMs,
+    );
+    return { message: 'Logged out successfully' };
   }
 
   async requestStudentPasswordReset({ email }: { email: string }) {
@@ -541,16 +563,20 @@ export class StudentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${studentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
+    await this.cacheManager.set(
+      `pw_changed:${studentId}`,
+      Math.floor(Date.now() / 1000).toString(),
+      this.refreshTokenTtlMs,
+    );
     return result;
   }
 
   async changePassword({
-    email,
+    id,
     currentPassword,
     newPassword,
   }: {
-    email: string;
+    id: string;
     currentPassword: string;
     newPassword: string;
   }): Promise<{ message: string }> {
@@ -559,7 +585,7 @@ export class StudentService {
     const result = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
-          where: { email },
+          where: { id },
         });
 
         if (!student) {
@@ -582,16 +608,20 @@ export class StudentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${studentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
+    await this.cacheManager.set(
+      `pw_changed:${studentId}`,
+      Math.floor(Date.now() / 1000).toString(),
+      this.refreshTokenTtlMs,
+    );
     return result;
   }
 
   async changePin({
-    email,
+    id,
     currentPin,
     newPin,
   }: {
-    email: string;
+    id: string;
     currentPin: string;
     newPin: string;
   }): Promise<{ message: string }> {
@@ -600,7 +630,7 @@ export class StudentService {
     const result = await this.childRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const child = await transactionalEntityManager.findOne(Child, {
-          where: { student: { email } },
+          where: { student: { id } },
           relations: ['student'],
         });
 
@@ -621,7 +651,11 @@ export class StudentService {
       },
     );
 
-    await this.cacheManager.set(`pw_changed:${studentId}`, Math.floor(Date.now() / 1000).toString(), TTL_30D_MS);
+    await this.cacheManager.set(
+      `pw_changed:${studentId}`,
+      Math.floor(Date.now() / 1000).toString(),
+      this.refreshTokenTtlMs,
+    );
     return result;
   }
 

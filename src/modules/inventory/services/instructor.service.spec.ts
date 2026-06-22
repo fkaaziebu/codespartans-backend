@@ -188,12 +188,12 @@ describe('InstructorService', () => {
   const setupCourseWithVersion = async () => {
     const { organization, instructor } = await setupData();
     const course = await instructorService.createCourse({
-      email: instructorInfo.email,
+      id: instructor.id,
       courseInfo,
       organizationId: organization.id,
     });
     const version = await instructorService.addCourseVersion({
-      email: instructorInfo.email,
+      id: instructor.id,
       courseId: course.id,
     });
     return { organization, instructor, course, version };
@@ -201,10 +201,10 @@ describe('InstructorService', () => {
 
   describe('createCourse', () => {
     it('returns the created course with correct fields', async () => {
-      const { organization } = await setupData();
+      const { organization, instructor } = await setupData();
 
       const response = await instructorService.createCourse({
-        email: instructorInfo.email,
+        id: instructor.id,
         courseInfo,
         organizationId: organization.id,
       });
@@ -218,9 +218,9 @@ describe('InstructorService', () => {
       expect(response.price).toBe(courseInfo.price);
       expect(response.id).toBeDefined();
 
-      const instructor = await getInstructor(instructorInfo.email);
-      expect(instructor.created_courses[0].id).toBe(response.id);
-      expect(instructor.created_courses[0].organization.id).toBe(
+      const savedInstructor = await getInstructor(instructorInfo.email);
+      expect(savedInstructor.created_courses[0].id).toBe(response.id);
+      expect(savedInstructor.created_courses[0].organization.id).toBe(
         organization.id,
       );
     });
@@ -230,7 +230,7 @@ describe('InstructorService', () => {
 
       await expect(
         instructorService.createCourse({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           courseInfo,
           organizationId: organization.id,
         }),
@@ -238,7 +238,7 @@ describe('InstructorService', () => {
     });
 
     it('throws NotFoundException if instructor does not belong to the organization', async () => {
-      const { organization } = await setupData();
+      const { organization, instructor } = await setupData();
 
       const otherOrg = new Organization();
       otherOrg.name = 'Other Org';
@@ -248,7 +248,7 @@ describe('InstructorService', () => {
 
       await expect(
         instructorService.createCourse({
-          email: instructorInfo.email,
+          id: instructor.id,
           courseInfo,
           organizationId: otherOrg.id,
         }),
@@ -260,15 +260,15 @@ describe('InstructorService', () => {
 
   describe('addCourseVersion', () => {
     it('returns a new version with version_number 1 and PENDING status', async () => {
-      const { organization } = await setupData();
+      const { organization, instructor } = await setupData();
       const course = await instructorService.createCourse({
-        email: instructorInfo.email,
+        id: instructor.id,
         courseInfo,
         organizationId: organization.id,
       });
 
       const response = await instructorService.addCourseVersion({
-        email: instructorInfo.email,
+        id: instructor.id,
         courseId: course.id,
       });
 
@@ -276,32 +276,32 @@ describe('InstructorService', () => {
       expect(response.status).toBe(VersionStatusType.PENDING);
       expect(response.id).toBeDefined();
 
-      const instructor = await getInstructor(instructorInfo.email);
-      expect(instructor.created_courses[0].versions[0].id).toBe(response.id);
+      const savedInstructor = await getInstructor(instructorInfo.email);
+      expect(savedInstructor.created_courses[0].versions[0].id).toBe(response.id);
     });
 
     it('throws NotFoundException if instructor does not exist', async () => {
-      const { organization } = await setupData();
+      const { organization, instructor } = await setupData();
       const course = await instructorService.createCourse({
-        email: instructorInfo.email,
+        id: instructor.id,
         courseInfo,
         organizationId: organization.id,
       });
 
       await expect(
         instructorService.addCourseVersion({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           courseId: course.id,
         }),
       ).rejects.toThrow(new NotFoundException('Instructor does not exist'));
     });
 
     it('throws NotFoundException if course does not exist', async () => {
-      await setupData();
+      const { instructor } = await setupData();
 
       await expect(
         instructorService.addCourseVersion({
-          email: instructorInfo.email,
+          id: instructor.id,
           courseId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Course not found'));
@@ -310,10 +310,10 @@ describe('InstructorService', () => {
 
   describe('addQuestionsToCourseVersion', () => {
     it('returns version with created questions and test suite', async () => {
-      const { course, version } = await setupCourseWithVersion();
+      const { course, version, instructor } = await setupCourseWithVersion();
 
       const response = await instructorService.addQuestionsToCourseVersion({
-        email: instructorInfo.email,
+        id: instructor.id,
         versionId: version.id,
         suiteTitle: 'Suite One',
         suiteDescription: 'Suite description',
@@ -323,9 +323,9 @@ describe('InstructorService', () => {
 
       expect(response.questions).toHaveLength(2);
 
-      const instructor = await getInstructor(instructorInfo.email);
+      const savedInstructor = await getInstructor(instructorInfo.email);
       const savedQuestions =
-        instructor.created_courses[0].versions[0].questions;
+        savedInstructor.created_courses[0].versions[0].questions;
       expect(savedQuestions).toHaveLength(2);
       expect(
         savedQuestions.sort((a, b) => a.question_number - b.question_number)[0]
@@ -338,7 +338,7 @@ describe('InstructorService', () => {
 
       await expect(
         instructorService.addQuestionsToCourseVersion({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           versionId: version.id,
           suiteTitle: 'Suite',
           suiteDescription: 'Desc',
@@ -349,11 +349,11 @@ describe('InstructorService', () => {
     });
 
     it('throws NotFoundException if course version does not exist', async () => {
-      await setupData();
+      const { instructor } = await setupData();
 
       await expect(
         instructorService.addQuestionsToCourseVersion({
-          email: instructorInfo.email,
+          id: instructor.id,
           versionId: '00000000-0000-0000-0000-000000000000',
           suiteTitle: 'Suite',
           suiteDescription: 'Desc',
@@ -366,9 +366,9 @@ describe('InstructorService', () => {
 
   describe('updateQuestion', () => {
     it('updates and returns the question with new values', async () => {
-      const { version } = await setupCourseWithVersion();
+      const { version, instructor } = await setupCourseWithVersion();
       await instructorService.addQuestionsToCourseVersion({
-        email: instructorInfo.email,
+        id: instructor.id,
         versionId: version.id,
         suiteTitle: 'Suite One',
         suiteDescription: 'Desc',
@@ -376,12 +376,12 @@ describe('InstructorService', () => {
         questions: sampleQuestions,
       });
 
-      const instructor = await getInstructor(instructorInfo.email);
+      const savedInstructor = await getInstructor(instructorInfo.email);
       const questionId =
-        instructor.created_courses[0].versions[0].questions[0].id;
+        savedInstructor.created_courses[0].versions[0].questions[0].id;
 
       const updated = await instructorService.updateQuestion({
-        email: instructorInfo.email,
+        id: instructor.id,
         questionId,
         question: {
           ...sampleQuestions[0],
@@ -395,9 +395,9 @@ describe('InstructorService', () => {
     });
 
     it('throws NotFoundException if instructor does not exist', async () => {
-      const { version } = await setupCourseWithVersion();
+      const { version, instructor } = await setupCourseWithVersion();
       await instructorService.addQuestionsToCourseVersion({
-        email: instructorInfo.email,
+        id: instructor.id,
         versionId: version.id,
         suiteTitle: 'Suite',
         suiteDescription: 'Desc',
@@ -405,13 +405,13 @@ describe('InstructorService', () => {
         questions: sampleQuestions,
       });
 
-      const instructor = await getInstructor(instructorInfo.email);
+      const savedInstructor = await getInstructor(instructorInfo.email);
       const questionId =
-        instructor.created_courses[0].versions[0].questions[0].id;
+        savedInstructor.created_courses[0].versions[0].questions[0].id;
 
       await expect(
         instructorService.updateQuestion({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           questionId,
           question: sampleQuestions[0],
         }),
@@ -419,11 +419,11 @@ describe('InstructorService', () => {
     });
 
     it('throws NotFoundException if question does not exist', async () => {
-      await setupData();
+      const { instructor } = await setupData();
 
       await expect(
         instructorService.updateQuestion({
-          email: instructorInfo.email,
+          id: instructor.id,
           questionId: '00000000-0000-0000-0000-000000000000',
           question: sampleQuestions[0],
         }),
@@ -433,9 +433,9 @@ describe('InstructorService', () => {
 
   describe('requestCourseVersionReview', () => {
     it('returns the review request linked to the version and organization', async () => {
-      const { organization, version } = await setupCourseWithVersion();
+      const { organization, version, instructor } = await setupCourseWithVersion();
       await instructorService.addQuestionsToCourseVersion({
-        email: instructorInfo.email,
+        id: instructor.id,
         versionId: version.id,
         suiteTitle: 'Suite',
         suiteDescription: 'Desc',
@@ -444,15 +444,15 @@ describe('InstructorService', () => {
       });
 
       const response = await instructorService.requestCourseVersionReview({
-        email: instructorInfo.email,
+        id: instructor.id,
         versionId: version.id,
       });
 
       expect(response.course_version.id).toBe(version.id);
 
-      const instructor = await getInstructor(instructorInfo.email);
+      const savedInstructor = await getInstructor(instructorInfo.email);
       const reviewRequest =
-        instructor.created_courses[0].versions[0].review_request;
+        savedInstructor.created_courses[0].versions[0].review_request;
       expect(reviewRequest.id).toBe(response.id);
       expect(reviewRequest.organization.id).toBe(organization.id);
       expect(reviewRequest.course_version.id).toBe(version.id);
@@ -463,18 +463,18 @@ describe('InstructorService', () => {
 
       await expect(
         instructorService.requestCourseVersionReview({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           versionId: version.id,
         }),
       ).rejects.toThrow(new NotFoundException('Instructor does not exist'));
     });
 
     it('throws NotFoundException if course version does not exist', async () => {
-      await setupData();
+      const { instructor } = await setupData();
 
       await expect(
         instructorService.requestCourseVersionReview({
-          email: instructorInfo.email,
+          id: instructor.id,
           versionId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Course version not found'));

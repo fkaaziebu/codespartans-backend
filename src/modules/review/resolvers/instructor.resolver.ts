@@ -19,10 +19,10 @@ export class InstructorResolver {
     @Context() context,
     @Args('reviewId') reviewId: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.getVersionReview({
-      email,
+      id,
       reviewId,
     });
   }
@@ -35,10 +35,10 @@ export class InstructorResolver {
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.listQuestionsForVersionPaginated({
-      email,
+      id,
       searchTerm,
       versionId,
       pagination,
@@ -48,10 +48,10 @@ export class InstructorResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => CourseTypeClass)
   getCourse(@Context() context, @Args('courseId') courseId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.getCourse({
-      email,
+      id,
       courseId,
     });
   }
@@ -62,10 +62,10 @@ export class InstructorResolver {
     @Context() context,
     @Args('versionId') versionId: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.getCourseVersion({
-      email,
+      id,
       versionId,
     });
   }
@@ -77,10 +77,10 @@ export class InstructorResolver {
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.listCoursesPaginated({
-      email,
+      id,
       searchTerm,
       pagination,
     });
@@ -96,10 +96,10 @@ export class InstructorResolver {
     issueStatus: IssueStatusType,
     @Args('response') response: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.updateIssueStatus({
-      email,
+      id,
       issueId,
       issueStatus,
       response,

@@ -9,9 +9,7 @@ import { Test as TestTypeClass } from 'src/modules/simulation/entities/test.enti
 import { GqlJwtAuthGuard, SubscriptionGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';
-import {
-  SuiteType,
-} from 'src/modules/review/entities/test_suite.entity';
+import { SuiteType } from 'src/modules/review/entities/test_suite.entity';
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import { StudentService } from '../services';
 import {
@@ -38,10 +36,10 @@ export class StudentResolver {
     @Context() context,
     @Args('courseId') courseId: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.getOrganizationCourse({
-      email,
+      id,
       courseId,
     });
   }
@@ -59,10 +57,10 @@ export class StudentResolver {
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
     @Args('filter', { nullable: true }) filter?: CourseFilterInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.listOrganizationCoursesPaginated({
-      email,
+      id,
       organizationId,
       searchTerm,
       pagination,
@@ -76,10 +74,10 @@ export class StudentResolver {
     @Context() context,
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.listOrganizationCategories({
-      email,
+      id,
       searchTerm,
     });
   }
@@ -87,10 +85,10 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [CourseTypeClass])
   listCartCourses(@Context() context) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.listCartCourses({
-      email,
+      id,
     });
   }
 
@@ -102,10 +100,10 @@ export class StudentResolver {
     @Args('filter', { nullable: true }) filter?: AttemptFilterInput,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.listAttempts({
-      email,
+      id,
       searchTerm,
       filter,
       pagination,
@@ -121,10 +119,10 @@ export class StudentResolver {
     suiteTypes?: SuiteType[],
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.listCourseSuitesPaginated({
-      email,
+      id,
       courseId,
       suiteTypes,
       pagination,
@@ -134,33 +132,33 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => TestTypeClass)
   getActiveTest(@Context() context) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.getActiveTest({ email });
+    return this.studentService.getActiveTest({ id });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => TestTypeClass)
   getTest(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.getTest({ email, testId });
+    return this.studentService.getTest({ id, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => StudentStatsResponse)
   getStudentStats(@Context() context) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.getStats({ email });
+    return this.studentService.getStats({ id });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => StreakResponse)
   getCurrentStreakCount(@Context() context) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.getCurrentStreakCount({ email });
+    return this.studentService.getCurrentStreakCount({ id });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -169,16 +167,16 @@ export class StudentResolver {
     @Context() context,
     @Args('testId', { nullable: true }) testId?: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.studentSubjectProgress({ email, testId });
+    return this.studentService.studentSubjectProgress({ id, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [TestTopicProgressResponse])
   studentTestTopicProgress(@Context() context, @Args('testId') testId: string) {
-    const { email } = context.req.user;
-    return this.studentService.studentTestTopicProgress({ email, testId });
+    const { id } = context.req.user;
+    return this.studentService.studentTestTopicProgress({ id, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -187,9 +185,9 @@ export class StudentResolver {
     @Context() context,
     @Args('testId', { nullable: true }) testId?: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.weakSubjectAreas({ email, testId });
+    return this.studentService.weakSubjectAreas({ id, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -198,18 +196,18 @@ export class StudentResolver {
     @Context() context,
     @Args('testId', { nullable: true }) testId?: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.getTestScoreHistory({ email, testId });
+    return this.studentService.getTestScoreHistory({ id, testId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [CategoryTypeClass])
   listCartCategories(@Context() context) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.listCartCategories({
-      email,
+      id,
     });
   }
 
@@ -217,9 +215,9 @@ export class StudentResolver {
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => CartTypeClass)
   addCourseToCart(@Context() context, @Args('courseId') courseId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.addCourseToCart({ email, courseId });
+    return this.studentService.addCourseToCart({ id, courseId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -230,17 +228,17 @@ export class StudentResolver {
     @Args('courseIds', { type: () => [String!]!, nullable: false })
     courseIds: string[],
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.completeSetup({ email, categoryId, courseIds });
+    return this.studentService.completeSetup({ id, categoryId, courseIds });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => CartTypeClass)
   removeCourseFromCart(@Context() context, @Args('courseId') courseId: string) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.removeCourseFromCart({ email, courseId });
+    return this.studentService.removeCourseFromCart({ id, courseId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -249,9 +247,9 @@ export class StudentResolver {
     @Context() context,
     @Args('categoryId') categoryId: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
-    return this.studentService.addCategoryToCart({ email, categoryId });
+    return this.studentService.addCategoryToCart({ id, categoryId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -261,10 +259,10 @@ export class StudentResolver {
     @Args('currentPassword') currentPassword: string,
     @Args('newPassword') newPassword: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.changeStudentPassword({
-      email,
+      id,
       currentPassword,
       newPassword,
     });
@@ -278,10 +276,10 @@ export class StudentResolver {
     @Args('checkoutFromCart', { nullable: true }) checkoutFromCart: boolean,
     @Args('courseId', { nullable: true }) courseId: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.studentService.createCheckout({
-      email,
+      id,
       autoApproveSubscription,
       checkoutFromCart,
       courseId,

@@ -326,7 +326,7 @@ describe('StudentService', () => {
       await studentRepository.save(student);
 
       const result = await studentService.listOrganizationCourses({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(2);
@@ -335,7 +335,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.listOrganizationCourses({ email: 'nobody@test.com' }),
+        studentService.listOrganizationCourses({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -347,7 +347,7 @@ describe('StudentService', () => {
       await studentRepository.save(student);
 
       const result = await studentService.listOrganizationCoursesPaginated({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.edges).toHaveLength(2);
@@ -360,7 +360,7 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       const result = await studentService.listCartCourses({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(0);
@@ -369,12 +369,12 @@ describe('StudentService', () => {
     it('returns courses that are in the cart', async () => {
       const { student, course } = await setupData();
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       });
 
       const result = await studentService.listCartCourses({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(1);
@@ -383,7 +383,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.listCartCourses({ email: 'nobody@test.com' }),
+        studentService.listCartCourses({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -393,7 +393,7 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       const result = await studentService.listCartCategories({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(0);
@@ -402,12 +402,12 @@ describe('StudentService', () => {
     it('returns categories that are in the cart', async () => {
       const { student, category } = await setupData();
       await studentService.addCategoryToCart({
-        email: student.email,
+        id: student.id,
         categoryId: category.id,
       });
 
       const result = await studentService.listCartCategories({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(1);
@@ -420,7 +420,7 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       const result = await studentService.listOrganizationCategories({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(1);
@@ -431,13 +431,13 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       const match = await studentService.listOrganizationCategories({
-        email: student.email,
+        id: student.id,
         searchTerm: 'Test',
       });
       expect(match).toHaveLength(1);
 
       const empty = await studentService.listOrganizationCategories({
-        email: student.email,
+        id: student.id,
         searchTerm: 'NonExistent',
       });
       expect(empty).toHaveLength(0);
@@ -445,7 +445,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.listOrganizationCategories({ email: 'nobody@test.com' }),
+        studentService.listOrganizationCategories({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -455,7 +455,7 @@ describe('StudentService', () => {
       const { student, course, cart } = await setupData();
 
       const response = await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       });
 
@@ -471,7 +471,7 @@ describe('StudentService', () => {
 
       await expect(
         studentService.addCourseToCart({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           courseId: course.id,
         }),
       ).rejects.toThrow('Student not found');
@@ -482,12 +482,12 @@ describe('StudentService', () => {
     it('removes the course from the cart', async () => {
       const { student, course } = await setupData();
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       });
 
       const response = await studentService.removeCourseFromCart({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       });
 
@@ -503,7 +503,7 @@ describe('StudentService', () => {
       const { student, category, cart } = await setupData();
 
       const response = await studentService.addCategoryToCart({
-        email: student.email,
+        id: student.id,
         categoryId: category.id,
       });
 
@@ -519,12 +519,12 @@ describe('StudentService', () => {
     it('checks out from cart with an additional courseId', async () => {
       const { student, course, course2 } = await setupData();
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course2.id,
       });
 
       const response = await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         checkoutFromCart: true,
         courseId: course.id,
         autoApproveSubscription: true,
@@ -540,12 +540,12 @@ describe('StudentService', () => {
     it('does not subscribe when autoApproveSubscription is false', async () => {
       const { student, course, course2 } = await setupData();
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course2.id,
       });
 
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         checkoutFromCart: true,
         courseId: course.id,
         autoApproveSubscription: false,
@@ -559,16 +559,16 @@ describe('StudentService', () => {
     it('checks out all cart courses when only checkoutFromCart is true', async () => {
       const { student, course, course2 } = await setupData();
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       });
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course2.id,
       });
 
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         checkoutFromCart: true,
         autoApproveSubscription: true,
       });
@@ -581,16 +581,16 @@ describe('StudentService', () => {
     it('checks out a single course when only courseId is provided', async () => {
       const { student, course, course2 } = await setupData();
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       });
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course2.id,
       });
 
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         autoApproveSubscription: true,
       });
@@ -603,16 +603,16 @@ describe('StudentService', () => {
     it('checks out cart with categories and courses', async () => {
       const { student, course2, category } = await setupData();
       await studentService.addCourseToCart({
-        email: student.email,
+        id: student.id,
         courseId: course2.id,
       });
       await studentService.addCategoryToCart({
-        email: student.email,
+        id: student.id,
         categoryId: category.id,
       });
 
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         checkoutFromCart: true,
         autoApproveSubscription: true,
       });
@@ -630,7 +630,7 @@ describe('StudentService', () => {
       const { student, category, course } = await setupData();
 
       const response = await studentService.completeSetup({
-        email: student.email,
+        id: student.id,
         categoryId: category.id,
         courseIds: [course.id],
       });
@@ -645,14 +645,14 @@ describe('StudentService', () => {
     it('throws BadRequestException if student is already subscribed to the category', async () => {
       const { student, category } = await setupData();
       await studentService.completeSetup({
-        email: student.email,
+        id: student.id,
         categoryId: category.id,
         courseIds: [],
       });
 
       await expect(
         studentService.completeSetup({
-          email: student.email,
+          id: student.id,
           categoryId: category.id,
           courseIds: [],
         }),
@@ -667,7 +667,7 @@ describe('StudentService', () => {
       const { student, course } = await setupData();
 
       const result = await studentService.getOrganizationCourse({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       }) as any;
 
@@ -679,13 +679,13 @@ describe('StudentService', () => {
     it('reflects is_subscribed correctly after subscription', async () => {
       const { student, course } = await setupData();
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         autoApproveSubscription: true,
       });
 
       const result = await studentService.getOrganizationCourse({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       }) as any;
 
@@ -697,7 +697,7 @@ describe('StudentService', () => {
     it('returns an empty list when student has no ended tests', async () => {
       const { student } = await setupData();
 
-      const result = await studentService.listAttempts({ email: student.email });
+      const result = await studentService.listAttempts({ id: student.id });
 
       expect(result.edges).toHaveLength(0);
     });
@@ -718,7 +718,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [false], start1);
       await createEndedTest(student, suite, [question], [true], start2);
 
-      const result = await studentService.listAttempts({ email: student.email });
+      const result = await studentService.listAttempts({ id: student.id });
 
       expect(result.edges).toHaveLength(2);
       // most recent first
@@ -731,7 +731,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.listAttempts({ email: 'nobody@test.com' }),
+        studentService.listAttempts({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -754,7 +754,7 @@ describe('StudentService', () => {
       test.student = student;
       await testRepository.save(test);
 
-      const result = await studentService.getActiveTest({ email: student.email });
+      const result = await studentService.getActiveTest({ id: student.id });
 
       expect(result.id).toBe(test.id);
       expect(result.status).toBe(TestStatusType.ON_GOING);
@@ -764,7 +764,7 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       await expect(
-        studentService.getActiveTest({ email: student.email }),
+        studentService.getActiveTest({ id: student.id }),
       ).rejects.toThrow(new NotFoundException('No active test found'));
     });
   });
@@ -789,7 +789,7 @@ describe('StudentService', () => {
       );
 
       const result = await studentService.getTest({
-        email: student.email,
+        id: student.id,
         testId: test.id,
       });
 
@@ -801,7 +801,7 @@ describe('StudentService', () => {
 
       await expect(
         studentService.getTest({
-          email: student.email,
+          id: student.id,
           testId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Test not found'));
@@ -812,7 +812,7 @@ describe('StudentService', () => {
     it('returns zeroed stats when no tests exist', async () => {
       const { student } = await setupData();
 
-      const result = await studentService.getStats({ email: student.email });
+      const result = await studentService.getStats({ id: student.id });
 
       expect(result.total_test_taken).toBe(0);
       expect(result.average_score).toBe(0);
@@ -838,7 +838,7 @@ describe('StudentService', () => {
         new Date(),
       );
 
-      const result = await studentService.getStats({ email: student.email });
+      const result = await studentService.getStats({ id: student.id });
 
       expect(result.total_test_taken).toBe(1);
       expect(result.average_score).toBe(100);
@@ -847,7 +847,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.getStats({ email: 'nobody@test.com' }),
+        studentService.getStats({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -857,7 +857,7 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       const result = await studentService.studentSubjectProgress({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(0);
@@ -876,7 +876,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [true], new Date());
 
       const result = await studentService.studentSubjectProgress({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.length).toBeGreaterThan(0);
@@ -886,7 +886,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.studentSubjectProgress({ email: 'nobody@test.com' }),
+        studentService.studentSubjectProgress({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -911,7 +911,7 @@ describe('StudentService', () => {
       );
 
       const result = await studentService.studentTestTopicProgress({
-        email: student.email,
+        id: student.id,
         testId: test.id,
       });
 
@@ -924,7 +924,7 @@ describe('StudentService', () => {
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
         studentService.studentTestTopicProgress({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           testId: 'any-id',
         }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
@@ -935,7 +935,7 @@ describe('StudentService', () => {
 
       await expect(
         studentService.studentTestTopicProgress({
-          email: student.email,
+          id: student.id,
           testId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Test not found or not yet ended'));
@@ -957,7 +957,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [true], new Date());
 
       const result = await studentService.weakSubjectAreas({
-        email: student.email,
+        id: student.id,
       });
 
       // accuracy = 100% which is > 65, so nothing returned
@@ -978,7 +978,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [false], new Date());
 
       const result = await studentService.weakSubjectAreas({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.length).toBeGreaterThan(0);
@@ -987,7 +987,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.weakSubjectAreas({ email: 'nobody@test.com' }),
+        studentService.weakSubjectAreas({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -997,7 +997,7 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       const result = await studentService.getTestScoreHistory({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(0);
@@ -1019,7 +1019,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [true], start2);
 
       const result = await studentService.getTestScoreHistory({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result).toHaveLength(2);
@@ -1029,7 +1029,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
-        studentService.getTestScoreHistory({ email: 'nobody@test.com' }),
+        studentService.getTestScoreHistory({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -1039,7 +1039,7 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       const response = await studentService.changeStudentPassword({
-        email: student.email,
+        id: student.id,
         currentPassword: 'password',
         newPassword: 'newpassword',
       });
@@ -1058,7 +1058,7 @@ describe('StudentService', () => {
 
       await expect(
         studentService.changeStudentPassword({
-          email: student.email,
+          id: student.id,
           currentPassword: 'wrongpassword',
           newPassword: 'newpassword',
         }),
@@ -1070,7 +1070,7 @@ describe('StudentService', () => {
     it('throws NotFoundException if student does not exist', async () => {
       await expect(
         studentService.changeStudentPassword({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           currentPassword: 'password',
           newPassword: 'newpassword',
         }),
@@ -1096,7 +1096,7 @@ describe('StudentService', () => {
       const { student } = await setupData();
 
       const result = await studentService.getCurrentStreakCount({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.current_streak).toBe(0);
@@ -1116,7 +1116,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [true], todayUtcNoon());
 
       const result = await studentService.getCurrentStreakCount({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.current_streak).toBe(1);
@@ -1138,7 +1138,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [true], todayUtcNoon());
 
       const result = await studentService.getCurrentStreakCount({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.current_streak).toBe(3);
@@ -1169,7 +1169,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [true], todayUtcNoon());
 
       const result = await studentService.getCurrentStreakCount({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.current_streak).toBe(1);
@@ -1189,7 +1189,7 @@ describe('StudentService', () => {
       await createEndedTest(student, suite, [question], [true], daysAgoUtcNoon(2));
 
       const result = await studentService.getCurrentStreakCount({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.current_streak).toBe(0);
@@ -1217,7 +1217,7 @@ describe('StudentService', () => {
       );
 
       const result = await studentService.getCurrentStreakCount({
-        email: student.email,
+        id: student.id,
       });
 
       expect(result.current_streak).toBe(1);
@@ -1226,7 +1226,7 @@ describe('StudentService', () => {
 
     it('throws NotFoundException when student does not exist', async () => {
       await expect(
-        studentService.getCurrentStreakCount({ email: 'nobody@test.com' }),
+        studentService.getCurrentStreakCount({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
   });
@@ -1247,11 +1247,11 @@ describe('StudentService', () => {
     };
 
     it('throws NotFoundException when student is not subscribed to the course', async () => {
-      const { course } = await setupData();
+      const { student, course } = await setupData();
 
       await expect(
         studentService.listCourseSuitesPaginated({
-          email: 'student@test.com',
+          id: student.id,
           courseId: course.id,
         }),
       ).rejects.toThrow(
@@ -1264,7 +1264,7 @@ describe('StudentService', () => {
     it('returns all suites when no suiteTypes filter is provided', async () => {
       const { student, course, version } = await setupData();
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         autoApproveSubscription: true,
       });
@@ -1274,7 +1274,7 @@ describe('StudentService', () => {
       await makeSuite(version, 'Class Suite', SuiteType.CLASS);
 
       const result = await studentService.listCourseSuitesPaginated({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
       });
 
@@ -1285,7 +1285,7 @@ describe('StudentService', () => {
     it('filters suites by a single suite type', async () => {
       const { student, course, version } = await setupData();
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         autoApproveSubscription: true,
       });
@@ -1295,7 +1295,7 @@ describe('StudentService', () => {
       await makeSuite(version, 'Year Suite', SuiteType.YEAR);
 
       const result = await studentService.listCourseSuitesPaginated({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         suiteTypes: [SuiteType.TOPIC],
       });
@@ -1309,7 +1309,7 @@ describe('StudentService', () => {
     it('filters suites by multiple suite types', async () => {
       const { student, course, version } = await setupData();
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         autoApproveSubscription: true,
       });
@@ -1319,7 +1319,7 @@ describe('StudentService', () => {
       await makeSuite(version, 'Class Suite', SuiteType.CLASS);
 
       const result = await studentService.listCourseSuitesPaginated({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         suiteTypes: [SuiteType.TOPIC, SuiteType.CLASS],
       });
@@ -1334,7 +1334,7 @@ describe('StudentService', () => {
     it('returns empty edges when suiteTypes filter matches no suites', async () => {
       const { student, course, version } = await setupData();
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         autoApproveSubscription: true,
       });
@@ -1342,7 +1342,7 @@ describe('StudentService', () => {
       await makeSuite(version, 'Year Suite', SuiteType.YEAR);
 
       const result = await studentService.listCourseSuitesPaginated({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         suiteTypes: [SuiteType.TOPIC],
       });
@@ -1354,7 +1354,7 @@ describe('StudentService', () => {
     it('paginates results with first/after cursor', async () => {
       const { student, course, version } = await setupData();
       await studentService.createCheckout({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         autoApproveSubscription: true,
       });
@@ -1364,7 +1364,7 @@ describe('StudentService', () => {
       await makeSuite(version, 'Suite C', SuiteType.TOPIC);
 
       const page1 = await studentService.listCourseSuitesPaginated({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         pagination: { first: 2 },
       });
@@ -1373,7 +1373,7 @@ describe('StudentService', () => {
       expect(page1.pageInfo.hasNextPage).toBe(true);
 
       const page2 = await studentService.listCourseSuitesPaginated({
-        email: student.email,
+        id: student.id,
         courseId: course.id,
         pagination: { first: 2, after: page1.pageInfo.endCursor },
       });

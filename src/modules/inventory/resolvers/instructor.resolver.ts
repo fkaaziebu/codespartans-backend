@@ -24,9 +24,9 @@ export class InstructorResolver {
     @Args('courseInfo', { type: () => CourseInfoInput!, nullable: false })
     courseInfo: CourseInfoInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
     return this.instructorService.createCourse({
-      email,
+      id,
       courseInfo,
       organizationId,
     });
@@ -40,15 +40,15 @@ export class InstructorResolver {
     @Args('courseInfo', { type: () => UpdateCourseInfoInput!, nullable: false })
     courseInfo: UpdateCourseInfoInput,
   ) {
-    const { email } = context.req.user;
-    return this.instructorService.updateCourse({ email });
+    const { id } = context.req.user;
+    return this.instructorService.updateCourse({ id });
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => VersionTypeClass)
   addCourseVersion(@Context() context, @Args('courseId') courseId: string) {
-    const { email } = context.req.user;
-    return this.instructorService.addCourseVersion({ email, courseId });
+    const { id } = context.req.user;
+    return this.instructorService.addCourseVersion({ id, courseId });
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -62,10 +62,10 @@ export class InstructorResolver {
     @Args('questions', { type: () => [QuestionInput!]!, nullable: false })
     questions: QuestionInput[],
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.addQuestionsToCourseVersion({
-      email,
+      id,
       versionId,
       suiteTitle,
       suiteDescription,
@@ -82,10 +82,10 @@ export class InstructorResolver {
     @Args('question', { type: () => QuestionInput! })
     question: QuestionInput,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.updateQuestion({
-      email,
+      id,
       questionId,
       question,
     });
@@ -97,10 +97,10 @@ export class InstructorResolver {
     @Context() context,
     @Args('versionId') versionId: string,
   ) {
-    const { email } = context.req.user;
+    const { id } = context.req.user;
 
     return this.instructorService.requestCourseVersionReview({
-      email,
+      id,
       versionId,
     });
   }

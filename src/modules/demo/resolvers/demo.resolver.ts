@@ -64,35 +64,35 @@ export class DemoResolver {
     @Args('children', { type: () => [String] }) children: string[],
     @Context() context,
   ) {
-    const { email, role } = context.req.user;
-    return this.demoService.initiatePayment(email, planId, role, children);
+    const { id, role } = context.req.user;
+    return this.demoService.initiatePayment(id, planId, role, children);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => ParentSubscription, { nullable: true })
   async getMySubscription(@Context() context) {
-    const { email } = context.req.user;
-    return this.demoService.getMySubscription(email);
+    const { id } = context.req.user;
+    return this.demoService.getMySubscription(id);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [ParentSubscription])
   async listMySubscriptions(@Context() context) {
-    const { email } = context.req.user;
-    return this.demoService.listMySubscriptions(email);
+    const { id } = context.req.user;
+    return this.demoService.listMySubscriptions(id);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => StudentSubscription, { nullable: true })
   async getMyStudentSubscription(@Context() context) {
-    const { email } = context.req.user;
-    return this.demoService.getMyStudentSubscription(email);
+    const { id } = context.req.user;
+    return this.demoService.getMyStudentSubscription(id);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Query(() => [StudentSubscription])
   async listMyStudentSubscriptions(@Context() context) {
-    const { email } = context.req.user;
-    return this.demoService.listMyStudentSubscriptions(email);
+    const { id } = context.req.user;
+    return this.demoService.listMyStudentSubscriptions(id);
   }
 }

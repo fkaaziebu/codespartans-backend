@@ -33,11 +33,10 @@ import {
   RequestMetadata,
 } from '../entities/deletion-audit-log.entity';
 
-const TTL_30D_MS = 30 * 24 * 60 * 60 * 1000;
-
 @Injectable()
 export class AccountDeletionService {
   private readonly gracePeriodMs: number;
+  private readonly deletionCacheTtlMs: number;
 
   constructor(
     @InjectRepository(Student)
@@ -59,6 +58,8 @@ export class AccountDeletionService {
       60 *
       60 *
       1000;
+    this.deletionCacheTtlMs =
+      this.configService.get<number>('DELETION_CACHE_TTL_DAYS') * 24 * 60 * 60 * 1000;
   }
 
   // ─── public API ──────────────────────────────────────────────────────────────
@@ -103,7 +104,7 @@ export class AccountDeletionService {
       });
 
     if (alreadyDeactivated) {
-      await this.cacheManager.set(`deactivated:${studentId}`, '1', TTL_30D_MS);
+      await this.cacheManager.set(`deactivated:${studentId}`, '1', this.deletionCacheTtlMs);
       await this.writeAuditLog({
         event: DeletionAuditEvent.STUDENT_DELETION_ALREADY_PENDING,
         account_id: studentId,
@@ -131,7 +132,7 @@ export class AccountDeletionService {
       userType: 'student',
     });
 
-    await this.cacheManager.set(`deactivated:${studentId}`, '1', TTL_30D_MS);
+    await this.cacheManager.set(`deactivated:${studentId}`, '1', this.deletionCacheTtlMs);
 
     await this.writeAuditLog({
       event: DeletionAuditEvent.STUDENT_DELETION_REQUESTED,
@@ -189,7 +190,7 @@ export class AccountDeletionService {
       });
 
     if (alreadyDeactivated) {
-      await this.cacheManager.set(`deactivated:${parentId}`, '1', TTL_30D_MS);
+      await this.cacheManager.set(`deactivated:${parentId}`, '1', this.deletionCacheTtlMs);
       await this.writeAuditLog({
         event: DeletionAuditEvent.PARENT_DELETION_ALREADY_PENDING,
         account_id: parentId,
@@ -227,9 +228,9 @@ export class AccountDeletionService {
     });
 
     await Promise.all([
-      this.cacheManager.set(`deactivated:${parentId}`, '1', TTL_30D_MS),
+      this.cacheManager.set(`deactivated:${parentId}`, '1', this.deletionCacheTtlMs),
       ...deactivatedStudents.map((s) =>
-        this.cacheManager.set(`deactivated:${s.id}`, '1', TTL_30D_MS),
+        this.cacheManager.set(`deactivated:${s.id}`, '1', this.deletionCacheTtlMs),
       ),
     ]);
 
@@ -261,7 +262,7 @@ export class AccountDeletionService {
   }
 
   async deleteChild(
-    parentEmail: string,
+    parentId: string,
     childId: string,
     meta: RequestMetadata | null = null,
   ): Promise<AccountDeletionResponse> {
@@ -280,7 +281,7 @@ export class AccountDeletionService {
         throw new NotFoundException('Child not found');
       }
 
-      if (child.parent.email !== parentEmail) {
+      if (child.parent.id !== parentId) {
         throw new ForbiddenException(
           'You are not authorized to delete this child account',
         );
@@ -314,7 +315,7 @@ export class AccountDeletionService {
       await this.cacheManager.set(
         `deactivated:${deactivatedStudent.id}`,
         '1',
-        TTL_30D_MS,
+        this.deletionCacheTtlMs,
       );
     }
 

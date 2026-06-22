@@ -20,11 +20,11 @@ export class InstructorService {
   ) {}
 
   async createCourse({
-    email,
+    id,
     courseInfo,
     organizationId,
   }: {
-    email: string;
+    id: string;
     courseInfo: CourseInfoInput;
     organizationId: string;
   }): Promise<CourseTypeClass> {
@@ -33,7 +33,7 @@ export class InstructorService {
         const instructor = await transactionalEntityManager.findOne(
           Instructor,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -75,16 +75,16 @@ export class InstructorService {
     );
   }
 
-  async updateCourse({ email }: { email: string }): Promise<void> {
+  async updateCourse({ id }: { id: string }): Promise<void> {
     // Implementation here
     // return { id: '1' };
   }
 
   async addCourseVersion({
-    email,
+    id,
     courseId,
   }: {
-    email: string;
+    id: string;
     courseId: string;
   }): Promise<VersionTypeClass> {
     return await this.instructorRepository.manager.transaction(
@@ -92,7 +92,7 @@ export class InstructorService {
         const instructor = await transactionalEntityManager.findOne(
           Instructor,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -121,14 +121,14 @@ export class InstructorService {
   }
 
   async addQuestionsToCourseVersion({
-    email,
+    id,
     versionId,
     suiteTitle,
     suiteDescription,
     suiteKeywords,
     questions,
   }: {
-    email: string;
+    id: string;
     versionId: string;
     suiteTitle: string;
     suiteDescription: string;
@@ -140,7 +140,7 @@ export class InstructorService {
         const instructor = await transactionalEntityManager.findOne(
           Instructor,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -155,7 +155,7 @@ export class InstructorService {
               id: versionId,
               course: {
                 instructor: {
-                  email,
+                  id,
                 },
               },
             },
@@ -209,11 +209,11 @@ export class InstructorService {
   }
 
   async updateQuestion({
-    email,
+    id,
     questionId,
     question,
   }: {
-    email: string;
+    id: string;
     questionId: string;
     question: QuestionInput;
   }): Promise<Question> {
@@ -222,7 +222,7 @@ export class InstructorService {
         const instructor = await transactionalEntityManager.findOne(
           Instructor,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -238,7 +238,7 @@ export class InstructorService {
               version: {
                 course: {
                   instructor: {
-                    email,
+                    id,
                   },
                 },
               },
@@ -275,10 +275,10 @@ export class InstructorService {
   }
 
   async requestCourseVersionReview({
-    email,
+    id,
     versionId,
   }: {
-    email: string;
+    id: string;
     versionId: string;
   }): Promise<ReviewRequest> {
     return await this.instructorRepository.manager.transaction(
@@ -286,7 +286,7 @@ export class InstructorService {
         const instructor = await transactionalEntityManager.findOne(
           Instructor,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -301,7 +301,7 @@ export class InstructorService {
               id: versionId,
               course: {
                 instructor: {
-                  email,
+                  id,
                 },
               },
             },

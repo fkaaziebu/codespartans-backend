@@ -132,27 +132,54 @@ describe('ParentService', () => {
         ParentService,
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: SignupProducer, useValue: mockSignupProducer },
-        { provide: AccountDeletionService, useValue: mockAccountDeletionService },
+        {
+          provide: AccountDeletionService,
+          useValue: mockAccountDeletionService,
+        },
         { provide: CACHE_MANAGER, useValue: mockCacheManager },
       ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);
     parentService = module.get<ParentService>(ParentService);
-    parentRepository = module.get<Repository<Parent>>(getRepositoryToken(Parent));
+    parentRepository = module.get<Repository<Parent>>(
+      getRepositoryToken(Parent),
+    );
     childRepository = module.get<Repository<Child>>(getRepositoryToken(Child));
-    organizationRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
-    categoryRepository = module.get<Repository<Category>>(getRepositoryToken(Category));
-    courseRepository = module.get<Repository<Course>>(getRepositoryToken(Course));
-    versionRepository = module.get<Repository<Version>>(getRepositoryToken(Version));
-    questionRepository = module.get<Repository<Question>>(getRepositoryToken(Question));
+    organizationRepository = module.get<Repository<Organization>>(
+      getRepositoryToken(Organization),
+    );
+    categoryRepository = module.get<Repository<Category>>(
+      getRepositoryToken(Category),
+    );
+    courseRepository = module.get<Repository<Course>>(
+      getRepositoryToken(Course),
+    );
+    versionRepository = module.get<Repository<Version>>(
+      getRepositoryToken(Version),
+    );
+    questionRepository = module.get<Repository<Question>>(
+      getRepositoryToken(Question),
+    );
     cartRepository = module.get<Repository<Cart>>(getRepositoryToken(Cart));
-    studentRepository = module.get<Repository<Student>>(getRepositoryToken(Student));
-    testRepository = module.get<Repository<TestEntity>>(getRepositoryToken(TestEntity));
-    submittedAnswerRepository = module.get<Repository<SubmittedAnswer>>(getRepositoryToken(SubmittedAnswer));
-    timeEventRepository = module.get<Repository<TimeEvent>>(getRepositoryToken(TimeEvent));
-    testSuiteRepository = module.get<Repository<TestSuite>>(getRepositoryToken(TestSuite));
-    testAssignmentRepository = module.get<Repository<TestAssignment>>(getRepositoryToken(TestAssignment));
+    studentRepository = module.get<Repository<Student>>(
+      getRepositoryToken(Student),
+    );
+    testRepository = module.get<Repository<TestEntity>>(
+      getRepositoryToken(TestEntity),
+    );
+    submittedAnswerRepository = module.get<Repository<SubmittedAnswer>>(
+      getRepositoryToken(SubmittedAnswer),
+    );
+    timeEventRepository = module.get<Repository<TimeEvent>>(
+      getRepositoryToken(TimeEvent),
+    );
+    testSuiteRepository = module.get<Repository<TestSuite>>(
+      getRepositoryToken(TestSuite),
+    );
+    testAssignmentRepository = module.get<Repository<TestAssignment>>(
+      getRepositoryToken(TestAssignment),
+    );
   });
 
   beforeEach(async () => {
@@ -256,7 +283,9 @@ describe('ParentService', () => {
     student.organizations = [org];
     await studentRepository.save(student);
 
-    const { Instructor } = await import('../../auth/entities/instructor.entity');
+    const { Instructor } = await import(
+      '../../auth/entities/instructor.entity'
+    );
     const instructor = new Instructor();
     instructor.name = 'Test Instructor';
     instructor.email = `instr-${Date.now()}@test.com`;
@@ -283,7 +312,7 @@ describe('ParentService', () => {
     const { category, version, question, suite } = await seedCategory(org);
     const parent = await registerAndVerifyParent();
 
-    const results = await parentService.setupParentAccount(parent.email, [
+    const results = await parentService.setupParentAccount(parent.id, [
       {
         full_name: 'Alice Child',
         class_level: ClassLevel.JHS1,
@@ -457,7 +486,9 @@ describe('ParentService', () => {
       );
 
       expect(response.message).toBe('Verification email resent successfully');
-      expect(mockEmailProducer.sendAccountValidationEmail).toHaveBeenCalledTimes(2);
+      expect(
+        mockEmailProducer.sendAccountValidationEmail,
+      ).toHaveBeenCalledTimes(2);
     });
 
     it('throws NotFoundException if parent does not exist', async () => {
@@ -622,7 +653,9 @@ describe('ParentService', () => {
 
       await expect(
         parentService.refreshParentToken(loginResponse.refresh_token),
-      ).rejects.toThrow(new UnauthorizedException('Account has been deactivated'));
+      ).rejects.toThrow(
+        new UnauthorizedException('Account has been deactivated'),
+      );
     });
 
     it('throws UnauthorizedException when password was recently changed', async () => {
@@ -641,7 +674,9 @@ describe('ParentService', () => {
       await expect(
         parentService.refreshParentToken(loginResponse.refresh_token),
       ).rejects.toThrow(
-        new UnauthorizedException('Password was recently changed. Please log in again.'),
+        new UnauthorizedException(
+          'Password was recently changed. Please log in again.',
+        ),
       );
     });
   });
@@ -653,7 +688,9 @@ describe('ParentService', () => {
       });
 
       expect(response.message).toBe('Password reset link sent to your email');
-      expect(mockEmailProducer.sendParentPasswordResetEmail).not.toHaveBeenCalled();
+      expect(
+        mockEmailProducer.sendParentPasswordResetEmail,
+      ).not.toHaveBeenCalled();
     });
 
     it('sets reset_token and sends email when parent exists', async () => {
@@ -664,7 +701,9 @@ describe('ParentService', () => {
       });
 
       expect(response.message).toBe('Password reset link sent to your email');
-      expect(mockEmailProducer.sendParentPasswordResetEmail).toHaveBeenCalledWith(
+      expect(
+        mockEmailProducer.sendParentPasswordResetEmail,
+      ).toHaveBeenCalledWith(
         expect.objectContaining({ email: parentInfo.email }),
       );
 
@@ -720,10 +759,10 @@ describe('ParentService', () => {
 
   describe('changeParentPassword', () => {
     it('changes the password and sets pw_changed cache flag', async () => {
-      await registerAndVerifyParent();
+      const parent = await registerAndVerifyParent();
 
       const response = await parentService.changeParentPassword({
-        email: parentInfo.email,
+        id: parent.id,
         currentPassword: parentInfo.password,
         newPassword: 'newSecurePassword',
       });
@@ -733,7 +772,9 @@ describe('ParentService', () => {
       const updated = await parentRepository.findOne({
         where: { email: parentInfo.email },
       });
-      expect(await HashHelper.compare('newSecurePassword', updated.password)).toBe(true);
+      expect(
+        await HashHelper.compare('newSecurePassword', updated.password),
+      ).toBe(true);
       expect(mockCacheManager.set).toHaveBeenCalledWith(
         expect.stringContaining('pw_changed:'),
         expect.stringMatching(/^\d+$/),
@@ -742,21 +783,23 @@ describe('ParentService', () => {
     });
 
     it('throws BadRequestException if current password is incorrect', async () => {
-      await registerAndVerifyParent();
+      const parent = await registerAndVerifyParent();
 
       await expect(
         parentService.changeParentPassword({
-          email: parentInfo.email,
+          id: parent.id,
           currentPassword: 'wrongpassword',
           newPassword: 'newpass',
         }),
-      ).rejects.toThrow(new BadRequestException('Current password is incorrect'));
+      ).rejects.toThrow(
+        new BadRequestException('Current password is incorrect'),
+      );
     });
 
     it('throws BadRequestException if parent does not exist', async () => {
       await expect(
         parentService.changeParentPassword({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           currentPassword: 'any',
           newPassword: 'new',
         }),
@@ -773,10 +816,15 @@ describe('ParentService', () => {
 
       mockCacheManager.get.mockResolvedValueOnce('654321');
 
-      const result = await parentService.verifyCancellationOtp(parent.id, '654321');
+      const result = await parentService.verifyCancellationOtp(
+        parent.id,
+        '654321',
+      );
 
       expect(result.message).toContain('OTP verified');
-      expect(mockCacheManager.del).toHaveBeenCalledWith(`cancel_otp:${parent.id}`);
+      expect(mockCacheManager.del).toHaveBeenCalledWith(
+        `cancel_otp:${parent.id}`,
+      );
       expect(mockCacheManager.set).toHaveBeenCalledWith(
         `cancel_otp_verified:${parent.id}`,
         '1',
@@ -823,7 +871,9 @@ describe('ParentService', () => {
 
       mockCacheManager.get.mockResolvedValueOnce('1');
 
-      const response = await parentService.cancelParentAccountDeletion(parent.id);
+      const response = await parentService.cancelParentAccountDeletion(
+        parent.id,
+      );
 
       expect(response.token).toBeDefined();
       expect(response.refresh_token).toBeDefined();
@@ -862,7 +912,9 @@ describe('ParentService', () => {
       mockCacheManager.get.mockResolvedValueOnce('1');
 
       await expect(
-        parentService.cancelParentAccountDeletion('00000000-0000-0000-0000-000000000000'),
+        parentService.cancelParentAccountDeletion(
+          '00000000-0000-0000-0000-000000000000',
+        ),
       ).rejects.toThrow(UnauthorizedException);
     });
   });
@@ -877,7 +929,10 @@ describe('ParentService', () => {
         deactivated_at: new Date(),
       });
 
-      const result = await parentService.cancelChildDeletion(parent.email, child.id);
+      const result = await parentService.cancelChildDeletion(
+        parent.id,
+        child.id,
+      );
 
       expect(result.status).toBe(AccountStatus.ACTIVE);
       expect(result.deletionScheduledFor).toBeNull();
@@ -889,11 +944,11 @@ describe('ParentService', () => {
     });
 
     it('throws NotFoundException if child does not exist', async () => {
-      await registerAndVerifyParent();
+      const parent = await registerAndVerifyParent();
 
       await expect(
         parentService.cancelChildDeletion(
-          parentInfo.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found.'));
@@ -903,7 +958,10 @@ describe('ParentService', () => {
       const { child } = await setupParentWithChild();
 
       await expect(
-        parentService.cancelChildDeletion('wrongparent@test.com', child.id),
+        parentService.cancelChildDeletion(
+          '00000000-0000-0000-0000-000000000000',
+          child.id,
+        ),
       ).rejects.toThrow(ForbiddenException);
     });
 
@@ -912,9 +970,11 @@ describe('ParentService', () => {
 
       // Child student is active (not deactivated)
       await expect(
-        parentService.cancelChildDeletion(parent.email, child.id),
+        parentService.cancelChildDeletion(parent.id, child.id),
       ).rejects.toThrow(
-        new NotFoundException('No pending deletion found for this child account.'),
+        new NotFoundException(
+          'No pending deletion found for this child account.',
+        ),
       );
     });
   });
@@ -925,7 +985,7 @@ describe('ParentService', () => {
       const { category } = await seedCategory(org);
       const parent = await registerAndVerifyParent();
 
-      const results = await parentService.setupParentAccount(parent.email, [
+      const results = await parentService.setupParentAccount(parent.id, [
         {
           full_name: 'Alice Child',
           class_level: ClassLevel.JHS1,
@@ -939,7 +999,7 @@ describe('ParentService', () => {
       expect(results[0].pin).toBeDefined();
 
       const updatedParent = await parentRepository.findOne({
-        where: { email: parent.email },
+        where: { id: parent.id },
       });
       expect(updatedParent.is_setup_completed).toBe(true);
 
@@ -953,15 +1013,22 @@ describe('ParentService', () => {
 
     it('throws NotFoundException if parent does not exist', async () => {
       await expect(
-        parentService.setupParentAccount('nobody@test.com', []),
+        parentService.setupParentAccount(
+          '00000000-0000-0000-0000-000000000000',
+          [],
+        ),
       ).rejects.toThrow(new NotFoundException('Parent not found'));
     });
 
     it('throws UnauthorizedException if parent account is not verified', async () => {
       await parentService.registerParent(parentInfo);
 
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
       await expect(
-        parentService.setupParentAccount(parentInfo.email, []),
+        parentService.setupParentAccount(parent.id, []),
       ).rejects.toThrow(
         new UnauthorizedException(
           'Please verify your account before setting up',
@@ -973,7 +1040,7 @@ describe('ParentService', () => {
       const parent = await registerAndVerifyParent();
 
       await expect(
-        parentService.setupParentAccount(parent.email, [
+        parentService.setupParentAccount(parent.id, [
           {
             full_name: 'Alice',
             class_level: ClassLevel.JHS1,
@@ -990,7 +1057,7 @@ describe('ParentService', () => {
       const { category } = await seedCategory(org);
       const parent = await registerAndVerifyParent();
 
-      const result = await parentService.addChild(parent.email, {
+      const result = await parentService.addChild(parent.id, {
         full_name: 'Bob Child',
         class_level: ClassLevel.SHS1,
         target_exam: category.id,
@@ -1009,7 +1076,7 @@ describe('ParentService', () => {
       await seedGenpopOrganization();
 
       await expect(
-        parentService.addChild('nobody@test.com', {
+        parentService.addChild('00000000-0000-0000-0000-000000000000', {
           full_name: 'Bob',
           class_level: ClassLevel.JHS1,
           target_exam: '00000000-0000-0000-0000-000000000000',
@@ -1020,8 +1087,12 @@ describe('ParentService', () => {
     it('throws UnauthorizedException if parent account is not verified', async () => {
       await parentService.registerParent(parentInfo);
 
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
       await expect(
-        parentService.addChild(parentInfo.email, {
+        parentService.addChild(parent.id, {
           full_name: 'Bob',
           class_level: ClassLevel.JHS1,
           target_exam: '00000000-0000-0000-0000-000000000000',
@@ -1039,10 +1110,11 @@ describe('ParentService', () => {
       const { child } = await setupParentWithChild();
       const oldPin = child.pin;
 
-      const result = await parentService.resetChildPin(
-        parentInfo.email,
-        child.id,
-      );
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
+      const result = await parentService.resetChildPin(parent.id, child.id);
 
       expect(result.message).toBe('Pin reset successfully');
       expect(result.pin).toBeDefined();
@@ -1056,9 +1128,13 @@ describe('ParentService', () => {
     it('throws NotFoundException if child does not exist', async () => {
       await registerAndVerifyParent();
 
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
       await expect(
         parentService.resetChildPin(
-          parentInfo.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1069,21 +1145,22 @@ describe('ParentService', () => {
     it('returns a message containing the child username and a new pin', async () => {
       const { child } = await setupParentWithChild();
 
-      const result = await parentService.shareChildLogin(
-        parentInfo.email,
-        child.id,
-      );
+      const parent = await parentRepository.findOne({
+        where: { email: parentInfo.email },
+      });
+
+      const result = await parentService.shareChildLogin(parent.id, child.id);
 
       expect(result.message).toContain(child.username);
       expect(result.message).toContain('Alice Child');
     });
 
     it('throws NotFoundException if child does not exist', async () => {
-      await registerAndVerifyParent();
+      const parent = await registerAndVerifyParent();
 
       await expect(
         parentService.shareChildLogin(
-          parentInfo.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1108,7 +1185,8 @@ describe('ParentService', () => {
       const match = await parentService.listOrganizationCategories('BECE');
       expect(match).toHaveLength(1);
 
-      const empty = await parentService.listOrganizationCategories('NonExistent');
+      const empty =
+        await parentService.listOrganizationCategories('NonExistent');
       expect(empty).toHaveLength(0);
     });
   });
@@ -1117,7 +1195,7 @@ describe('ParentService', () => {
     it('returns paginated children for the parent', async () => {
       const { parent } = await setupParentWithChild();
 
-      const result = await parentService.listChildren(parent.email);
+      const result = await parentService.listChildren(parent.id);
 
       expect(result.edges).toHaveLength(1);
       expect(result.count).toBe(1);
@@ -1125,7 +1203,7 @@ describe('ParentService', () => {
 
     it('throws NotFoundException if parent does not exist', async () => {
       await expect(
-        parentService.listChildren('nobody@test.com'),
+        parentService.listChildren('00000000-0000-0000-0000-000000000000'),
       ).rejects.toThrow(new NotFoundException('Parent not found'));
     });
   });
@@ -1180,7 +1258,9 @@ describe('ParentService', () => {
 
     it('throws UnauthorizedException when child student is pending deletion', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(child.username);
+      const { temp_token } = await parentService.verifyChildUsername(
+        child.username,
+      );
 
       // Deactivate the child's student
       await studentRepository.update(child.student.id, {
@@ -1199,7 +1279,7 @@ describe('ParentService', () => {
       const { parent, child, suite } = await setupParentWithChild();
 
       const assignment = await parentService.assignTestToChild(
-        parent.email,
+        parent.id,
         child.id,
         suite.id,
         'Practice hard!',
@@ -1217,7 +1297,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.assignTestToChild(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
           suite.id,
         ),
@@ -1229,7 +1309,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.assignTestToChild(
-          parent.email,
+          parent.id,
           child.id,
           '00000000-0000-0000-0000-000000000000',
         ),
@@ -1240,10 +1320,10 @@ describe('ParentService', () => {
   describe('listChildAssignments', () => {
     it('returns assignments for the child', async () => {
       const { parent, child, suite } = await setupParentWithChild();
-      await parentService.assignTestToChild(parent.email, child.id, suite.id);
+      await parentService.assignTestToChild(parent.id, child.id, suite.id);
 
       const result = await parentService.listChildAssignments(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -1255,7 +1335,7 @@ describe('ParentService', () => {
       const { parent, child } = await setupParentWithChild();
 
       const result = await parentService.listChildAssignments(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -1267,7 +1347,7 @@ describe('ParentService', () => {
     it('returns the courses subscribed by the child', async () => {
       const { parent, child } = await setupParentWithChild();
 
-      const result = await parentService.listChildCourses(parent.email, child.id);
+      const result = await parentService.listChildCourses(parent.id, child.id);
 
       expect(result.length).toBeGreaterThan(0);
     });
@@ -1277,7 +1357,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.listChildCourses(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1288,7 +1368,7 @@ describe('ParentService', () => {
     it('returns zeroed stats when child has no tests', async () => {
       const { parent, child } = await setupParentWithChild();
 
-      const result = await parentService.getChildStats(parent.email, child.id);
+      const result = await parentService.getChildStats(parent.id, child.id);
 
       expect(result.avg_score).toBe(0);
       expect(result.total_questions_done).toBe(0);
@@ -1298,15 +1378,9 @@ describe('ParentService', () => {
     it('returns correct stats after completing a test', async () => {
       const { parent, child, suite, question } = await setupParentWithChild();
 
-      await createEndedTest(
-        child.student,
-        suite,
-        question,
-        true,
-        new Date(),
-      );
+      await createEndedTest(child.student, suite, question, true, new Date());
 
-      const result = await parentService.getChildStats(parent.email, child.id);
+      const result = await parentService.getChildStats(parent.id, child.id);
 
       expect(result.avg_score).toBe(100);
       expect(result.total_questions_done).toBe(1);
@@ -1318,7 +1392,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.getChildStats(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1330,7 +1404,7 @@ describe('ParentService', () => {
       const { parent, child } = await setupParentWithChild();
 
       const result = await parentService.getChildSubjectProgress(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -1342,7 +1416,7 @@ describe('ParentService', () => {
       await createEndedTest(child.student, suite, question, true, new Date());
 
       const result = await parentService.getChildSubjectProgress(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -1355,7 +1429,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.getChildSubjectProgress(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1367,7 +1441,7 @@ describe('ParentService', () => {
       const { parent, child } = await setupParentWithChild();
 
       const result = await parentService.getChildTestsHistory(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -1379,7 +1453,7 @@ describe('ParentService', () => {
       await createEndedTest(child.student, suite, question, true, new Date());
 
       const result = await parentService.getChildTestsHistory(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -1392,7 +1466,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.getChildTestsHistory(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1403,28 +1477,16 @@ describe('ParentService', () => {
     it('returns empty array when child has no tests', async () => {
       const { parent, child } = await setupParentWithChild();
 
-      const result = await parentService.getChildWeakAreas(
-        parent.email,
-        child.id,
-      );
+      const result = await parentService.getChildWeakAreas(parent.id, child.id);
 
       expect(result).toHaveLength(0);
     });
 
     it('returns weak areas when accuracy is below 65%', async () => {
       const { parent, child, suite, question } = await setupParentWithChild();
-      await createEndedTest(
-        child.student,
-        suite,
-        question,
-        false,
-        new Date(),
-      );
+      await createEndedTest(child.student, suite, question, false, new Date());
 
-      const result = await parentService.getChildWeakAreas(
-        parent.email,
-        child.id,
-      );
+      const result = await parentService.getChildWeakAreas(parent.id, child.id);
 
       expect(result.length).toBeGreaterThan(0);
       expect(result[0].accuracy).toBeLessThanOrEqual(65);
@@ -1435,7 +1497,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.getChildWeakAreas(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1446,10 +1508,7 @@ describe('ParentService', () => {
     it('returns empty activity when child has no tests', async () => {
       const { parent, child } = await setupParentWithChild();
 
-      const result = await parentService.getChildActivity(
-        parent.email,
-        child.id,
-      );
+      const result = await parentService.getChildActivity(parent.id, child.id);
 
       expect(result.edges).toHaveLength(0);
     });
@@ -1458,10 +1517,7 @@ describe('ParentService', () => {
       const { parent, child, suite, question } = await setupParentWithChild();
       await createEndedTest(child.student, suite, question, true, new Date());
 
-      const result = await parentService.getChildActivity(
-        parent.email,
-        child.id,
-      );
+      const result = await parentService.getChildActivity(parent.id, child.id);
 
       expect(result.edges).toHaveLength(1);
       expect((result.edges[0].node as any).score).toBe(100);
@@ -1472,7 +1528,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.getChildActivity(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1483,7 +1539,7 @@ describe('ParentService', () => {
     it('returns zeroed streak when child has no tests', async () => {
       const { parent, child } = await setupParentWithChild();
 
-      const result = await parentService.getChildStreak(parent.email, child.id);
+      const result = await parentService.getChildStreak(parent.id, child.id);
 
       expect(result.current_streak).toBe(0);
       expect(result.best_streak).toBe(0);
@@ -1493,7 +1549,7 @@ describe('ParentService', () => {
       const { parent, child, suite, question } = await setupParentWithChild();
       await createEndedTest(child.student, suite, question, true, new Date());
 
-      const result = await parentService.getChildStreak(parent.email, child.id);
+      const result = await parentService.getChildStreak(parent.id, child.id);
 
       expect(result.current_streak).toBeGreaterThanOrEqual(1);
       expect(result.best_streak).toBeGreaterThanOrEqual(1);
@@ -1504,7 +1560,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.getChildStreak(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -1518,7 +1574,7 @@ describe('ParentService', () => {
       await createEndedTest(child.student, suite, question, true, now);
 
       const result = await parentService.listChildStreak(
-        parent.email,
+        parent.id,
         child.id,
         now.getMonth() + 1,
         now.getFullYear(),
@@ -1541,7 +1597,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.listChildStreak(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
           1,
           2026,
@@ -1552,9 +1608,9 @@ describe('ParentService', () => {
 
   describe('listParentAlerts', () => {
     it('returns an empty array when parent has no children', async () => {
-      await registerAndVerifyParent();
+      const parent = await registerAndVerifyParent();
 
-      const result = await parentService.listParentAlerts(parentInfo.email);
+      const result = await parentService.listParentAlerts(parent.id);
 
       expect(result).toHaveLength(0);
     });
@@ -1563,18 +1619,44 @@ describe('ParentService', () => {
       const { parent, child, suite, question } = await setupParentWithChild();
       await createEndedTest(child.student, suite, question, true, new Date());
 
-      const result = await parentService.listParentAlerts(parent.email);
+      const result = await parentService.listParentAlerts(parent.id);
 
-      const completionAlert = result.find((a) =>
-        a.alert_type === 'info' && a.id.startsWith('completed-'),
+      const completionAlert = result.find(
+        (a) => a.alert_type === 'info' && a.id.startsWith('completed-'),
       );
       expect(completionAlert).toBeDefined();
     });
 
     it('throws NotFoundException if parent does not exist', async () => {
       await expect(
-        parentService.listParentAlerts('nobody@test.com'),
+        parentService.listParentAlerts('00000000-0000-0000-0000-000000000000'),
       ).rejects.toThrow(new NotFoundException('Parent not found'));
+    });
+  });
+
+  describe('logoutParent', () => {
+    it('returns success message', async () => {
+      const response = await parentService.logoutParent({
+        userId: '00000000-0000-0000-0000-000000000001',
+      });
+      expect(response).toEqual({ message: 'Logged out successfully' });
+    });
+
+    it('stores a Unix timestamp in cache under the logged_out key', async () => {
+      const userId = '00000000-0000-0000-0000-000000000001';
+      const before = Math.floor(Date.now() / 1000);
+
+      await parentService.logoutParent({ userId });
+
+      const after = Math.floor(Date.now() / 1000);
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        `logged_out:${userId}`,
+        expect.stringMatching(/^\d+$/),
+        expect.any(Number),
+      );
+      const storedTimestamp = Number(mockCacheManager.set.mock.calls[0][1]);
+      expect(storedTimestamp).toBeGreaterThanOrEqual(before);
+      expect(storedTimestamp).toBeLessThanOrEqual(after);
     });
   });
 
@@ -1583,7 +1665,7 @@ describe('ParentService', () => {
       const { parent, child } = await setupParentWithChild();
 
       const result = await parentService.listChildMonthlyReports(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -1595,7 +1677,7 @@ describe('ParentService', () => {
       await createEndedTest(child.student, suite, question, true, new Date());
 
       const result = await parentService.listChildMonthlyReports(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -1610,7 +1692,7 @@ describe('ParentService', () => {
 
       await expect(
         parentService.listChildMonthlyReports(
-          parent.email,
+          parent.id,
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));

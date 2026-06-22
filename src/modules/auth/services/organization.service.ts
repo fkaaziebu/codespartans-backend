@@ -61,12 +61,12 @@ export class OrganizationService {
   }
 
   async registerAdmin({
-    organizationEmail,
+    organizationId,
     name,
     email,
     password,
   }: {
-    organizationEmail: string;
+    organizationId: string;
     name: string;
     email: string;
     password: string;
@@ -77,7 +77,7 @@ export class OrganizationService {
           Organization,
           {
             where: {
-              email: organizationEmail,
+              id: organizationId,
             },
           },
         );
@@ -106,12 +106,12 @@ export class OrganizationService {
   }
 
   async registerInstructor({
-    organizationEmail,
+    organizationId,
     name,
     email,
     password,
   }: {
-    organizationEmail: string;
+    organizationId: string;
     name: string;
     email: string;
     password: string;
@@ -122,7 +122,7 @@ export class OrganizationService {
           Organization,
           {
             where: {
-              email: organizationEmail,
+              id: organizationId,
             },
           },
         );
@@ -186,13 +186,9 @@ export class OrganizationService {
 
         const payload: {
           id: string;
-          name: string;
-          email: string;
           role: 'ORGANIZATION';
         } = {
           id: organization.id,
-          name: organization.name,
-          email: organization.email,
           role: 'ORGANIZATION',
         };
 

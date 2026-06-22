@@ -27,16 +27,16 @@ export class OrganizationService {
   ) {}
 
   async listInstructorsPaginated({
-    email,
+    id,
     searchTerm,
     pagination,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
     pagination?: PaginationInput;
   }) {
     const instructors = await this.listInstructors({
-      email,
+      id,
       searchTerm,
     });
 
@@ -49,16 +49,16 @@ export class OrganizationService {
   }
 
   async listAdminsPaginated({
-    email,
+    id,
     searchTerm,
     pagination,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
     pagination?: PaginationInput;
   }) {
     const admins = await this.listAdmins({
-      email,
+      id,
       searchTerm,
     });
 
@@ -69,16 +69,16 @@ export class OrganizationService {
   }
 
   async listCoursesPaginated({
-    email,
+    id,
     searchTerm,
     pagination,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
     pagination?: PaginationInput;
   }) {
     const courses = await this.listCourses({
-      email,
+      id,
       searchTerm,
     });
 
@@ -89,15 +89,15 @@ export class OrganizationService {
   }
 
   async listCourses({
-    email,
+    id,
     searchTerm,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
   }): Promise<Course[]> {
     const organization = await this.organizationRepository.findOne({
       where: {
-        email,
+        id,
       },
     });
 
@@ -108,7 +108,7 @@ export class OrganizationService {
     const courses = await this.courseRepository.find({
       where: {
         organization: {
-          email,
+          id,
         },
         title: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
       },
@@ -119,16 +119,16 @@ export class OrganizationService {
   }
 
   async listRequestedReviewsPaginated({
-    email,
+    id,
     filter,
     pagination,
   }: {
-    email: string;
+    id: string;
     filter?: RequestedReviewFilterInput;
     pagination?: PaginationInput;
   }) {
     const requested_reviews = await this.listRequestedReviews({
-      email,
+      id,
       filter,
     });
 
@@ -141,10 +141,10 @@ export class OrganizationService {
   }
 
   async listInstructors({
-    email,
+    id,
     searchTerm,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
   }): Promise<Instructor[]> {
     return await this.organizationRepository.manager.transaction(
@@ -152,7 +152,7 @@ export class OrganizationService {
         const instructors = await transactionalEntityManager.find(Instructor, {
           where: {
             name: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
-            organizations: { email },
+            organizations: { id },
           },
           relations: [
             'created_courses.approved_version',
@@ -184,10 +184,10 @@ export class OrganizationService {
   }
 
   async listAdmins({
-    email,
+    id,
     searchTerm,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
   }): Promise<Admin[]> {
     return await this.organizationRepository.manager.transaction(
@@ -195,7 +195,7 @@ export class OrganizationService {
         const admins = await transactionalEntityManager.find(Admin, {
           where: {
             name: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
-            organization: { email },
+            organization: { id },
           },
           relations: ['assigned_course_versions_for_review.course.instructor'],
         });
@@ -216,10 +216,10 @@ export class OrganizationService {
   }
 
   async listRequestedReviews({
-    email,
+    id,
     filter,
   }: {
-    email: string;
+    id: string;
     filter?: RequestedReviewFilterInput;
   }): Promise<ReviewRequest[]> {
     return await this.organizationRepository.manager.transaction(
@@ -228,7 +228,7 @@ export class OrganizationService {
           Organization,
           {
             where: {
-              email,
+              id,
               requested_reviews: {
                 course_version: {
                   status: filter?.status || undefined,
@@ -260,13 +260,13 @@ export class OrganizationService {
     );
   }
 
-  async getStats({ email }: { email: string }): Promise<StatsResponse> {
+  async getStats({ id }: { id: string }): Promise<StatsResponse> {
     return await this.organizationRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const organization = await transactionalEntityManager.findOne(
           Organization,
           {
-            where: { email },
+            where: { id },
             relations: [
               'admins.assigned_course_versions_for_review',
               'instructors',
@@ -303,11 +303,11 @@ export class OrganizationService {
   }
 
   async assignCourseVersionForReview({
-    email,
+    id,
     versionId,
     adminId,
   }: {
-    email: string;
+    id: string;
     versionId: string;
     adminId: string;
   }) {
@@ -316,7 +316,7 @@ export class OrganizationService {
         const organization = await transactionalEntityManager.findOne(
           Organization,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -325,7 +325,7 @@ export class OrganizationService {
         }
 
         const admin = await transactionalEntityManager.findOne(Admin, {
-          where: { id: adminId, organization: { email } },
+          where: { id: adminId, organization: { id } },
         });
 
         if (!admin) {
@@ -339,12 +339,12 @@ export class OrganizationService {
               id: versionId,
               review_request: {
                 organization: {
-                  email,
+                  id,
                 },
               },
               course: {
                 organization: {
-                  email,
+                  id,
                 },
               },
             },
@@ -363,10 +363,10 @@ export class OrganizationService {
   }
 
   async createCategory({
-    email,
+    id,
     categoryInfo,
   }: {
-    email: string;
+    id: string;
     categoryInfo: CategoryInfoInput;
   }): Promise<CategoryTypeClass> {
     return await this.organizationRepository.manager.transaction(
@@ -374,7 +374,7 @@ export class OrganizationService {
         const organization = await transactionalEntityManager.findOne(
           Organization,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -392,11 +392,11 @@ export class OrganizationService {
   }
 
   async addCoursesToCategory({
-    email,
+    id,
     categoryId,
     courseIds,
   }: {
-    email: string;
+    id: string;
     categoryId: string;
     courseIds: string[];
   }): Promise<CategoryTypeClass> {
@@ -405,7 +405,7 @@ export class OrganizationService {
         const organization = await transactionalEntityManager.findOne(
           Organization,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -414,7 +414,7 @@ export class OrganizationService {
         }
 
         const category = await transactionalEntityManager.findOne(Category, {
-          where: { id: categoryId, organization: { email } },
+          where: { id: categoryId, organization: { id } },
         });
 
         if (!category) {
@@ -437,12 +437,12 @@ export class OrganizationService {
   }
 
   async updateCategoryCountdown({
-    email,
+    id,
     categoryId,
     dateOfExams,
     examDurationDays,
   }: {
-    email: string;
+    id: string;
     categoryId: string;
     dateOfExams: Date;
     examDurationDays: number;
@@ -450,7 +450,7 @@ export class OrganizationService {
     return await this.organizationRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const category = await transactionalEntityManager.findOne(Category, {
-          where: { id: categoryId, organization: { email } },
+          where: { id: categoryId, organization: { id } },
         });
 
         if (!category) {

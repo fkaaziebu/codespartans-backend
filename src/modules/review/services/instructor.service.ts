@@ -19,10 +19,10 @@ export class InstructorService {
   ) {}
 
   async getVersionReview({
-    email,
+    id,
     reviewId,
   }: {
-    email: string;
+    id: string;
     reviewId: string;
   }): Promise<Review> {
     return this.instructorRepository.manager.transaction(
@@ -33,7 +33,7 @@ export class InstructorService {
             course_version: {
               course: {
                 instructor: {
-                  email,
+                  id,
                 },
               },
             },
@@ -51,18 +51,18 @@ export class InstructorService {
   }
 
   async listQuestionsForVersionPaginated({
-    email,
+    id,
     versionId,
     searchTerm,
     pagination,
   }: {
-    email: string;
+    id: string;
     versionId?: string;
     searchTerm?: string;
     pagination?: PaginationInput;
   }) {
     const questions = await this.listQuestionsForVersion({
-      email,
+      id,
       versionId,
       searchTerm,
     });
@@ -76,11 +76,11 @@ export class InstructorService {
   }
 
   async listQuestionsForVersion({
-    email,
+    id,
     versionId,
     searchTerm,
   }: {
-    email: string;
+    id: string;
     versionId: string;
     searchTerm?: string;
   }): Promise<Question[]> {
@@ -95,7 +95,7 @@ export class InstructorService {
               id: versionId,
               course: {
                 instructor: {
-                  email,
+                  id,
                 },
               },
             },
@@ -108,10 +108,10 @@ export class InstructorService {
   }
 
   async getCourseVersion({
-    email,
+    id,
     versionId,
   }: {
-    email: string;
+    id: string;
     versionId: string;
   }): Promise<Version> {
     return this.instructorRepository.manager.transaction(
@@ -121,7 +121,7 @@ export class InstructorService {
             id: versionId,
             course: {
               instructor: {
-                email,
+                id,
               },
             },
           },
@@ -150,10 +150,10 @@ export class InstructorService {
   }
 
   async getCourse({
-    email,
+    id,
     courseId,
   }: {
-    email: string;
+    id: string;
     courseId: string;
   }): Promise<Course> {
     return await this.instructorRepository.manager.transaction(
@@ -162,7 +162,7 @@ export class InstructorService {
           where: {
             id: courseId,
             instructor: {
-              email,
+              id,
             },
           },
           relations: [
@@ -179,16 +179,16 @@ export class InstructorService {
   }
 
   async listCoursesPaginated({
-    email,
+    id,
     searchTerm,
     pagination,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
     pagination?: PaginationInput;
   }) {
     const courses = await this.listCourses({
-      email,
+      id,
       searchTerm,
     });
 
@@ -199,10 +199,10 @@ export class InstructorService {
   }
 
   async listCourses({
-    email,
+    id,
     searchTerm,
   }: {
-    email: string;
+    id: string;
     searchTerm?: string;
   }): Promise<Course[]> {
     return await this.instructorRepository.manager.transaction(
@@ -211,7 +211,7 @@ export class InstructorService {
           where: {
             title: searchTerm ? ILike(`%${searchTerm.trim()}%`) : undefined,
             instructor: {
-              email,
+              id,
             },
           },
           relations: ['approved_version', 'versions'],
@@ -223,12 +223,12 @@ export class InstructorService {
   }
 
   async updateIssueStatus({
-    email,
+    id,
     issueId,
     issueStatus,
     response,
   }: {
-    email: string;
+    id: string;
     issueId: string;
     issueStatus: IssueStatusType;
     response: string;
@@ -238,7 +238,7 @@ export class InstructorService {
         const instructor = await transactionalEntityManager.findOne(
           Instructor,
           {
-            where: { email },
+            where: { id },
           },
         );
 
@@ -253,7 +253,7 @@ export class InstructorService {
               course_version: {
                 course: {
                   instructor: {
-                    email,
+                    id,
                   },
                 },
               },

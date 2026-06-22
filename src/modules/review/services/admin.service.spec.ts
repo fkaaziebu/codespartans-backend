@@ -61,7 +61,8 @@ describe('AdminService', () => {
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
             secret: configService.get<string>('JWT_SECRET') || 'test-secret',
-            secretOrPrivateKey: configService.get('JWT_SECRET') || 'test-secret',
+            secretOrPrivateKey:
+              configService.get('JWT_SECRET') || 'test-secret',
             signOptions: { expiresIn: '1h' },
           }),
           inject: [ConfigService],
@@ -87,13 +88,27 @@ describe('AdminService', () => {
     dataSource = module.get<DataSource>(DataSource);
     adminService = module.get<AdminService>(AdminService);
     adminRepository = module.get<Repository<Admin>>(getRepositoryToken(Admin));
-    instructorRepository = module.get<Repository<Instructor>>(getRepositoryToken(Instructor));
-    organizationRepository = module.get<Repository<Organization>>(getRepositoryToken(Organization));
-    courseRepository = module.get<Repository<Course>>(getRepositoryToken(Course));
-    versionRepository = module.get<Repository<Version>>(getRepositoryToken(Version));
-    questionRepository = module.get<Repository<Question>>(getRepositoryToken(Question));
-    reviewRepository = module.get<Repository<Review>>(getRepositoryToken(Review));
-    reviewRequestRepository = module.get<Repository<ReviewRequest>>(getRepositoryToken(ReviewRequest));
+    instructorRepository = module.get<Repository<Instructor>>(
+      getRepositoryToken(Instructor),
+    );
+    organizationRepository = module.get<Repository<Organization>>(
+      getRepositoryToken(Organization),
+    );
+    courseRepository = module.get<Repository<Course>>(
+      getRepositoryToken(Course),
+    );
+    versionRepository = module.get<Repository<Version>>(
+      getRepositoryToken(Version),
+    );
+    questionRepository = module.get<Repository<Question>>(
+      getRepositoryToken(Question),
+    );
+    reviewRepository = module.get<Repository<Review>>(
+      getRepositoryToken(Review),
+    );
+    reviewRequestRepository = module.get<Repository<ReviewRequest>>(
+      getRepositoryToken(ReviewRequest),
+    );
   });
 
   beforeEach(async () => {
@@ -112,8 +127,16 @@ describe('AdminService', () => {
 
   // ─── helpers ────────────────────────────────────────────────────────────────
 
-  const adminInfo = { email: 'admin@test.com', name: 'Test Admin', password: 'password' };
-  const instructorInfo = { email: 'instructor@test.com', name: 'Test Instructor', password: 'password' };
+  const adminInfo = {
+    email: 'admin@test.com',
+    name: 'Test Admin',
+    password: 'password',
+  };
+  const instructorInfo = {
+    email: 'instructor@test.com',
+    name: 'Test Instructor',
+    password: 'password',
+  };
 
   const sampleQuestion = {
     question_number: 1,
@@ -184,7 +207,11 @@ describe('AdminService', () => {
     await versionRepository.save([version, version2]);
 
     const q1 = Object.assign(new Question(), sampleQuestion, { version });
-    const q2 = Object.assign(new Question(), { ...sampleQuestion, question_number: 2 }, { version: version2 });
+    const q2 = Object.assign(
+      new Question(),
+      { ...sampleQuestion, question_number: 2 },
+      { version: version2 },
+    );
     await questionRepository.save([q1, q2]);
 
     const reviewRequest = new ReviewRequest();
@@ -192,7 +219,15 @@ describe('AdminService', () => {
     reviewRequest.organization = organization;
     await reviewRequestRepository.save(reviewRequest);
 
-    return { organization, admin, instructor, course, version, version2, question: q1 };
+    return {
+      organization,
+      admin,
+      instructor,
+      course,
+      version,
+      version2,
+      question: q1,
+    };
   };
 
   // ─── listQuestionsForVersion ─────────────────────────────────────────────────
@@ -202,7 +237,7 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const result = await adminService.listQuestionsForVersion({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
       });
 
@@ -213,14 +248,14 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const match = await adminService.listQuestionsForVersion({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
         searchTerm: 'Test question',
       });
       expect(match).toHaveLength(1);
 
       const empty = await adminService.listQuestionsForVersion({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
         searchTerm: 'NonExistent',
       });
@@ -233,7 +268,7 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const result = await adminService.listQuestionsForVersionPaginated({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
       });
 
@@ -249,7 +284,7 @@ describe('AdminService', () => {
       const { admin } = await setupData();
 
       const result = await adminService.listAssignedVersions({
-        email: admin.email,
+        id: admin.id,
         searchTerm: '',
       });
 
@@ -261,13 +296,13 @@ describe('AdminService', () => {
       const { admin } = await setupData();
 
       const match = await adminService.listAssignedVersions({
-        email: admin.email,
+        id: admin.id,
         searchTerm: 'Test Course',
       });
       expect(match).toHaveLength(2);
 
       const empty = await adminService.listAssignedVersions({
-        email: admin.email,
+        id: admin.id,
         searchTerm: 'NonExistent',
       });
       expect(empty).toHaveLength(0);
@@ -279,7 +314,7 @@ describe('AdminService', () => {
       const { admin } = await setupData();
 
       const result = await adminService.listAssignedVersionsPaginated({
-        email: admin.email,
+        id: admin.id,
       });
 
       expect(result.edges).toHaveLength(2);
@@ -294,7 +329,7 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const result = await adminService.getCourseVersion({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
       });
 
@@ -311,13 +346,13 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const review = await adminService.addCourseVersionReview({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
         reviewInfo: { title: 'Rev', message: 'Msg' },
       });
 
       const result = await adminService.getVersionReview({
-        email: admin.email,
+        id: admin.id,
         reviewId: review.id,
       });
 
@@ -333,7 +368,7 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const response = await adminService.addCourseVersionReview({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
         reviewInfo: { title: 'Test Title', message: 'Test Message' },
       });
@@ -342,9 +377,9 @@ describe('AdminService', () => {
 
       const adminData = await getAdmin(admin.email);
       expect(
-        adminData.assigned_course_versions_for_review
-          .sort((a, b) => a.version_number - b.version_number)[0]
-          .reviews[0].id,
+        adminData.assigned_course_versions_for_review.sort(
+          (a, b) => a.version_number - b.version_number,
+        )[0].reviews[0].id,
       ).toBe(response.id);
     });
 
@@ -353,7 +388,7 @@ describe('AdminService', () => {
 
       await expect(
         adminService.addCourseVersionReview({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           versionId: version.id,
           reviewInfo: { title: 'T', message: 'M' },
         }),
@@ -365,7 +400,7 @@ describe('AdminService', () => {
 
       await expect(
         adminService.addCourseVersionReview({
-          email: admin.email,
+          id: admin.id,
           versionId: '00000000-0000-0000-0000-000000000000',
           reviewInfo: { title: 'T', message: 'M' },
         }),
@@ -380,13 +415,13 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const review = await adminService.addCourseVersionReview({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
         reviewInfo: { title: 'Rev', message: 'Msg' },
       });
 
       const response = await adminService.addReviewIssue({
-        email: admin.email,
+        id: admin.id,
         reviewId: review.id,
         issueInfo: { description: 'Test Description' },
       });
@@ -396,14 +431,15 @@ describe('AdminService', () => {
 
       const adminData = await getAdmin(admin.email);
       expect(
-        adminData.assigned_course_versions_for_review[0].reviews[0].issues[0].id,
+        adminData.assigned_course_versions_for_review[0].reviews[0].issues[0]
+          .id,
       ).toBe(response.id);
     });
 
     it('throws NotFoundException if admin does not exist', async () => {
       await expect(
         adminService.addReviewIssue({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           reviewId: '00000000-0000-0000-0000-000000000000',
           issueInfo: { description: 'D' },
         }),
@@ -415,7 +451,7 @@ describe('AdminService', () => {
 
       await expect(
         adminService.addReviewIssue({
-          email: admin.email,
+          id: admin.id,
           reviewId: '00000000-0000-0000-0000-000000000000',
           issueInfo: { description: 'D' },
         }),
@@ -430,12 +466,12 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const review = await adminService.addCourseVersionReview({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
         reviewInfo: { title: 'Rev', message: 'Msg' },
       });
       const issue = await adminService.addReviewIssue({
-        email: admin.email,
+        id: admin.id,
         reviewId: review.id,
         issueInfo: { description: 'D' },
       });
@@ -443,7 +479,7 @@ describe('AdminService', () => {
       expect(issue.status).toBe(IssueStatusType.OPEN);
 
       const response = await adminService.closeIssue({
-        email: admin.email,
+        id: admin.id,
         issueId: issue.id,
       });
 
@@ -451,14 +487,15 @@ describe('AdminService', () => {
 
       const adminData = await getAdmin(admin.email);
       expect(
-        adminData.assigned_course_versions_for_review[0].reviews[0].issues[0].status,
+        adminData.assigned_course_versions_for_review[0].reviews[0].issues[0]
+          .status,
       ).toBe(IssueStatusType.CLOSED);
     });
 
     it('throws NotFoundException if admin does not exist', async () => {
       await expect(
         adminService.closeIssue({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           issueId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Admin does not exist'));
@@ -469,7 +506,7 @@ describe('AdminService', () => {
 
       await expect(
         adminService.closeIssue({
-          email: admin.email,
+          id: admin.id,
           issueId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Issue not found'));
@@ -483,7 +520,7 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const review = await adminService.addCourseVersionReview({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
         reviewInfo: { title: 'Rev', message: 'Msg' },
       });
@@ -491,7 +528,7 @@ describe('AdminService', () => {
       expect(review.status).toBe(ReviewStatusType.OPEN);
 
       const response = await adminService.closeReview({
-        email: admin.email,
+        id: admin.id,
         reviewId: review.id,
       });
 
@@ -506,7 +543,7 @@ describe('AdminService', () => {
     it('throws NotFoundException if admin does not exist', async () => {
       await expect(
         adminService.closeReview({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           reviewId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Admin does not exist'));
@@ -517,7 +554,7 @@ describe('AdminService', () => {
 
       await expect(
         adminService.closeReview({
-          email: admin.email,
+          id: admin.id,
           reviewId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Review not found'));
@@ -531,13 +568,15 @@ describe('AdminService', () => {
       const { admin, version } = await setupData();
 
       const response = await adminService.approveCourseVersion({
-        email: admin.email,
+        id: admin.id,
         versionId: version.id,
       });
 
       expect(response.id).toBe(version.id);
       expect(response.status).toBe(VersionStatusType.APPROVED);
-      expect(mockMeilisearchProducer.updateMeilisearchDocuments).toHaveBeenCalled();
+      expect(
+        mockMeilisearchProducer.updateMeilisearchDocuments,
+      ).toHaveBeenCalled();
 
       const adminData = await getAdmin(admin.email);
       expect(
@@ -550,7 +589,7 @@ describe('AdminService', () => {
 
       await expect(
         adminService.approveCourseVersion({
-          email: 'nobody@test.com',
+          id: '00000000-0000-0000-0000-000000000000',
           versionId: version.id,
         }),
       ).rejects.toThrow(new NotFoundException('Admin does not exist'));
@@ -561,7 +600,7 @@ describe('AdminService', () => {
 
       await expect(
         adminService.approveCourseVersion({
-          email: admin.email,
+          id: admin.id,
           versionId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Course version not found'));

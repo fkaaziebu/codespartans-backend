@@ -27,8 +27,8 @@ export class SchoolResolver {
     @Args('searchTerm', { nullable: true }) searchTerm?: string,
     @Args('pagination', { nullable: true }) pagination?: PaginationInput,
   ) {
-    const { email } = context.req.user;
-    return this.schoolService.listSchoolStudents(email, searchTerm, pagination);
+    const { id } = context.req.user;
+    return this.schoolService.listSchoolStudents(id, searchTerm, pagination);
   }
 
   // ─── Mutations (org-authenticated) ───────────────────────────────────────────
@@ -39,8 +39,8 @@ export class SchoolResolver {
     @Args('input') input: AddSchoolStudentInput,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.schoolService.addSchoolStudent(email, input);
+    const { id } = context.req.user;
+    return this.schoolService.addSchoolStudent(id, input);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -49,8 +49,8 @@ export class SchoolResolver {
     @Args('input') input: BulkEnrollStudentsInput,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.schoolService.bulkEnrollStudents(email, input.students);
+    const { id } = context.req.user;
+    return this.schoolService.bulkEnrollStudents(id, input.students);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -59,8 +59,8 @@ export class SchoolResolver {
     @Args('studentId') studentId: string,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.schoolService.resetStudentPin(email, studentId);
+    const { id } = context.req.user;
+    return this.schoolService.resetStudentPin(id, studentId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -69,8 +69,8 @@ export class SchoolResolver {
     @Args('studentId') studentId: string,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.schoolService.shareStudentLogin(email, studentId);
+    const { id } = context.req.user;
+    return this.schoolService.shareStudentLogin(id, studentId);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -79,8 +79,8 @@ export class SchoolResolver {
     @Args('studentId') studentId: string,
     @Context() context,
   ) {
-    const { email } = context.req.user;
-    return this.schoolService.removeSchoolStudent(email, studentId);
+    const { id } = context.req.user;
+    return this.schoolService.removeSchoolStudent(id, studentId);
   }
 
   // ─── Mutations (public – student login flow) ──────────────────────────────────

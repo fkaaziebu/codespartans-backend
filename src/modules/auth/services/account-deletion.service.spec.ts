@@ -372,7 +372,7 @@ describe('AccountDeletionService', () => {
       const child = await createChild(parent, student);
 
       const result = await accountDeletionService.deleteChild(
-        parent.email,
+        parent.id,
         child.id,
       );
 
@@ -396,7 +396,7 @@ describe('AccountDeletionService', () => {
     it('throws NotFoundException if child does not exist', async () => {
       await expect(
         accountDeletionService.deleteChild(
-          'parent@test.com',
+          '00000000-0000-0000-0000-000000000000',
           '00000000-0000-0000-0000-000000000000',
         ),
       ).rejects.toThrow(new NotFoundException('Child not found'));
@@ -408,7 +408,10 @@ describe('AccountDeletionService', () => {
       const child = await createChild(parent, student);
 
       await expect(
-        accountDeletionService.deleteChild('wrongparent@test.com', child.id),
+        accountDeletionService.deleteChild(
+          '00000000-0000-0000-0000-000000000000',
+          child.id,
+        ),
       ).rejects.toThrow(ForbiddenException);
     });
   });

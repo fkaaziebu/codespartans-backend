@@ -46,27 +46,27 @@ export class SubscriptionGuard implements CanActivate {
     // Not authenticated — let GqlJwtAuthGuard handle it
     if (!user) return true;
 
-    const { email, role } = user;
+    const { id, role } = user;
 
     if (role === 'STUDENT') {
-      return this.checkStudentAccess(email, req);
+      return this.checkStudentAccess(id, req);
     }
 
     if (role === 'ORGANIZATION') {
-      return this.checkOrgAccess(email);
+      return this.checkOrgAccess(id);
     }
 
     if (role === 'CHILD') {
-      return this.checkChildAccess(email);
+      return this.checkChildAccess(id);
     }
 
     // INSTRUCTOR, ADMIN, PARENT — not gated
     return true;
   }
 
-  private async checkStudentAccess(email: string, req: any): Promise<boolean> {
+  private async checkStudentAccess(id: string, req: any): Promise<boolean> {
     const student = await this.studentRepo.findOne({
-      where: { email },
+      where: { id },
       relations: ['organizations', 'organizations.school_demo'],
     });
 
@@ -86,17 +86,17 @@ export class SubscriptionGuard implements CanActivate {
 
     // Student is GENPOP-only, independent, or no non-GENPOP org has valid access.
     // They must have their own active subscription.
-    return this.checkStudentSubscription(email, req);
+    return this.checkStudentSubscription(id, req);
   }
 
   private async checkStudentSubscription(
-    email: string,
+    id: string,
     req: any,
   ): Promise<boolean> {
     const now = new Date();
     const activeSub = await this.studentSubscriptionRepo.findOne({
       where: {
-        student: { email },
+        student: { id },
         status: SubscriptionStatus.ACTIVE,
       },
       relations: ['plan'],
@@ -118,9 +118,9 @@ export class SubscriptionGuard implements CanActivate {
     );
   }
 
-  private async checkOrgAccess(email: string): Promise<boolean> {
+  private async checkOrgAccess(id: string): Promise<boolean> {
     const org = await this.orgRepo.findOne({
-      where: { email },
+      where: { id },
       relations: ['school_demo'],
     });
 
@@ -134,10 +134,9 @@ export class SubscriptionGuard implements CanActivate {
     );
   }
 
-  private async checkChildAccess(studentEmail: string): Promise<boolean> {
-    // CHILD JWT carries the linked student's email
+  private async checkChildAccess(studentId: string): Promise<boolean> {
     const child = await this.childRepo.findOne({
-      where: { student: { email: studentEmail } },
+      where: { student: { id: studentId } },
       relations: ['parent'],
     });
 

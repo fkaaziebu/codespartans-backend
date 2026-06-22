@@ -49,7 +49,7 @@ export class PaymentService {
   }
 
   async initiatePayment(
-    email: string,
+    id: string,
     planId: string,
     role: string,
     childrenIds: string[] = [],
@@ -62,7 +62,7 @@ export class PaymentService {
     const now = new Date();
 
     if (role === 'PARENT') {
-      const parent = await this.parentRepo.findOne({ where: { email } });
+      const parent = await this.parentRepo.findOne({ where: { id } });
       if (parent && childrenIds.length > 0) {
         const ownedChildren = await this.childRepo.find({
           where: { parent: { id: parent.id } },
@@ -105,7 +105,7 @@ export class PaymentService {
         }
       }
     } else if (role === 'STUDENT') {
-      const student = await this.studentRepo.findOne({ where: { email } });
+      const student = await this.studentRepo.findOne({ where: { id } });
       if (student) {
         const existingSub = await this.studentSubscriptionRepo.findOne({
           where: {
@@ -129,7 +129,7 @@ export class PaymentService {
         }
       }
     } else {
-      const org = await this.orgRepo.findOne({ where: { email } });
+      const org = await this.orgRepo.findOne({ where: { id } });
       if (org) {
         const existingSub = await this.orgSubscriptionRepo.findOne({
           where: {
@@ -155,7 +155,7 @@ export class PaymentService {
     }
 
     if (plan.price === 0) {
-      return this.activateFreeTrial(email, plan, role, childrenIds);
+      return this.activateFreeTrial(id, plan, role, childrenIds);
     }
 
     const secretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY');
@@ -170,7 +170,7 @@ export class PaymentService {
     let callbackUrl: string;
 
     if (role === 'PARENT') {
-      const parent = await this.parentRepo.findOne({ where: { email } });
+      const parent = await this.parentRepo.findOne({ where: { id } });
       if (!parent) throw new NotFoundException('Parent not found');
       payerEmail = parent.email;
       metadata = {
@@ -185,7 +185,7 @@ export class PaymentService {
       );
       callbackUrl = parentUrl + '/billing/callback';
     } else if (role === 'STUDENT') {
-      const student = await this.studentRepo.findOne({ where: { email } });
+      const student = await this.studentRepo.findOne({ where: { id } });
       if (!student) throw new NotFoundException('Student not found');
       payerEmail = student.email;
       metadata = {
@@ -199,7 +199,7 @@ export class PaymentService {
       );
       callbackUrl = studentUrl + '/billing/callback';
     } else {
-      const org = await this.orgRepo.findOne({ where: { email } });
+      const org = await this.orgRepo.findOne({ where: { id } });
       if (!org) throw new NotFoundException('Organization not found');
       payerEmail = org.email;
       metadata = { org_id: org.id, plan_id: plan.id, plan_name: plan.name };
@@ -232,7 +232,7 @@ export class PaymentService {
   }
 
   async activateFreeTrial(
-    email: string,
+    id: string,
     plan: SubscriptionPlan,
     role: string,
     childrenIds: string[],
@@ -245,7 +245,7 @@ export class PaymentService {
     let callbackUrl: string;
 
     if (role === 'PARENT') {
-      const parent = await this.parentRepo.findOne({ where: { email } });
+      const parent = await this.parentRepo.findOne({ where: { id } });
       if (!parent) throw new NotFoundException('Parent not found');
 
       let coveredChildren: Child[] = [];
@@ -273,7 +273,7 @@ export class PaymentService {
       );
       callbackUrl = `${parentUrl}/billing/callback?reference=${reference}&status=success`;
     } else if (role === 'STUDENT') {
-      const student = await this.studentRepo.findOne({ where: { email } });
+      const student = await this.studentRepo.findOne({ where: { id } });
       if (!student) throw new NotFoundException('Student not found');
 
       await this.studentSubscriptionRepo.save(
@@ -293,7 +293,7 @@ export class PaymentService {
       );
       callbackUrl = `${studentUrl}/billing/callback?reference=${reference}&status=success`;
     } else {
-      const org = await this.orgRepo.findOne({ where: { email } });
+      const org = await this.orgRepo.findOne({ where: { id } });
       if (!org) throw new NotFoundException('Organization not found');
 
       await this.orgSubscriptionRepo.save(
@@ -422,11 +422,11 @@ export class PaymentService {
   }
 
   async getParentSubscription(
-    parentEmail: string,
+    parentId: string,
   ): Promise<ParentSubscription | null> {
     return this.parentSubscriptionRepo.findOne({
       where: {
-        parent: { email: parentEmail },
+        parent: { id: parentId },
         status: SubscriptionStatus.ACTIVE,
       },
       relations: ['plan', 'children'],
@@ -435,14 +435,14 @@ export class PaymentService {
   }
 
   async listParentSubscriptions(
-    parentEmail: string,
+    parentId: string,
   ): Promise<ParentSubscription[]> {
     const year = new Date().getFullYear();
     const start = new Date(year, 0, 1);
     const end = new Date(year + 1, 0, 1);
     return this.parentSubscriptionRepo.find({
       where: {
-        parent: { email: parentEmail },
+        parent: { id: parentId },
         created_at: Between(start, end),
       },
       relations: ['plan', 'children'],
@@ -451,11 +451,11 @@ export class PaymentService {
   }
 
   async getStudentSubscription(
-    studentEmail: string,
+    studentId: string,
   ): Promise<StudentSubscription | null> {
     return this.studentSubscriptionRepo.findOne({
       where: {
-        student: { email: studentEmail },
+        student: { id: studentId },
         status: SubscriptionStatus.ACTIVE,
       },
       relations: ['plan'],
@@ -464,14 +464,14 @@ export class PaymentService {
   }
 
   async listStudentSubscriptions(
-    studentEmail: string,
+    studentId: string,
   ): Promise<StudentSubscription[]> {
     const year = new Date().getFullYear();
     const start = new Date(year, 0, 1);
     const end = new Date(year + 1, 0, 1);
     return this.studentSubscriptionRepo.find({
       where: {
-        student: { email: studentEmail },
+        student: { id: studentId },
         created_at: Between(start, end),
       },
       relations: ['plan'],

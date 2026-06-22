@@ -12,10 +12,7 @@ import { Cache } from 'cache-manager';
 import { In, Repository } from 'typeorm';
 import { Student } from '../../auth/entities/student.entity';
 import { Course } from '../../inventory/entities/course.entity';
-import {
-  Question,
-  QuestionType,
-} from '../../review/entities/question.entity';
+import { Question, QuestionType } from '../../review/entities/question.entity';
 import { Recommendation } from '../entities/recommendation.entity';
 import { SubmittedAnswer } from '../entities/sumitted_answer.entity';
 import { Test } from '../entities/test.entity';
@@ -25,10 +22,7 @@ import {
 } from '../entities/test_assignment.entity';
 import { TimeEvent } from '../entities/time_event.entity';
 import { TimeEventType } from '../entities/time_event.entity';
-import {
-  TestModeType,
-  TestStatusType,
-} from '../entities/test.entity';
+import { TestModeType, TestStatusType } from '../entities/test.entity';
 import { Child } from '../../parent/entities/child.entity';
 import { StudentGateway } from '../gateways/student.gateway';
 import { TestTimerService } from './test-timer.service';
@@ -57,11 +51,11 @@ export class StudentService {
   ) {}
 
   async startTest({
-    email,
+    id,
     suiteId,
     mode = TestModeType.PROCTURED,
   }: {
-    email: string;
+    id: string;
     suiteId: string;
     mode?: TestModeType;
   }) {
@@ -69,7 +63,7 @@ export class StudentService {
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
-            email,
+            id,
             subscribed_courses: {
               versions: {
                 test_suites: {
@@ -132,7 +126,7 @@ export class StudentService {
           endTime,
           (remaining_ms) =>
             this.handleTimerTick(testId, studentId, remaining_ms),
-          async () => await this.endTest({ email, testId: new_test.id }),
+          async () => await this.endTest({ id, testId: new_test.id }),
         );
 
         this.logger.log(`Test ${new_test.id} started for student ${studentId}`);
@@ -142,12 +136,12 @@ export class StudentService {
     );
   }
 
-  async pauseTest({ email, testId }: { email: string; testId: string }) {
+  async pauseTest({ id, testId }: { id: string; testId: string }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
-            email,
+            id,
             tests: {
               id: testId,
             },
@@ -181,12 +175,12 @@ export class StudentService {
     );
   }
 
-  async resumeTest({ email, testId }: { email: string; testId: string }) {
+  async resumeTest({ id, testId }: { id: string; testId: string }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
-            email,
+            id,
             tests: {
               id: testId,
             },
@@ -227,7 +221,7 @@ export class StudentService {
           endTime,
           (remainingMs) =>
             this.handleTimerTick(testId, student.id, remainingMs),
-          async () => await this.endTest({ email: student.email, testId }),
+          async () => await this.endTest({ id: student.id, testId }),
         );
 
         this.logger.log(
@@ -239,12 +233,12 @@ export class StudentService {
     );
   }
 
-  async endTest({ email, testId }: { email: string; testId: string }) {
+  async endTest({ id, testId }: { id: string; testId: string }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
-            email,
+            id,
             tests: {
               id: testId,
             },
@@ -269,7 +263,9 @@ export class StudentService {
 
         this.sseGateway.sendTestEnded(testId, studentId);
 
-        const savedTest = await transactionalEntityManager.save(student.tests[0]);
+        const savedTest = await transactionalEntityManager.save(
+          student.tests[0],
+        );
 
         const linkedAssignment = await transactionalEntityManager.findOne(
           TestAssignment,
@@ -279,7 +275,10 @@ export class StudentService {
         if (linkedAssignment) {
           linkedAssignment.status = TestAssignmentStatus.COMPLETED;
           linkedAssignment.completed_at = new Date();
-          await transactionalEntityManager.save(TestAssignment, linkedAssignment);
+          await transactionalEntityManager.save(
+            TestAssignment,
+            linkedAssignment,
+          );
         }
 
         this.logger.log(`Test ${testId} ended for student ${studentId}`);
@@ -288,11 +287,11 @@ export class StudentService {
         await this.insightService.invalidateForStudent(studentId);
 
         await Promise.all([
-          this.cacheManager.del(`student-stats:${email}`),
-          this.cacheManager.del(`student-streak:${email}`),
-          this.cacheManager.del(`student-subject-progress:${email}:all`),
-          this.cacheManager.del(`student-weak-areas:${email}:all`),
-          this.cacheManager.del(`student-score-history:${email}:all`),
+          this.cacheManager.del(`student-stats:${id}`),
+          this.cacheManager.del(`student-streak:${id}`),
+          this.cacheManager.del(`student-subject-progress:${id}:all`),
+          this.cacheManager.del(`student-weak-areas:${id}:all`),
+          this.cacheManager.del(`student-score-history:${id}:all`),
         ]);
 
         return savedTest;
@@ -300,12 +299,12 @@ export class StudentService {
     );
   }
 
-  async getQuestion({ email, testId }: { email: string; testId: string }) {
+  async getQuestion({ id, testId }: { id: string; testId: string }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
-            email,
+            id,
             tests: {
               id: testId,
             },
@@ -343,11 +342,11 @@ export class StudentService {
   }
 
   async getSubscribedCourseDetails({
-    email,
+    id,
     courseId,
     filter,
   }: {
-    email: string;
+    id: string;
     courseId: string;
     filter?: SuiteFilterInput;
   }): Promise<CourseTypeClass> {
@@ -355,7 +354,7 @@ export class StudentService {
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
-            email,
+            id,
             subscribed_courses: {
               id: courseId,
             },
@@ -370,7 +369,7 @@ export class StudentService {
         const test = await transactionalEntityManager.find(Test, {
           where: {
             student: {
-              email: email,
+              id,
             },
             test_suite: In(
               student.subscribed_courses[0].approved_version.test_suites.map(
@@ -388,9 +387,7 @@ export class StudentService {
         const allSuites =
           student.subscribed_courses[0].approved_version.test_suites;
         const suitesToReturn = filter?.suite_type
-          ? allSuites.filter(
-              (suite) => suite.suite_type === filter.suite_type,
-            )
+          ? allSuites.filter((suite) => suite.suite_type === filter.suite_type)
           : allSuites;
 
         return {
@@ -422,14 +419,14 @@ export class StudentService {
   }
 
   async submitAnswer({
-    email,
+    id,
     testId,
     questionId,
     timeRange,
     answer,
     isFlagged,
   }: {
-    email: string;
+    id: string;
     testId: string;
     questionId: string;
     timeRange: string;
@@ -443,7 +440,7 @@ export class StudentService {
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
-            email,
+            id,
             tests: {
               id: testId,
             },
@@ -531,15 +528,15 @@ export class StudentService {
   }
 
   async getAllAttemptedQuestions({
-    email,
+    id,
     testId,
   }: {
-    email: string;
+    id: string;
     testId: string;
   }) {
     const student = await this.studentRepository.findOne({
       where: {
-        email,
+        id,
         tests: {
           id: testId,
         },
@@ -564,7 +561,7 @@ export class StudentService {
     return test.submitted_answers;
   }
 
-  async testStats({ email, testId }: { email: string; testId: string }) {
+  async testStats({ id, testId }: { id: string; testId: string }) {
     const cacheKey = `test-stats:${testId}`;
     const cached = await this.cacheManager.get<Test>(cacheKey);
     if (cached) {
@@ -573,7 +570,7 @@ export class StudentService {
 
     const student = await this.studentRepository.findOne({
       where: {
-        email,
+        id,
         tests: {
           id: testId,
         },
@@ -652,7 +649,7 @@ export class StudentService {
           `Test ${testId} for student ${studentId} has expired. Ending test.`,
         );
 
-        const ended_test = await this.endTest({ email: student.email, testId });
+        const ended_test = await this.endTest({ id: student.id, testId });
 
         // Send test ended event via SSE
         this.sseGateway.sendTestEnded(testId, studentId);
@@ -669,7 +666,7 @@ export class StudentService {
         studentId,
         endTime,
         (remainingMs) => this.handleTimerTick(testId, studentId, remainingMs),
-        async () => await this.endTest({ email: student.email, testId }),
+        async () => await this.endTest({ id: student.id, testId }),
       );
 
       // Send current remaining time to student
@@ -705,9 +702,9 @@ export class StudentService {
     };
   }
 
-  async listMyAssignments({ email }: { email: string }): Promise<TestAssignment[]> {
+  async listMyAssignments({ id }: { id: string }): Promise<TestAssignment[]> {
     const student = await this.studentRepository.findOne({
-      where: { email },
+      where: { id },
     });
 
     if (!student) {
@@ -745,18 +742,18 @@ export class StudentService {
   }
 
   async startAssignedTest({
-    email,
+    id,
     assignmentId,
     mode = TestModeType.PROCTURED,
   }: {
-    email: string;
+    id: string;
     assignmentId: string;
     mode?: TestModeType;
   }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
-          where: { email },
+          where: { id },
         });
 
         if (!student) {
@@ -789,7 +786,9 @@ export class StudentService {
         }
 
         if (assignment.status === TestAssignmentStatus.COMPLETED) {
-          throw new BadRequestException('This assignment has already been completed');
+          throw new BadRequestException(
+            'This assignment has already been completed',
+          );
         }
 
         const on_going_tests = await transactionalEntityManager.find(Test, {
@@ -836,8 +835,9 @@ export class StudentService {
           testId,
           studentId,
           endTime,
-          (remaining_ms) => this.handleTimerTick(testId, studentId, remaining_ms),
-          async () => await this.endTest({ email, testId: new_test.id }),
+          (remaining_ms) =>
+            this.handleTimerTick(testId, studentId, remaining_ms),
+          async () => await this.endTest({ id, testId: new_test.id }),
         );
 
         this.logger.log(
