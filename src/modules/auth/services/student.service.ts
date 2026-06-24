@@ -659,6 +659,105 @@ export class StudentService {
     return result;
   }
 
+  createConsentToken(data: {
+    email: string;
+    firstName: string;
+    lastName: string;
+  }): string {
+    return this.jwtService.sign(
+      { ...data, type: 'consent' },
+      { expiresIn: '10m' },
+    );
+  }
+
+  getConsentUserInfo(token: string): {
+    email: string;
+    firstName: string;
+    lastName: string;
+  } {
+    let payload: any;
+    try {
+      payload = this.jwtService.verify(token);
+    } catch {
+      throw new UnauthorizedException('Invalid or expired consent token');
+    }
+
+    if (payload.type !== 'consent') {
+      throw new UnauthorizedException('Invalid consent token type');
+    }
+
+    return {
+      email: payload.email,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+    };
+  }
+
+  async handleConsentSubmission(
+    consent: string,
+    token: string,
+  ): Promise<{ redirectUrl: string }> {
+    const studentUrl = this.configService.get<string>('STUDENT_URL');
+
+    if (consent !== 'yes') {
+      return { redirectUrl: `${studentUrl}/oauth/failed` };
+    }
+
+    const consentData = this.getConsentUserInfo(token);
+    const payload = await this.createGoogleUser(consentData);
+    return { redirectUrl: `${studentUrl}/validate-account?email=${payload.email}` };
+  }
+
+  async handleGoogleOAuthCallback(
+    user: any,
+  ): Promise<{ redirectUrl: string }> {
+    const studentUrl = this.configService.get<string>('STUDENT_URL');
+
+    if (user.needsConsent) {
+      const consentToken = this.createConsentToken(user.consentData);
+      return { redirectUrl: `/v1/students/auth/consent?token=${consentToken}` };
+    }
+
+    if (!user.is_account_validated) {
+      return { redirectUrl: `${studentUrl}/validate-account?email=${user.email}` };
+    }
+
+    if (user.is_deactivated) {
+      const deletionScheduledFor = new Date(
+        new Date(user.deactivated_at).getTime() + this.gracePeriodMs,
+      );
+      const pendingToken = this.jwtService.sign(
+        { id: user.id, role: 'STUDENT', type: 'pending_deletion' },
+        { expiresIn: '15m' },
+      );
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      await this.cacheManager.set(`cancel_otp:${user.id}`, otp, 10 * 60 * 1000);
+      await this.emailProducer.sendCancellationOtpEmail({
+        email: user.email,
+        name: user.name,
+        otp,
+      });
+
+      return {
+        redirectUrl: `${studentUrl}/oauth/redirect?token=${pendingToken}&organizationId=${user.organizations.at(0).id}&isSetupCompleted=${Boolean(user.is_setup_completed)}&accountStatus=${AccountStatus.PENDING_DELETION}&deletionScheduledFor=${deletionScheduledFor}`,
+      };
+    }
+
+    const tokenPayload = { id: user.id, role: 'STUDENT' as const };
+    const access_token = this.jwtService.sign(tokenPayload);
+    const refresh_token = this.jwtService.sign(
+      { ...tokenPayload, type: 'refresh' },
+      {
+        expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
+      },
+    );
+
+    return {
+      redirectUrl: `${studentUrl}/oauth/redirect?token=${access_token}&refreshToken=${refresh_token}&organizationId=${user.organizations.at(0).id}&isSetupCompleted=${Boolean(user.is_setup_completed)}`,
+    };
+  }
+
   async validateGoogleUser(googleUser: LoginBodyDto) {
     const user = await this.studentRepository.findOne({
       where: { email: googleUser.email },
