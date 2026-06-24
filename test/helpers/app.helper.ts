@@ -11,6 +11,7 @@ import { AccountDeletionProducer } from '../../src/modules/auth/services/account
 import { SetupDbService } from '../../src/setup-db-2.service';
 import { SemanticCacheService } from '../../src/modules/simulation/services/semantic-cache.service';
 import { GqlThrottlerGuard } from 'src/helpers/guards';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 export interface EmailCall {
   method: string;
@@ -96,9 +97,9 @@ export async function createTestApp(): Promise<TestApp> {
     .overrideProvider(SemanticCacheService)
     .useValue({ findSimilar: jest.fn().mockResolvedValue(null), store: jest.fn().mockResolvedValue(undefined) })
     .overrideGuard(GqlThrottlerGuard)
-    .useValue({
-      getRequestResponse: (req, res) => ({ req, res }),
-    })
+    .useValue({ canActivate: () => true })
+    .overrideGuard(ThrottlerGuard)
+    .useValue({ canActivate: () => true })
     .compile();
 
   const app = moduleFixture.createNestApplication();

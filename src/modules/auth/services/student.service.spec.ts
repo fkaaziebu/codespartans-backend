@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -1016,6 +1016,181 @@ describe('StudentService', () => {
           email: 'johndoe@gmail.com',
         }),
       ).rejects.toThrow('Organization not found');
+    });
+  });
+
+  describe('createConsentToken', () => {
+    it('returns a signed JWT string', () => {
+      const token = studentService.createConsentToken({
+        email: 'test@test.com',
+        firstName: 'John',
+        lastName: 'Doe',
+      });
+
+      expect(typeof token).toBe('string');
+      expect(token.split('.')).toHaveLength(3);
+    });
+  });
+
+  describe('getConsentUserInfo', () => {
+    it('returns user info from a valid consent token', () => {
+      const token = studentService.createConsentToken({
+        email: 'test@test.com',
+        firstName: 'John',
+        lastName: 'Doe',
+      });
+
+      const result = studentService.getConsentUserInfo(token);
+
+      expect(result).toEqual({
+        email: 'test@test.com',
+        firstName: 'John',
+        lastName: 'Doe',
+      });
+    });
+
+    it('throws UnauthorizedException for an invalid token', () => {
+      expect(() => studentService.getConsentUserInfo('invalid.token.here')).toThrow(
+        new UnauthorizedException('Invalid or expired consent token'),
+      );
+    });
+
+    it('throws UnauthorizedException for a token with the wrong type', () => {
+      const jwtService = module.get<JwtService>(JwtService);
+      const wrongTypeToken = jwtService.sign({
+        email: 'test@test.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        type: 'refresh',
+      });
+
+      expect(() => studentService.getConsentUserInfo(wrongTypeToken)).toThrow(
+        new UnauthorizedException('Invalid consent token type'),
+      );
+    });
+  });
+
+  describe('handleConsentSubmission', () => {
+    it('returns failed redirect URL when consent is not "yes"', async () => {
+      const token = studentService.createConsentToken({
+        email: 'test@test.com',
+        firstName: 'John',
+        lastName: 'Doe',
+      });
+
+      const result = await studentService.handleConsentSubmission('no', token);
+
+      expect(result.redirectUrl).toContain('/oauth/failed');
+    });
+
+    it('creates a user and returns validate-account URL when consent is "yes"', async () => {
+      await seedGenpopOrganization();
+      const token = studentService.createConsentToken({
+        email: 'google@test.com',
+        firstName: 'Google',
+        lastName: 'User',
+      });
+
+      const result = await studentService.handleConsentSubmission('yes', token);
+
+      expect(result.redirectUrl).toContain('/validate-account?email=google@test.com');
+      expect(mockEmailProducer.sendAccountValidationEmail).toHaveBeenCalledWith(
+        expect.objectContaining({ email: 'google@test.com' }),
+      );
+    });
+
+    it('throws UnauthorizedException for an invalid consent token', async () => {
+      await expect(
+        studentService.handleConsentSubmission('yes', 'bad.token.here'),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('handleGoogleOAuthCallback', () => {
+    it('returns internal consent redirect URL when user needs consent', async () => {
+      const user = {
+        needsConsent: true,
+        consentData: { email: 'new@test.com', firstName: 'New', lastName: 'User' },
+      };
+
+      const result = await studentService.handleGoogleOAuthCallback(user);
+
+      expect(result.redirectUrl).toMatch(/^\/v1\/students\/auth\/consent\?token=.+/);
+    });
+
+    it('redirects to validate-account when account is not validated', async () => {
+      const user = {
+        needsConsent: false,
+        is_account_validated: false,
+        email: 'unvalidated@test.com',
+      };
+
+      const result = await studentService.handleGoogleOAuthCallback(user);
+
+      expect(result.redirectUrl).toContain('/validate-account?email=unvalidated@test.com');
+    });
+
+    it('returns pending deletion redirect and sends OTP when student is deactivated', async () => {
+      const student = await registerAndValidateStudent();
+      student.is_deactivated = true;
+      student.deactivated_at = new Date();
+      student.is_setup_completed = false;
+      await studentRepository.save(student);
+
+      const savedStudent = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+        relations: ['organizations'],
+      });
+
+      const user = {
+        needsConsent: false,
+        is_account_validated: true,
+        is_deactivated: true,
+        deactivated_at: savedStudent.deactivated_at,
+        id: savedStudent.id,
+        email: savedStudent.email,
+        name: savedStudent.name,
+        is_setup_completed: savedStudent.is_setup_completed,
+        organizations: savedStudent.organizations,
+      };
+
+      const result = await studentService.handleGoogleOAuthCallback(user);
+
+      expect(result.redirectUrl).toContain('/oauth/redirect');
+      expect(result.redirectUrl).toContain(`accountStatus=${AccountStatus.PENDING_DELETION}`);
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        `cancel_otp:${savedStudent.id}`,
+        expect.any(String),
+        10 * 60 * 1000,
+      );
+      expect(mockEmailProducer.sendCancellationOtpEmail).toHaveBeenCalledWith(
+        expect.objectContaining({ email: savedStudent.email }),
+      );
+    });
+
+    it('returns access and refresh tokens for a normal active student', async () => {
+      const student = await registerAndValidateStudent();
+      const savedStudent = await studentRepository.findOne({
+        where: { email: studentInfo.email },
+        relations: ['organizations'],
+      });
+
+      const user = {
+        needsConsent: false,
+        is_account_validated: true,
+        is_deactivated: false,
+        id: savedStudent.id,
+        email: savedStudent.email,
+        is_setup_completed: savedStudent.is_setup_completed,
+        organizations: savedStudent.organizations,
+      };
+
+      const result = await studentService.handleGoogleOAuthCallback(user);
+
+      expect(result.redirectUrl).toContain('/oauth/redirect');
+      expect(result.redirectUrl).toContain('token=');
+      expect(result.redirectUrl).toContain('refreshToken=');
+      expect(result.redirectUrl).not.toContain('PENDING_DELETION');
     });
   });
 });
