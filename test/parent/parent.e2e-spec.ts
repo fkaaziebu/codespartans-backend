@@ -372,6 +372,137 @@ describe('Parent (e2e)', () => {
       expect(profileRes.errors).toBeUndefined();
       expect((profileRes.data.studentProfile as { name: string }).name).toBe(childInput.full_name);
     });
+
+    it('4.6 locks child account after 5 wrong PIN attempts with progressive messages', async () => {
+      await registerAndVerifyParent();
+      const token = await loginParent(parentInput.email, parentInput.password);
+      const setupRes = await gql(
+        app,
+        `mutation($input: SetupParentAccountInput!) { setupParentAccount(input: $input) { username pin } }`,
+        { input: { children: [{ ...childInput, target_exam: testCategory.id }] } },
+        token,
+      );
+      const { username } = (setupRes.data.setupParentAccount as Array<{ username: string; pin: string }>)[0];
+
+      const verifyRes = await gql(app,
+        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
+        { input: { username } },
+      );
+      const tempToken = (verifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
+
+      // First 4 wrong attempts: all fail but do not lock the account
+      for (let i = 0; i < 4; i++) {
+        const res = await gql(app,
+          `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
+          { input: { temp_token: tempToken, pin: '000000' } },
+        );
+        expect(res.errors).toBeDefined();
+      }
+
+      // 5th attempt triggers lockout
+      const lockRes = await gql(app,
+        `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
+        { input: { temp_token: tempToken, pin: '000000' } },
+      );
+      expect(lockRes.errors).toBeDefined();
+
+      // Subsequent attempt while locked is still rejected
+      const retryRes = await gql(app,
+        `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
+        { input: { temp_token: tempToken, pin: '000000' } },
+      );
+      expect(retryRes.errors).toBeDefined();
+    });
+
+    it('4.7 requestChildPinReset notifies parent while account is locked', async () => {
+      await registerAndVerifyParent();
+      const token = await loginParent(parentInput.email, parentInput.password);
+      const setupRes = await gql(
+        app,
+        `mutation($input: SetupParentAccountInput!) { setupParentAccount(input: $input) { username pin } }`,
+        { input: { children: [{ ...childInput, target_exam: testCategory.id }] } },
+        token,
+      );
+      const { username } = (setupRes.data.setupParentAccount as Array<{ username: string; pin: string }>)[0];
+
+      const verifyRes = await gql(app,
+        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
+        { input: { username } },
+      );
+      const tempToken = (verifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
+
+      // Lock the account with 5 wrong attempts
+      for (let i = 0; i < 5; i++) {
+        await gql(app,
+          `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
+          { input: { temp_token: tempToken, pin: '000000' } },
+        );
+      }
+
+      // Request pin reset while locked
+      const resetReqRes = await gql(app,
+        `mutation($input: RequestChildPinResetInput!) { requestChildPinReset(input: $input) }`,
+        { input: { temp_token: tempToken } },
+      );
+      expect(resetReqRes.errors).toBeUndefined();
+      expect(resetReqRes.data.requestChildPinReset).toBe(true);
+
+      const captured = emailCapture.getLast('sendChildPinResetRequestEmail');
+      expect(captured).toBeDefined();
+      expect(captured?.email).toBe(parentInput.email);
+    });
+
+    it('4.8 parent PIN reset clears lockout so child can login immediately with new PIN', async () => {
+      await registerAndVerifyParent();
+      const token = await loginParent(parentInput.email, parentInput.password);
+      const setupRes = await gql(
+        app,
+        `mutation($input: SetupParentAccountInput!) { setupParentAccount(input: $input) { username pin } }`,
+        { input: { children: [{ ...childInput, target_exam: testCategory.id }] } },
+        token,
+      );
+      const { username } = (setupRes.data.setupParentAccount as Array<{ username: string; pin: string }>)[0];
+
+      const listRes = await gql(app, `query { listChildren { edges { node { id } } } }`, undefined, token);
+      const childId = (listRes.data.listChildren as { edges: Array<{ node: { id: string } }> }).edges[0].node.id;
+
+      const verifyRes = await gql(app,
+        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
+        { input: { username } },
+      );
+      const tempToken = (verifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
+
+      // Lock the account with 5 wrong attempts
+      for (let i = 0; i < 5; i++) {
+        await gql(app,
+          `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
+          { input: { temp_token: tempToken, pin: '000000' } },
+        );
+      }
+
+      // Parent resets the child PIN
+      const resetRes = await gql(app, `
+        mutation {
+          resetChildPin(childId: "${childId}") { message pin }
+        }
+      `, undefined, token);
+      expect(resetRes.errors).toBeUndefined();
+      const newPin = (resetRes.data.resetChildPin as { pin: string }).pin;
+
+      // Child can login immediately with new PIN — no 5-minute wait required
+      const newVerifyRes = await gql(app,
+        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
+        { input: { username } },
+      );
+      const newTempToken = (newVerifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
+
+      const loginRes = await gql(app,
+        `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
+        { input: { temp_token: newTempToken, pin: newPin } },
+      );
+      expect(loginRes.errors).toBeUndefined();
+      expect((loginRes.data.loginChild as { token: string }).token).toBeDefined();
+    });
   });
 
   // ─── Flow 6: pw_changed token invalidation ─────────────────────────────────
