@@ -144,6 +144,15 @@ export class EmailConsumer extends WorkerHost {
         await this.emailService.sendCancellationOtpEmail(email, name, otp);
         break;
       }
+      case 'send-child-pin-reset-request': {
+        const { email, parentName, childName } = job.data;
+        await this.emailService.sendChildPinResetRequestEmail(
+          email,
+          parentName,
+          childName,
+        );
+        break;
+      }
     }
   }
 }

@@ -126,4 +126,12 @@ export class EmailProducer {
   }) {
     await this.emailQueue.add('send-cancellation-otp', data);
   }
+
+  async sendChildPinResetRequestEmail(data: {
+    email: string;
+    parentName: string;
+    childName: string;
+  }) {
+    await this.emailQueue.add('send-child-pin-reset-request', data);
+  }
 }

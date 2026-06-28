@@ -795,6 +795,9 @@ export class ParentService {
           await transactionalEntityManager.save(Student, child.student);
         }
 
+        await this.cacheManager.del(`child_pin_attempts:${childId}`);
+        await this.cacheManager.del(`child_pin_locked:${childId}`);
+
         return { message: 'Pin reset successfully', pin: rawPin };
       },
     );
@@ -1449,6 +1452,10 @@ export class ParentService {
     return { temp_token };
   }
 
+  private readonly PIN_MAX_ATTEMPTS = 5;
+  private readonly PIN_LOCK_TTL_MS = 5 * 60 * 1_000; // 5 minutes
+  private readonly PIN_ATTEMPTS_TTL_MS = 30 * 60 * 1_000; // 30 minutes
+
   async loginChild(
     temp_token: string,
     pin: string,
@@ -1465,8 +1472,27 @@ export class ParentService {
       throw new UnauthorizedException('Invalid token type');
     }
 
+    const childId = payload.id;
+    const attemptsKey = `child_pin_attempts:${childId}`;
+    const lockedKey = `child_pin_locked:${childId}`;
+
+    const lockedAt = await this.cacheManager.get<string>(lockedKey);
+    if (lockedAt) {
+      throw new UnauthorizedException({
+        message: 'Account locked for 5 minutes',
+        code: 'ACCOUNT_LOCKED',
+        locked_at: lockedAt,
+      });
+    }
+
+    const currentAttempts =
+      (await this.cacheManager.get<number>(attemptsKey)) ?? 0;
+    if (currentAttempts >= this.PIN_MAX_ATTEMPTS) {
+      await this.cacheManager.del(attemptsKey);
+    }
+
     const child = await this.childRepository.findOne({
-      where: { id: payload.id },
+      where: { id: childId },
       relations: ['student.organizations'],
     });
 
@@ -1483,8 +1509,35 @@ export class ParentService {
     const isPinValid = await HashHelper.compare(pin, child.pin);
 
     if (!isPinValid) {
-      throw new UnauthorizedException('Invalid pin');
+      const attempts =
+        (await this.cacheManager.get<number>(attemptsKey) ?? 0) + 1;
+      await this.cacheManager.set(attemptsKey, attempts, this.PIN_ATTEMPTS_TTL_MS);
+
+      if (attempts >= this.PIN_MAX_ATTEMPTS) {
+        const timestamp = new Date().toISOString();
+        await this.cacheManager.set(lockedKey, timestamp, this.PIN_LOCK_TTL_MS);
+        throw new UnauthorizedException({
+          message: 'Account locked for 5 minutes',
+          code: 'ACCOUNT_LOCKED',
+          locked_at: timestamp,
+        });
+      }
+
+      const messages: Record<number, string> = {
+        1: 'Incorrect PIN, try again',
+        2: 'Incorrect PIN, you have 3 more attempts',
+        3: 'Incorrect PIN, you have 2 more attempts',
+        4: 'Incorrect PIN, you have 1 more attempt. Your account will be locked for 5 minutes if this fails',
+      };
+
+      throw new UnauthorizedException({
+        message: messages[attempts] ?? 'Incorrect PIN, try again',
+        code: 'INVALID_PIN',
+        attempts_remaining: this.PIN_MAX_ATTEMPTS - attempts,
+      });
     }
+
+    await this.cacheManager.del(attemptsKey);
 
     const tokenPayload = {
       id: child.student.id,
@@ -1498,6 +1551,43 @@ export class ParentService {
     );
 
     return { ...child, token, refresh_token };
+  }
+
+  async requestChildPinReset(temp_token: string): Promise<boolean> {
+    let payload: { id: string; username: string; role: string; type: string };
+
+    try {
+      payload = this.jwtService.verify(temp_token);
+    } catch {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
+
+    if (payload.type !== 'temp' || payload.role !== 'CHILD') {
+      throw new UnauthorizedException('Invalid token type');
+    }
+
+    const lockedKey = `child_pin_locked:${payload.id}`;
+    const lockedAt = await this.cacheManager.get<string>(lockedKey);
+    if (!lockedAt) {
+      throw new BadRequestException('Account is not currently locked');
+    }
+
+    const child = await this.childRepository.findOne({
+      where: { id: payload.id },
+      relations: ['parent'],
+    });
+
+    if (!child) {
+      throw new NotFoundException('Child not found');
+    }
+
+    await this.emailProducer.sendChildPinResetRequestEmail({
+      email: child.parent.email,
+      parentName: `${child.parent.first_name} ${child.parent.last_name}`,
+      childName: child.full_name,
+    });
+
+    return true;
   }
 
   async assignTestToChild(

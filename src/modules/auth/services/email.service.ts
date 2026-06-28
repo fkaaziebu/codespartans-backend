@@ -369,6 +369,29 @@ export class EmailService {
     }
   }
 
+  async sendChildPinResetRequestEmail(
+    to: string,
+    parentName: string,
+    childName: string,
+  ): Promise<void> {
+    const html = this.compileTemplate('child-pin-reset-request', {
+      parentName,
+      childName,
+    });
+
+    try {
+      await this.sendMail(
+        to,
+        `${childName} is requesting a PIN reset – Examforge`,
+        '',
+        html,
+      );
+    } catch (error) {
+      console.error('Failed to send child PIN reset request email:', error);
+      throw new Error('Failed to send child PIN reset request email');
+    }
+  }
+
   async sendCancellationOtpEmail(
     to: string,
     name: string,

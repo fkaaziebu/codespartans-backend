@@ -19,6 +19,7 @@ import { SubjectProgressResponse } from 'src/modules/inventory/types/subject-pro
 import { WeakSubjectAreaResponse } from 'src/modules/inventory/types/weak-subject-area-response.type';
 import { AddChildInput } from '../inputs/add-child.input';
 import { LoginChildInput } from '../inputs/login-child.input';
+import { RequestChildPinResetInput } from '../inputs/request-child-pin-reset.input';
 import { LoginParentInput } from '../inputs/login-parent.input';
 import { RegisterParentInput } from '../inputs/register-parent.input';
 import { SetupParentAccountInput } from '../inputs/setup-parent-account.input';
@@ -250,11 +251,20 @@ export class ParentResolver {
     return this.parentService.verifyChildUsername(input.username);
   }
 
-  @Throttle({ default: { limit: 3, ttl: 60_000 } })
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @UseGuards(GqlThrottlerGuard)
   @Mutation(() => LoginChildResponse)
   async loginChild(@Args('input') input: LoginChildInput) {
     return this.parentService.loginChild(input.temp_token, input.pin);
+  }
+
+  @Throttle({ default: { limit: 3, ttl: 300_000 } })
+  @UseGuards(GqlThrottlerGuard)
+  @Mutation(() => Boolean)
+  async requestChildPinReset(
+    @Args('input') input: RequestChildPinResetInput,
+  ) {
+    return this.parentService.requestChildPinReset(input.temp_token);
   }
 
   @UseGuards(GqlJwtAuthGuard)

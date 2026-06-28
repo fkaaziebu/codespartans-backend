@@ -71,6 +71,10 @@ export async function createTestApp(): Promise<TestApp> {
     sendLeadAdminNotificationEmail: jest.fn().mockResolvedValue(undefined),
     sendParentAccountAlreadyExistsEmail: jest.fn().mockResolvedValue(undefined),
     sendPurgeFailureAlert: jest.fn().mockResolvedValue(undefined),
+    sendChildPinResetRequestEmail: jest.fn().mockImplementation((data) => {
+      emailCapture.record('sendChildPinResetRequestEmail', data);
+      return Promise.resolve();
+    }),
   };
 
   const mockSignupProducer = {
