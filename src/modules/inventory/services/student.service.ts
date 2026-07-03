@@ -1506,7 +1506,19 @@ export class StudentService {
     if (!categoryId) {
       const cached =
         await this.cacheManager.get<StudentAggregateResponse>(cacheKey);
-      if (cached) return cached;
+      if (cached) {
+        return {
+          ...cached,
+          courses_with_test_taken: cached.courses_with_test_taken.map(
+            (course) => ({
+              ...course,
+              date_taken: course.date_taken
+                ? new Date(course.date_taken)
+                : null,
+            }),
+          ),
+        };
+      }
     }
 
     const student = await this.studentRepository.findOne({
