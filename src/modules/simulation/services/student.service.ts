@@ -292,6 +292,7 @@ export class StudentService {
           this.cacheManager.del(`student-subject-progress:${id}:all`),
           this.cacheManager.del(`student-weak-areas:${id}:all`),
           this.cacheManager.del(`student-score-history:${id}:all`),
+          this.cacheManager.del(`student-aggregate:${id}`),
         ]);
 
         return savedTest;
