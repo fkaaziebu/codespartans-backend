@@ -1636,6 +1636,8 @@ export class StudentService {
       state,
       message,
       aggregate_range: aggregate?.range ?? null,
+      required_subjects_count: requiredSlots,
+      tested_required_subjects_count: aggregate?.testedSlots ?? 0,
       category_id: category.id,
       category_name: category.name,
       grading_system: category.grading_system,

@@ -88,6 +88,8 @@ export interface AggregateResult {
   high: number;
   requiredCoreRemaining: number;
   requiredElectiveRemaining: number;
+  requiredSlots: number;
+  testedSlots: number;
   selectedCourseIds: string[];
 }
 
@@ -122,6 +124,8 @@ export function computeAggregateRange(
     high += strategy.getGrade(worstCaseScore).points;
   }
 
+  const requiredSlots = strategy.coreCount + strategy.electiveCount;
+
   return {
     range: low === high ? String(low) : `${low}-${high}`,
     low,
@@ -131,6 +135,8 @@ export function computeAggregateRange(
       0,
       strategy.electiveCount - elective.length,
     ),
+    requiredSlots,
+    testedSlots: core.length + elective.length,
     selectedCourseIds: selected.map((c) => c.course_id),
   };
 }

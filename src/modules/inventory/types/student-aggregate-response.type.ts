@@ -1,4 +1,4 @@
-import { Field, Float, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, Float, ID, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { CategoryGradingSystemType } from '../entities/category.entity';
 
 export enum StudentAggregateStateType {
@@ -43,6 +43,12 @@ export class StudentAggregateResponse {
 
   @Field({ nullable: true })
   aggregate_range: string | null;
+
+  @Field(() => Int)
+  required_subjects_count: number;
+
+  @Field(() => Int)
+  tested_required_subjects_count: number;
 
   @Field(() => ID)
   category_id: string;
