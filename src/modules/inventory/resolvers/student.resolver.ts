@@ -15,6 +15,7 @@ import { StudentService } from '../services';
 import {
   AttemptConnection,
   CategoryCountdownResponse,
+  StudentAggregateResponse,
   StudentCourseResponse,
   StudentStatsResponse,
   SubjectProgressResponse,
@@ -290,5 +291,16 @@ export class StudentResolver {
   @Query(() => CategoryCountdownResponse)
   getCategoryCountdown(@Args('categoryId') categoryId: string) {
     return this.studentService.getCategoryCountdown({ categoryId });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Query(() => StudentAggregateResponse)
+  getStudentAggregate(
+    @Context() context,
+    @Args('categoryId', { nullable: true }) categoryId?: string,
+  ) {
+    const { id } = context.req.user;
+
+    return this.studentService.getStudentAggregate({ id, categoryId });
   }
 }

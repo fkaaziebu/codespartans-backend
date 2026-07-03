@@ -29,12 +29,22 @@ import {
 import { AttemptFilterInput, CourseFilterInput } from '../inputs';
 import {
   CategoryCountdownResponse,
+  CourseAggregateEntry,
+  StudentAggregateResponse,
+  StudentAggregateStateType,
   StudentStatsResponse,
   SubjectProgressResponse,
   TestScoreHistoryResponse,
   TestTopicProgressResponse,
   WeakSubjectAreaResponse,
 } from '../types';
+import {
+  AggregateState,
+  GRADING_STRATEGIES,
+  GradedCourse,
+  buildAggregateMessage,
+  computeAggregateRange,
+} from './grading-strategies';
 // import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
 
 const FIVE_MIN_MS = 5 * 60 * 1000;
@@ -1466,6 +1476,171 @@ export class StudentService {
       categoryName: category.name,
       countdown,
       exam_duration_days: category.exam_duration_days ?? null,
+    };
+  }
+
+  private getTestStartTime(test: Test): Date | null {
+    const event = test.time_events.find(
+      (e) => e.type === TimeEventType.STARTED,
+    );
+    return event ? new Date(event.recorded_at) : null;
+  }
+
+  private computeScorePercentage(test: Test): number {
+    const answers = test.submitted_answers;
+    const totalQuestions = test.test_suite?.questions?.length ?? answers.length;
+    if (!totalQuestions) return 0;
+    const correct = answers.filter((a) => a.is_correct === true).length;
+    return (correct / totalQuestions) * 100;
+  }
+
+  async getStudentAggregate({
+    id,
+    categoryId,
+  }: {
+    id: string;
+    categoryId?: string;
+  }): Promise<StudentAggregateResponse> {
+    const student = await this.studentRepository.findOne({
+      where: { id },
+      relations: [
+        'subscribed_courses',
+        'subscribed_categories.courses',
+        'tests.test_suite.course_version.course',
+        'tests.test_suite.questions',
+        'tests.submitted_answers',
+        'tests.time_events',
+      ],
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student not found');
+    }
+
+    const category = categoryId
+      ? student.subscribed_categories.find((c) => c.id === categoryId)
+      : student.subscribed_categories[0];
+
+    if (!category) {
+      throw new NotFoundException(
+        'Student is not subscribed to this category',
+      );
+    }
+
+    const subscribedCourseIds = new Set(
+      student.subscribed_courses.map((c) => c.id),
+    );
+    const categoryCourses = category.courses.filter((c) =>
+      subscribedCourseIds.has(c.id),
+    );
+
+    const endedTests = student.tests.filter(
+      (t) => t.status === TestStatusType.ENDED,
+    );
+    // .filter((t) => t.test_suite?.suite_type === SuiteType.PAST_QUESTIONS) // enable once past-questions-only aggregate is required
+
+    const strategy = GRADING_STRATEGIES[category.grading_system];
+
+    const coursesWithTestTaken: CourseAggregateEntry[] = [];
+    const coursesWithoutTestTaken: CourseAggregateEntry[] = [];
+    const gradedCourses: GradedCourse[] = [];
+
+    for (const course of categoryCourses) {
+      const latestTest = endedTests
+        .filter((t) => t.test_suite?.course_version?.course?.id === course.id)
+        .sort(
+          (a, b) =>
+            (this.getTestStartTime(b)?.getTime() ?? 0) -
+            (this.getTestStartTime(a)?.getTime() ?? 0),
+        )[0];
+
+      if (!latestTest) {
+        coursesWithoutTestTaken.push({
+          course_id: course.id,
+          course_title: course.title,
+          is_mandatory: course.is_mandatory,
+          score: null,
+          grade: null,
+          date_taken: null,
+        });
+        continue;
+      }
+
+      const score = this.computeScorePercentage(latestTest);
+      const grade = strategy ? strategy.getGrade(score).grade : null;
+
+      coursesWithTestTaken.push({
+        course_id: course.id,
+        course_title: course.title,
+        is_mandatory: course.is_mandatory,
+        score,
+        grade,
+        date_taken: this.getTestStartTime(latestTest),
+      });
+
+      gradedCourses.push({
+        course_id: course.id,
+        course_title: course.title,
+        is_mandatory: course.is_mandatory,
+        score,
+      });
+    }
+
+    const aggregate = strategy
+      ? computeAggregateRange(strategy, gradedCourses)
+      : null;
+
+    const requiredSlots = strategy
+      ? strategy.coreCount + strategy.electiveCount
+      : 0;
+
+    let state: StudentAggregateStateType;
+    if (coursesWithTestTaken.length === 0) {
+      state = StudentAggregateStateType.ZERO_DATA;
+    } else if (
+      aggregate &&
+      aggregate.requiredCoreRemaining === 0 &&
+      aggregate.requiredElectiveRemaining === 0
+    ) {
+      state = StudentAggregateStateType.COMPLETE_DATA;
+    } else {
+      state = StudentAggregateStateType.PARTIAL_DATA;
+    }
+
+    const missingCourseTitles: string[] = [];
+    if (aggregate) {
+      const untestedCore = coursesWithoutTestTaken.filter(
+        (c) => c.is_mandatory,
+      );
+      const untestedElective = coursesWithoutTestTaken.filter(
+        (c) => !c.is_mandatory,
+      );
+      missingCourseTitles.push(
+        ...untestedCore
+          .slice(0, aggregate.requiredCoreRemaining)
+          .map((c) => c.course_title),
+        ...untestedElective
+          .slice(0, aggregate.requiredElectiveRemaining)
+          .map((c) => c.course_title),
+      );
+    }
+
+    const message = buildAggregateMessage({
+      state: state as unknown as AggregateState,
+      gradingConfigured: strategy !== null,
+      missingCourseTitles,
+      requiredSlots,
+    });
+
+    return {
+      state,
+      message,
+      aggregate_range: aggregate?.range ?? null,
+      category_id: category.id,
+      category_name: category.name,
+      grading_system: category.grading_system,
+      courses_with_test_taken: coursesWithTestTaken,
+      courses_without_test_taken: coursesWithoutTestTaken,
     };
   }
 }

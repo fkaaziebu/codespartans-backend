@@ -1,4 +1,4 @@
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -10,6 +10,17 @@ import {
 import { Course } from './course.entity';
 import { Organization } from '../../auth/entities/organization.entity';
 import { Student } from '../../auth/entities/student.entity';
+
+export enum CategoryGradingSystemType {
+  WASSCE = 'WASSCE',
+  BECE = 'BECE',
+  NONE = 'NONE',
+}
+
+registerEnumType(CategoryGradingSystemType, {
+  name: 'CategoryGradingSystemType',
+  description: 'Grading system used to compute a predicted aggregate',
+});
 
 @ObjectType('Category')
 @Entity('categories')
@@ -33,6 +44,14 @@ export class Category {
   @Field(() => Int, { nullable: true })
   @Column({ type: 'int', nullable: true })
   exam_duration_days: number | null;
+
+  @Field(() => CategoryGradingSystemType)
+  @Column({
+    type: 'enum',
+    enum: CategoryGradingSystemType,
+    default: CategoryGradingSystemType.NONE,
+  })
+  grading_system: CategoryGradingSystemType;
 
   @Field(() => Organization, { nullable: true })
   @ManyToOne(
