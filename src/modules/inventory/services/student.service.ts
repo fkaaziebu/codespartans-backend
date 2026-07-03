@@ -1501,6 +1501,14 @@ export class StudentService {
     id: string;
     categoryId?: string;
   }): Promise<StudentAggregateResponse> {
+    const cacheKey = `student-aggregate:${id}`;
+
+    if (!categoryId) {
+      const cached =
+        await this.cacheManager.get<StudentAggregateResponse>(cacheKey);
+      if (cached) return cached;
+    }
+
     const student = await this.studentRepository.findOne({
       where: { id },
       relations: [
@@ -1632,7 +1640,7 @@ export class StudentService {
       requiredSlots,
     });
 
-    return {
+    const result: StudentAggregateResponse = {
       state,
       message,
       aggregate_range: aggregate?.range ?? null,
@@ -1644,5 +1652,11 @@ export class StudentService {
       courses_with_test_taken: coursesWithTestTaken,
       courses_without_test_taken: coursesWithoutTestTaken,
     };
+
+    if (!categoryId) {
+      await this.cacheManager.set(cacheKey, result, SEVEN_DAYS_MS);
+    }
+
+    return result;
   }
 }
