@@ -40,11 +40,11 @@ import { ClassLevel } from '../../parent/entities/child.entity';
 import { Gender } from '../../parent/entities/parent.entity';
 import { HashHelper } from '../../../helpers';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { StudentGateway } from '../gateways/student.gateway';
+import { GraphQLError } from 'graphql';
+import { EndTestProducer } from './end-test.producer';
 import { InsightService } from './insight.service';
 import { MarkAnswerProducer } from './mark-answer.producer';
 import { MarkAnswerService } from './mark-answer.service';
-import { TestTimerService } from './test-timer.service';
 import { StudentService } from './student.service';
 
 describe('StudentService', () => {
@@ -65,17 +65,9 @@ describe('StudentService', () => {
   let parentRepository: Repository<Parent>;
   let childRepository: Repository<Child>;
 
-  const mockTimerService = {
-    startTimer: jest.fn(),
-    pauseTimer: jest.fn(),
-    resumeTimer: jest.fn(),
-    stopTimer: jest.fn(),
-  };
-
-  const mockSseGateway = {
-    sendTestEnded: jest.fn(),
-    sendTimeUpdate: jest.fn(),
-    sendTestPaused: jest.fn(),
+  const mockEndTestProducer = {
+    scheduleEndTest: jest.fn().mockResolvedValue(undefined),
+    cancelEndTestJob: jest.fn().mockResolvedValue(undefined),
   };
 
   const mockMarkAnswerProducer = {
@@ -117,8 +109,7 @@ describe('StudentService', () => {
       ],
       providers: [
         StudentService,
-        { provide: TestTimerService, useValue: mockTimerService },
-        { provide: StudentGateway, useValue: mockSseGateway },
+        { provide: EndTestProducer, useValue: mockEndTestProducer },
         { provide: MarkAnswerProducer, useValue: mockMarkAnswerProducer },
         { provide: MarkAnswerService, useValue: mockMarkAnswerService },
         {
@@ -307,7 +298,11 @@ describe('StudentService', () => {
       const response = await startTest(suite.id, student.id);
 
       expect(response.status).toBe(TestStatusType.ON_GOING);
-      expect(mockTimerService.startTimer).toHaveBeenCalled();
+      expect(mockEndTestProducer.scheduleEndTest).toHaveBeenCalledWith(
+        response.id,
+        student.id,
+        expect.any(Date),
+      );
 
       const std = await getStudent(student.id);
       expect(std.tests[0].id).toBe(response.id);
@@ -350,7 +345,9 @@ describe('StudentService', () => {
       });
 
       expect(response.status).toBe(TestStatusType.PAUSED);
-      expect(mockTimerService.pauseTimer).toHaveBeenCalled();
+      expect(mockEndTestProducer.cancelEndTestJob).toHaveBeenCalledWith(
+        test.id,
+      );
 
       const std = await getStudent(student.id);
       expect(std.tests[0].time_events.map((e) => e.type)).toContain(
@@ -385,7 +382,14 @@ describe('StudentService', () => {
       });
 
       expect(response.status).toBe(TestStatusType.ON_GOING);
-      expect(mockTimerService.resumeTimer).toHaveBeenCalled();
+      expect(mockEndTestProducer.cancelEndTestJob).toHaveBeenCalledWith(
+        test.id,
+      );
+      expect(mockEndTestProducer.scheduleEndTest).toHaveBeenCalledWith(
+        test.id,
+        student.id,
+        expect.any(Date),
+      );
 
       const std = await getStudent(student.id);
       expect(std.tests[0].time_events.map((e) => e.type)).toContain(
@@ -408,8 +412,9 @@ describe('StudentService', () => {
       });
 
       expect(response.status).toBe(TestStatusType.ENDED);
-      expect(mockTimerService.stopTimer).toHaveBeenCalled();
-      expect(mockSseGateway.sendTestEnded).toHaveBeenCalled();
+      expect(mockEndTestProducer.cancelEndTestJob).toHaveBeenCalledWith(
+        test.id,
+      );
 
       const std = await getStudent(student.id);
       expect(std.tests[0].time_events.map((e) => e.type)).toContain(
@@ -426,6 +431,38 @@ describe('StudentService', () => {
           testId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(NotFoundException);
+    });
+
+    it('is idempotent when called twice for the same test', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+
+      await studentService.endTest({ id: student.id, testId: test.id });
+      const second = await studentService.endTest({
+        id: student.id,
+        testId: test.id,
+      });
+
+      expect(second.status).toBe(TestStatusType.ENDED);
+
+      const std = await getStudent(student.id);
+      expect(
+        std.tests[0].time_events.filter((e) => e.type === TimeEventType.ENDED),
+      ).toHaveLength(1);
+    });
+
+    it('endTestFromQueue ends the test without cancelling a queue job', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+      mockEndTestProducer.cancelEndTestJob.mockClear();
+
+      const response = await studentService.endTestFromQueue({
+        id: student.id,
+        testId: test.id,
+      });
+
+      expect(response.status).toBe(TestStatusType.ENDED);
+      expect(mockEndTestProducer.cancelEndTestJob).not.toHaveBeenCalled();
     });
   });
 
@@ -530,21 +567,24 @@ describe('StudentService', () => {
       expect(updated.is_correct).toBe(true);
     });
 
-    it('throws BadRequestException when test is ended', async () => {
+    it('throws a TEST_ENDED GraphQLError when test is ended', async () => {
       const { suite, student, questions } = await setupData();
       const test = await startTest(suite.id, student.id);
       await studentService.endTest({ id: student.id, testId: test.id });
 
-      await expect(
-        studentService.submitAnswer({
-          id: student.id,
-          testId: test.id,
-          questionId: questions[0].id,
-          timeRange: `${Date.now()}#${Date.now() + 1000}`,
-          answer: 'option one',
-          isFlagged: false,
-        }),
-      ).rejects.toThrow(BadRequestException);
+      const submit = studentService.submitAnswer({
+        id: student.id,
+        testId: test.id,
+        questionId: questions[0].id,
+        timeRange: `${Date.now()}#${Date.now() + 1000}`,
+        answer: 'option one',
+        isFlagged: false,
+      });
+
+      await expect(submit).rejects.toThrow(GraphQLError);
+      await expect(submit).rejects.toMatchObject({
+        extensions: { code: 'TEST_ENDED' },
+      });
     });
   });
 
@@ -715,7 +755,11 @@ describe('StudentService', () => {
       });
 
       expect(result.status).toBe(TestStatusType.ON_GOING);
-      expect(mockTimerService.startTimer).toHaveBeenCalled();
+      expect(mockEndTestProducer.scheduleEndTest).toHaveBeenCalledWith(
+        result.id,
+        student.id,
+        expect.any(Date),
+      );
 
       const updatedAssignment = await testAssignmentRepository.findOne({
         where: { id: assignment.id },

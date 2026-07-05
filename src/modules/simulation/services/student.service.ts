@@ -24,14 +24,13 @@ import { TimeEvent } from '../entities/time_event.entity';
 import { TimeEventType } from '../entities/time_event.entity';
 import { TestModeType, TestStatusType } from '../entities/test.entity';
 import { Child } from '../../parent/entities/child.entity';
-import { StudentGateway } from '../gateways/student.gateway';
-import { TestTimerService } from './test-timer.service';
+import { EndTestProducer } from './end-test.producer';
 import { MarkAnswerProducer } from './mark-answer.producer';
 import { MarkAnswerService } from './mark-answer.service';
 import { InsightService } from './insight.service';
 import { Course as CourseTypeClass } from '../../inventory/entities/course.entity';
 import { SuiteFilterInput } from '../../inventory/inputs';
-import { SuiteType } from '../../review/entities/test_suite.entity';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class StudentService {
@@ -42,8 +41,7 @@ export class StudentService {
     private studentRepository: Repository<Student>,
     @InjectRepository(TestAssignment)
     private testAssignmentRepository: Repository<TestAssignment>,
-    private timerService: TestTimerService,
-    private sseGateway: StudentGateway,
+    private endTestProducer: EndTestProducer,
     private markAnswerProducer: MarkAnswerProducer,
     private markAnswerService: MarkAnswerService,
     private insightService: InsightService,
@@ -59,7 +57,11 @@ export class StudentService {
     suiteId: string;
     mode?: TestModeType;
   }) {
-    return await this.studentRepository.manager.transaction(
+    let scheduledTestId: string;
+    let scheduledStudentId: string;
+    let scheduledEndTime: Date;
+
+    const new_test = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
@@ -108,9 +110,6 @@ export class StudentService {
         time_event.test = new_test;
         await transactionalEntityManager.save(time_event);
 
-        const testId = new_test.id;
-        const studentId = student.id;
-
         const endTime = new Date(
           new Date(time_event.recorded_at).setSeconds(
             (student.subscribed_courses[0].versions[0].questions.reduce(
@@ -120,24 +119,29 @@ export class StudentService {
           ),
         );
 
-        this.timerService.startTimer(
-          testId,
-          studentId,
-          endTime,
-          (remaining_ms) =>
-            this.handleTimerTick(testId, studentId, remaining_ms),
-          async () => await this.endTest({ id, testId: new_test.id }),
-        );
+        scheduledTestId = new_test.id;
+        scheduledStudentId = student.id;
+        scheduledEndTime = endTime;
 
-        this.logger.log(`Test ${new_test.id} started for student ${studentId}`);
+        this.logger.log(
+          `Test ${new_test.id} started for student ${student.id}`,
+        );
 
         return new_test;
       },
     );
+
+    await this.endTestProducer.scheduleEndTest(
+      scheduledTestId,
+      scheduledStudentId,
+      scheduledEndTime,
+    );
+
+    return new_test;
   }
 
   async pauseTest({ id, testId }: { id: string; testId: string }) {
-    return await this.studentRepository.manager.transaction(
+    const updated_test = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
@@ -165,18 +169,23 @@ export class StudentService {
           student.tests[0],
         );
 
-        this.timerService.pauseTimer(testId, student.id);
-
         this.logger.log(
           `Test ${updated_test.id} paused for student ${student.id}`,
         );
         return updated_test;
       },
     );
+
+    await this.endTestProducer.cancelEndTestJob(testId);
+
+    return updated_test;
   }
 
   async resumeTest({ id, testId }: { id: string; testId: string }) {
-    return await this.studentRepository.manager.transaction(
+    let scheduledStudentId: string;
+    let scheduledEndTime: Date;
+
+    const updated_test = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: {
@@ -215,14 +224,8 @@ export class StudentService {
           totalEstimatedMs,
         );
 
-        this.timerService.resumeTimer(
-          testId,
-          student.id,
-          endTime,
-          (remainingMs) =>
-            this.handleTimerTick(testId, student.id, remainingMs),
-          async () => await this.endTest({ id: student.id, testId }),
-        );
+        scheduledStudentId = student.id;
+        scheduledEndTime = endTime;
 
         this.logger.log(
           `Test ${updated_test.id} resumed for student ${student.id}`,
@@ -231,9 +234,38 @@ export class StudentService {
         return updated_test;
       },
     );
+
+    await this.endTestProducer.cancelEndTestJob(testId);
+    await this.endTestProducer.scheduleEndTest(
+      testId,
+      scheduledStudentId,
+      scheduledEndTime,
+    );
+
+    return updated_test;
   }
 
   async endTest({ id, testId }: { id: string; testId: string }) {
+    const savedTest = await this.endTestInternal({ id, testId });
+    await this.endTestProducer.cancelEndTestJob(testId);
+    return savedTest;
+  }
+
+  /**
+   * Invoked by the end-test queue consumer when a test's deadline is
+   * reached. Never touches the queue itself, since it is that job.
+   */
+  async endTestFromQueue({ id, testId }: { id: string; testId: string }) {
+    return this.endTestInternal({ id, testId });
+  }
+
+  private async endTestInternal({
+    id,
+    testId,
+  }: {
+    id: string;
+    testId: string;
+  }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
@@ -250,6 +282,10 @@ export class StudentService {
           throw new NotFoundException('You do not have access to this test');
         }
 
+        if (student.tests[0].status === TestStatusType.ENDED) {
+          return student.tests[0];
+        }
+
         const time_event = new TimeEvent();
         time_event.recorded_at = new Date();
         time_event.type = TimeEventType.ENDED;
@@ -259,9 +295,6 @@ export class StudentService {
         student.tests[0].status = TestStatusType.ENDED;
 
         const studentId = student.id;
-        this.timerService.stopTimer(testId, studentId);
-
-        this.sseGateway.sendTestEnded(testId, studentId);
 
         const savedTest = await transactionalEntityManager.save(
           student.tests[0],
@@ -454,8 +487,9 @@ export class StudentService {
         }
 
         if (student.tests[0].status === TestStatusType.ENDED) {
-          throw new BadRequestException(
+          throw new GraphQLError(
             "Test has ended, you can't submit answers for an ended test",
+            { extensions: { code: 'TEST_ENDED' } },
           );
         }
 
@@ -600,109 +634,6 @@ export class StudentService {
     return test;
   }
 
-  /**
-   * Handle student reconnection
-   * This is crucial for the edge case where a student disconnects
-   * and the test should have already ended
-   */
-  async handleStudentReconnection(
-    testId: string,
-    studentId: string,
-  ): Promise<{ test: Test; action: string }> {
-    const student = await this.studentRepository.findOne({
-      where: {
-        id: studentId,
-        tests: {
-          id: testId,
-        },
-      },
-      relations: ['tests.time_events', 'tests.test_suite.questions'],
-    });
-
-    this.logger.log(`StudentId: ${studentId}, TestId: ${testId}`);
-
-    if (!student || !studentId || !testId) {
-      throw new NotFoundException('You do not have access to this suite');
-    }
-
-    const test = student.tests[0];
-
-    this.logger.log(
-      `Student ${studentId} reconnected to test ${testId}. Current status: ${test.status}`,
-    );
-
-    const totalEstimatedMs =
-      student.tests[0].test_suite.questions.reduce(
-        (acc, question) => acc + question.estimated_time_in_ms,
-        0,
-      ) || 0;
-
-    const endTime = this.calculateEndTime(test.time_events, totalEstimatedMs);
-
-    const now = new Date();
-    const remainingMs = endTime.getTime() - now.getTime();
-
-    // Check if test is on_going
-    if (test.status === TestStatusType.ON_GOING) {
-      // Critical: Check if test should have ended
-      if (remainingMs <= 0) {
-        this.logger.warn(
-          `Test ${testId} for student ${studentId} has expired. Ending test.`,
-        );
-
-        const ended_test = await this.endTest({ id: student.id, testId });
-
-        // Send test ended event via SSE
-        this.sseGateway.sendTestEnded(testId, studentId);
-
-        return {
-          test: ended_test,
-          action: 'test_ended',
-        };
-      }
-
-      // Test is still ongoing, restart timer
-      this.timerService.startTimer(
-        testId,
-        studentId,
-        endTime,
-        (remainingMs) => this.handleTimerTick(testId, studentId, remainingMs),
-        async () => await this.endTest({ id: student.id, testId }),
-      );
-
-      // Send current remaining time to student
-      this.sseGateway.sendTimeUpdate(testId, studentId, remainingMs);
-
-      return {
-        test,
-        action: 'test_resumed',
-      };
-    }
-
-    // Test is paused, send current remaining time
-    if (test.status === TestStatusType.PAUSED && remainingMs) {
-      this.sseGateway.sendTestPaused(testId, studentId, remainingMs);
-      return {
-        test,
-        action: 'test_paused',
-      };
-    }
-
-    // Test has ended
-    if (test.status === TestStatusType.ENDED) {
-      this.sseGateway.sendTestEnded(testId, studentId);
-      return {
-        test,
-        action: 'test_ended',
-      };
-    }
-
-    return {
-      test,
-      action: 'test_not_started',
-    };
-  }
-
   async listMyAssignments({ id }: { id: string }): Promise<TestAssignment[]> {
     const student = await this.studentRepository.findOne({
       where: { id },
@@ -751,7 +682,11 @@ export class StudentService {
     assignmentId: string;
     mode?: TestModeType;
   }) {
-    return await this.studentRepository.manager.transaction(
+    let scheduledTestId: string;
+    let scheduledStudentId: string;
+    let scheduledEndTime: Date;
+
+    const new_test = await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
           where: { id },
@@ -820,9 +755,6 @@ export class StudentService {
         time_event.test = new_test;
         await transactionalEntityManager.save(time_event);
 
-        const testId = new_test.id;
-        const studentId = student.id;
-
         const endTime = new Date(
           new Date(time_event.recorded_at).setSeconds(
             (assignment.test_suite.questions.reduce(
@@ -832,47 +764,25 @@ export class StudentService {
           ),
         );
 
-        this.timerService.startTimer(
-          testId,
-          studentId,
-          endTime,
-          (remaining_ms) =>
-            this.handleTimerTick(testId, studentId, remaining_ms),
-          async () => await this.endTest({ id, testId: new_test.id }),
-        );
+        scheduledTestId = new_test.id;
+        scheduledStudentId = student.id;
+        scheduledEndTime = endTime;
 
         this.logger.log(
-          `Assigned test ${new_test.id} started for student ${studentId}`,
+          `Assigned test ${new_test.id} started for student ${student.id}`,
         );
 
         return new_test;
       },
     );
-  }
 
-  async getActiveTest(studentId: string) {
-    const student = await this.studentRepository.findOne({
-      where: {
-        id: studentId,
-        tests: {
-          status: TestStatusType.ON_GOING || TestStatusType.PAUSED,
-        },
-      },
-      relations: ['tests'],
-    });
+    await this.endTestProducer.scheduleEndTest(
+      scheduledTestId,
+      scheduledStudentId,
+      scheduledEndTime,
+    );
 
-    return student?.tests[0];
-  }
-
-  /**
-   * Private helper: Handle timer tick
-   */
-  private handleTimerTick(
-    testId: string,
-    studentId: string,
-    remainingMs: number,
-  ): void {
-    this.sseGateway.sendTimeUpdate(testId, studentId, remainingMs);
+    return new_test;
   }
 
   private calculateEndTime(
