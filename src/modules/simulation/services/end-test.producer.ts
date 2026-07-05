@@ -34,10 +34,21 @@ export class EndTestProducer {
   }
 
   async cancelEndTestJob(testId: string): Promise<void> {
-    const job = await this.queue.getJob(testId);
-    if (job) {
-      await job.remove();
-      this.logger.log(`Cancelled end-test job for test ${testId}`);
+    try {
+      const job = await this.queue.getJob(testId);
+      if (job) {
+        await job.remove();
+        this.logger.log(`Cancelled end-test job for test ${testId}`);
+      }
+    } catch (error) {
+      // If the job is already active/locked (e.g. it started running right
+      // as the student paused), it can't be removed. That's fine: the
+      // consumer's PAUSED guard makes a late-firing job a safe no-op.
+      this.logger.warn(
+        `Failed to cancel end-test job for test ${testId}: ${
+          error instanceof Error ? error.message : error
+        }`,
+      );
     }
   }
 }

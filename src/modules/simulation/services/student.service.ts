@@ -157,6 +157,12 @@ export class StudentService {
           throw new NotFoundException('You do not have access to this test');
         }
 
+        if (student.tests[0].status !== TestStatusType.ON_GOING) {
+          throw new BadRequestException(
+            `Cannot pause test with status ${student.tests[0].status}`,
+          );
+        }
+
         const time_event = new TimeEvent();
         time_event.recorded_at = new Date();
         time_event.type = TimeEventType.PAUSED;
@@ -199,6 +205,12 @@ export class StudentService {
 
         if (!student) {
           throw new NotFoundException('You do not have access to this test');
+        }
+
+        if (student.tests[0].status !== TestStatusType.PAUSED) {
+          throw new BadRequestException(
+            `Cannot resume test with status ${student.tests[0].status}`,
+          );
         }
 
         const time_event = new TimeEvent();
@@ -256,15 +268,17 @@ export class StudentService {
    * reached. Never touches the queue itself, since it is that job.
    */
   async endTestFromQueue({ id, testId }: { id: string; testId: string }) {
-    return this.endTestInternal({ id, testId });
+    return this.endTestInternal({ id, testId, isQueueTriggered: true });
   }
 
   private async endTestInternal({
     id,
     testId,
+    isQueueTriggered = false,
   }: {
     id: string;
     testId: string;
+    isQueueTriggered?: boolean;
   }) {
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
@@ -283,6 +297,19 @@ export class StudentService {
         }
 
         if (student.tests[0].status === TestStatusType.ENDED) {
+          return student.tests[0];
+        }
+
+        // A delayed queue job can fire after the student paused the test
+        // (e.g. cancellation raced with the job becoming active). Never
+        // let the scheduled job end a paused test out from under them.
+        if (
+          isQueueTriggered &&
+          student.tests[0].status === TestStatusType.PAUSED
+        ) {
+          this.logger.log(
+            `Skipping end-test job for test ${testId}: test is currently PAUSED`,
+          );
           return student.tests[0];
         }
 

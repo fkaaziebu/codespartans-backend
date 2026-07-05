@@ -366,6 +366,33 @@ describe('StudentService', () => {
         }),
       ).rejects.toThrow(NotFoundException);
     });
+
+    it('throws BadRequestException when pausing an already-PAUSED test', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+      await studentService.pauseTest({ id: student.id, testId: test.id });
+
+      await expect(
+        studentService.pauseTest({ id: student.id, testId: test.id }),
+      ).rejects.toThrow(BadRequestException);
+
+      const std = await getStudent(student.id);
+      expect(
+        std.tests[0].time_events.filter(
+          (e) => e.type === TimeEventType.PAUSED,
+        ),
+      ).toHaveLength(1);
+    });
+
+    it('throws BadRequestException when pausing an ENDED test', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+      await studentService.endTest({ id: student.id, testId: test.id });
+
+      await expect(
+        studentService.pauseTest({ id: student.id, testId: test.id }),
+      ).rejects.toThrow(BadRequestException);
+    });
   });
 
   // ─── resumeTest ──────────────────────────────────────────────────────────────
@@ -396,6 +423,108 @@ describe('StudentService', () => {
         TimeEventType.RESUMED,
       );
       expect(std.tests[0].time_events).toHaveLength(3);
+    });
+
+    it('throws BadRequestException when resuming a test that is not PAUSED', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+
+      await expect(
+        studentService.resumeTest({ id: student.id, testId: test.id }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('throws BadRequestException when resuming an ENDED test', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+      await studentService.pauseTest({ id: student.id, testId: test.id });
+      await studentService.endTest({ id: student.id, testId: test.id });
+
+      await expect(
+        studentService.resumeTest({ id: student.id, testId: test.id }),
+      ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  // ─── calculateEndTime / calculateTimeUsed ───────────────────────────────────
+
+  describe('calculateEndTime / calculateTimeUsed', () => {
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    const asEndTime = (timeEvents: unknown[], totalEstimatedMs: number) =>
+      (studentService as any).calculateEndTime(timeEvents, totalEstimatedMs);
+
+    it('shifts the end time forward by exactly the paused duration for a single pause/resume cycle', () => {
+      const started = new Date('2026-01-01T14:30:00.000Z');
+      const paused = new Date('2026-01-01T14:45:00.000Z');
+      const resumed = new Date('2026-01-01T15:00:00.000Z');
+      jest.useFakeTimers().setSystemTime(resumed);
+
+      const endTime = asEndTime(
+        [
+          { type: TimeEventType.STARTED, recorded_at: started },
+          { type: TimeEventType.PAUSED, recorded_at: paused },
+          { type: TimeEventType.RESUMED, recorded_at: resumed },
+        ],
+        30 * 60 * 1000,
+      );
+
+      expect(endTime).toEqual(new Date('2026-01-01T15:15:00.000Z'));
+    });
+
+    it('accumulates the total paused duration across multiple pause/resume cycles', () => {
+      const started = new Date('2026-01-01T10:00:00.000Z');
+      const paused1 = new Date('2026-01-01T10:10:00.000Z');
+      const resumed1 = new Date('2026-01-01T10:20:00.000Z');
+      const paused2 = new Date('2026-01-01T10:25:00.000Z');
+      const resumed2 = new Date('2026-01-01T10:35:00.000Z');
+      jest.useFakeTimers().setSystemTime(resumed2);
+
+      const endTime = asEndTime(
+        [
+          { type: TimeEventType.STARTED, recorded_at: started },
+          { type: TimeEventType.PAUSED, recorded_at: paused1 },
+          { type: TimeEventType.RESUMED, recorded_at: resumed1 },
+          { type: TimeEventType.PAUSED, recorded_at: paused2 },
+          { type: TimeEventType.RESUMED, recorded_at: resumed2 },
+        ],
+        60 * 60 * 1000,
+      );
+
+      // Unpaused baseline end would be 11:00; 20 total paused minutes shift it to 11:20.
+      expect(endTime).toEqual(new Date('2026-01-01T11:20:00.000Z'));
+    });
+
+    it('characterizes the double-pause corruption that the pauseTest guard prevents', () => {
+      const started = new Date('2026-01-01T10:00:00.000Z');
+      const paused1 = new Date('2026-01-01T10:10:00.000Z');
+      const paused2 = new Date('2026-01-01T10:15:00.000Z');
+      const resumed = new Date('2026-01-01T10:20:00.000Z');
+      jest.useFakeTimers().setSystemTime(resumed);
+
+      // This sequence (two consecutive PAUSED events with no RESUMED between
+      // them) can no longer be produced through the service now that pauseTest
+      // rejects pausing an already-PAUSED test. It's kept here to document why
+      // that guard matters: without it, the second PAUSED event is treated as
+      // if resuming from epoch 0, corrupting the "active time used" duration by
+      // many orders of magnitude relative to totalEstimatedMs.
+      const endTime = asEndTime(
+        [
+          { type: TimeEventType.STARTED, recorded_at: started },
+          { type: TimeEventType.PAUSED, recorded_at: paused1 },
+          { type: TimeEventType.PAUSED, recorded_at: paused2 },
+          { type: TimeEventType.RESUMED, recorded_at: resumed },
+        ],
+        30 * 60 * 1000,
+      );
+
+      const expectedCorrectEndTime = new Date('2026-01-01T10:35:00.000Z');
+      expect(endTime.getTime()).not.toEqual(expectedCorrectEndTime.getTime());
+      expect(
+        Math.abs(endTime.getTime() - expectedCorrectEndTime.getTime()),
+      ).toBeGreaterThan(365 * 24 * 60 * 60 * 1000);
     });
   });
 
@@ -463,6 +592,25 @@ describe('StudentService', () => {
 
       expect(response.status).toBe(TestStatusType.ENDED);
       expect(mockEndTestProducer.cancelEndTestJob).not.toHaveBeenCalled();
+    });
+
+    it('endTestFromQueue is a no-op when the test is currently PAUSED', async () => {
+      const { suite, student } = await setupData();
+      const test = await startTest(suite.id, student.id);
+      await studentService.pauseTest({ id: student.id, testId: test.id });
+
+      const response = await studentService.endTestFromQueue({
+        id: student.id,
+        testId: test.id,
+      });
+
+      expect(response.status).toBe(TestStatusType.PAUSED);
+
+      const std = await getStudent(student.id);
+      expect(std.tests[0].status).toBe(TestStatusType.PAUSED);
+      expect(
+        std.tests[0].time_events.filter((e) => e.type === TimeEventType.ENDED),
+      ).toHaveLength(0);
     });
   });
 
