@@ -13,23 +13,27 @@ import { SubmittedAnswer } from './entities/sumitted_answer.entity';
 import { Test } from './entities/test.entity';
 import { TestAssignment } from './entities/test_assignment.entity';
 import { TimeEvent } from './entities/time_event.entity';
-import { StudentController } from './controllers/student.controller';
-import { StudentGateway } from './gateways/student.gateway';
 import { StudentResolver } from './resolvers';
 import { StudentService } from './services';
+import { EndTestConsumer } from './services/end-test.consumer';
+import { EndTestProducer } from './services/end-test.producer';
 import { InsightService } from './services/insight.service';
 import { MarkAnswerConsumer } from './services/mark-answer.consumer';
 import { MarkAnswerProducer } from './services/mark-answer.producer';
 import { MarkAnswerService } from './services/mark-answer.service';
 import { SemanticCacheService } from './services/semantic-cache.service';
-import { TestTimerService } from './services/test-timer.service';
 
 @Module({
   imports: [
     ConfigModule,
-    BullModule.registerQueue({
-      name: 'mark-answer-queue',
-    }),
+    BullModule.registerQueue(
+      {
+        name: 'mark-answer-queue',
+      },
+      {
+        name: 'end-test-queue',
+      },
+    ),
     DemoModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -52,18 +56,17 @@ import { TestTimerService } from './services/test-timer.service';
       TimeEvent,
     ]),
   ],
-  controllers: [StudentController],
   providers: [
     StudentService,
     InsightService,
-    TestTimerService,
     JwtStrategy,
     StudentResolver,
-    StudentGateway,
     MarkAnswerProducer,
     SemanticCacheService,
     MarkAnswerService,
     MarkAnswerConsumer,
+    EndTestProducer,
+    EndTestConsumer,
   ],
   exports: [TypeOrmModule],
 })
