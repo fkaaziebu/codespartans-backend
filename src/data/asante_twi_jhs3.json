@@ -1,0 +1,933 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Ghanaian Language (Asante Twi)",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "subject_default.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Twi JHS3 — Nsɛmfua: Nkontaabo ne Abira",
+          "suiteDescription": "Synonyms, antonyms and abstract vocabulary.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Nsɛmfua"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Anigyeɛ » ne « ahosɛpɛ » yɛ nsɛmfua a wɔkyerɛ adeɛ korɔ. Wɔkyerɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "Both mean joy/happiness (synonyms)."
+              ],
+              "options": [
+                "happiness",
+                "sadness",
+                "anger",
+                "fear"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "happiness"
+            },
+            {
+              "question_number": 2,
+              "description": "« Awerɛhoɔ » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sadness",
+                "joy",
+                "strength",
+                "wealth"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "sadness"
+            },
+            {
+              "question_number": 3,
+              "description": "« Ahoɔden » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "strength",
+                "weakness",
+                "beauty",
+                "poverty"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "strength"
+            },
+            {
+              "question_number": 4,
+              "description": "« Ahonya » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "wealth",
+                "poverty",
+                "hunger",
+                "sickness"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "wealth"
+            },
+            {
+              "question_number": 5,
+              "description": "« Ohia » (poverty) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "ohia (poverty) ↔ ahonya (wealth)."
+              ],
+              "options": [
+                "ahonya",
+                "awerɛhoɔ",
+                "ahoɔden",
+                "adwene"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ahonya"
+            },
+            {
+              "question_number": 6,
+              "description": "« Nokorɛ » (truth) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "nokorɛ (truth) ↔ atorɔ (lie)."
+              ],
+              "options": [
+                "atorɔ",
+                "nyansa",
+                "adwene",
+                "anigyeɛ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "atorɔ"
+            },
+            {
+              "question_number": 7,
+              "description": "« Nyansafoɔ » yɛ onipa a ɔwɔ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "nyansa (wisdom)",
+                "sika (money)",
+                "ahoɔden (strength)",
+                "asaase (land)"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "nyansa (wisdom)"
+            },
+            {
+              "question_number": 8,
+              "description": "« Adwene » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "mind / thought",
+                "hand",
+                "eye",
+                "leg"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "mind / thought"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS3 — Kasasin mu Nhyehyɛe",
+          "suiteDescription": "Punctuation, tense across persons, plurals and connectives.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Kasasin"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Kasasin a ɛda asɛm adi (statement) wieeɛ no, yɛde ___ si ano.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "full stop",
+                "question mark",
+                "comma",
+                "exclamation mark"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "full stop"
+            },
+            {
+              "question_number": 2,
+              "description": "Kasasin a ɛbisa asɛm no wieeɛ no, yɛde ___ si ano.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "question mark",
+                "full stop",
+                "comma",
+                "colon"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "question mark"
+            },
+            {
+              "question_number": 3,
+              "description": "« Mereba » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "I am coming",
+                "I came",
+                "I will come",
+                "I go"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "I am coming"
+            },
+            {
+              "question_number": 4,
+              "description": "« Mebaeɛ » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "I came",
+                "I am coming",
+                "I will come",
+                "I come"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "I came"
+            },
+            {
+              "question_number": 5,
+              "description": "« Mɛba » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "I will come",
+                "I came",
+                "I am coming",
+                "I go"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "I will come"
+            },
+            {
+              "question_number": 6,
+              "description": "« Ɔbaa » (woman) dodoɔ (plural) ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "ɔbaa (woman) → mmaa (women)."
+              ],
+              "options": [
+                "mmaa",
+                "abaa",
+                "ɔbaanom",
+                "nnipa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "mmaa"
+            },
+            {
+              "question_number": 7,
+              "description": "« Ɔbarima » (man) dodoɔ (plural) ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "ɔbarima (man) → mmarima (men)."
+              ],
+              "options": [
+                "mmarima",
+                "abarima",
+                "ɔbarimanom",
+                "nnipa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "mmarima"
+            },
+            {
+              "question_number": 8,
+              "description": "Wɔ « Kwame ne Ama » mu, « ne » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "and",
+                "or",
+                "but",
+                "if"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "and"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS3 — Amammerɛ ne Abusua",
+          "suiteDescription": "Rites of passage, matrilineal inheritance, the Golden Stool and clans.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Amammerɛ"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Bragoro yɛ afahyɛ a wɔyɛ ma ___.",
+              "hints": [],
+              "solution_steps": [
+                "Bragoro is a girls' puberty rite."
+              ],
+              "options": [
+                "mmabaawa (young women)",
+                "mmarima",
+                "ahemfo",
+                "mmɔfra"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "mmabaawa (young women)"
+            },
+            {
+              "question_number": 2,
+              "description": "Akan abusua mu, adedie (inheritance) fa firi ___.",
+              "hints": [],
+              "solution_steps": [
+                "Akan inheritance is matrilineal."
+              ],
+              "options": [
+                "ɛna (maternal line)",
+                "agya (paternal line)",
+                "ɔhene",
+                "sukuu"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ɛna (maternal line)"
+            },
+            {
+              "question_number": 3,
+              "description": "« Kofi » ne « Ama » yɛ din a ɛgyina ___ so.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "da a wɔwoo obi (day of birth)",
+                "abusua",
+                "kuro",
+                "afahyɛ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "da a wɔwoo obi (day of birth)"
+            },
+            {
+              "question_number": 4,
+              "description": "Sika Dwa Kofi yɛ Asantefoɔ wɔn ___.",
+              "hints": [],
+              "solution_steps": [
+                "The Golden Stool is said to hold the soul of the Asante nation."
+              ],
+              "options": [
+                "ɔkra (soul)",
+                "ntoma",
+                "aduane",
+                "afuo"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ɔkra (soul)"
+            },
+            {
+              "question_number": 5,
+              "description": "Afahyɛ a Asantefoɔ di no bi ne ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Akwasidae",
+                "Homowo",
+                "Hogbetsotso",
+                "Aboakyer"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Akwasidae"
+            },
+            {
+              "question_number": 6,
+              "description": "Onipa a ɔkasa ma ɔhene no yɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ɔkyeame",
+                "ɔsɔfoɔ",
+                "ɔkyerɛkyerɛni",
+                "ɔbarima"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ɔkyeame"
+            },
+            {
+              "question_number": 7,
+              "description": "Akan mmusuakuo (clans) bi ne ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Oyoko",
+                "Kumasi",
+                "Twi",
+                "Kente"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Oyoko"
+            },
+            {
+              "question_number": 8,
+              "description": "Sɛ obi wu a, Akanfoɔ yɛ no ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ayie (funeral)",
+                "afahyɛ",
+                "aponto",
+                "adae"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ayie (funeral)"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS3 — Mmɛ ne Kasakoa",
+          "suiteDescription": "Proverbs, their word roots and idiomatic meanings.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Mmɛ"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Tikorɔ nkɔ agyina » kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "two heads are better than one",
+                "one head is enough",
+                "go alone",
+                "keep quiet"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "two heads are better than one"
+            },
+            {
+              "question_number": 2,
+              "description": "« Sankɔfa » firi mmɔden « san », « kɔ », ne « ___ ».",
+              "hints": [],
+              "solution_steps": [
+                "san (return) + kɔ (go) + fa (take)."
+              ],
+              "options": [
+                "fa",
+                "di",
+                "ba",
+                "tu"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "fa"
+            },
+            {
+              "question_number": 3,
+              "description": "« Ɔkɔtɔ nwo anoma » kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "children resemble their parents",
+                "crabs can fly",
+                "birds swim",
+                "no one is wise"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "children resemble their parents"
+            },
+            {
+              "question_number": 4,
+              "description": "Ɛbɛ a ɛfa biakoyɛ (unity) ho kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "unity is strength",
+                "one is best",
+                "quarrelling is good",
+                "silence is best"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "unity is strength"
+            },
+            {
+              "question_number": 5,
+              "description": "Kasakoa « ɔwɔ nsa tenten » kyerɛ sɛ onipa no yɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ɔkorɔmfoɔ (a thief)",
+                "tenten (tall)",
+                "adɔefoɔ (generous)",
+                "ɔdefoɔ (rich)"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ɔkorɔmfoɔ (a thief)"
+            },
+            {
+              "question_number": 6,
+              "description": "« Ese ne tɛkrɛma » kyerɛ sɛ nnipa a wɔbɛn wɔn ho ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "may quarrel but still stay together",
+                "never meet",
+                "hate each other",
+                "are strangers"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "may quarrel but still stay together"
+            },
+            {
+              "question_number": 7,
+              "description": "« Obi nkyerɛ abɔfra Nyame » kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "some truths are self-evident",
+                "teach the child God",
+                "no one sees God",
+                "children are clever"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "some truths are self-evident"
+            },
+            {
+              "question_number": 8,
+              "description": "« Aboa bi bɛka wo a, na ɔfiri wo ntoma mu » kyerɛ sɛ ɔtamfoɔ taa firi ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "your own circle",
+                "far away",
+                "the forest",
+                "the sky"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "your own circle"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS3 — Anwonsɛm ne Akenkan",
+          "suiteDescription": "Literature (folktales, appellations), writers and comprehension.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Anwonsɛm"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Anansesɛm yɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "folktale",
+                "song",
+                "riddle",
+                "proverb"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "folktale"
+            },
+            {
+              "question_number": 2,
+              "description": "Anwonsɛm a wɔde kamfo ɔhene no yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "apae = praise poetry / appellation."
+              ],
+              "options": [
+                "apae (appellation)",
+                "anansesɛm",
+                "nnwom",
+                "nkɔmɔ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "apae (appellation)"
+            },
+            {
+              "question_number": 3,
+              "description": "Onipa a ɔkyerɛw nwoma no yɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ɔkyerɛwfoɔ (writer)",
+                "ɔkenkanfoɔ",
+                "ɔsɔfoɔ",
+                "ɔkyeame"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ɔkyerɛwfoɔ (writer)"
+            },
+            {
+              "question_number": 4,
+              "description": "« Kɔkɔɔ », « tuntum » ne « fufuo » yɛ nsɛmfua a ɛkyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ahosuo (colours)",
+                "mmoa",
+                "nnuane",
+                "nnɔmaa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ahosuo (colours)"
+            },
+            {
+              "question_number": 5,
+              "description": "« Anɔpa », « awia » ne « anadwo » yɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "parts of the day",
+                "days of the week",
+                "months",
+                "festivals"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "parts of the day"
+            },
+            {
+              "question_number": 6,
+              "description": "« Medaase » ne « mepa wo kyɛw » yɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "courtesy expressions",
+                "proverbs",
+                "names",
+                "numbers"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "courtesy expressions"
+            },
+            {
+              "question_number": 7,
+              "description": "Sɛ yɛkenkan asɛm na yɛte aseɛ a, ɛno ne akenkan ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "nkyerɛaseɛ (comprehension)",
+                "akontabuo",
+                "nnwom",
+                "nkyea"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "nkyerɛaseɛ (comprehension)"
+            },
+            {
+              "question_number": 8,
+              "description": "Twi nsɛm no, deɛ ɛyɛ edin (a noun) ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "nwoma = book, a noun."
+              ],
+              "options": [
+                "nwoma",
+                "di",
+                "kɔ",
+                "kɛseɛ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "nwoma"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,939 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "French",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "french_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Français JHS3 — Grammaire avancée",
+          "suiteDescription": "Past participles, comparatives, superlatives and object pronouns.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Grammaire"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« J'ai ___ une pomme. » (manger, passé composé)",
+              "hints": [],
+              "solution_steps": [
+                "Past participle of manger is mangé."
+              ],
+              "options": [
+                "mangé",
+                "manger",
+                "mangeant",
+                "mange"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "mangé"
+            },
+            {
+              "question_number": 2,
+              "description": "Le participe passé de « aller » est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "allé",
+                "aller",
+                "allant",
+                "va"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "allé"
+            },
+            {
+              "question_number": 3,
+              "description": "« Hier, je ___ allé au marché. » (auxiliaire)",
+              "hints": [],
+              "solution_steps": [
+                "aller uses être: « je suis allé »."
+              ],
+              "options": [
+                "suis",
+                "ai",
+                "es",
+                "a"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "suis"
+            },
+            {
+              "question_number": 4,
+              "description": "Le futur simple de « je parle » est « je ___ ».",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "parlerai",
+                "parlais",
+                "parlé",
+                "parle"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "parlerai"
+            },
+            {
+              "question_number": 5,
+              "description": "L'imparfait de « je suis » est « j'___ ».",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "étais",
+                "suis",
+                "été",
+                "serai"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "étais"
+            },
+            {
+              "question_number": 6,
+              "description": "Dans « Je vois Marie », le pronom COD est : « Je ___ vois ».",
+              "hints": [],
+              "solution_steps": [
+                "Marie (fem.) → la: « Je la vois »."
+              ],
+              "options": [
+                "la",
+                "le",
+                "lui",
+                "les"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "la"
+            },
+            {
+              "question_number": 7,
+              "description": "« Paul est plus grand ___ Marc. » (comparatif)",
+              "hints": [],
+              "solution_steps": [
+                "plus + adjective + que = ...er than."
+              ],
+              "options": [
+                "que",
+                "de",
+                "à",
+                "en"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "que"
+            },
+            {
+              "question_number": 8,
+              "description": "Le superlatif : « le ___ grand » (the tallest).",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "plus",
+                "très",
+                "moins",
+                "aussi"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "plus"
+            }
+          ]
+        },
+        {
+          "suiteName": "Français JHS3 — Conjugaison (temps composés)",
+          "suiteDescription": "Passé composé, imparfait and futur across several verbs.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Conjugaison"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Nous ___ au cinéma hier. » (aller, passé composé)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sommes allés",
+                "avons allé",
+                "allons",
+                "irons"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "sommes allés"
+            },
+            {
+              "question_number": 2,
+              "description": "« Elle a ___ une lettre. » (écrire, passé composé)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "écrit",
+                "écrire",
+                "écrivant",
+                "écris"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "écrit"
+            },
+            {
+              "question_number": 3,
+              "description": "« Demain, nous ___ à Kumasi. » (aller, futur)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "irons",
+                "allons",
+                "allions",
+                "allés"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "irons"
+            },
+            {
+              "question_number": 4,
+              "description": "« Quand j'étais petit, je ___ au football. » (jouer, imparfait)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "jouais",
+                "joue",
+                "joué",
+                "jouerai"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "jouais"
+            },
+            {
+              "question_number": 5,
+              "description": "« Vous ___ fini vos devoirs. » (avoir + finir)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "avez",
+                "êtes",
+                "avons",
+                "ont"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "avez"
+            },
+            {
+              "question_number": 6,
+              "description": "Le participe passé de « prendre » est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "pris",
+                "prendu",
+                "prenant",
+                "prends"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "pris"
+            },
+            {
+              "question_number": 7,
+              "description": "« Ils ___ arrivés à l'heure. » (être, passé composé)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sont",
+                "ont",
+                "avez",
+                "est"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "sont"
+            },
+            {
+              "question_number": 8,
+              "description": "« J'___ le français depuis deux ans. » (étudier, présent)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "étudie",
+                "étudié",
+                "étudierai",
+                "étudiais"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "étudie"
+            }
+          ]
+        },
+        {
+          "suiteName": "Français JHS3 — Vocabulaire & expressions",
+          "suiteDescription": "Idiomatic expressions with avoir/faire and useful vocabulary.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Vocabulaire"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« avoir faim » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "to be hungry",
+                "to be thirsty",
+                "to be tired",
+                "to be sleepy"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "to be hungry"
+            },
+            {
+              "question_number": 2,
+              "description": "« avoir soif » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "to be thirsty",
+                "to be hungry",
+                "to be cold",
+                "to be hot"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "to be thirsty"
+            },
+            {
+              "question_number": 3,
+              "description": "« Il fait chaud » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "It is hot",
+                "It is cold",
+                "It is raining",
+                "It is windy"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "It is hot"
+            },
+            {
+              "question_number": 4,
+              "description": "« la cuisine » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "the kitchen",
+                "the bedroom",
+                "the garden",
+                "the school"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "the kitchen"
+            },
+            {
+              "question_number": 5,
+              "description": "« un boulanger » fabrique ___.",
+              "hints": [],
+              "solution_steps": [
+                "A boulanger (baker) makes bread (du pain)."
+              ],
+              "options": [
+                "du pain",
+                "des chaussures",
+                "des habits",
+                "des voitures"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "du pain"
+            },
+            {
+              "question_number": 6,
+              "description": "Le contraire de « grand » est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "petit",
+                "gros",
+                "long",
+                "haut"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "petit"
+            },
+            {
+              "question_number": 7,
+              "description": "« toujours » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "always",
+                "never",
+                "sometimes",
+                "often"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "always"
+            },
+            {
+              "question_number": 8,
+              "description": "« lentement » est le contraire de ___.",
+              "hints": [],
+              "solution_steps": [
+                "lentement (slowly) ↔ rapidement (quickly)."
+              ],
+              "options": [
+                "rapidement",
+                "bien",
+                "beaucoup",
+                "ici"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "rapidement"
+            }
+          ]
+        },
+        {
+          "suiteName": "Français JHS3 — Négation, pronoms & prépositions",
+          "suiteDescription": "Advanced negation, subject/object pronouns and prepositions.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Grammaire"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Je ne mange ___ de viande. » (never)",
+              "hints": [],
+              "solution_steps": [
+                "ne ... jamais = never."
+              ],
+              "options": [
+                "jamais",
+                "pas",
+                "rien",
+                "plus"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NEGATION_ET_QUESTIONS"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "jamais"
+            },
+            {
+              "question_number": 2,
+              "description": "« Il n'y a ___ dans la boîte. » (nothing)",
+              "hints": [],
+              "solution_steps": [
+                "ne ... rien = nothing."
+              ],
+              "options": [
+                "rien",
+                "pas",
+                "jamais",
+                "personne"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NEGATION_ET_QUESTIONS"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "rien"
+            },
+            {
+              "question_number": 3,
+              "description": "Le pronom sujet pour « we » est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "nous",
+                "vous",
+                "ils",
+                "on"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "nous"
+            },
+            {
+              "question_number": 4,
+              "description": "« Le livre est ___ la table. » (on the table)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sur",
+                "sous",
+                "dans",
+                "avec"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "sur"
+            },
+            {
+              "question_number": 5,
+              "description": "« Le chat est ___ la maison. » (in the house)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "dans",
+                "sur",
+                "sous",
+                "entre"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "dans"
+            },
+            {
+              "question_number": 6,
+              "description": "« Je vais ___ Kumasi. » (to a town)",
+              "hints": [],
+              "solution_steps": [
+                "aller à + town: « à Kumasi »."
+              ],
+              "options": [
+                "à",
+                "en",
+                "au",
+                "aux"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "à"
+            },
+            {
+              "question_number": 7,
+              "description": "« Elle vient ___ Ghana. » (from Ghana)",
+              "hints": [],
+              "solution_steps": [
+                "venir du + masculine country: « du Ghana »."
+              ],
+              "options": [
+                "du",
+                "de la",
+                "des",
+                "de"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "du"
+            },
+            {
+              "question_number": 8,
+              "description": "Le pronom COI « to him/her » est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "lui",
+                "le",
+                "la",
+                "les"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "lui"
+            }
+          ]
+        },
+        {
+          "suiteName": "Français JHS3 — Nombres & compréhension",
+          "suiteDescription": "Numbers 60–90, halves, dates and set expressions.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Comprehension"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« soixante » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sixty",
+                "sixteen",
+                "six",
+                "seventy"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NOMBRES_ET_TEMPS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "sixty"
+            },
+            {
+              "question_number": 2,
+              "description": "« quatre-vingts » veut dire ___.",
+              "hints": [],
+              "solution_steps": [
+                "4 × 20 = 80 (quatre-vingts)."
+              ],
+              "options": [
+                "eighty",
+                "ninety",
+                "four",
+                "twenty"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NOMBRES_ET_TEMPS"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "eighty"
+            },
+            {
+              "question_number": 3,
+              "description": "« soixante-dix » veut dire ___.",
+              "hints": [],
+              "solution_steps": [
+                "60 + 10 = 70 (soixante-dix)."
+              ],
+              "options": [
+                "seventy",
+                "sixty",
+                "eighty",
+                "seventeen"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NOMBRES_ET_TEMPS"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "seventy"
+            },
+            {
+              "question_number": 4,
+              "description": "« la moitié de vingt » est ___.",
+              "hints": [],
+              "solution_steps": [
+                "Half of 20 is 10 (dix)."
+              ],
+              "options": [
+                "dix",
+                "cinq",
+                "quinze",
+                "vingt"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NOMBRES_ET_TEMPS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "dix"
+            },
+            {
+              "question_number": 5,
+              "description": "Lisez : « Ama a treize ans. » Quel âge a Ama ?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "13",
+                "30",
+                "3",
+                "14"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COMPREHENSION"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "13"
+            },
+            {
+              "question_number": 6,
+              "description": "« Quelle est la date d'aujourd'hui ? » demande ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "today's date",
+                "the time",
+                "your name",
+                "the weather"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COMPREHENSION"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "today's date"
+            },
+            {
+              "question_number": 7,
+              "description": "« Au revoir » et « à bientôt » servent à ___.",
+              "hints": [],
+              "solution_steps": [
+                "Both are used to say goodbye."
+              ],
+              "options": [
+                "dire au revoir",
+                "saluer le matin",
+                "remercier",
+                "s'excuser"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COMPREHENSION"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "dire au revoir"
+            },
+            {
+              "question_number": 8,
+              "description": "« Bonne chance ! » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Good luck!",
+                "Good morning!",
+                "Thank you!",
+                "Goodbye!"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COMPREHENSION"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Good luck!"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

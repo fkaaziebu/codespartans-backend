@@ -1,0 +1,931 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Arabic",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "arabic_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Arabic JHS2 — At-Tahiyyat wat-Ta'aruf (Greetings & Introductions)",
+          "suiteDescription": "How-are-you exchanges, introducing oneself and everyday replies.",
+          "suiteKeywords": [
+            "BECE",
+            "Arabic",
+            "Greetings"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "«كيف حالك؟» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "How are you?",
+                "What is your name?",
+                "Where are you?",
+                "How old are you?"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AT_TAHIYYAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "How are you?"
+            },
+            {
+              "question_number": 2,
+              "description": "الرد على «كيف حالك؟» ___",
+              "hints": [],
+              "solution_steps": [
+                "بخير = (I am) fine."
+              ],
+              "options": [
+                "بخير",
+                "شكرا",
+                "نعم",
+                "لا"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AT_TAHIYYAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "بخير"
+            },
+            {
+              "question_number": 3,
+              "description": "«ما اسمك؟» تسأل عن ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "your name",
+                "your age",
+                "your school",
+                "your house"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AT_TAHIYYAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "your name"
+            },
+            {
+              "question_number": 4,
+              "description": "«اسمي محمد» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "My name is Muhammad",
+                "I greet Muhammad",
+                "Muhammad is my father",
+                "Muhammad is here"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AT_TAHIYYAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "My name is Muhammad"
+            },
+            {
+              "question_number": 5,
+              "description": "«أهلا وسهلا» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Welcome",
+                "Goodbye",
+                "Thank you",
+                "Sorry"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AT_TAHIYYAT"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Welcome"
+            },
+            {
+              "question_number": 6,
+              "description": "«عفوا» هو الرد على ___",
+              "hints": [],
+              "solution_steps": [
+                "عفوا (you're welcome) replies to شكرا (thank you)."
+              ],
+              "options": [
+                "شكرا",
+                "السلام عليكم",
+                "نعم",
+                "لا"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AT_TAHIYYAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "شكرا"
+            },
+            {
+              "question_number": 7,
+              "description": "في المساء نقول ___",
+              "hints": [],
+              "solution_steps": [
+                "مساء الخير = Good evening."
+              ],
+              "options": [
+                "مساء الخير",
+                "صباح الخير",
+                "أهلا",
+                "شكرا"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AT_TAHIYYAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "مساء الخير"
+            },
+            {
+              "question_number": 8,
+              "description": "«الحمد لله» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Praise be to God",
+                "Please",
+                "Welcome",
+                "Goodbye"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AT_TAHIYYAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Praise be to God"
+            }
+          ]
+        },
+        {
+          "suiteName": "Arabic JHS2 — Al-Alwan wat-Ta'am (Colours & Food)",
+          "suiteDescription": "Colours and common foods.",
+          "suiteKeywords": [
+            "BECE",
+            "Arabic",
+            "Vocabulary"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "«أحمر» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "red",
+                "blue",
+                "green",
+                "black"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_MUFRADAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "red"
+            },
+            {
+              "question_number": 2,
+              "description": "«أزرق» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "blue",
+                "red",
+                "white",
+                "yellow"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_MUFRADAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "blue"
+            },
+            {
+              "question_number": 3,
+              "description": "«أبيض» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "white",
+                "black",
+                "red",
+                "green"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_MUFRADAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "white"
+            },
+            {
+              "question_number": 4,
+              "description": "«أسود» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "black",
+                "white",
+                "red",
+                "yellow"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_MUFRADAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "black"
+            },
+            {
+              "question_number": 5,
+              "description": "«خبز» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "bread",
+                "water",
+                "rice",
+                "meat"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_MUFRADAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "bread"
+            },
+            {
+              "question_number": 6,
+              "description": "«لحم» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "meat",
+                "bread",
+                "fish",
+                "fruit"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_MUFRADAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "meat"
+            },
+            {
+              "question_number": 7,
+              "description": "«تفاحة» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "apple",
+                "orange",
+                "banana",
+                "mango"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_MUFRADAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "apple"
+            },
+            {
+              "question_number": 8,
+              "description": "«لبن» (حليب) يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "milk",
+                "water",
+                "juice",
+                "oil"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_MUFRADAT"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "milk"
+            }
+          ]
+        },
+        {
+          "suiteName": "Arabic JHS2 — Al-Arqam wal-Ayyam (Numbers & Days)",
+          "suiteDescription": "Numbers six to twenty and the days of the week.",
+          "suiteKeywords": [
+            "BECE",
+            "Arabic",
+            "Numbers"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "«ستة» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "six",
+                "five",
+                "seven",
+                "eight"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_ARQAM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "six"
+            },
+            {
+              "question_number": 2,
+              "description": "«ثمانية» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "eight",
+                "seven",
+                "nine",
+                "ten"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_ARQAM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "eight"
+            },
+            {
+              "question_number": 3,
+              "description": "«تسعة» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "nine",
+                "eight",
+                "ten",
+                "seven"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_ARQAM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "nine"
+            },
+            {
+              "question_number": 4,
+              "description": "«عشرون» يعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "twenty",
+                "twelve",
+                "two",
+                "ten"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_ARQAM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "twenty"
+            },
+            {
+              "question_number": 5,
+              "description": "«يوم الأحد» هو ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Sunday",
+                "Monday",
+                "Saturday",
+                "Friday"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Sunday"
+            },
+            {
+              "question_number": 6,
+              "description": "«يوم الاثنين» هو ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Monday",
+                "Tuesday",
+                "Sunday",
+                "Friday"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Monday"
+            },
+            {
+              "question_number": 7,
+              "description": "«٣ + ٢ =» ___",
+              "hints": [],
+              "solution_steps": [
+                "3 + 2 = 5 (خمسة)."
+              ],
+              "options": [
+                "خمسة",
+                "أربعة",
+                "ستة",
+                "سبعة"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_ARQAM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "خمسة"
+            },
+            {
+              "question_number": 8,
+              "description": "الرقم العربي «٧» هو ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "7",
+                "6",
+                "8",
+                "9"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_ARQAM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "7"
+            }
+          ]
+        },
+        {
+          "suiteName": "Arabic JHS2 — Al-Qawa'id (Grammar)",
+          "suiteDescription": "Nouns, verbs, pronouns, gender and simple plurals.",
+          "suiteKeywords": [
+            "BECE",
+            "Arabic",
+            "Grammar"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "الكلمة التي تدل على اسم (noun) هي ___",
+              "hints": [],
+              "solution_steps": [
+                "كتاب (book) is a noun."
+              ],
+              "options": [
+                "كتاب",
+                "يكتب",
+                "ذهب",
+                "في"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_QAWAID"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "كتاب"
+            },
+            {
+              "question_number": 2,
+              "description": "الكلمة التي تدل على فعل (verb) هي ___",
+              "hints": [],
+              "solution_steps": [
+                "يكتب (writes) is a verb."
+              ],
+              "options": [
+                "يكتب",
+                "كتاب",
+                "ولد",
+                "بيت"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_QAWAID"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "يكتب"
+            },
+            {
+              "question_number": 3,
+              "description": "«هو» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "he",
+                "she",
+                "I",
+                "they"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_QAWAID"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "he"
+            },
+            {
+              "question_number": 4,
+              "description": "«هي» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "she",
+                "he",
+                "we",
+                "you"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_QAWAID"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "she"
+            },
+            {
+              "question_number": 5,
+              "description": "«نحن» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "we",
+                "you",
+                "they",
+                "he"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_QAWAID"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "we"
+            },
+            {
+              "question_number": 6,
+              "description": "علامة التأنيث في الاسم غالبا هي ___",
+              "hints": [],
+              "solution_steps": [
+                "The feminine marker is the ta marbuta (ة)."
+              ],
+              "options": [
+                "ة",
+                "ال",
+                "في",
+                "ون"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_QAWAID"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "ة"
+            },
+            {
+              "question_number": 7,
+              "description": "«هذه» للمؤنث، و«هذا» تُستعمل لـ ___",
+              "hints": [],
+              "solution_steps": [
+                "هذا is used for the masculine."
+              ],
+              "options": [
+                "المذكر",
+                "المؤنث",
+                "الجمع",
+                "العدد"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_QAWAID"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "المذكر"
+            },
+            {
+              "question_number": 8,
+              "description": "جمع كلمة «معلم» (teacher) هو ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "معلمون",
+                "معلم",
+                "معلمة",
+                "معلمي"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AL_QAWAID"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "معلمون"
+            }
+          ]
+        },
+        {
+          "suiteName": "Arabic JHS2 — Ath-Thaqafa (Culture & Expressions)",
+          "suiteDescription": "The Arabic script, the Qur'an and common expressions.",
+          "suiteKeywords": [
+            "BECE",
+            "Arabic",
+            "Culture"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "اللغة العربية تُكتب من ___",
+              "hints": [],
+              "solution_steps": [
+                "Arabic is written from right to left."
+              ],
+              "options": [
+                "اليمين إلى اليسار",
+                "اليسار إلى اليمين",
+                "أعلى إلى أسفل",
+                "أسفل إلى أعلى"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "اليمين إلى اليسار"
+            },
+            {
+              "question_number": 2,
+              "description": "كتاب المسلمين المقدس هو ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "القرآن",
+                "الإنجيل",
+                "التوراة",
+                "الزبور"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "القرآن"
+            },
+            {
+              "question_number": 3,
+              "description": "المسلمون يصلون ___ مرات في اليوم",
+              "hints": [],
+              "solution_steps": [
+                "Muslims pray five times a day."
+              ],
+              "options": [
+                "خمس",
+                "ثلاث",
+                "سبع",
+                "عشر"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "خمس"
+            },
+            {
+              "question_number": 4,
+              "description": "لغة القرآن الكريم هي ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "العربية",
+                "الإنجليزية",
+                "الفرنسية",
+                "الأمهرية"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "العربية"
+            },
+            {
+              "question_number": 5,
+              "description": "«بسم الله» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "In the name of God",
+                "Praise God",
+                "God is great",
+                "Thank God"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "In the name of God"
+            },
+            {
+              "question_number": 6,
+              "description": "«الله أكبر» تعني ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "God is the greatest",
+                "Thank God",
+                "In the name of God",
+                "Peace"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "God is the greatest"
+            },
+            {
+              "question_number": 7,
+              "description": "من الدول التي تتكلم العربية ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "السعودية",
+                "فرنسا",
+                "الصين",
+                "اليابان"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "السعودية"
+            },
+            {
+              "question_number": 8,
+              "description": "تعلّم اللغة العربية يساعد على قراءة ___",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "القرآن",
+                "التلفاز",
+                "الكرة",
+                "السيارة"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ATH_THAQAFA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "القرآن"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

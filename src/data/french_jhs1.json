@@ -1,0 +1,933 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "French",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "french_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Français JHS1 — Salutations & Expressions",
+          "suiteDescription": "Greetings, courtesy expressions and introducing oneself.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Salutations"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "On dit « Bonsoir » ___.",
+              "hints": [],
+              "solution_steps": [
+                "« Bonsoir » = Good evening (said in the evening)."
+              ],
+              "options": [
+                "le matin",
+                "le soir",
+                "à midi",
+                "jamais"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_SALUTATIONS_ET_EXPRESSIONS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "le soir"
+            },
+            {
+              "question_number": 2,
+              "description": "Pour dire « goodbye », on dit ___.",
+              "hints": [],
+              "solution_steps": [
+                "« Au revoir » = Goodbye."
+              ],
+              "options": [
+                "Bonjour",
+                "Au revoir",
+                "Merci",
+                "Oui"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_SALUTATIONS_ET_EXPRESSIONS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Au revoir"
+            },
+            {
+              "question_number": 3,
+              "description": "Pour remercier quelqu'un, on dit ___.",
+              "hints": [],
+              "solution_steps": [
+                "« Merci » = Thank you."
+              ],
+              "options": [
+                "Merci",
+                "Pardon",
+                "Salut",
+                "Non"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_SALUTATIONS_ET_EXPRESSIONS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Merci"
+            },
+            {
+              "question_number": 4,
+              "description": "« S'il vous plaît » veut dire ___ (en anglais).",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Please",
+                "Thank you",
+                "Sorry",
+                "Hello"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_SALUTATIONS_ET_EXPRESSIONS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Please"
+            },
+            {
+              "question_number": 5,
+              "description": "Pour se présenter : « Je ___ Ama. »",
+              "hints": [],
+              "solution_steps": [
+                "« Je m'appelle Ama » = My name is Ama."
+              ],
+              "options": [
+                "m'appelle",
+                "mange",
+                "vais",
+                "parle"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_SALUTATIONS_ET_EXPRESSIONS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "m'appelle"
+            },
+            {
+              "question_number": 6,
+              "description": "« De rien » est une réponse à ___.",
+              "hints": [],
+              "solution_steps": [
+                "« De rien » = You're welcome (reply to thanks)."
+              ],
+              "options": [
+                "Merci",
+                "Bonjour",
+                "Non",
+                "Pardon"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_SALUTATIONS_ET_EXPRESSIONS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Merci"
+            },
+            {
+              "question_number": 7,
+              "description": "Entre amis, on dit ___ pour saluer.",
+              "hints": [],
+              "solution_steps": [
+                "« Salut » = Hi (informal)."
+              ],
+              "options": [
+                "Salut",
+                "Adieu",
+                "Pardon",
+                "Bonsoir"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_SALUTATIONS_ET_EXPRESSIONS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Salut"
+            },
+            {
+              "question_number": 8,
+              "description": "« Comment t'appelles-tu ? » demande ___ (en anglais).",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "your name",
+                "your age",
+                "your school",
+                "your house"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_SALUTATIONS_ET_EXPRESSIONS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "your name"
+            }
+          ]
+        },
+        {
+          "suiteName": "Français JHS1 — La famille & l'école",
+          "suiteDescription": "Vocabulary for family members and common school objects.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Vocabulaire"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« le père » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "the father",
+                "the mother",
+                "the boy",
+                "the friend"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "the father"
+            },
+            {
+              "question_number": 2,
+              "description": "« la mère » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "the mother",
+                "the sister",
+                "the aunt",
+                "the girl"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "the mother"
+            },
+            {
+              "question_number": 3,
+              "description": "« le frère » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "the brother",
+                "the sister",
+                "the father",
+                "the son"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "the brother"
+            },
+            {
+              "question_number": 4,
+              "description": "« la sœur » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "the sister",
+                "the brother",
+                "the mother",
+                "the aunt"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "the sister"
+            },
+            {
+              "question_number": 5,
+              "description": "Le mot français pour « school » est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "l'école",
+                "la maison",
+                "la voiture",
+                "le marché"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "l'école"
+            },
+            {
+              "question_number": 6,
+              "description": "Le mot français pour « book » est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "le livre",
+                "le stylo",
+                "la table",
+                "la porte"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "le livre"
+            },
+            {
+              "question_number": 7,
+              "description": "« le stylo » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "the pen",
+                "the book",
+                "the bag",
+                "the chair"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "the pen"
+            },
+            {
+              "question_number": 8,
+              "description": "« la maison » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "the house",
+                "the school",
+                "the car",
+                "the market"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "the house"
+            }
+          ]
+        },
+        {
+          "suiteName": "Français JHS1 — Couleurs, animaux & nombres",
+          "suiteDescription": "Colours, animals and numbers one to ten.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Vocabulaire"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« rouge » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "red",
+                "blue",
+                "green",
+                "black"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "red"
+            },
+            {
+              "question_number": 2,
+              "description": "« bleu » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "blue",
+                "red",
+                "white",
+                "yellow"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "blue"
+            },
+            {
+              "question_number": 3,
+              "description": "« un chat » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "a cat",
+                "a dog",
+                "a bird",
+                "a goat"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "a cat"
+            },
+            {
+              "question_number": 4,
+              "description": "« un chien » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "a dog",
+                "a cat",
+                "a cow",
+                "a sheep"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "a dog"
+            },
+            {
+              "question_number": 5,
+              "description": "Le nombre « cinq » en chiffre est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NOMBRES_ET_TEMPS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "5"
+            },
+            {
+              "question_number": 6,
+              "description": "« dix » veut dire ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ten",
+                "two",
+                "six",
+                "nine"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NOMBRES_ET_TEMPS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "ten"
+            },
+            {
+              "question_number": 7,
+              "description": "Le nombre 3 s'écrit ___ en français.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "deux",
+                "trois",
+                "quatre",
+                "cinq"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NOMBRES_ET_TEMPS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "trois"
+            },
+            {
+              "question_number": 8,
+              "description": "« sept » + « trois » = ___.",
+              "hints": [],
+              "solution_steps": [
+                "7 + 3 = 10 (dix)."
+              ],
+              "options": [
+                "huit",
+                "neuf",
+                "dix",
+                "onze"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NOMBRES_ET_TEMPS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "dix"
+            }
+          ]
+        },
+        {
+          "suiteName": "Français JHS1 — Les articles & le genre",
+          "suiteDescription": "Definite and indefinite articles and grammatical gender.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Grammaire"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "L'article défini masculin singulier est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "le",
+                "la",
+                "les",
+                "un"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "le"
+            },
+            {
+              "question_number": 2,
+              "description": "L'article défini féminin singulier est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "le",
+                "la",
+                "les",
+                "une"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "la"
+            },
+            {
+              "question_number": 3,
+              "description": "Le pluriel de « le livre » est « ___ livres ».",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "le",
+                "la",
+                "les",
+                "un"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "les"
+            },
+            {
+              "question_number": 4,
+              "description": "« un » et « une » sont des articles ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "définis",
+                "indéfinis",
+                "pluriels",
+                "négatifs"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "indéfinis"
+            },
+            {
+              "question_number": 5,
+              "description": "On écrit « ___ école » (mot féminin commençant par une voyelle).",
+              "hints": [],
+              "solution_steps": [
+                "Before a vowel, le/la becomes l' → l'école."
+              ],
+              "options": [
+                "le",
+                "la",
+                "l'",
+                "les"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "l'"
+            },
+            {
+              "question_number": 6,
+              "description": "Le pluriel de « une maison » est « ___ maisons ».",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "un",
+                "une",
+                "des",
+                "le"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "des"
+            },
+            {
+              "question_number": 7,
+              "description": "« ___ chat est noir. » (article défini masculin)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Le",
+                "La",
+                "Les",
+                "Une"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Le"
+            },
+            {
+              "question_number": 8,
+              "description": "Le mot « fille » est de genre ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "masculin",
+                "féminin",
+                "pluriel",
+                "neutre"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAIRE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "féminin"
+            }
+          ]
+        },
+        {
+          "suiteName": "Français JHS1 — Conjugaison (présent)",
+          "suiteDescription": "Present tense of être, avoir, aller and common -er verbs.",
+          "suiteKeywords": [
+            "BECE",
+            "French",
+            "Conjugaison"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Je ___ un élève. » (être)",
+              "hints": [],
+              "solution_steps": [
+                "être: je suis = I am."
+              ],
+              "options": [
+                "suis",
+                "es",
+                "est",
+                "sont"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "suis"
+            },
+            {
+              "question_number": 2,
+              "description": "« Tu ___ un livre. » (avoir)",
+              "hints": [],
+              "solution_steps": [
+                "avoir: tu as = you have."
+              ],
+              "options": [
+                "ai",
+                "as",
+                "a",
+                "ont"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "as"
+            },
+            {
+              "question_number": 3,
+              "description": "« Il ___ à l'école. » (aller)",
+              "hints": [],
+              "solution_steps": [
+                "aller: il va = he goes."
+              ],
+              "options": [
+                "vais",
+                "vas",
+                "va",
+                "vont"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "va"
+            },
+            {
+              "question_number": 4,
+              "description": "« Nous ___ français. » (parler)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "parle",
+                "parles",
+                "parlons",
+                "parlent"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "parlons"
+            },
+            {
+              "question_number": 5,
+              "description": "« Elle ___ une pomme. » (manger)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "mange",
+                "manges",
+                "mangeons",
+                "mangent"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "mange"
+            },
+            {
+              "question_number": 6,
+              "description": "« Vous ___ contents. » (être)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "suis",
+                "es",
+                "êtes",
+                "sont"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "êtes"
+            },
+            {
+              "question_number": 7,
+              "description": "« Ils ___ des amis. » (avoir)",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ai",
+                "as",
+                "avons",
+                "ont"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_CONJUGAISON"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "ont"
+            },
+            {
+              "question_number": 8,
+              "description": "Le contraire de « oui » est ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "non",
+                "oui",
+                "si",
+                "pas"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULAIRE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "non"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

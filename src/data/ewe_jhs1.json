@@ -1,0 +1,927 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Ghanaian Language (Ewe)",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "subject_default.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Eʋe JHS1 — Gbedoname (Greetings)",
+          "suiteDescription": "Greetings and courtesy expressions. Grounded in the Ewe Language Guide (Bureau of Ghana Languages).",
+          "suiteKeywords": [
+            "BECE",
+            "Ewe",
+            "Greetings"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Ne ŋdi ke la, míedona gbe be ___.",
+              "hints": [],
+              "solution_steps": [
+                "Ŋdi = Good morning."
+              ],
+              "options": [
+                "Ŋdi",
+                "Ŋdɔ",
+                "Fiẽ",
+                "Dɔ agbe"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GBEDONAME"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Ŋdi"
+            },
+            {
+              "question_number": 2,
+              "description": "Ne ame aɖe va aƒe me la, míegblɔna be ___.",
+              "hints": [],
+              "solution_steps": [
+                "Woezɔ = Welcome."
+              ],
+              "options": [
+                "Woezɔ",
+                "Hede nyuie",
+                "Akpe",
+                "Agoo"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GBEDONAME"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Woezɔ"
+            },
+            {
+              "question_number": 3,
+              "description": "« Akpe » fia nu ka le Eŋlisigbe me?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Thank you",
+                "Please",
+                "Sorry",
+                "Welcome"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GBEDONAME"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Thank you"
+            },
+            {
+              "question_number": 4,
+              "description": "Ne èle dzodzoge la, ègblɔna be ___.",
+              "hints": [],
+              "solution_steps": [
+                "Hede nyuie = Go well / Goodbye."
+              ],
+              "options": [
+                "Hede nyuie",
+                "Ŋdi",
+                "Woezɔ",
+                "Agoo"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GBEDONAME"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Hede nyuie"
+            },
+            {
+              "question_number": 5,
+              "description": "« Meɖe kuku » fia ___ le Eŋlisigbe me.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Please",
+                "Thank you",
+                "Yes",
+                "No"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GBEDONAME"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Please"
+            },
+            {
+              "question_number": 6,
+              "description": "Ne èdi be yeayɔ ame ƒe susu la, ègblɔna be ___.",
+              "hints": [],
+              "solution_steps": [
+                "Agoo is a call for attention; the reply is Amee."
+              ],
+              "options": [
+                "Agoo",
+                "Amee",
+                "Akpe",
+                "Yoo"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GBEDONAME"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Agoo"
+            },
+            {
+              "question_number": 7,
+              "description": "Gbe si míedona le fiẽ me la nye ___.",
+              "hints": [],
+              "solution_steps": [
+                "Fiẽ = Good evening."
+              ],
+              "options": [
+                "Fiẽ",
+                "Ŋdi",
+                "Ŋdɔ",
+                "Woezɔ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GBEDONAME"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Fiẽ"
+            },
+            {
+              "question_number": 8,
+              "description": "« Ŋdɔ » fia gbedoname na ɣeyiɣi kae?",
+              "hints": [],
+              "solution_steps": [
+                "Ŋdɔ = Good afternoon."
+              ],
+              "options": [
+                "afternoon",
+                "morning",
+                "evening",
+                "night"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GBEDONAME"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "afternoon"
+            }
+          ]
+        },
+        {
+          "suiteName": "Eʋe JHS1 — Ƒome kple Ŋutilã (Family & Body)",
+          "suiteDescription": "Family members and parts of the body.",
+          "suiteKeywords": [
+            "BECE",
+            "Ewe",
+            "Nyagbewo"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Le Eʋegbe me, « fofo » (tɔ) fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "father",
+                "mother",
+                "brother",
+                "uncle"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "father"
+            },
+            {
+              "question_number": 2,
+              "description": "« Dada » (nɔ) fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "mother",
+                "father",
+                "sister",
+                "aunt"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "mother"
+            },
+            {
+              "question_number": 3,
+              "description": "« Nɔvi » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sibling",
+                "friend",
+                "stranger",
+                "child"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "sibling"
+            },
+            {
+              "question_number": 4,
+              "description": "« Ta » nye ŋutilã ƒe akpa aɖe. Efia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "head",
+                "hand",
+                "leg",
+                "eye"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "head"
+            },
+            {
+              "question_number": 5,
+              "description": "« Asi » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "hand",
+                "leg",
+                "ear",
+                "nose"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "hand"
+            },
+            {
+              "question_number": 6,
+              "description": "« Ŋku » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "eye",
+                "ear",
+                "mouth",
+                "nose"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "eye"
+            },
+            {
+              "question_number": 7,
+              "description": "« Afɔ » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "leg",
+                "hand",
+                "head",
+                "ear"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "leg"
+            },
+            {
+              "question_number": 8,
+              "description": "« Nu » (as a body part) fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "mouth",
+                "nose",
+                "ear",
+                "eye"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "mouth"
+            }
+          ]
+        },
+        {
+          "suiteName": "Eʋe JHS1 — Lãwo kple Dzɔdzɔme (Animals & Nature)",
+          "suiteDescription": "Animals, water, fire, the sun, food and God.",
+          "suiteKeywords": [
+            "BECE",
+            "Ewe",
+            "Nyagbewo"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Avu » nye lã si fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "dog",
+                "cat",
+                "goat",
+                "sheep"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "dog"
+            },
+            {
+              "question_number": 2,
+              "description": "« Koklo » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "fowl",
+                "dog",
+                "cat",
+                "cow"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "fowl"
+            },
+            {
+              "question_number": 3,
+              "description": "« Gbɔ̃ » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "goat",
+                "sheep",
+                "cow",
+                "dog"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "goat"
+            },
+            {
+              "question_number": 4,
+              "description": "« Tsi » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "water",
+                "fire",
+                "food",
+                "oil"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "water"
+            },
+            {
+              "question_number": 5,
+              "description": "« Dzo » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "fire",
+                "water",
+                "wind",
+                "rain"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "fire"
+            },
+            {
+              "question_number": 6,
+              "description": "« Ɣe » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sun",
+                "moon",
+                "star",
+                "cloud"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "sun"
+            },
+            {
+              "question_number": 7,
+              "description": "« Nuɖuɖu » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "food",
+                "water",
+                "house",
+                "book"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "food"
+            },
+            {
+              "question_number": 8,
+              "description": "« Mawu » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "God",
+                "king",
+                "chief",
+                "elder"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "God"
+            }
+          ]
+        },
+        {
+          "suiteName": "Eʋe JHS1 — Xexlẽdzesiwo (Numbers)",
+          "suiteDescription": "Cardinal numbers one to ten and beyond.",
+          "suiteKeywords": [
+            "BECE",
+            "Ewe",
+            "Numbers"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« ɖeka » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "one",
+                "two",
+                "three",
+                "ten"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_XEXLEDZESIWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "one"
+            },
+            {
+              "question_number": 2,
+              "description": "« eve » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "two",
+                "three",
+                "four",
+                "five"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_XEXLEDZESIWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "two"
+            },
+            {
+              "question_number": 3,
+              "description": "« etɔ̃ » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "three",
+                "four",
+                "five",
+                "six"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_XEXLEDZESIWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "three"
+            },
+            {
+              "question_number": 4,
+              "description": "« atɔ̃ » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "five",
+                "four",
+                "six",
+                "seven"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_XEXLEDZESIWO"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "five"
+            },
+            {
+              "question_number": 5,
+              "description": "« ewo » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ten",
+                "nine",
+                "eight",
+                "twelve"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_XEXLEDZESIWO"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "ten"
+            },
+            {
+              "question_number": 6,
+              "description": "The Ewe word for « four » is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ene",
+                "atɔ̃",
+                "ade",
+                "adre"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_XEXLEDZESIWO"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "ene"
+            },
+            {
+              "question_number": 7,
+              "description": "The Ewe word for « seven » is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ade",
+                "adre",
+                "enyi",
+                "asiekɛ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_XEXLEDZESIWO"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "adre"
+            },
+            {
+              "question_number": 8,
+              "description": "The Ewe word for « one hundred » is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "alafa",
+                "akpe",
+                "ewo",
+                "asiekɛ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_XEXLEDZESIWO"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "alafa"
+            }
+          ]
+        },
+        {
+          "suiteName": "Eʋe JHS1 — Eʋe Dekɔnu kple Nunya (Culture & Basics)",
+          "suiteDescription": "The Ewe festival, region, chief, home and basic pronouns.",
+          "suiteKeywords": [
+            "BECE",
+            "Ewe",
+            "Dekɔnu"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Azã gã si Eʋeawo (Anlo) ɖuna la nye ___.",
+              "hints": [],
+              "solution_steps": [
+                "Hogbetsotso is the great Anlo-Ewe festival."
+              ],
+              "options": [
+                "Hogbetsotso",
+                "Homowo",
+                "Odwira",
+                "Aboakyer"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_EVE_DEKONU"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Hogbetsotso"
+            },
+            {
+              "question_number": 2,
+              "description": "Eʋeawo teƒe le Ghana nye ___ Region.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Volta",
+                "Ashanti",
+                "Greater Accra",
+                "Northern"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_EVE_DEKONU"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Volta"
+            },
+            {
+              "question_number": 3,
+              "description": "Eʋeawo yɔa woƒe fia be ___.",
+              "hints": [],
+              "solution_steps": [
+                "An Ewe chief is addressed as Togbe/Togbui."
+              ],
+              "options": [
+                "Togbe",
+                "Nana",
+                "Mantse",
+                "Naa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_EVE_DEKONU"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Togbe"
+            },
+            {
+              "question_number": 4,
+              "description": "« Aƒe » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "home",
+                "school",
+                "market",
+                "farm"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "home"
+            },
+            {
+              "question_number": 5,
+              "description": "« Suku » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "school",
+                "church",
+                "market",
+                "farm"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NYAGBEWO"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "school"
+            },
+            {
+              "question_number": 6,
+              "description": "Le Eʋegbe me, « me » nye ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "I",
+                "you",
+                "he",
+                "they"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "I"
+            },
+            {
+              "question_number": 7,
+              "description": "« Wò » fia ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "you",
+                "I",
+                "he",
+                "we"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "you"
+            },
+            {
+              "question_number": 8,
+              "description": "Eʋegbe wodona le Ghana, Togo kple ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Benin",
+                "Mali",
+                "Niger",
+                "Chad"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_EVE_DEKONU"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Benin"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

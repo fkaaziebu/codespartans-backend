@@ -1,0 +1,949 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Ghanaian Language (Asante Twi)",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "subject_default.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Twi JHS2 — Nsɛmfua a Wɔbɔ Abira",
+          "suiteDescription": "Opposites (antonyms) and common everyday vocabulary.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Nsɛmfua"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Kɛseɛ » (big) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "kɛseɛ (big) ↔ ketewa (small)."
+              ],
+              "options": [
+                "ketewa",
+                "tenten",
+                "duru",
+                "papa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "ketewa"
+            },
+            {
+              "question_number": 2,
+              "description": "« Papa » (good) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "papa (good) ↔ bɔne (bad)."
+              ],
+              "options": [
+                "bɔne",
+                "kɛseɛ",
+                "tuntum",
+                "kɔkɔɔ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "bɔne"
+            },
+            {
+              "question_number": 3,
+              "description": "« Tenten » (long/tall) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "tenten (tall) ↔ tiawa (short)."
+              ],
+              "options": [
+                "tiawa",
+                "kɛseɛ",
+                "duru",
+                "den"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "tiawa"
+            },
+            {
+              "question_number": 4,
+              "description": "« Anɔpa » (morning) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "anɔpa (morning) ↔ anwummerɛ (evening)."
+              ],
+              "options": [
+                "anwummerɛ",
+                "awia",
+                "anɔpa",
+                "da"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "anwummerɛ"
+            },
+            {
+              "question_number": 5,
+              "description": "« Bra » (come) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "bra/ba (come) ↔ kɔ (go)."
+              ],
+              "options": [
+                "kɔ",
+                "ba",
+                "da",
+                "di"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "kɔ"
+            },
+            {
+              "question_number": 6,
+              "description": "« Fufuo » (white) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "fufuo (white) ↔ tuntum (black)."
+              ],
+              "options": [
+                "tuntum",
+                "kɔkɔɔ",
+                "fɛ",
+                "papa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "tuntum"
+            },
+            {
+              "question_number": 7,
+              "description": "« Nkwa » (life) ne deɛ ɛne no bɔ abira ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "nkwa (life) ↔ owuo (death)."
+              ],
+              "options": [
+                "owuo",
+                "nkwa",
+                "ahoɔden",
+                "apɔmuden"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "owuo"
+            },
+            {
+              "question_number": 8,
+              "description": "« Anigyeɛ » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "happiness",
+                "sadness",
+                "anger",
+                "fear"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "happiness"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS2 — Amammerɛ",
+          "suiteDescription": "Chieftaincy, festivals, clans and customs.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Amammerɛ"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Asantefoɔ ɔhene te akonnwa a wɔfrɛ no ___.",
+              "hints": [],
+              "solution_steps": [
+                "Sika Dwa = the Golden Stool."
+              ],
+              "options": [
+                "Sika Dwa",
+                "pono",
+                "mpa",
+                "aponkye"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Sika Dwa"
+            },
+            {
+              "question_number": 2,
+              "description": "Onipa a ɔkasa ma ɔhene no yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "ɔkyeame = linguist / chief's spokesperson."
+              ],
+              "options": [
+                "ɔkyeame",
+                "ɔsɔfoɔ",
+                "ɔbarima",
+                "ɔhemaa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "ɔkyeame"
+            },
+            {
+              "question_number": 3,
+              "description": "Ɔbaa a ɔdi ahemman no anim ka ɔhene ho no yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "ɔhemaa = queen mother."
+              ],
+              "options": [
+                "ɔhemaa",
+                "ɔbaa",
+                "maame",
+                "ɔkyeame"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "ɔhemaa"
+            },
+            {
+              "question_number": 4,
+              "description": "Afahyɛ a Asantefoɔ di no bi ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "Akwasidae is an Akan (Asante) festival."
+              ],
+              "options": [
+                "Akwasidae",
+                "Homowo",
+                "Aboakyer",
+                "Hogbetsotso"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Akwasidae"
+            },
+            {
+              "question_number": 5,
+              "description": "Sɛ wɔwo abɔfra a, nnaawɔtwe so no wɔto no ___.",
+              "hints": [],
+              "solution_steps": [
+                "wɔto no din = the child is named (naming rite)."
+              ],
+              "options": [
+                "din",
+                "adae",
+                "afahyɛ",
+                "aponkye"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "din"
+            },
+            {
+              "question_number": 6,
+              "description": "Ɔhene tenabea a ɛkyerɛ ne tumi no yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "akonnwa = stool, a symbol of authority."
+              ],
+              "options": [
+                "akonnwa",
+                "pono",
+                "mpa",
+                "kɛtɛ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "akonnwa"
+            },
+            {
+              "question_number": 7,
+              "description": "Akanfoɔ abusua (clan) bi ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "Oyoko is one of the Akan clans."
+              ],
+              "options": [
+                "Oyoko",
+                "Accra",
+                "Twi",
+                "Kente"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Oyoko"
+            },
+            {
+              "question_number": 8,
+              "description": "Ntoma a Asantefoɔ nwene a agye din no ne ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Kente",
+                "jeans",
+                "linen",
+                "khaki"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Kente"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS2 — Nsɛmfua a Emu Dɔ",
+          "suiteDescription": "Vocabulary: the sky, home, school and places.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Nsɛmfua"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Owia » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sun",
+                "moon",
+                "star",
+                "rain"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "sun"
+            },
+            {
+              "question_number": 2,
+              "description": "« Ɔsram » (bosome) kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "moon",
+                "sun",
+                "star",
+                "cloud"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "moon"
+            },
+            {
+              "question_number": 3,
+              "description": "« Nsoromma » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "star",
+                "moon",
+                "sun",
+                "sky"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "star"
+            },
+            {
+              "question_number": 4,
+              "description": "« Fie » (ɛfie) kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "house",
+                "school",
+                "market",
+                "farm"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "house"
+            },
+            {
+              "question_number": 5,
+              "description": "« Sukuu » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "school",
+                "church",
+                "market",
+                "farm"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "school"
+            },
+            {
+              "question_number": 6,
+              "description": "« Nwoma » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "book",
+                "pen",
+                "table",
+                "chair"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "book"
+            },
+            {
+              "question_number": 7,
+              "description": "« Afuo » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "farm",
+                "river",
+                "road",
+                "town"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "farm"
+            },
+            {
+              "question_number": 8,
+              "description": "« Kurom » (kuro) kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "town",
+                "farm",
+                "river",
+                "forest"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "town"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS2 — Kasasin mu Nhyehyɛe",
+          "suiteDescription": "Tense (present, past, future), verbs, subjects and pronouns.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Kasasin"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Kofi redidi » kyerɛ sɛ Kofi ___.",
+              "hints": [],
+              "solution_steps": [
+                "re- shows a continuous (present) action."
+              ],
+              "options": [
+                "is eating",
+                "ate",
+                "will eat",
+                "has eaten"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "is eating"
+            },
+            {
+              "question_number": 2,
+              "description": "« Kofi didiiɛ » kyerɛ sɛ Kofi ___.",
+              "hints": [],
+              "solution_steps": [
+                "This shows a past action."
+              ],
+              "options": [
+                "ate",
+                "is eating",
+                "will eat",
+                "eats"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "ate"
+            },
+            {
+              "question_number": 3,
+              "description": "« Kofi bɛdidi » kyerɛ sɛ Kofi ___.",
+              "hints": [],
+              "solution_steps": [
+                "bɛ- shows a future action."
+              ],
+              "options": [
+                "will eat",
+                "ate",
+                "is eating",
+                "eats"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "will eat"
+            },
+            {
+              "question_number": 4,
+              "description": "Kasasin « Ama kɔ sukuu » mu, adeyɛ (verb) no ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "kɔ = go, the verb."
+              ],
+              "options": [
+                "kɔ",
+                "Ama",
+                "sukuu",
+                "no"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "kɔ"
+            },
+            {
+              "question_number": 5,
+              "description": "Kasasin « Ama kɔ sukuu » mu, deɛ ɔyɛ adeɛ no (subject) ne ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Ama",
+                "kɔ",
+                "sukuu",
+                "no"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Ama"
+            },
+            {
+              "question_number": 6,
+              "description": "Wɔ « Mede aduane » mu, « me » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "I",
+                "you",
+                "he",
+                "they"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "I"
+            },
+            {
+              "question_number": 7,
+              "description": "Wɔ « wo nsa » mu, « wo » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "your",
+                "my",
+                "his",
+                "their"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "your"
+            },
+            {
+              "question_number": 8,
+              "description": "« Ɔba » (child) dodoɔ (plural) ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "ɔba (child) → mma (children)."
+              ],
+              "options": [
+                "mma",
+                "aba",
+                "ɔbanom",
+                "nnipa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "mma"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS2 — Mmɛ ne Kasakoa",
+          "suiteDescription": "Proverbs and idioms and their meanings.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Mmɛ"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Ɛbɛ « Tikorɔ nkɔ agyina » kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "two heads are better than one",
+                "one head is best",
+                "go alone",
+                "stay silent"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "two heads are better than one"
+            },
+            {
+              "question_number": 2,
+              "description": "« Sankɔfa » kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "go back and take it (learn from the past)",
+                "run fast",
+                "never return",
+                "forget everything"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "go back and take it (learn from the past)"
+            },
+            {
+              "question_number": 3,
+              "description": "Ɛbɛ « Obi nkyerɛ abɔfra Nyame » kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "some truths are self-evident",
+                "teach the child about God",
+                "no one knows God",
+                "children are wise"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "some truths are self-evident"
+            },
+            {
+              "question_number": 4,
+              "description": "Kasakoa « n'ani abere » kyerɛ sɛ onipa no ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "is serious or angry",
+                "is happy",
+                "is asleep",
+                "is blind"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "is serious or angry"
+            },
+            {
+              "question_number": 5,
+              "description": "« Ɔkɔtɔ nwo anoma » kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "children resemble their parents",
+                "crabs can fly",
+                "birds swim",
+                "nobody is perfect"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "children resemble their parents"
+            },
+            {
+              "question_number": 6,
+              "description": "Wɔ « Se wo werɛ fi na wosankɔfa a yɛnkyi » mu, « yɛnkyi » kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "it is not forbidden",
+                "it is a sin",
+                "it is far",
+                "it is sweet"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "it is not forbidden"
+            },
+            {
+              "question_number": 7,
+              "description": "Ɛbɛ a ɛfa biakoyɛ (unity) ho kyerɛ sɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "unity is strength",
+                "one is enough",
+                "quarrelling is good",
+                "silence is best"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "unity is strength"
+            },
+            {
+              "question_number": 8,
+              "description": "« Anansesɛm » yɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "a folktale",
+                "a song",
+                "a dance",
+                "a number"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "a folktale"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

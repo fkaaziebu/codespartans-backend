@@ -1,0 +1,941 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Ghanaian Language (Asante Twi)",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "subject_default.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Twi JHS1 — Nkyea ne Kasa",
+          "suiteDescription": "Greetings and everyday courtesy expressions.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Nkyea"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Sɛ adeɛ kye a, yɛkyea sɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "Maakye = Good morning."
+              ],
+              "options": [
+                "Maakye",
+                "Maadwo",
+                "Maaha",
+                "Akwaaba"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Maakye"
+            },
+            {
+              "question_number": 2,
+              "description": "Sɛ ɔhɔhoɔ ba fie a, yɛka kyerɛ no sɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "Akwaaba = Welcome."
+              ],
+              "options": [
+                "Akwaaba",
+                "Nante yie",
+                "Medaase",
+                "Aane"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Akwaaba"
+            },
+            {
+              "question_number": 3,
+              "description": "« Medaase » kyerɛ deɛn wɔ Borɔfo kasa mu?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Thank you",
+                "Please",
+                "Sorry",
+                "Welcome"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Thank you"
+            },
+            {
+              "question_number": 4,
+              "description": "Sɛ wopɛ sɛ wobisa obi din a, wobisa sɛ « Wo din de ___? »",
+              "hints": [],
+              "solution_steps": [
+                "« Wo din de sɛn? » = What is your name?"
+              ],
+              "options": [
+                "sɛn",
+                "deɛn",
+                "hwan",
+                "ɛhe"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "sɛn"
+            },
+            {
+              "question_number": 5,
+              "description": "« Mepa wo kyɛw » kyerɛ deɛn wɔ Borɔfo mu?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Please",
+                "Thank you",
+                "Goodbye",
+                "Yes"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Please"
+            },
+            {
+              "question_number": 6,
+              "description": "Sɛ woretwe wo ho afiri obi ho a, woka sɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "Nante yie = Go well / Farewell."
+              ],
+              "options": [
+                "Nante yie",
+                "Maakye",
+                "Akwaaba",
+                "Aane"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Nante yie"
+            },
+            {
+              "question_number": 7,
+              "description": "« Aane » kyerɛ deɛn?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Yes",
+                "No",
+                "Please",
+                "Sorry"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Yes"
+            },
+            {
+              "question_number": 8,
+              "description": "« Daabi » kyerɛ deɛn?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "No",
+                "Yes",
+                "Thanks",
+                "Hello"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASA_NE_NKYEA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "No"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS1 — Abusua ne Nnipadua",
+          "suiteDescription": "Family members and parts of the body.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Nsɛmfua"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Agya » kyerɛ ___ wɔ Borɔfo mu.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "father",
+                "mother",
+                "brother",
+                "uncle"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "father"
+            },
+            {
+              "question_number": 2,
+              "description": "« Ɛna » (maame) kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "mother",
+                "father",
+                "sister",
+                "aunt"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "mother"
+            },
+            {
+              "question_number": 3,
+              "description": "« Nua » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sibling",
+                "friend",
+                "stranger",
+                "child"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "sibling"
+            },
+            {
+              "question_number": 4,
+              "description": "« Abusua » kyerɛ ___ wɔ Borɔfo mu.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "family",
+                "school",
+                "market",
+                "farm"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "family"
+            },
+            {
+              "question_number": 5,
+              "description": "« Ti » yɛ nnipadua fa. Ɛkyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "head",
+                "hand",
+                "leg",
+                "eye"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "head"
+            },
+            {
+              "question_number": 6,
+              "description": "« Nsa » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "hand",
+                "leg",
+                "ear",
+                "nose"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "hand"
+            },
+            {
+              "question_number": 7,
+              "description": "« Aniwa » (ani) kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "eye",
+                "ear",
+                "mouth",
+                "nose"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "eye"
+            },
+            {
+              "question_number": 8,
+              "description": "« Nan » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "leg",
+                "hand",
+                "head",
+                "ear"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "leg"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS1 — Mmoa, Nneɛma ne Ahosuo",
+          "suiteDescription": "Animals, everyday objects and colours.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Nsɛmfua"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Ɔkraman » (kraman) yɛ aboa a ɛkyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "dog",
+                "cat",
+                "goat",
+                "sheep"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "dog"
+            },
+            {
+              "question_number": 2,
+              "description": "« Akokɔ » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "fowl",
+                "dog",
+                "cat",
+                "cow"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "fowl"
+            },
+            {
+              "question_number": 3,
+              "description": "« Aponkye » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "goat",
+                "sheep",
+                "cow",
+                "dog"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "goat"
+            },
+            {
+              "question_number": 4,
+              "description": "« Nsuo » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "water",
+                "fire",
+                "food",
+                "oil"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "water"
+            },
+            {
+              "question_number": 5,
+              "description": "« Aduane » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "food",
+                "water",
+                "house",
+                "book"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "food"
+            },
+            {
+              "question_number": 6,
+              "description": "Ahosuo « kɔkɔɔ » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "red",
+                "black",
+                "white",
+                "green"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "red"
+            },
+            {
+              "question_number": 7,
+              "description": "« Tuntum » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "black",
+                "white",
+                "red",
+                "blue"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "black"
+            },
+            {
+              "question_number": 8,
+              "description": "« Fufuo » (fitaa) kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "white",
+                "black",
+                "red",
+                "yellow"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "white"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS1 — Akontabuo ne Nnafua",
+          "suiteDescription": "Numbers one to ten and Akan day-names.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Akontabuo"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "« Baako » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "one",
+                "two",
+                "three",
+                "ten"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "one"
+            },
+            {
+              "question_number": 2,
+              "description": "« Mmienu » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "two",
+                "three",
+                "four",
+                "five"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "two"
+            },
+            {
+              "question_number": 3,
+              "description": "« Du » kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "ten",
+                "nine",
+                "eight",
+                "twelve"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "ten"
+            },
+            {
+              "question_number": 4,
+              "description": "« Enum » (anum) kyerɛ ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "five",
+                "four",
+                "six",
+                "seven"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_NSEMFUA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "five"
+            },
+            {
+              "question_number": 5,
+              "description": "Ɔbarima a wɔwoo no Dwoada (Monday) din ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "Monday-born male = Kwadwo."
+              ],
+              "options": [
+                "Kwadwo",
+                "Kwame",
+                "Kofi",
+                "Kwaku"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Kwadwo"
+            },
+            {
+              "question_number": 6,
+              "description": "Ɔbaa a wɔwoo no Fiada (Friday) din ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "Friday-born female = Afua/Afia."
+              ],
+              "options": [
+                "Afua",
+                "Ama",
+                "Akua",
+                "Adwoa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Afua"
+            },
+            {
+              "question_number": 7,
+              "description": "« Kwasiada » yɛ da bɛn wɔ Borɔfo mu?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Sunday",
+                "Monday",
+                "Saturday",
+                "Friday"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Sunday"
+            },
+            {
+              "question_number": 8,
+              "description": "Ɔbarima a wɔwoo no Wukuada (Wednesday) din ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "Wednesday-born male = Kwaku."
+              ],
+              "options": [
+                "Kwaku",
+                "Kofi",
+                "Kwame",
+                "Yaw"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_AMAMMERE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Kwaku"
+            }
+          ]
+        },
+        {
+          "suiteName": "Twi JHS1 — Kasa mu Nhyehyɛe",
+          "suiteDescription": "Nouns, verbs, adjectives and simple plurals.",
+          "suiteKeywords": [
+            "BECE",
+            "Asante Twi",
+            "Kasasin"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Deɛ ɛyɛ edin (naming word / noun) ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "pono = table, a noun (edin)."
+              ],
+              "options": [
+                "pono",
+                "di",
+                "kɔ",
+                "tu"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "pono"
+            },
+            {
+              "question_number": 2,
+              "description": "Deɛ ɛyɛ adeyɛ (action word / verb) ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "di = eat, a verb (adeyɛ)."
+              ],
+              "options": [
+                "pono",
+                "nwoma",
+                "di",
+                "fie"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "di"
+            },
+            {
+              "question_number": 3,
+              "description": "« Abofra » baako, na pii yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "abofra (child) → mmɔfra (children)."
+              ],
+              "options": [
+                "mmɔfra",
+                "abofra",
+                "nnipa",
+                "mmarima"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "mmɔfra"
+            },
+            {
+              "question_number": 4,
+              "description": "« Onipa » baako, na pii yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "onipa (person) → nnipa (people)."
+              ],
+              "options": [
+                "nnipa",
+                "anipa",
+                "onipa",
+                "nkurɔfoɔ"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "nnipa"
+            },
+            {
+              "question_number": 5,
+              "description": "« Ɔkraman » baako, na pii yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "ɔkraman (dog) → akraman (dogs)."
+              ],
+              "options": [
+                "akraman",
+                "nkraman",
+                "nnwan",
+                "mmoa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "akraman"
+            },
+            {
+              "question_number": 6,
+              "description": "Nsɛmfua a ɛkyerɛ suban (describing word / adjective) bi ne ___.",
+              "hints": [],
+              "solution_steps": [
+                "kɛseɛ = big (an adjective)."
+              ],
+              "options": [
+                "kɛseɛ",
+                "nwoma",
+                "Kofi",
+                "pono"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "kɛseɛ"
+            },
+            {
+              "question_number": 7,
+              "description": "« Odwan » (sheep) baako, na pii yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "odwan (sheep) → nnwan."
+              ],
+              "options": [
+                "nnwan",
+                "adwan",
+                "odwan",
+                "mmoa"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_KASASIN_MU_NHYEHYEE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "nnwan"
+            },
+            {
+              "question_number": 8,
+              "description": "Akanfoɔ nyansasɛm tiawa a ɛwɔ nkyerɛaseɛ no yɛ ___.",
+              "hints": [],
+              "solution_steps": [
+                "ɛbɛ (pl. mmɛ) = proverb."
+              ],
+              "options": [
+                "ɛbɛ",
+                "edin",
+                "akontaa",
+                "nkyea"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_MME_NE_ANWONSEM"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "ɛbɛ"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

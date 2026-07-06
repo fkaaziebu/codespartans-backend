@@ -1,0 +1,917 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Creative Arts and Design",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "creative_arts_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Creative Arts JHS2 — Principles of Design",
+          "suiteDescription": "Balance, rhythm, contrast, proportion, harmony and emphasis.",
+          "suiteKeywords": [
+            "BECE",
+            "Creative Arts",
+            "Principles"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Balance, rhythm, contrast and harmony are the ___ of design.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "elements",
+                "principles",
+                "colours",
+                "materials"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PRINCIPLES_OF_DESIGN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "principles"
+            },
+            {
+              "question_number": 2,
+              "description": "When both sides of a design are equal, like a mirror image, the balance is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "symmetrical",
+                "asymmetrical",
+                "radial",
+                "uneven"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PRINCIPLES_OF_DESIGN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "symmetrical"
+            },
+            {
+              "question_number": 3,
+              "description": "The repetition of elements to create a sense of movement is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "rhythm",
+                "space",
+                "texture",
+                "line"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PRINCIPLES_OF_DESIGN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "rhythm"
+            },
+            {
+              "question_number": 4,
+              "description": "The striking difference between light and dark, or big and small, is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "contrast",
+                "harmony",
+                "space",
+                "line"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PRINCIPLES_OF_DESIGN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "contrast"
+            },
+            {
+              "question_number": 5,
+              "description": "The size relationship between the different parts of a design is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "proportion",
+                "colour",
+                "texture",
+                "line"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PRINCIPLES_OF_DESIGN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "proportion"
+            },
+            {
+              "question_number": 6,
+              "description": "When all the parts of a design work well together, we have ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "harmony",
+                "chaos",
+                "contrast",
+                "noise"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PRINCIPLES_OF_DESIGN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "harmony"
+            },
+            {
+              "question_number": 7,
+              "description": "The centre of interest that draws the eye first in a design is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "focal point",
+                "margin",
+                "border",
+                "frame"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PRINCIPLES_OF_DESIGN"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "focal point"
+            },
+            {
+              "question_number": 8,
+              "description": "A vertical line stands ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "side to side",
+                "up and down",
+                "slanting",
+                "curved"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ELEMENTS_OF_DESIGN"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "up and down"
+            }
+          ]
+        },
+        {
+          "suiteName": "Creative Arts JHS2 — Colour Theory",
+          "suiteDescription": "Tertiary colours, tints and shades, hue and neutral colours.",
+          "suiteKeywords": [
+            "BECE",
+            "Creative Arts",
+            "Colour"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Colours made by mixing a primary and a neighbouring secondary colour are ___ colours.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "tertiary",
+                "primary",
+                "neutral",
+                "warm"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COLOUR"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "tertiary"
+            },
+            {
+              "question_number": 2,
+              "description": "![A colour wheel](/v1/images/ges/colour_wheel.svg)\n\nColours found directly opposite each other on the colour wheel are ___ colours.",
+              "imageFile": {
+                "filename": "colour_wheel.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/colour_wheel.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "complementary",
+                "primary",
+                "warm",
+                "neutral"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COLOUR"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "complementary"
+            },
+            {
+              "question_number": 3,
+              "description": "Adding white to a colour produces a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "tint",
+                "shade",
+                "tone",
+                "hue"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COLOUR"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "tint"
+            },
+            {
+              "question_number": 4,
+              "description": "Adding black to a colour produces a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "tint",
+                "shade",
+                "tone",
+                "hue"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COLOUR"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "shade"
+            },
+            {
+              "question_number": 5,
+              "description": "The pure colour itself, such as red or blue, is called its ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "hue",
+                "tint",
+                "shade",
+                "value"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COLOUR"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "hue"
+            },
+            {
+              "question_number": 6,
+              "description": "The three secondary colours are green, orange and ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "purple",
+                "red",
+                "blue",
+                "yellow"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COLOUR"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "purple"
+            },
+            {
+              "question_number": 7,
+              "description": "Black, white and grey are described as ___ colours.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "warm",
+                "cool",
+                "neutral",
+                "primary"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COLOUR"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "neutral"
+            },
+            {
+              "question_number": 8,
+              "description": "Warm colours often remind us of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "fire and the sun",
+                "ice and water",
+                "the night",
+                "the grass"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_COLOUR"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "fire and the sun"
+            }
+          ]
+        },
+        {
+          "suiteName": "Creative Arts JHS2 — Visual Arts Techniques",
+          "suiteDescription": "Printmaking, shading, modelling, weaving and paper art.",
+          "suiteKeywords": [
+            "BECE",
+            "Creative Arts",
+            "Techniques"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Making a print by cutting a design on a surface and pressing it onto paper is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "printmaking",
+                "weaving",
+                "singing",
+                "carving"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VISUAL_ARTS_MEDIA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "printmaking"
+            },
+            {
+              "question_number": 2,
+              "description": "Shading an area using closely drawn parallel lines is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "hatching",
+                "colouring",
+                "weaving",
+                "tracing"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VISUAL_ARTS_MEDIA"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "hatching"
+            },
+            {
+              "question_number": 3,
+              "description": "Shaping soft clay into forms with the hands is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "modelling",
+                "painting",
+                "printing",
+                "sketching"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VISUAL_ARTS_MEDIA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "modelling"
+            },
+            {
+              "question_number": 4,
+              "description": "Water colour and poster colour are types of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "paint",
+                "clay",
+                "wood",
+                "thread"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VISUAL_ARTS_MEDIA"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "paint"
+            },
+            {
+              "question_number": 5,
+              "description": "The rough or smooth quality of a surface in an artwork is its ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "texture",
+                "colour",
+                "line",
+                "shape"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_ELEMENTS_OF_DESIGN"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "texture"
+            },
+            {
+              "question_number": 6,
+              "description": "Passing threads over and under each other on a loom produces ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "cloth",
+                "clay",
+                "wood",
+                "metal"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VISUAL_ARTS_MEDIA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "cloth"
+            },
+            {
+              "question_number": 7,
+              "description": "A drawing that shows an object exactly as it really looks is called ___ drawing.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "realistic",
+                "abstract",
+                "random",
+                "hidden"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VISUAL_ARTS_MEDIA"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "realistic"
+            },
+            {
+              "question_number": 8,
+              "description": "The art of folding paper into shapes and figures is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "origami",
+                "collage",
+                "weaving",
+                "carving"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VISUAL_ARTS_MEDIA"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "origami"
+            }
+          ]
+        },
+        {
+          "suiteName": "Creative Arts JHS2 — Ghanaian Art & Culture",
+          "suiteDescription": "Adinkra printing, kente weaving, pottery firing, beadwork and symbols.",
+          "suiteKeywords": [
+            "BECE",
+            "Creative Arts",
+            "Culture"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Adinkra cloth is traditionally decorated by being ___ with symbols.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "printed",
+                "woven",
+                "knitted",
+                "sewn"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GHANAIAN_ART_AND_CULTURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "printed"
+            },
+            {
+              "question_number": 2,
+              "description": "The Adinkra symbol 'Sankofa' teaches us to ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "learn from the past",
+                "forget the past",
+                "run fast",
+                "be greedy"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GHANAIAN_ART_AND_CULTURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "learn from the past"
+            },
+            {
+              "question_number": 3,
+              "description": "Kente cloth is woven on a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "loom",
+                "wheel",
+                "stove",
+                "board"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GHANAIAN_ART_AND_CULTURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "loom"
+            },
+            {
+              "question_number": 4,
+              "description": "Pottery items are hardened by ___ them in fire.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "firing",
+                "washing",
+                "painting",
+                "cutting"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GHANAIAN_ART_AND_CULTURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "firing"
+            },
+            {
+              "question_number": 5,
+              "description": "The art of arranging beads into patterns and ornaments is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "beadwork",
+                "carving",
+                "weaving",
+                "printing"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GHANAIAN_ART_AND_CULTURE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "beadwork"
+            },
+            {
+              "question_number": 6,
+              "description": "Ghanaian smocks (fugu/batakari) are sewn from woven ___ strips.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "cotton",
+                "plastic",
+                "metal",
+                "glass"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GHANAIAN_ART_AND_CULTURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "cotton"
+            },
+            {
+              "question_number": 7,
+              "description": "The bright colours and patterns of kente each carry a special ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "meaning",
+                "price",
+                "smell",
+                "sound"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GHANAIAN_ART_AND_CULTURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "meaning"
+            },
+            {
+              "question_number": 8,
+              "description": "Traditional stools and drums are often made by ___ wood.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "carving",
+                "boiling",
+                "melting",
+                "printing"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GHANAIAN_ART_AND_CULTURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "carving"
+            }
+          ]
+        },
+        {
+          "suiteName": "Creative Arts JHS2 — Performing Arts",
+          "suiteDescription": "Music terms, Ghanaian dances, drama roles and instrument families.",
+          "suiteKeywords": [
+            "BECE",
+            "Creative Arts",
+            "Performing Arts"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "A person who composes and performs songs is a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "musician",
+                "painter",
+                "weaver",
+                "potter"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PERFORMING_ARTS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "musician"
+            },
+            {
+              "question_number": 2,
+              "description": "The speed of a piece of music, whether fast or slow, is called its ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "tempo",
+                "colour",
+                "texture",
+                "shape"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PERFORMING_ARTS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "tempo"
+            },
+            {
+              "question_number": 3,
+              "description": "The 'kete' and 'adowa' are examples of Ghanaian traditional ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "dances",
+                "foods",
+                "cloths",
+                "tools"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PERFORMING_ARTS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "dances"
+            },
+            {
+              "question_number": 4,
+              "description": "In drama, a person who acts out a role is an ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "actor",
+                "author",
+                "editor",
+                "usher"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PERFORMING_ARTS"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "actor"
+            },
+            {
+              "question_number": 5,
+              "description": "The words of a song are called its ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "lyrics",
+                "tempo",
+                "rhythm",
+                "colour"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PERFORMING_ARTS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "lyrics"
+            },
+            {
+              "question_number": 6,
+              "description": "A musical instrument played by blowing air into it is a ___ instrument.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "wind",
+                "string",
+                "percussion",
+                "keyboard"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PERFORMING_ARTS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "wind"
+            },
+            {
+              "question_number": 7,
+              "description": "Drums, rattles and bells belong to the ___ family of instruments.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "percussion",
+                "wind",
+                "string",
+                "keyboard"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PERFORMING_ARTS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "percussion"
+            },
+            {
+              "question_number": 8,
+              "description": "How high or low a musical sound is describes its ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "pitch",
+                "tempo",
+                "colour",
+                "shape"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PERFORMING_ARTS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "pitch"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
