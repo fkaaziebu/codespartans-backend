@@ -12,13 +12,9 @@
       "suites": [
         {
           "suiteName": "English JHS3 — Concord & Advanced Grammar",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Tricky subject-verb agreement, the subjunctive and proximity rules.",
-          "suiteKeywords": [
-            "BECE",
-            "English",
-            "Concord",
-            "Grammar"
-          ],
+          "suiteKeywords": ["BECE", "English", "Concord", "Grammar"],
           "questions": [
             {
               "question_number": 1,
@@ -27,16 +23,9 @@
               "solution_steps": [
                 "Here the committee acts as one body, so it takes 'was'."
               ],
-              "options": [
-                "were",
-                "was",
-                "are",
-                "have"
-              ],
+              "options": ["were", "was", "are", "have"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -50,16 +39,9 @@
               "solution_steps": [
                 "'Mathematics' is singular though it ends in 's', so it takes 'is'."
               ],
-              "options": [
-                "are",
-                "is",
-                "were",
-                "have"
-              ],
+              "options": ["are", "is", "were", "have"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -73,16 +55,9 @@
               "solution_steps": [
                 "The subject is 'one' (singular), so it takes 'has'."
               ],
-              "options": [
-                "have",
-                "has",
-                "are",
-                "were"
-              ],
+              "options": ["have", "has", "are", "were"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -96,16 +71,9 @@
               "solution_steps": [
                 "With 'neither...nor', the verb agrees with the nearer subject ('students') → 'have'."
               ],
-              "options": [
-                "has",
-                "have",
-                "was",
-                "is"
-              ],
+              "options": ["has", "have", "was", "is"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -119,16 +87,9 @@
               "solution_steps": [
                 "'News' is an uncountable singular noun, so it takes 'is'."
               ],
-              "options": [
-                "are",
-                "were",
-                "is",
-                "have"
-              ],
+              "options": ["are", "were", "is", "have"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -142,16 +103,9 @@
               "solution_steps": [
                 "The subjunctive uses 'were' for hypothetical situations."
               ],
-              "options": [
-                "was",
-                "were",
-                "am",
-                "be"
-              ],
+              "options": ["was", "were", "am", "be"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -165,16 +119,9 @@
               "solution_steps": [
                 "'Scissors' is treated as plural, so it takes 'are'."
               ],
-              "options": [
-                "is",
-                "was",
-                "are",
-                "has"
-              ],
+              "options": ["is", "was", "are", "has"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -185,29 +132,18 @@
         },
         {
           "suiteName": "English JHS3 — Vocabulary, Idioms & Proverbs",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Idioms, proverbs, precise synonyms/antonyms and commonly confused words.",
-          "suiteKeywords": [
-            "BECE",
-            "English",
-            "Idioms",
-            "Vocabulary"
-          ],
+          "suiteKeywords": ["BECE", "English", "Idioms", "Vocabulary"],
           "questions": [
             {
               "question_number": 1,
               "description": "The idiom \"to kick the bucket\" means to ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "play football",
-                "die",
-                "be lazy",
-                "waste water"
-              ],
+              "options": ["play football", "die", "be lazy", "waste water"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -226,9 +162,7 @@
                 "save money"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -240,16 +174,9 @@
               "description": "The synonym of \"reluctant\" is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "eager",
-                "unwilling",
-                "quick",
-                "cheerful"
-              ],
+              "options": ["eager", "unwilling", "quick", "cheerful"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -261,16 +188,9 @@
               "description": "The antonym of \"generous\" is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "kind",
-                "giving",
-                "stingy",
-                "wealthy"
-              ],
+              "options": ["kind", "giving", "stingy", "wealthy"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -284,16 +204,9 @@
               "solution_steps": [
                 "'Principal' = head person; 'principle' = a rule or belief."
               ],
-              "options": [
-                "principle",
-                "principal",
-                "principel",
-                "principled"
-              ],
+              "options": ["principle", "principal", "principel", "principled"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -305,16 +218,9 @@
               "description": "The correct collective noun for a large number of people gathered together is a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "crowd",
-                "pride",
-                "flock",
-                "swarm"
-              ],
+              "options": ["crowd", "pride", "flock", "swarm"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_3",
@@ -335,9 +241,7 @@
                 "every month"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -348,13 +252,9 @@
         },
         {
           "suiteName": "English JHS3 — Tenses, Reported Speech & Passive",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Perfect tenses, reported speech, passive voice and question tags.",
-          "suiteKeywords": [
-            "BECE",
-            "English",
-            "Tense",
-            "Reported Speech"
-          ],
+          "suiteKeywords": ["BECE", "English", "Tense", "Reported Speech"],
           "questions": [
             {
               "question_number": 1,
@@ -363,16 +263,9 @@
               "solution_steps": [
                 "'Will' shifts to 'would' in reported speech."
               ],
-              "options": [
-                "will",
-                "would",
-                "shall",
-                "can"
-              ],
+              "options": ["will", "would", "shall", "can"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -386,16 +279,9 @@
               "solution_steps": [
                 "Present continuous passive: 'is being built'."
               ],
-              "options": [
-                "is being",
-                "was being",
-                "has been",
-                "is"
-              ],
+              "options": ["is being", "was being", "has been", "is"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -409,16 +295,9 @@
               "solution_steps": [
                 "An earlier past action uses the past perfect: 'had started'."
               ],
-              "options": [
-                "started",
-                "has started",
-                "had started",
-                "starts"
-              ],
+              "options": ["started", "has started", "had started", "starts"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -432,16 +311,9 @@
               "solution_steps": [
                 "In reported speech, 'am going' shifts to 'was going'."
               ],
-              "options": [
-                "am",
-                "was",
-                "were",
-                "is"
-              ],
+              "options": ["am", "was", "were", "is"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -452,9 +324,7 @@
               "question_number": 5,
               "description": "\"The work ___ by the time you return.\"",
               "hints": [],
-              "solution_steps": [
-                "Future passive: 'will be finished'."
-              ],
+              "solution_steps": ["Future passive: 'will be finished'."],
               "options": [
                 "will finish",
                 "will be finished",
@@ -462,9 +332,7 @@
                 "is finishing"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -475,19 +343,10 @@
               "question_number": 6,
               "description": "Choose the correct question tag: \"Let's go out, ___?\"",
               "hints": [],
-              "solution_steps": [
-                "After 'Let's', the tag is 'shall we'."
-              ],
-              "options": [
-                "shall we",
-                "will we",
-                "don't we",
-                "aren't we"
-              ],
+              "solution_steps": ["After 'Let's', the tag is 'shall we'."],
+              "options": ["shall we", "will we", "don't we", "aren't we"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -498,6 +357,7 @@
         },
         {
           "suiteName": "English JHS3 — Literature & Figures of Speech",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Metaphor, hyperbole, irony, protagonist and forms of literature.",
           "suiteKeywords": [
             "BECE",
@@ -511,16 +371,9 @@
               "description": "\"The classroom was a zoo\" is an example of ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "simile",
-                "metaphor",
-                "personification",
-                "irony"
-              ],
+              "options": ["simile", "metaphor", "personification", "irony"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -531,19 +384,10 @@
               "question_number": 2,
               "description": "\"I have told you a thousand times\" is an example of ___.",
               "hints": [],
-              "solution_steps": [
-                "Hyperbole is a deliberate exaggeration."
-              ],
-              "options": [
-                "metaphor",
-                "hyperbole",
-                "simile",
-                "irony"
-              ],
+              "solution_steps": ["Hyperbole is a deliberate exaggeration."],
+              "options": ["metaphor", "hyperbole", "simile", "irony"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -555,16 +399,9 @@
               "description": "An expression that means the opposite of what is actually said is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "metaphor",
-                "irony",
-                "simile",
-                "alliteration"
-              ],
+              "options": ["metaphor", "irony", "simile", "alliteration"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -576,16 +413,9 @@
               "description": "A long narrative work of prose fiction is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "poem",
-                "novel",
-                "essay",
-                "proverb"
-              ],
+              "options": ["poem", "novel", "essay", "proverb"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_3",
@@ -597,16 +427,9 @@
               "description": "The main character in a story is the ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "antagonist",
-                "protagonist",
-                "narrator",
-                "author"
-              ],
+              "options": ["antagonist", "protagonist", "narrator", "author"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -617,13 +440,9 @@
         },
         {
           "suiteName": "English JHS3 — Comprehension & Punctuation",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Sentence analysis, the colon, quoted speech, spelling and letter writing.",
-          "suiteKeywords": [
-            "BECE",
-            "English",
-            "Comprehension",
-            "Punctuation"
-          ],
+          "suiteKeywords": ["BECE", "English", "Comprehension", "Punctuation"],
           "questions": [
             {
               "question_number": 1,
@@ -639,9 +458,7 @@
                 "the time"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_READING_COMPREHENSION"
-              ],
+              "tags": ["TAG_READING_COMPREHENSION"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -660,9 +477,7 @@
                 "join two words"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PUNCTUATION_AND_MECHANICS"
-              ],
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -683,9 +498,7 @@
                 "She asked \"Are you ready?\"."
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PUNCTUATION_AND_MECHANICS"
-              ],
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -697,16 +510,9 @@
               "description": "Which word is correctly spelt?",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "neccessary",
-                "necessary",
-                "necesary",
-                "neccesary"
-              ],
+              "options": ["neccessary", "necessary", "necesary", "neccesary"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PUNCTUATION_AND_MECHANICS"
-              ],
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -725,9 +531,7 @@
                 "sign the writer's name"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_READING_COMPREHENSION"
-              ],
+              "tags": ["TAG_READING_COMPREHENSION"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_3",

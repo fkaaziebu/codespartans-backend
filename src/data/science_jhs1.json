@@ -1,0 +1,516 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Integrated Science",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "integrated_science_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Science JHS1 — Diversity of Matter",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Living and non-living things, states of matter, metals and acids/bases.",
+          "suiteKeywords": ["BECE", "Science", "Matter"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Which of the following is a living thing?",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["rock", "car", "tree", "water"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "tree"
+            },
+            {
+              "question_number": 2,
+              "description": "The three states of matter are solid, liquid and ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["air", "gas", "ice", "wood"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "gas"
+            },
+            {
+              "question_number": 3,
+              "description": "Water at room temperature is an example of a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["solid", "liquid", "gas", "plasma"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "liquid"
+            },
+            {
+              "question_number": 4,
+              "description": "Which of these materials is a metal?",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["wood", "plastic", "iron", "rubber"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "iron"
+            },
+            {
+              "question_number": 5,
+              "description": "A substance that turns blue litmus paper red is a/an ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["base", "acid", "salt", "sugar"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "acid"
+            },
+            {
+              "question_number": 6,
+              "description": "A mixture of sand and water can be separated by ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["filtration", "burning", "freezing", "melting"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "filtration"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS1 — Cycles",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "The water cycle, evaporation, condensation and life cycles.",
+          "suiteKeywords": ["BECE", "Science", "Cycles"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The process by which water changes into water vapour is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "condensation",
+                "evaporation",
+                "precipitation",
+                "melting"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "evaporation"
+            },
+            {
+              "question_number": 2,
+              "description": "![The water cycle](/v1/images/ges/water_cycle.svg)\n\nRain, evaporation and condensation are all part of the ___.",
+              "imageFile": {
+                "filename": "water_cycle.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/water_cycle.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "nitrogen cycle",
+                "water cycle",
+                "carbon cycle",
+                "food chain"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "water cycle"
+            },
+            {
+              "question_number": 3,
+              "description": "A butterfly begins its life cycle as an ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["egg", "adult", "pupa", "bird"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "egg"
+            },
+            {
+              "question_number": 4,
+              "description": "The gas that green plants take in during photosynthesis is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["oxygen", "carbon dioxide", "nitrogen", "hydrogen"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "carbon dioxide"
+            },
+            {
+              "question_number": 5,
+              "description": "The gas released by green plants during photosynthesis is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["carbon dioxide", "oxygen", "nitrogen", "hydrogen"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "oxygen"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS1 — Systems",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Cells, the human body, plant parts and the solar system.",
+          "suiteKeywords": ["BECE", "Science", "Systems"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "![An animal cell](/v1/images/ges/animal_cell.svg)\n\nThe basic unit of life is the ___.",
+              "imageFile": {
+                "filename": "animal_cell.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/animal_cell.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["tissue", "organ", "cell", "atom"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "cell"
+            },
+            {
+              "question_number": 2,
+              "description": "The organ that pumps blood around the body is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["lung", "heart", "kidney", "brain"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "heart"
+            },
+            {
+              "question_number": 3,
+              "description": "We take in oxygen from the air using our ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["heart", "lungs", "liver", "stomach"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "lungs"
+            },
+            {
+              "question_number": 4,
+              "description": "The planet on which we live is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Mars", "Earth", "Venus", "Jupiter"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Earth"
+            },
+            {
+              "question_number": 5,
+              "description": "The star at the centre of our solar system is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Moon", "Sun", "Earth", "Mars"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Sun"
+            },
+            {
+              "question_number": 6,
+              "description": "![The parts of a plant](/v1/images/ges/plant_parts.svg)\n\nWhich part of a plant absorbs water from the soil?",
+              "imageFile": {
+                "filename": "plant_parts.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/plant_parts.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["leaf", "stem", "root", "flower"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "root"
+            },
+            {
+              "question_number": 7,
+              "description": "![The parts of a plant](/v1/images/ges/plant_parts.svg)\n\nThe part of a green plant that makes food is the ___.",
+              "imageFile": {
+                "filename": "plant_parts.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/plant_parts.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["root", "leaf", "flower", "stem"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "leaf"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS1 — Forces & Energy",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Forces, forms of energy, light, sound and simple electricity.",
+          "suiteKeywords": ["BECE", "Science", "Forces", "Energy"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "A push or a pull is called a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["force", "mass", "weight", "speed"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "force"
+            },
+            {
+              "question_number": 2,
+              "description": "The force that pulls objects towards the earth is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["friction", "gravity", "magnetism", "tension"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "gravity"
+            },
+            {
+              "question_number": 3,
+              "description": "The energy stored in food is ___ energy.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["light", "sound", "chemical", "electrical"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "chemical"
+            },
+            {
+              "question_number": 4,
+              "description": "The main natural source of light and heat energy on Earth is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Moon", "Sun", "stars", "fire"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Sun"
+            },
+            {
+              "question_number": 5,
+              "description": "Sound is produced by ___ objects.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["cold", "vibrating", "still", "wet"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "vibrating"
+            },
+            {
+              "question_number": 6,
+              "description": "![A simple electric circuit](/v1/images/ges/simple_circuit.svg)\n\nA device that produces electricity from stored chemical energy is a ___.",
+              "imageFile": {
+                "filename": "simple_circuit.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/simple_circuit.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["bulb", "battery", "wire", "switch"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "battery"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS1 — Humans & the Environment",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Personal hygiene, diseases, nutrition and sanitation.",
+          "suiteKeywords": ["BECE", "Science", "Health", "Environment"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Brushing our teeth twice a day is an example of good personal ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["cooking", "hygiene", "farming", "reading"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "hygiene"
+            },
+            {
+              "question_number": 2,
+              "description": "Malaria is spread by the bite of a female ___ mosquito.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Aedes", "Anopheles", "Culex", "house"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Anopheles"
+            },
+            {
+              "question_number": 3,
+              "description": "The vitamin the body makes when the skin is exposed to sunlight is Vitamin ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["A", "B", "C", "D"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "D"
+            },
+            {
+              "question_number": 4,
+              "description": "Which of the following foods is a good source of protein?",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["rice", "beans", "oil", "sugar"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "beans"
+            },
+            {
+              "question_number": 5,
+              "description": "Refuse and other waste should be disposed of properly to prevent ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["rain", "diseases", "wind", "growth"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "diseases"
+            },
+            {
+              "question_number": 6,
+              "description": "Boiling water before drinking helps to kill harmful ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["vitamins", "germs", "minerals", "oxygen"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "germs"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

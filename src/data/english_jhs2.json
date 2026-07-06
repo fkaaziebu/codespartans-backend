@@ -12,31 +12,18 @@
       "suites": [
         {
           "suiteName": "English JHS2 — Grammar & Agreement",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Subject-verb agreement, question tags, comparison and correct pronoun use.",
-          "suiteKeywords": [
-            "BECE",
-            "English",
-            "Grammar",
-            "Concord"
-          ],
+          "suiteKeywords": ["BECE", "English", "Grammar", "Concord"],
           "questions": [
             {
               "question_number": 1,
               "description": "\"Neither of the boys ___ present.\"",
               "hints": [],
-              "solution_steps": [
-                "'Neither' is singular, so it takes 'was'."
-              ],
-              "options": [
-                "were",
-                "are",
-                "was",
-                "have"
-              ],
+              "solution_steps": ["'Neither' is singular, so it takes 'was'."],
+              "options": ["were", "are", "was", "have"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -50,16 +37,9 @@
               "solution_steps": [
                 "A positive statement takes a negative tag: 'aren't you'."
               ],
-              "options": [
-                "are you",
-                "aren't you",
-                "isn't it",
-                "do you"
-              ],
+              "options": ["are you", "aren't you", "isn't it", "do you"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -70,19 +50,10 @@
               "question_number": 3,
               "description": "\"Each of the students ___ a book.\"",
               "hints": [],
-              "solution_steps": [
-                "'Each' is singular and takes 'has'."
-              ],
-              "options": [
-                "have",
-                "has",
-                "are",
-                "were"
-              ],
+              "solution_steps": ["'Each' is singular and takes 'has'."],
+              "options": ["have", "has", "are", "were"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -93,19 +64,10 @@
               "question_number": 4,
               "description": "The comparative form of \"good\" is ___.",
               "hints": [],
-              "solution_steps": [
-                "'Good' is irregular: good → better → best."
-              ],
-              "options": [
-                "gooder",
-                "better",
-                "best",
-                "more good"
-              ],
+              "solution_steps": ["'Good' is irregular: good → better → best."],
+              "options": ["gooder", "better", "best", "more good"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -126,9 +88,7 @@
                 "more beautiful"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -149,9 +109,7 @@
                 "He not like it."
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -165,16 +123,9 @@
               "solution_steps": [
                 "After the preposition 'for', use the object pronoun 'me'."
               ],
-              "options": [
-                "I",
-                "me",
-                "mine",
-                "myself"
-              ],
+              "options": ["I", "me", "mine", "myself"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -185,13 +136,9 @@
         },
         {
           "suiteName": "English JHS2 — Vocabulary & Word Formation",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Prefixes, suffixes, synonyms, antonyms, homophones and collective nouns.",
-          "suiteKeywords": [
-            "BECE",
-            "English",
-            "Vocabulary",
-            "Word Formation"
-          ],
+          "suiteKeywords": ["BECE", "English", "Vocabulary", "Word Formation"],
           "questions": [
             {
               "question_number": 1,
@@ -200,16 +147,9 @@
               "solution_steps": [
                 "A prefix ('un-') is added to the front of a word."
               ],
-              "options": [
-                "suffix",
-                "prefix",
-                "root",
-                "syllable"
-              ],
+              "options": ["suffix", "prefix", "root", "syllable"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -220,19 +160,10 @@
               "question_number": 2,
               "description": "Add a suffix to \"care\" to mean \"without care\".",
               "hints": [],
-              "solution_steps": [
-                "The suffix '-less' means 'without'."
-              ],
-              "options": [
-                "careful",
-                "careless",
-                "caring",
-                "carer"
-              ],
+              "solution_steps": ["The suffix '-less' means 'without'."],
+              "options": ["careful", "careless", "caring", "carer"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -244,16 +175,9 @@
               "description": "The synonym of \"brave\" is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "cowardly",
-                "courageous",
-                "weak",
-                "fearful"
-              ],
+              "options": ["cowardly", "courageous", "weak", "fearful"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -265,16 +189,9 @@
               "description": "The antonym of \"ancient\" is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "old",
-                "modern",
-                "aged",
-                "past"
-              ],
+              "options": ["old", "modern", "aged", "past"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -286,16 +203,9 @@
               "description": "A person who flies an aeroplane is a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sailor",
-                "pilot",
-                "driver",
-                "captain"
-              ],
+              "options": ["sailor", "pilot", "driver", "captain"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -309,16 +219,9 @@
               "solution_steps": [
                 "Homophones sound alike: 'flour' and 'flower'."
               ],
-              "options": [
-                "flower",
-                "floor",
-                "flow",
-                "flavour"
-              ],
+              "options": ["flower", "floor", "flow", "flavour"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -330,16 +233,9 @@
               "description": "The correct collective noun for a group of lions is a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "flock",
-                "herd",
-                "pride",
-                "pack"
-              ],
+              "options": ["flock", "herd", "pride", "pack"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULARY"
-              ],
+              "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -350,31 +246,18 @@
         },
         {
           "suiteName": "English JHS2 — Tenses, Speech & Sentence Types",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Past and perfect tenses, reported speech, the passive and types of sentences.",
-          "suiteKeywords": [
-            "BECE",
-            "English",
-            "Tense",
-            "Sentence"
-          ],
+          "suiteKeywords": ["BECE", "English", "Tense", "Sentence"],
           "questions": [
             {
               "question_number": 1,
               "description": "Change to the past tense: \"He writes a letter.\" → \"He ___ a letter.\"",
               "hints": [],
-              "solution_steps": [
-                "The past tense of 'write' is 'wrote'."
-              ],
-              "options": [
-                "write",
-                "wrote",
-                "written",
-                "writing"
-              ],
+              "solution_steps": ["The past tense of 'write' is 'wrote'."],
+              "options": ["write", "wrote", "written", "writing"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -385,19 +268,10 @@
               "question_number": 2,
               "description": "The present perfect tense of \"go\" is \"has/have ___\".",
               "hints": [],
-              "solution_steps": [
-                "The past participle of 'go' is 'gone'."
-              ],
-              "options": [
-                "went",
-                "gone",
-                "going",
-                "goes"
-              ],
+              "solution_steps": ["The past participle of 'go' is 'gone'."],
+              "options": ["went", "gone", "going", "goes"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -411,16 +285,9 @@
               "solution_steps": [
                 "In reported speech, present tense shifts to past: 'am' → 'was'."
               ],
-              "options": [
-                "is",
-                "was",
-                "were",
-                "has been"
-              ],
+              "options": ["is", "was", "were", "has been"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -439,9 +306,7 @@
                 "exclamatory"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -460,9 +325,7 @@
                 "exclamatory"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -476,16 +339,9 @@
               "solution_steps": [
                 "In the passive, the object becomes the subject: 'was kicked'."
               ],
-              "options": [
-                "kicks",
-                "was kicked",
-                "kicked",
-                "is kicking"
-              ],
+              "options": ["kicks", "was kicked", "kicked", "is kicking"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAR_USAGE"
-              ],
+              "tags": ["TAG_GRAMMAR_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -496,6 +352,7 @@
         },
         {
           "suiteName": "English JHS2 — Figures of Speech",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Similes, metaphors, personification, alliteration and onomatopoeia.",
           "suiteKeywords": [
             "BECE",
@@ -508,19 +365,10 @@
               "question_number": 1,
               "description": "\"As brave as a lion\" is an example of ___.",
               "hints": [],
-              "solution_steps": [
-                "A simile compares using 'as' or 'like'."
-              ],
-              "options": [
-                "metaphor",
-                "simile",
-                "personification",
-                "hyperbole"
-              ],
+              "solution_steps": ["A simile compares using 'as' or 'like'."],
+              "options": ["metaphor", "simile", "personification", "hyperbole"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -541,9 +389,7 @@
                 "onomatopoeia"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -557,16 +403,9 @@
               "solution_steps": [
                 "A metaphor states one thing IS another, without 'like'/'as'."
               ],
-              "options": [
-                "simile",
-                "metaphor",
-                "idiom",
-                "pun"
-              ],
+              "options": ["simile", "metaphor", "idiom", "pun"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -578,16 +417,9 @@
               "description": "The repetition of the first consonant sound, as in \"big brown bear\", is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "rhyme",
-                "alliteration",
-                "simile",
-                "assonance"
-              ],
+              "options": ["rhyme", "alliteration", "simile", "assonance"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -599,16 +431,9 @@
               "description": "Words that imitate sounds, like \"buzz\" and \"bang\", are examples of ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "onomatopoeia",
-                "metaphor",
-                "simile",
-                "hyperbole"
-              ],
+              "options": ["onomatopoeia", "metaphor", "simile", "hyperbole"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -619,29 +444,18 @@
         },
         {
           "suiteName": "English JHS2 — Punctuation & Literature Basics",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Commas, the apostrophe, quotation marks, spelling and the fable.",
-          "suiteKeywords": [
-            "BECE",
-            "English",
-            "Punctuation",
-            "Literature"
-          ],
+          "suiteKeywords": ["BECE", "English", "Punctuation", "Literature"],
           "questions": [
             {
               "question_number": 1,
               "description": "Which punctuation mark separates items in a list?",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "full stop",
-                "comma",
-                "colon",
-                "apostrophe"
-              ],
+              "options": ["full stop", "comma", "colon", "apostrophe"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PUNCTUATION_AND_MECHANICS"
-              ],
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -662,9 +476,7 @@
                 "Kofi book's is new."
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PUNCTUATION_AND_MECHANICS"
-              ],
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -683,9 +495,7 @@
                 "a pause"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PUNCTUATION_AND_MECHANICS"
-              ],
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -697,16 +507,9 @@
               "description": "Choose the word that is correctly spelt.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "definately",
-                "definitely",
-                "definitly",
-                "definetly"
-              ],
+              "options": ["definately", "definitely", "definitly", "definetly"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PUNCTUATION_AND_MECHANICS"
-              ],
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -718,16 +521,9 @@
               "description": "A short story that teaches a moral lesson, often using animals, is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "novel",
-                "fable",
-                "poem",
-                "drama"
-              ],
+              "options": ["novel", "fable", "poem", "drama"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_LITERATURE"
-              ],
+              "tags": ["TAG_LITERATURE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",

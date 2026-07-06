@@ -1,0 +1,495 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Mathematics",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "math_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Maths JHS2 — Number & Numeration",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Fraction operations, decimals, percentages, squares and square roots.",
+          "suiteKeywords": ["BECE", "Mathematics", "Number"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Simplify: 2/3 + 1/6",
+              "hints": [],
+              "solution_steps": ["2/3 = 4/6", "4/6 + 1/6 = 5/6"],
+              "options": ["3/9", "5/6", "1/2", "3/6"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "5/6"
+            },
+            {
+              "question_number": 2,
+              "description": "Simplify: 3/4 × 2/3",
+              "hints": [],
+              "solution_steps": ["(3 × 2)/(4 × 3) = 6/12 = 1/2"],
+              "options": ["6/7", "1/2", "5/12", "1/4"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "1/2"
+            },
+            {
+              "question_number": 3,
+              "description": "Convert 0.75 to a fraction in its simplest form.",
+              "hints": [],
+              "solution_steps": ["0.75 = 75/100 = 3/4"],
+              "options": ["3/4", "7/5", "1/4", "2/5"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "3/4"
+            },
+            {
+              "question_number": 4,
+              "description": "Find 15% of 300.",
+              "hints": [],
+              "solution_steps": ["15/100 × 300 = 45"],
+              "options": ["30", "45", "60", "15"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "45"
+            },
+            {
+              "question_number": 5,
+              "description": "Express 7/20 as a decimal.",
+              "hints": [],
+              "solution_steps": ["7 ÷ 20 = 0.35"],
+              "options": ["0.35", "0.72", "0.14", "3.5"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "0.35"
+            },
+            {
+              "question_number": 6,
+              "description": "The value of 9² (9 squared) is ___.",
+              "hints": [],
+              "solution_steps": ["9 × 9 = 81"],
+              "options": ["18", "72", "81", "99"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "81"
+            },
+            {
+              "question_number": 7,
+              "description": "The square root of 64 (√64) is ___.",
+              "hints": [],
+              "solution_steps": ["8 × 8 = 64, so √64 = 8"],
+              "options": ["6", "7", "8", "32"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "8"
+            }
+          ]
+        },
+        {
+          "suiteName": "Maths JHS2 — Algebra",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Two-step equations, expansion, factorisation and sequences.",
+          "suiteKeywords": ["BECE", "Mathematics", "Algebra"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Solve: 2x + 3 = 11",
+              "hints": [],
+              "solution_steps": ["2x = 11 − 3 = 8", "x = 8 ÷ 2 = 4"],
+              "options": ["3", "4", "7", "8"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "4"
+            },
+            {
+              "question_number": 2,
+              "description": "Expand: 3(x + 2)",
+              "hints": [],
+              "solution_steps": ["3 × x = 3x, 3 × 2 = 6 → 3x + 6"],
+              "options": ["3x + 2", "3x + 6", "x + 6", "3x + 5"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "3x + 6"
+            },
+            {
+              "question_number": 3,
+              "description": "If 5x = 35, find x.",
+              "hints": [],
+              "solution_steps": ["x = 35 ÷ 5 = 7"],
+              "options": ["5", "6", "7", "30"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "7"
+            },
+            {
+              "question_number": 4,
+              "description": "Simplify: 4a + 3b − 2a + b",
+              "hints": [],
+              "solution_steps": ["(4a − 2a) + (3b + b) = 2a + 4b"],
+              "options": ["2a + 4b", "6a + 4b", "2a + 3b", "2a + 2b"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "2a + 4b"
+            },
+            {
+              "question_number": 5,
+              "description": "Evaluate 3x − 2 when x = 4.",
+              "hints": [],
+              "solution_steps": ["3 × 4 − 2 = 12 − 2 = 10"],
+              "options": ["10", "14", "5", "2"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "10"
+            },
+            {
+              "question_number": 6,
+              "description": "Factorise: 6x + 9",
+              "hints": [],
+              "solution_steps": ["The HCF of 6 and 9 is 3 → 3(2x + 3)"],
+              "options": ["3(2x + 3)", "6(x + 9)", "3(2x + 9)", "2(3x + 3)"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "3(2x + 3)"
+            },
+            {
+              "question_number": 7,
+              "description": "Find the next term: 3, 6, 12, 24, ___",
+              "hints": [],
+              "solution_steps": ["Each term is doubled: 24 × 2 = 48"],
+              "options": ["30", "36", "48", "27"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "48"
+            },
+            {
+              "question_number": 8,
+              "description": "Solve: x/3 = 5",
+              "hints": [],
+              "solution_steps": ["x = 5 × 3 = 15"],
+              "options": ["8", "15", "2", "3"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "15"
+            }
+          ]
+        },
+        {
+          "suiteName": "Maths JHS2 — Geometry & Measurement",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Angles, the circle, quadrilaterals, volume and related formulae.",
+          "suiteKeywords": ["BECE", "Mathematics", "Geometry", "Measurement"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The interior angles of a triangle add up to ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["90°", "180°", "270°", "360°"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "180°"
+            },
+            {
+              "question_number": 2,
+              "description": "![Circle with radius r](/v1/images/ges/circle_radius.svg)\n\nThe formula for the area of a circle is ___.",
+              "imageFile": {
+                "filename": "circle_radius.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/circle_radius.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["2πr", "πr²", "πd", "πr"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "πr²"
+            },
+            {
+              "question_number": 3,
+              "description": "The formula for the circumference of a circle is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["πr²", "2πr", "r²", "2r"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "2πr"
+            },
+            {
+              "question_number": 4,
+              "description": "How many angles does a quadrilateral have?",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["3", "4", "5", "6"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "4"
+            },
+            {
+              "question_number": 5,
+              "description": "Angles in a complete turn (full rotation) add up to ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["90°", "180°", "270°", "360°"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "360°"
+            },
+            {
+              "question_number": 6,
+              "description": "The volume of a cuboid is found using ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["l + w + h", "l × w × h", "2(l + w)", "l × w"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "l × w × h"
+            },
+            {
+              "question_number": 7,
+              "description": "![Two complementary angles](/v1/images/ges/complementary_angles.svg)\n\nTwo angles that add up to 90° are called ___ angles.",
+              "imageFile": {
+                "filename": "complementary_angles.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/complementary_angles.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "complementary",
+                "supplementary",
+                "vertical",
+                "reflex"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "complementary"
+            },
+            {
+              "question_number": 8,
+              "description": "![Circle with radius 7 cm](/v1/images/ges/circle_r7.svg)\n\nIf the radius of a circle is 7 cm, its diameter is ___.",
+              "imageFile": {
+                "filename": "circle_r7.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/circle_r7.svg"
+              },
+              "hints": [],
+              "solution_steps": ["Diameter = 2 × radius = 2 × 7 = 14 cm"],
+              "options": ["3.5 cm", "7 cm", "14 cm", "21 cm"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "14 cm"
+            }
+          ]
+        },
+        {
+          "suiteName": "Maths JHS2 — Handling Data & Probability",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Averages, range, simple probability and interpreting charts.",
+          "suiteKeywords": ["BECE", "Mathematics", "Data", "Probability"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The mean of 5, 10, 15 and 20 is ___.",
+              "hints": [],
+              "solution_steps": ["(5 + 10 + 15 + 20) ÷ 4 = 50 ÷ 4 = 12.5"],
+              "options": ["10", "12.5", "15", "50"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "12.5"
+            },
+            {
+              "question_number": 2,
+              "description": "The median of 2, 4, 6 and 8 is ___.",
+              "hints": [],
+              "solution_steps": [
+                "Median = average of the two middle numbers = (4 + 6) ÷ 2 = 5"
+              ],
+              "options": ["4", "5", "6", "10"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "5"
+            },
+            {
+              "question_number": 3,
+              "description": "The range of 12, 7, 20 and 5 is ___.",
+              "hints": [],
+              "solution_steps": ["Range = 20 − 5 = 15"],
+              "options": ["12", "15", "20", "25"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "15"
+            },
+            {
+              "question_number": 4,
+              "description": "The probability of getting a head when a fair coin is tossed is ___.",
+              "hints": [],
+              "solution_steps": [
+                "A coin has 2 outcomes; heads is 1 of them → 1/2"
+              ],
+              "options": ["1", "1/2", "1/6", "0"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "1/2"
+            },
+            {
+              "question_number": 5,
+              "description": "In a pie chart, the whole circle represents ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["50%", "100%", "25%", "180%"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "100%"
+            },
+            {
+              "question_number": 6,
+              "description": "The mode of 4, 4, 4, 6 and 8 is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["4", "6", "8", "26"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "4"
+            },
+            {
+              "question_number": 7,
+              "description": "Probability values always range from ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["0 to 1", "1 to 10", "0 to 100", "1 to 6"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "0 to 1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

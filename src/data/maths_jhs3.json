@@ -1,0 +1,512 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Mathematics",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "math_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Maths JHS3 — Number & Numeration",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Indices, standard form, profit and loss, simple interest and ratio.",
+          "suiteKeywords": ["BECE", "Mathematics", "Number"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Simplify: 2⁻¹",
+              "hints": [],
+              "solution_steps": [
+                "A negative index means reciprocal: 2⁻¹ = 1/2"
+              ],
+              "options": ["2", "-2", "1/2", "0"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "1/2"
+            },
+            {
+              "question_number": 2,
+              "description": "Express 0.000045 in standard form.",
+              "hints": [],
+              "solution_steps": ["Move the point 5 places right → 4.5 × 10⁻⁵"],
+              "options": [
+                "4.5 × 10⁻⁵",
+                "45 × 10⁻⁶",
+                "4.5 × 10⁵",
+                "0.45 × 10⁻⁴"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "4.5 × 10⁻⁵"
+            },
+            {
+              "question_number": 3,
+              "description": "The value of 3⁰ is ___.",
+              "hints": [],
+              "solution_steps": [
+                "Any non-zero number to the power 0 equals 1."
+              ],
+              "options": ["0", "1", "3", "30"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "1"
+            },
+            {
+              "question_number": 4,
+              "description": "A trader bought an item for GH₵80 and sold it for GH₵100. The percentage profit is ___.",
+              "hints": [],
+              "solution_steps": [
+                "Profit = 20",
+                "% profit = (20 ÷ 80) × 100 = 25%"
+              ],
+              "options": ["20%", "25%", "80%", "125%"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "25%"
+            },
+            {
+              "question_number": 5,
+              "description": "Increase 200 by 10%.",
+              "hints": [],
+              "solution_steps": ["10% of 200 = 20; 200 + 20 = 220"],
+              "options": ["210", "220", "180", "20"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "220"
+            },
+            {
+              "question_number": 6,
+              "description": "Find the simple interest on GH₵500 at 5% per annum for 2 years.",
+              "hints": [],
+              "solution_steps": [
+                "I = (P × R × T) ÷ 100 = (500 × 5 × 2) ÷ 100 = GH₵50"
+              ],
+              "options": ["GH₵25", "GH₵50", "GH₵55", "GH₵500"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "GH₵50"
+            },
+            {
+              "question_number": 7,
+              "description": "Express the ratio 12 : 18 in its simplest form.",
+              "hints": [],
+              "solution_steps": ["Divide both by the HCF (6): 12 : 18 = 2 : 3"],
+              "options": ["2 : 3", "3 : 2", "6 : 9", "4 : 6"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_NUMBER_AND_NUMERATION"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "2 : 3"
+            }
+          ]
+        },
+        {
+          "suiteName": "Maths JHS3 — Algebra",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Linear equations, expansion, factorisation, inequalities and change of subject.",
+          "suiteKeywords": ["BECE", "Mathematics", "Algebra"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Solve: 3x − 7 = 2x + 5",
+              "hints": [],
+              "solution_steps": ["3x − 2x = 5 + 7", "x = 12"],
+              "options": ["2", "6", "12", "-2"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "12"
+            },
+            {
+              "question_number": 2,
+              "description": "Expand: (x + 3)(x + 2)",
+              "hints": [],
+              "solution_steps": ["x·x + 2x + 3x + 6 = x² + 5x + 6"],
+              "options": ["x² + 5x + 6", "x² + 6", "x² + 6x + 5", "x² + 5x"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "x² + 5x + 6"
+            },
+            {
+              "question_number": 3,
+              "description": "Factorise: x² − 9",
+              "hints": [],
+              "solution_steps": [
+                "Difference of two squares: x² − 3² = (x − 3)(x + 3)"
+              ],
+              "options": [
+                "(x − 3)(x + 3)",
+                "(x − 9)(x + 1)",
+                "(x − 3)²",
+                "(x + 3)²"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "(x − 3)(x + 3)"
+            },
+            {
+              "question_number": 4,
+              "description": "Make y the subject of the formula: x = y + 4",
+              "hints": [],
+              "solution_steps": ["Subtract 4 from both sides: y = x − 4"],
+              "options": ["y = x + 4", "y = x − 4", "y = 4 − x", "y = 4x"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "y = x − 4"
+            },
+            {
+              "question_number": 5,
+              "description": "Solve the inequality: x + 2 > 5",
+              "hints": [],
+              "solution_steps": ["x > 5 − 2 → x > 3"],
+              "options": ["x > 3", "x < 3", "x > 7", "x < 7"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "x > 3"
+            },
+            {
+              "question_number": 6,
+              "description": "If 2ˣ = 8, find x.",
+              "hints": [],
+              "solution_steps": ["8 = 2³, so x = 3"],
+              "options": ["2", "3", "4", "16"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "3"
+            },
+            {
+              "question_number": 7,
+              "description": "Simplify: 12x²y ÷ 4xy",
+              "hints": [],
+              "solution_steps": ["12 ÷ 4 = 3; x²/x = x; y/y = 1 → 3x"],
+              "options": ["3x", "3xy", "8x", "3x²"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "3x"
+            },
+            {
+              "question_number": 8,
+              "description": "Given x + y = 10 and x − y = 4, find the value of x.",
+              "hints": [],
+              "solution_steps": ["Add the equations: 2x = 14 → x = 7"],
+              "options": ["6", "7", "8", "3"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ALGEBRA"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "7"
+            }
+          ]
+        },
+        {
+          "suiteName": "Maths JHS3 — Geometry & Measurement",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Pythagoras, circles, bearings, polygon angles and trigonometry.",
+          "suiteKeywords": ["BECE", "Mathematics", "Geometry", "Measurement"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "![Right-angled triangle with legs 3 cm and 4 cm](/v1/images/ges/right_triangle_345.svg)\n\nIn a right-angled triangle, the legs are 3 cm and 4 cm. The hypotenuse is ___ cm.",
+              "imageFile": {
+                "filename": "right_triangle_345.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/right_triangle_345.svg"
+              },
+              "hints": [],
+              "solution_steps": [
+                "c² = 3² + 4² = 9 + 16 = 25",
+                "c = √25 = 5 cm"
+              ],
+              "options": ["5", "6", "7", "12"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "5"
+            },
+            {
+              "question_number": 2,
+              "description": "![Circle with radius 7 cm](/v1/images/ges/circle_r7.svg)\n\nFind the area of a circle of radius 7 cm. (Take π = 22/7)",
+              "imageFile": {
+                "filename": "circle_r7.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/circle_r7.svg"
+              },
+              "hints": [],
+              "solution_steps": ["Area = πr² = 22/7 × 7 × 7 = 154 cm²"],
+              "options": ["44 cm²", "154 cm²", "22 cm²", "49 cm²"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "154 cm²"
+            },
+            {
+              "question_number": 3,
+              "description": "The bearing of a point due East is ___.",
+              "hints": [],
+              "solution_steps": [
+                "Bearings are measured clockwise from North; East = 090°"
+              ],
+              "options": ["000°", "090°", "180°", "270°"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "090°"
+            },
+            {
+              "question_number": 4,
+              "description": "The sum of the exterior angles of any polygon is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["180°", "360°", "540°", "720°"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "360°"
+            },
+            {
+              "question_number": 5,
+              "description": "![A pentagon](/v1/images/ges/pentagon.svg)\n\nThe sum of the interior angles of a pentagon is ___.",
+              "imageFile": {
+                "filename": "pentagon.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/pentagon.svg"
+              },
+              "hints": [],
+              "solution_steps": ["(n − 2) × 180 = (5 − 2) × 180 = 540°"],
+              "options": ["360°", "540°", "720°", "180°"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "540°"
+            },
+            {
+              "question_number": 6,
+              "description": "The formula for the volume of a cylinder is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["2πrh", "πr²h", "πr²", "πrh"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "πr²h"
+            },
+            {
+              "question_number": 7,
+              "description": "The value of tan 45° is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["0", "1", "0.5", "√2"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "1"
+            },
+            {
+              "question_number": 8,
+              "description": "An angle that measures exactly 90° is called a ___ angle.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["acute", "obtuse", "right", "reflex"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GEOMETRY_AND_MEASUREMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "right"
+            }
+          ]
+        },
+        {
+          "suiteName": "Maths JHS3 — Handling Data & Probability",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Averages, probability of events, pie-chart angles and range.",
+          "suiteKeywords": ["BECE", "Mathematics", "Data", "Probability"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The mean of 3, 5, 7, 9 and 11 is ___.",
+              "hints": [],
+              "solution_steps": ["(3 + 5 + 7 + 9 + 11) ÷ 5 = 35 ÷ 5 = 7"],
+              "options": ["5", "7", "9", "35"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "7"
+            },
+            {
+              "question_number": 2,
+              "description": "The probability of an impossible event is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["0", "1", "0.5", "1/2"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "0"
+            },
+            {
+              "question_number": 3,
+              "description": "The median of 10, 15, 20, 25 and 30 is ___.",
+              "hints": [],
+              "solution_steps": ["The middle value of the ordered set is 20."],
+              "options": ["15", "20", "22.5", "25"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "20"
+            },
+            {
+              "question_number": 4,
+              "description": "A card is drawn at random from 5 cards numbered 1–5. The probability of drawing an even number is ___.",
+              "hints": [],
+              "solution_steps": ["Even numbers are 2 and 4 → 2 out of 5 = 2/5"],
+              "options": ["2/5", "1/5", "3/5", "1/2"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "2/5"
+            },
+            {
+              "question_number": 5,
+              "description": "In a pie chart, the angle representing 25% of the data is ___.",
+              "hints": [],
+              "solution_steps": ["25% of 360° = 90°"],
+              "options": ["25°", "90°", "180°", "45°"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "90°"
+            },
+            {
+              "question_number": 6,
+              "description": "The range of 45, 30, 60 and 25 is ___.",
+              "hints": [],
+              "solution_steps": ["Range = 60 − 25 = 35"],
+              "options": ["30", "35", "60", "25"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "35"
+            },
+            {
+              "question_number": 7,
+              "description": "If the probability that it will rain is 0.3, the probability that it will NOT rain is ___.",
+              "hints": [],
+              "solution_steps": ["P(not rain) = 1 − 0.3 = 0.7"],
+              "options": ["0.3", "0.7", "1.3", "0"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HANDLING_DATA"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "0.7"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

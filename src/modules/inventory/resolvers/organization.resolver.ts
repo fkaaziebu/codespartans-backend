@@ -1,12 +1,14 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Category as CategoryTypeClass } from 'src/modules/inventory/entities/category.entity';
+import { Course as CourseTypeClass } from 'src/modules/inventory/entities/course.entity';
 import { TestSuite as TestSuiteTypeClass } from 'src/modules/review/entities/test_suite.entity';
 import { Version as VersionTypeClass } from 'src/modules/review/entities/version.entity';
 import { GqlJwtAuthGuard } from 'src/helpers/guards';
 import { PaginationInput } from 'src/helpers/inputs';
 import { CourseConnection } from 'src/helpers/types';
 import {
+  CategoryCourseInfoInput,
   CategoryInfoInput,
   RequestedReviewFilterInput,
   SuiteInput,
@@ -140,6 +142,26 @@ export class OrganizationResolver {
       id,
       categoryId,
       courseIds,
+    });
+  }
+
+  @UseGuards(GqlJwtAuthGuard)
+  @Mutation(() => CourseTypeClass)
+  createCategoryCourse(
+    @Context() context,
+    @Args('categoryId') categoryId: string,
+    @Args('courseInfo', {
+      type: () => CategoryCourseInfoInput!,
+      nullable: false,
+    })
+    courseInfo: CategoryCourseInfoInput,
+  ) {
+    const { id } = context.req.user;
+
+    return this.organizationService.createCategoryCourse({
+      id,
+      categoryId,
+      courseInfo,
     });
   }
 
