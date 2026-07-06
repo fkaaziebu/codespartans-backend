@@ -6,4 +6,5 @@ export { CourseFilterInput } from './course-filter.input';
 export { CourseInfoInput } from './course-info.input';
 export { QuestionInput } from './question.input';
 export { RequestedReviewFilterInput } from './requested-review-filter.input';
+export { SuiteInput } from './suite.input';
 export { UpdateCourseInfoInput } from './update-course-info.input';

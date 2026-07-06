@@ -9,10 +9,16 @@ import { Instructor } from '../../auth/entities/instructor.entity';
 import { Organization } from '../../auth/entities/organization.entity';
 import { Category } from '../entities/category.entity';
 import { Course } from '../entities/course.entity';
+import { Question } from '../../review/entities/question.entity';
 import { ReviewRequest } from '../../review/entities/review_request.entity';
+import { TestSuite } from '../../review/entities/test_suite.entity';
 import { Version } from '../../review/entities/version.entity';
 import { Category as CategoryTypeClass } from 'src/modules/inventory/entities/category.entity';
-import { CategoryInfoInput, RequestedReviewFilterInput } from '../inputs';
+import {
+  CategoryInfoInput,
+  RequestedReviewFilterInput,
+  SuiteInput,
+} from '../inputs';
 import { StatsResponse } from '../types';
 
 @Injectable()
@@ -432,6 +438,91 @@ export class OrganizationService {
 
         category.courses = courses;
         return await transactionalEntityManager.save(Category, category);
+      },
+    );
+  }
+
+  async addSuitesToCourse({
+    id,
+    courseId,
+    suites,
+  }: {
+    id: string;
+    courseId: string;
+    suites: SuiteInput[];
+  }): Promise<TestSuite[]> {
+    return await this.organizationRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const organization = await transactionalEntityManager.findOne(
+          Organization,
+          {
+            where: { id },
+          },
+        );
+
+        if (!organization) {
+          throw new NotFoundException('Organization does not exist');
+        }
+
+        const course = await transactionalEntityManager.findOne(Course, {
+          where: { id: courseId, organization: { id } },
+          relations: ['versions'],
+        });
+
+        if (!course) {
+          throw new NotFoundException('Course not found');
+        }
+
+        let courseVersion = course.versions?.length
+          ? course.versions.reduce((latest, v) =>
+              v.version_number > latest.version_number ? v : latest,
+            )
+          : null;
+
+        if (!courseVersion) {
+          courseVersion = new Version();
+          courseVersion.version_number = course.versions.length + 1;
+          courseVersion.course = course;
+          await transactionalEntityManager.save(courseVersion);
+        }
+
+        const createdSuites: TestSuite[] = [];
+
+        for (const suiteInput of suites) {
+          const newSuite = new TestSuite();
+          newSuite.title = suiteInput.suiteName;
+          newSuite.description = suiteInput.suiteDescription;
+          newSuite.keywords = suiteInput.suiteKeywords;
+          newSuite.suite_type = suiteInput.suiteType;
+          newSuite.course_version = courseVersion;
+          await transactionalEntityManager.save(newSuite);
+
+          const newQuestions = suiteInput.questions.map((q) => {
+            const question = new Question();
+            question.question_number = q.question_number;
+            question.description = q.description;
+            question.hints = q.hints;
+            question.solution_steps = q.solution_steps;
+            question.options = q.options;
+            question.type = q.type;
+            question.tags = q.tags;
+            question.difficulty = q.difficulty;
+            question.estimated_time_in_ms = q.estimated_time_in_ms;
+            question.class_level = q.class_level;
+            question.exam_year = q.exam_year;
+            question.correct_answer = q.correct_answer;
+            if (q.marks !== undefined) question.marks = q.marks;
+            question.version = courseVersion;
+            question.test_suite = newSuite;
+            return question;
+          });
+
+          const savedQuestions =
+            await transactionalEntityManager.save(newQuestions);
+          createdSuites.push({ ...newSuite, questions: savedQuestions });
+        }
+
+        return createdSuites;
       },
     );
   }

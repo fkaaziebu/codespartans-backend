@@ -1,0 +1,742 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "English Language",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "english_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "English JHS3 — Concord & Advanced Grammar",
+          "suiteDescription": "Tricky subject-verb agreement, the subjunctive and proximity rules.",
+          "suiteKeywords": [
+            "BECE",
+            "English",
+            "Concord",
+            "Grammar"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "\"The committee ___ divided in its decision.\"",
+              "hints": [],
+              "solution_steps": [
+                "Here the committee acts as one body, so it takes 'was'."
+              ],
+              "options": [
+                "were",
+                "was",
+                "are",
+                "have"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "was"
+            },
+            {
+              "question_number": 2,
+              "description": "\"Mathematics ___ my favourite subject.\"",
+              "hints": [],
+              "solution_steps": [
+                "'Mathematics' is singular though it ends in 's', so it takes 'is'."
+              ],
+              "options": [
+                "are",
+                "is",
+                "were",
+                "have"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "is"
+            },
+            {
+              "question_number": 3,
+              "description": "\"One of the girls ___ lost her book.\"",
+              "hints": [],
+              "solution_steps": [
+                "The subject is 'one' (singular), so it takes 'has'."
+              ],
+              "options": [
+                "have",
+                "has",
+                "are",
+                "were"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "has"
+            },
+            {
+              "question_number": 4,
+              "description": "\"Neither the teacher nor the students ___ arrived.\"",
+              "hints": [],
+              "solution_steps": [
+                "With 'neither...nor', the verb agrees with the nearer subject ('students') → 'have'."
+              ],
+              "options": [
+                "has",
+                "have",
+                "was",
+                "is"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "have"
+            },
+            {
+              "question_number": 5,
+              "description": "\"The news ___ very disturbing.\"",
+              "hints": [],
+              "solution_steps": [
+                "'News' is an uncountable singular noun, so it takes 'is'."
+              ],
+              "options": [
+                "are",
+                "were",
+                "is",
+                "have"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "is"
+            },
+            {
+              "question_number": 6,
+              "description": "\"If I ___ you, I would apologise.\"",
+              "hints": [],
+              "solution_steps": [
+                "The subjunctive uses 'were' for hypothetical situations."
+              ],
+              "options": [
+                "was",
+                "were",
+                "am",
+                "be"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "were"
+            },
+            {
+              "question_number": 7,
+              "description": "\"Scissors ___ used for cutting.\"",
+              "hints": [],
+              "solution_steps": [
+                "'Scissors' is treated as plural, so it takes 'are'."
+              ],
+              "options": [
+                "is",
+                "was",
+                "are",
+                "has"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "are"
+            }
+          ]
+        },
+        {
+          "suiteName": "English JHS3 — Vocabulary, Idioms & Proverbs",
+          "suiteDescription": "Idioms, proverbs, precise synonyms/antonyms and commonly confused words.",
+          "suiteKeywords": [
+            "BECE",
+            "English",
+            "Idioms",
+            "Vocabulary"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The idiom \"to kick the bucket\" means to ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "play football",
+                "die",
+                "be lazy",
+                "waste water"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULARY"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "die"
+            },
+            {
+              "question_number": 2,
+              "description": "The proverb \"A stitch in time saves nine\" teaches us to ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "sew clothes neatly",
+                "act early to avoid bigger problems",
+                "count carefully",
+                "save money"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULARY"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "act early to avoid bigger problems"
+            },
+            {
+              "question_number": 3,
+              "description": "The synonym of \"reluctant\" is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "eager",
+                "unwilling",
+                "quick",
+                "cheerful"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULARY"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "unwilling"
+            },
+            {
+              "question_number": 4,
+              "description": "The antonym of \"generous\" is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "kind",
+                "giving",
+                "stingy",
+                "wealthy"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULARY"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "stingy"
+            },
+            {
+              "question_number": 5,
+              "description": "Choose the correct word: \"The head of the school is the ___.\"",
+              "hints": [],
+              "solution_steps": [
+                "'Principal' = head person; 'principle' = a rule or belief."
+              ],
+              "options": [
+                "principle",
+                "principal",
+                "principel",
+                "principled"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULARY"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "principal"
+            },
+            {
+              "question_number": 6,
+              "description": "The correct collective noun for a large number of people gathered together is a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "crowd",
+                "pride",
+                "flock",
+                "swarm"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULARY"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "crowd"
+            },
+            {
+              "question_number": 7,
+              "description": "The word \"biannual\" means happening ___.",
+              "hints": [],
+              "solution_steps": [
+                "'Biannual' = twice a year; 'biennial' = every two years."
+              ],
+              "options": [
+                "once a year",
+                "twice a year",
+                "every two years",
+                "every month"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_VOCABULARY"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "twice a year"
+            }
+          ]
+        },
+        {
+          "suiteName": "English JHS3 — Tenses, Reported Speech & Passive",
+          "suiteDescription": "Perfect tenses, reported speech, passive voice and question tags.",
+          "suiteKeywords": [
+            "BECE",
+            "English",
+            "Tense",
+            "Reported Speech"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Reported speech: He said, \"I will come tomorrow.\" → He said that he ___ come the next day.",
+              "hints": [],
+              "solution_steps": [
+                "'Will' shifts to 'would' in reported speech."
+              ],
+              "options": [
+                "will",
+                "would",
+                "shall",
+                "can"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "would"
+            },
+            {
+              "question_number": 2,
+              "description": "Passive voice: \"They are building a house.\" → \"A house ___ built.\"",
+              "hints": [],
+              "solution_steps": [
+                "Present continuous passive: 'is being built'."
+              ],
+              "options": [
+                "is being",
+                "was being",
+                "has been",
+                "is"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "is being"
+            },
+            {
+              "question_number": 3,
+              "description": "Past perfect: \"By the time we arrived, the film ___.\"",
+              "hints": [],
+              "solution_steps": [
+                "An earlier past action uses the past perfect: 'had started'."
+              ],
+              "options": [
+                "started",
+                "has started",
+                "had started",
+                "starts"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "had started"
+            },
+            {
+              "question_number": 4,
+              "description": "Change to indirect: She asked, \"Where are you going?\" → She asked where I ___ going.",
+              "hints": [],
+              "solution_steps": [
+                "In reported speech, 'am going' shifts to 'was going'."
+              ],
+              "options": [
+                "am",
+                "was",
+                "were",
+                "is"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "was"
+            },
+            {
+              "question_number": 5,
+              "description": "\"The work ___ by the time you return.\"",
+              "hints": [],
+              "solution_steps": [
+                "Future passive: 'will be finished'."
+              ],
+              "options": [
+                "will finish",
+                "will be finished",
+                "finishes",
+                "is finishing"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "will be finished"
+            },
+            {
+              "question_number": 6,
+              "description": "Choose the correct question tag: \"Let's go out, ___?\"",
+              "hints": [],
+              "solution_steps": [
+                "After 'Let's', the tag is 'shall we'."
+              ],
+              "options": [
+                "shall we",
+                "will we",
+                "don't we",
+                "aren't we"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_GRAMMAR_USAGE"
+              ],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "shall we"
+            }
+          ]
+        },
+        {
+          "suiteName": "English JHS3 — Literature & Figures of Speech",
+          "suiteDescription": "Metaphor, hyperbole, irony, protagonist and forms of literature.",
+          "suiteKeywords": [
+            "BECE",
+            "English",
+            "Literature",
+            "Figures of Speech"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "\"The classroom was a zoo\" is an example of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "simile",
+                "metaphor",
+                "personification",
+                "irony"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_LITERATURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "metaphor"
+            },
+            {
+              "question_number": 2,
+              "description": "\"I have told you a thousand times\" is an example of ___.",
+              "hints": [],
+              "solution_steps": [
+                "Hyperbole is a deliberate exaggeration."
+              ],
+              "options": [
+                "metaphor",
+                "hyperbole",
+                "simile",
+                "irony"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_LITERATURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "hyperbole"
+            },
+            {
+              "question_number": 3,
+              "description": "An expression that means the opposite of what is actually said is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "metaphor",
+                "irony",
+                "simile",
+                "alliteration"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_LITERATURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "irony"
+            },
+            {
+              "question_number": 4,
+              "description": "A long narrative work of prose fiction is called a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "poem",
+                "novel",
+                "essay",
+                "proverb"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_LITERATURE"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "novel"
+            },
+            {
+              "question_number": 5,
+              "description": "The main character in a story is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "antagonist",
+                "protagonist",
+                "narrator",
+                "author"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_LITERATURE"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "protagonist"
+            }
+          ]
+        },
+        {
+          "suiteName": "English JHS3 — Comprehension & Punctuation",
+          "suiteDescription": "Sentence analysis, the colon, quoted speech, spelling and letter writing.",
+          "suiteKeywords": [
+            "BECE",
+            "English",
+            "Comprehension",
+            "Punctuation"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "In \"The sun set slowly behind the hills\", the word \"slowly\" tells us ___.",
+              "hints": [],
+              "solution_steps": [
+                "'Slowly' is an adverb describing how the sun set."
+              ],
+              "options": [
+                "what set",
+                "how it set",
+                "where the hills are",
+                "the time"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_READING_COMPREHENSION"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "how it set"
+            },
+            {
+              "question_number": 2,
+              "description": "A colon (:) is best used to ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "end a sentence",
+                "introduce a list or explanation",
+                "show ownership",
+                "join two words"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PUNCTUATION_AND_MECHANICS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "introduce a list or explanation"
+            },
+            {
+              "question_number": 3,
+              "description": "Choose the correctly punctuated sentence.",
+              "hints": [],
+              "solution_steps": [
+                "A comma precedes the quotation and the question mark sits inside the marks."
+              ],
+              "options": [
+                "She asked, \"Are you ready?\"",
+                "She asked \"are you ready\".",
+                "She asked, are you ready?",
+                "She asked \"Are you ready?\"."
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PUNCTUATION_AND_MECHANICS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "She asked, \"Are you ready?\""
+            },
+            {
+              "question_number": 4,
+              "description": "Which word is correctly spelt?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "neccessary",
+                "necessary",
+                "necesary",
+                "neccesary"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_PUNCTUATION_AND_MECHANICS"
+              ],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "necessary"
+            },
+            {
+              "question_number": 5,
+              "description": "In a formal letter, the purpose of the salutation is to ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "end the letter",
+                "greet the receiver",
+                "state the address",
+                "sign the writer's name"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": [
+                "TAG_READING_COMPREHENSION"
+              ],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "greet the receiver"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
