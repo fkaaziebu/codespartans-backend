@@ -1,0 +1,503 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Religious and Moral Education",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "rme_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "RME JHS2 — God, His Creation & Attributes",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Monotheism, the attributes of God, stewardship and the Supreme Being in ATR.",
+          "suiteKeywords": ["BECE", "RME", "God", "Attributes"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The belief in the existence of only one God is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["polytheism", "monotheism", "atheism", "animism"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOD_HIS_CREATION_AND_ATTRIBUTES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "monotheism"
+            },
+            {
+              "question_number": 2,
+              "description": "The belief in many gods is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["monotheism", "polytheism", "atheism", "theism"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOD_HIS_CREATION_AND_ATTRIBUTES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "polytheism"
+            },
+            {
+              "question_number": 3,
+              "description": "The attribute of God meaning 'all-powerful' is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["omnipresent", "omnipotent", "omniscient", "eternal"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOD_HIS_CREATION_AND_ATTRIBUTES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "omnipotent"
+            },
+            {
+              "question_number": 4,
+              "description": "God being present everywhere at the same time is described as ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "omnipotent",
+                "omnipresent",
+                "omniscient",
+                "merciful"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOD_HIS_CREATION_AND_ATTRIBUTES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "omnipresent"
+            },
+            {
+              "question_number": 5,
+              "description": "In the Bible, the account of creation is found in the book of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Exodus", "Genesis", "Psalms", "John"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOD_HIS_CREATION_AND_ATTRIBUTES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Genesis"
+            },
+            {
+              "question_number": 6,
+              "description": "Caring responsibly for the environment is a way of showing ___ over God's creation.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["hatred", "stewardship", "greed", "pride"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOD_HIS_CREATION_AND_ATTRIBUTES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "stewardship"
+            },
+            {
+              "question_number": 7,
+              "description": "Among the Akan of Ghana, the Supreme Being is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Allah", "Onyame", "Buddha", "Olodumare"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOD_HIS_CREATION_AND_ATTRIBUTES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Onyame"
+            },
+            {
+              "question_number": 8,
+              "description": "God resting on the seventh day of creation teaches us the importance of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["work only", "rest", "quarrels", "travel"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOD_HIS_CREATION_AND_ATTRIBUTES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "rest"
+            }
+          ]
+        },
+        {
+          "suiteName": "RME JHS2 — Religious Practices",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "The pillars of Islam, Christian sacraments, ATR practices and festivals.",
+          "suiteKeywords": ["BECE", "RME", "Practices", "Festivals"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The pilgrimage to Mecca that every able Muslim must perform is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Salat", "Hajj", "Zakat", "Sawm"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_PRACTICES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Hajj"
+            },
+            {
+              "question_number": 2,
+              "description": "The giving of alms to the poor as a duty in Islam is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Hajj", "Zakat", "Salat", "Sawm"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_PRACTICES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Zakat"
+            },
+            {
+              "question_number": 3,
+              "description": "The Christian sacrament of baptism is performed using ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["oil", "water", "fire", "salt"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_PRACTICES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "water"
+            },
+            {
+              "question_number": 4,
+              "description": "The Christian act of sharing bread and wine in remembrance of Jesus is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "baptism",
+                "Holy Communion",
+                "confirmation",
+                "offering"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_PRACTICES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Holy Communion"
+            },
+            {
+              "question_number": 5,
+              "description": "The teachings of African Traditional Religion are preserved mainly through ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "written scriptures",
+                "oral tradition",
+                "the Bible",
+                "the Qur'an"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_PRACTICES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "oral tradition"
+            },
+            {
+              "question_number": 6,
+              "description": "The Christian festival that celebrates the birth of Jesus Christ is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Easter", "Christmas", "Ramadan", "Homowo"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_PRACTICES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Christmas"
+            },
+            {
+              "question_number": 7,
+              "description": "Traditional festivals in Ghana help to promote ___ among the people.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["division", "unity", "conflict", "hatred"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_PRACTICES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "unity"
+            },
+            {
+              "question_number": 8,
+              "description": "The ceremony held to name a new-born child in many Ghanaian cultures is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["outdooring", "wedding", "funeral", "harvest"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_PRACTICES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "outdooring"
+            }
+          ]
+        },
+        {
+          "suiteName": "RME JHS2 — Religious Leaders",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Key figures of Christianity, early Islam and traditional religious leaders.",
+          "suiteKeywords": ["BECE", "RME", "Leaders"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The mother of Jesus Christ was ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Sarah", "Mary", "Ruth", "Esther"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_LEADERS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Mary"
+            },
+            {
+              "question_number": 2,
+              "description": "The angel who announced the birth of Jesus to Mary was ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Michael", "Gabriel", "Raphael", "Uriel"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_LEADERS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Gabriel"
+            },
+            {
+              "question_number": 3,
+              "description": "The first Caliph of Islam after the death of Prophet Muhammad was ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Umar", "Abu Bakr", "Uthman", "Ali"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_LEADERS"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Abu Bakr"
+            },
+            {
+              "question_number": 4,
+              "description": "The cave where Prophet Muhammad received his first revelation was the cave of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Hira", "Uhud", "Badr", "Thawr"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_LEADERS"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Hira"
+            },
+            {
+              "question_number": 5,
+              "description": "The religious leader who leads a Christian congregation is a ___ or priest.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["imam", "pastor", "chief", "mallam"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_LEADERS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "pastor"
+            },
+            {
+              "question_number": 6,
+              "description": "In Akan tradition, a priest who serves a deity is called an ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["imam", "pastor", "okomfo", "elder"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_RELIGIOUS_LEADERS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "okomfo"
+            }
+          ]
+        },
+        {
+          "suiteName": "RME JHS2 — The Family & the Community",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Family roles, moral values, punctuality, chastity and cooperation.",
+          "suiteKeywords": ["BECE", "RME", "Family", "Values"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "In many Ghanaian societies, the head of the extended family is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "teacher",
+                "Abusuapanyin (family head)",
+                "police officer",
+                "doctor"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_THE_FAMILY_AND_THE_COMMUNITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Abusuapanyin (family head)"
+            },
+            {
+              "question_number": 2,
+              "description": "Respect, obedience and honesty are examples of good moral ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["values", "crimes", "diseases", "games"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_THE_FAMILY_AND_THE_COMMUNITY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "values"
+            },
+            {
+              "question_number": 3,
+              "description": "Punctuality means ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "being late",
+                "being on time",
+                "being absent",
+                "being lazy"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_THE_FAMILY_AND_THE_COMMUNITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "being on time"
+            },
+            {
+              "question_number": 4,
+              "description": "Chastity means keeping oneself morally ___ before marriage.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["rich", "pure", "busy", "quiet"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_THE_FAMILY_AND_THE_COMMUNITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "pure"
+            },
+            {
+              "question_number": 5,
+              "description": "Cooperation in the community means people ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "work together",
+                "fight one another",
+                "compete unfairly",
+                "stay apart"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_THE_FAMILY_AND_THE_COMMUNITY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "work together"
+            },
+            {
+              "question_number": 6,
+              "description": "Which of these is a responsibility of a good citizen?",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "paying taxes",
+                "avoiding work",
+                "breaking laws",
+                "littering"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_THE_FAMILY_AND_THE_COMMUNITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "paying taxes"
+            },
+            {
+              "question_number": 7,
+              "description": "The virtue of pardoning those who wrong us is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["revenge", "forgiveness", "anger", "pride"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_THE_FAMILY_AND_THE_COMMUNITY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "forgiveness"
+            },
+            {
+              "question_number": 8,
+              "description": "Obeying the rules and regulations of the school shows ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["indiscipline", "discipline", "rudeness", "laziness"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_THE_FAMILY_AND_THE_COMMUNITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "discipline"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

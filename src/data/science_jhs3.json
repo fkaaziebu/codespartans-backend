@@ -1,0 +1,531 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Integrated Science",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "integrated_science_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Science JHS3 — Diversity of Matter",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Atoms, symbols, the pH scale, rusting, distillation and chemical formulae.",
+          "suiteKeywords": ["BECE", "Science", "Matter", "Chemistry"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The smallest particle of an element that can take part in a chemical reaction is an ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["molecule", "atom", "ion", "cell"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "atom"
+            },
+            {
+              "question_number": 2,
+              "description": "The chemical symbol for gold is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Go", "Gd", "Au", "Ag"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Au"
+            },
+            {
+              "question_number": 3,
+              "description": "On the pH scale, a neutral substance such as pure water has a pH of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["0", "7", "14", "10"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "7"
+            },
+            {
+              "question_number": 4,
+              "description": "For iron to rust, it must be exposed to oxygen and ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["heat", "water", "salt", "light"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "water"
+            },
+            {
+              "question_number": 5,
+              "description": "The method used to obtain pure water from salt solution by boiling and cooling is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "filtration",
+                "distillation",
+                "decantation",
+                "evaporation"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "distillation"
+            },
+            {
+              "question_number": 6,
+              "description": "The chemical formula for water is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["CO₂", "H₂O", "O₂", "NaCl"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "H₂O"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS3 — Cycles",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Photosynthesis products, the nitrogen cycle, respiration and global warming.",
+          "suiteKeywords": ["BECE", "Science", "Cycles"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Photosynthesis produces glucose and releases ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["carbon dioxide", "oxygen", "water", "nitrogen"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "oxygen"
+            },
+            {
+              "question_number": 2,
+              "description": "Nitrogen-fixing bacteria that enrich the soil are found in the root nodules of ___ plants.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["cereal", "leguminous", "flowering", "aquatic"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "leguminous"
+            },
+            {
+              "question_number": 3,
+              "description": "Respiration releases energy stored in food using ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["nitrogen", "oxygen", "carbon dioxide", "hydrogen"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "oxygen"
+            },
+            {
+              "question_number": 4,
+              "description": "The natural process describing how water moves between the earth and the atmosphere is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "carbon cycle",
+                "nitrogen cycle",
+                "water cycle",
+                "rock cycle"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "water cycle"
+            },
+            {
+              "question_number": 5,
+              "description": "The gas most responsible for the greenhouse effect and global warming is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["oxygen", "nitrogen", "carbon dioxide", "hydrogen"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "carbon dioxide"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS3 — Systems",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Cell structures, blood, the lungs, reproduction and the solar system.",
+          "suiteKeywords": ["BECE", "Science", "Systems", "Biology"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "![An animal cell](/v1/images/ges/animal_cell.svg)\n\nThe part of the cell that controls all its activities is the ___.",
+              "imageFile": {
+                "filename": "animal_cell.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/animal_cell.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["cytoplasm", "nucleus", "membrane", "vacuole"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "nucleus"
+            },
+            {
+              "question_number": 2,
+              "description": "The red substance in blood that carries oxygen around the body is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["chlorophyll", "haemoglobin", "plasma", "platelet"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "haemoglobin"
+            },
+            {
+              "question_number": 3,
+              "description": "![The lungs and alveoli](/v1/images/ges/lungs_alveoli.svg)\n\nThe tiny air sacs in the lungs where gaseous exchange takes place are the ___.",
+              "imageFile": {
+                "filename": "lungs_alveoli.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/lungs_alveoli.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["bronchi", "alveoli", "trachea", "cilia"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "alveoli"
+            },
+            {
+              "question_number": 4,
+              "description": "The male reproductive cell (gamete) in humans is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["ovum", "sperm", "zygote", "embryo"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "sperm"
+            },
+            {
+              "question_number": 5,
+              "description": "![A plant cell](/v1/images/ges/plant_cell.svg)\n\nA structure found in plant cells but absent in animal cells is the ___.",
+              "imageFile": {
+                "filename": "plant_cell.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/plant_cell.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["nucleus", "cell wall", "cytoplasm", "membrane"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "cell wall"
+            },
+            {
+              "question_number": 6,
+              "description": "The largest planet in the solar system is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Earth", "Saturn", "Jupiter", "Mars"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Jupiter"
+            },
+            {
+              "question_number": 7,
+              "description": "The movement of food along the gut by rhythmic muscle contraction is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["digestion", "peristalsis", "absorption", "egestion"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "peristalsis"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS3 — Forces & Energy",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Power, energy units, magnetism, refraction, sound and circuits.",
+          "suiteKeywords": ["BECE", "Science", "Forces", "Energy"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The rate of doing work is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["force", "power", "energy", "speed"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "power"
+            },
+            {
+              "question_number": 2,
+              "description": "The SI unit of energy is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["newton", "joule", "watt", "volt"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "joule"
+            },
+            {
+              "question_number": 3,
+              "description": "A device that changes electrical energy into light energy is a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["motor", "bulb", "battery", "fan"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "bulb"
+            },
+            {
+              "question_number": 4,
+              "description": "When two like poles of magnets are brought close together, they ___ each other.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["attract", "repel", "hold", "melt"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "repel"
+            },
+            {
+              "question_number": 5,
+              "description": "![Refraction of light](/v1/images/ges/light_refraction.svg)\n\nThe bending of light as it passes from one medium to another is called ___.",
+              "imageFile": {
+                "filename": "light_refraction.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/light_refraction.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "reflection",
+                "refraction",
+                "dispersion",
+                "absorption"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "refraction"
+            },
+            {
+              "question_number": 6,
+              "description": "The number of complete vibrations produced per second is the ___ of a sound.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["pitch", "frequency", "amplitude", "echo"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "frequency"
+            },
+            {
+              "question_number": 7,
+              "description": "![A simple electric circuit with a switch](/v1/images/ges/simple_circuit.svg)\n\nIn a simple electric circuit, the component used to turn the current on and off is the ___.",
+              "imageFile": {
+                "filename": "simple_circuit.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/simple_circuit.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["bulb", "switch", "battery", "wire"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "switch"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS3 — Humans & the Environment",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "HIV/AIDS, balanced diet, pollution and renewable energy.",
+          "suiteKeywords": ["BECE", "Science", "Health", "Environment"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "HIV, the virus that causes AIDS, attacks the body's ___ system.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["digestive", "immune", "skeletal", "nervous"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "immune"
+            },
+            {
+              "question_number": 2,
+              "description": "In addition to the six food nutrients, a balanced diet should also contain ___ (dietary fibre).",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["sugar", "roughage", "oil", "salt"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "roughage"
+            },
+            {
+              "question_number": 3,
+              "description": "The addition of harmful substances to the environment is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "conservation",
+                "pollution",
+                "recycling",
+                "afforestation"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "pollution"
+            },
+            {
+              "question_number": 4,
+              "description": "A renewable source of energy obtained directly from the Sun is ___ energy.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["fossil", "solar", "nuclear", "coal"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "solar"
+            },
+            {
+              "question_number": 5,
+              "description": "Planting trees to replace those that have been cut down is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "deforestation",
+                "afforestation",
+                "irrigation",
+                "pollination"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "afforestation"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

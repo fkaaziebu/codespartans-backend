@@ -1,0 +1,515 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Social Studies",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "social_studies_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Social Studies JHS3 — Environment",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Map scale, the Greenwich Meridian, climate, bearings, galamsey and settlements.",
+          "suiteKeywords": [
+            "BECE",
+            "Social Studies",
+            "Environment",
+            "Geography"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The scale of a map shows the relationship between distance on the map and distance on the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["paper", "ground", "wall", "globe"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "ground"
+            },
+            {
+              "question_number": 2,
+              "description": "The Greenwich (Prime) Meridian passes through which Ghanaian city?",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Accra", "Tema", "Kumasi", "Ho"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Tema"
+            },
+            {
+              "question_number": 3,
+              "description": "The rainfall pattern experienced in the forest zone of Ghana is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "single maximum",
+                "double maxima",
+                "no rainfall",
+                "harmattan only"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "double maxima"
+            },
+            {
+              "question_number": 4,
+              "description": "The cold, dry and dusty wind that blows over Ghana between November and February is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["monsoon", "harmattan", "trade wind", "sea breeze"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "harmattan"
+            },
+            {
+              "question_number": 5,
+              "description": "The bearing of a point that lies due South, measured clockwise from North, is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["090°", "180°", "270°", "360°"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "180°"
+            },
+            {
+              "question_number": 6,
+              "description": "The lines that run from the North Pole to the South Pole on a map are lines of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["latitude", "longitude", "contour", "equator"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "longitude"
+            },
+            {
+              "question_number": 7,
+              "description": "The pollution of rivers and land through illegal small-scale mining in Ghana is commonly called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["galamsey", "sakawa", "trotro", "susu"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "galamsey"
+            },
+            {
+              "question_number": 8,
+              "description": "Using natural resources wisely so that future generations can also benefit is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "exploitation",
+                "conservation",
+                "wastage",
+                "pollution"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "conservation"
+            },
+            {
+              "question_number": 9,
+              "description": "The trapping of heat in the atmosphere by gases such as carbon dioxide leads to global ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["cooling", "warming", "darkness", "flooding"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "warming"
+            },
+            {
+              "question_number": 10,
+              "description": "A settlement in which houses are built close together, as in most cities, is described as ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["dispersed", "nucleated", "linear", "scattered"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_ENVIRONMENT"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "nucleated"
+            }
+          ]
+        },
+        {
+          "suiteName": "Social Studies JHS3 — Governance, Politics & Stability",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Democracy, the rule of law, the courts, the Electoral Commission and human rights.",
+          "suiteKeywords": [
+            "BECE",
+            "Social Studies",
+            "Governance",
+            "Democracy"
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Ghana is governed under a system of government known as ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["monarchy", "democracy", "dictatorship", "anarchy"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "democracy"
+            },
+            {
+              "question_number": 2,
+              "description": "The principle that no person, however powerful, is above the law is the ___ of law.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["breaking", "rule", "making", "end"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "rule"
+            },
+            {
+              "question_number": 3,
+              "description": "The three arms of government are the Executive, the Legislature and the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Police", "Judiciary", "Army", "Media"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Judiciary"
+            },
+            {
+              "question_number": 4,
+              "description": "The highest court of the land in Ghana is the ___ Court.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["High", "Circuit", "Supreme", "District"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Supreme"
+            },
+            {
+              "question_number": 5,
+              "description": "A form of government in which power is concentrated in one person or a small group is a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "democracy",
+                "dictatorship",
+                "federation",
+                "republic"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "dictatorship"
+            },
+            {
+              "question_number": 6,
+              "description": "The body responsible for conducting free and fair elections in Ghana is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "Ghana Education Service",
+                "Electoral Commission",
+                "Police Service",
+                "Judiciary"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Electoral Commission"
+            },
+            {
+              "question_number": 7,
+              "description": "Corruption and bribery in society generally lead to national ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "development",
+                "underdevelopment",
+                "peace",
+                "wealth for all"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "underdevelopment"
+            },
+            {
+              "question_number": 8,
+              "description": "The maintenance of law and order in the country is mainly the duty of the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["teachers", "Police Service", "traders", "farmers"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "Police Service"
+            },
+            {
+              "question_number": 9,
+              "description": "Human rights are rights that belong to all people simply because they are ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "rich",
+                "human beings",
+                "citizens only",
+                "adults only"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "human beings"
+            },
+            {
+              "question_number": 10,
+              "description": "Tolerance of different opinions, religions and cultures is essential for ___ in a nation.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["conflict", "peace", "poverty", "crime"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GOVERNANCE_POLITICS_AND_STABILITY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "peace"
+            }
+          ]
+        },
+        {
+          "suiteName": "Social Studies JHS3 — Socio-Economic Development",
+          "suiteType": "YEAR_THREE",
+          "suiteDescription": "Remittances, taxation, industrialisation, human resources and international cooperation.",
+          "suiteKeywords": ["BECE", "Social Studies", "Economy", "Development"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Money sent home by Ghanaians living and working abroad is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["taxes", "remittances", "duties", "fines"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "remittances"
+            },
+            {
+              "question_number": 2,
+              "description": "Rapid population growth that is not matched by resources can lead to ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "development",
+                "unemployment",
+                "wealth",
+                "education for all"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "unemployment"
+            },
+            {
+              "question_number": 3,
+              "description": "The type of farming in which crops are produced mainly for sale is ___ farming.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["subsistence", "commercial", "shifting", "mixed"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "commercial"
+            },
+            {
+              "question_number": 4,
+              "description": "The main source of government revenue for financing national development is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["gifts", "taxation", "gambling", "borrowing only"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "taxation"
+            },
+            {
+              "question_number": 5,
+              "description": "The process of establishing industries to process raw materials into finished goods is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "agriculture",
+                "industrialisation",
+                "urbanisation",
+                "migration"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "HARD",
+              "estimated_time_in_ms": 75000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "industrialisation"
+            },
+            {
+              "question_number": 6,
+              "description": "Depending on one's own effort and resources rather than on others is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "dependency",
+                "self-reliance",
+                "borrowing",
+                "begging"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "self-reliance"
+            },
+            {
+              "question_number": 7,
+              "description": "ECOWAS is an organisation that promotes cooperation among countries in ___ Africa.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["North", "South", "West", "East"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "West"
+            },
+            {
+              "question_number": 8,
+              "description": "The United Nations Organisation (UN) was formed mainly to promote world ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["war", "peace", "trade only", "tourism"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "peace"
+            },
+            {
+              "question_number": 9,
+              "description": "Investing in the education, health and skills of a country's people is ___ resource development.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["mineral", "human", "forest", "water"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "human"
+            },
+            {
+              "question_number": 10,
+              "description": "A major challenge that discourages investors and slows national development is poor ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["weather", "infrastructure", "music", "sports"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SOCIO_ECONOMIC_DEVELOPMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_3",
+              "exam_year": 2023,
+              "correct_answer": "infrastructure"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

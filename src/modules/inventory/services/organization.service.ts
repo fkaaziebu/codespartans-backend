@@ -15,6 +15,7 @@ import { TestSuite } from '../../review/entities/test_suite.entity';
 import { Version } from '../../review/entities/version.entity';
 import { Category as CategoryTypeClass } from 'src/modules/inventory/entities/category.entity';
 import {
+  CategoryCourseInfoInput,
   CategoryInfoInput,
   RequestedReviewFilterInput,
   SuiteInput,
@@ -442,6 +443,56 @@ export class OrganizationService {
     );
   }
 
+  async createCategoryCourse({
+    id,
+    categoryId,
+    courseInfo,
+  }: {
+    id: string;
+    categoryId: string;
+    courseInfo: CategoryCourseInfoInput;
+  }): Promise<Course> {
+    return await this.organizationRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const organization = await transactionalEntityManager.findOne(
+          Organization,
+          {
+            where: { id },
+          },
+        );
+
+        if (!organization) {
+          throw new NotFoundException('Organization does not exist');
+        }
+
+        const category = await transactionalEntityManager.findOne(Category, {
+          where: { id: categoryId, organization: { id } },
+          relations: ['courses'],
+        });
+
+        if (!category) {
+          throw new NotFoundException('Category not found');
+        }
+
+        const newCourse = new Course();
+        newCourse.title = courseInfo.courseName;
+        newCourse.is_mandatory = courseInfo.isMandatory;
+        newCourse.avatar_url =
+          courseInfo.imageUrl || 'https://example.com/avatar.jpg';
+        newCourse.description = `${courseInfo.courseName} course`;
+        newCourse.price = 0;
+        newCourse.organization = organization;
+
+        await transactionalEntityManager.save(newCourse);
+
+        category.courses = [...(category.courses || []), newCourse];
+        await transactionalEntityManager.save(Category, category);
+
+        return newCourse;
+      },
+    );
+  }
+
   async addSuitesToCourse({
     id,
     courseId,
@@ -483,6 +534,7 @@ export class OrganizationService {
           courseVersion = new Version();
           courseVersion.version_number = course.versions.length + 1;
           courseVersion.course = course;
+          courseVersion.status = VersionStatusType.APPROVED;
           await transactionalEntityManager.save(courseVersion);
         }
 

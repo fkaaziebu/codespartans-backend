@@ -1,0 +1,523 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "Integrated Science",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "integrated_science_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "Science JHS2 — Diversity of Matter",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Atoms, elements, compounds and mixtures; changes of state; acids and bases.",
+          "suiteKeywords": ["BECE", "Science", "Matter"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "An atom is made up of protons, neutrons and ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["cells", "electrons", "molecules", "ions"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "electrons"
+            },
+            {
+              "question_number": 2,
+              "description": "Common salt (sodium chloride) is an example of a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["element", "compound", "mixture", "metal"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "compound"
+            },
+            {
+              "question_number": 3,
+              "description": "Which of the following is a non-metal?",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["copper", "oxygen", "gold", "iron"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "oxygen"
+            },
+            {
+              "question_number": 4,
+              "description": "The change of a solid directly into a gas without becoming a liquid is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["melting", "evaporation", "sublimation", "freezing"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "sublimation"
+            },
+            {
+              "question_number": 5,
+              "description": "A base turns red litmus paper ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["red", "blue", "green", "white"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "blue"
+            },
+            {
+              "question_number": 6,
+              "description": "Air is best described as a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["element", "compound", "mixture", "metal"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_DIVERSITY_OF_MATTER"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "mixture"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS2 — Cycles",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Photosynthesis, transpiration, metamorphosis and germination.",
+          "suiteKeywords": ["BECE", "Science", "Cycles"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Green plants manufacture their own food through the process of ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "respiration",
+                "photosynthesis",
+                "digestion",
+                "transpiration"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "photosynthesis"
+            },
+            {
+              "question_number": 2,
+              "description": "The loss of water vapour from the leaves of plants is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "evaporation",
+                "transpiration",
+                "condensation",
+                "respiration"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "transpiration"
+            },
+            {
+              "question_number": 3,
+              "description": "During the water cycle, water vapour cools to form clouds through ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "evaporation",
+                "condensation",
+                "precipitation",
+                "melting"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "condensation"
+            },
+            {
+              "question_number": 4,
+              "description": "The complete change of an insect through egg, larva, pupa and adult is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "reproduction",
+                "metamorphosis",
+                "germination",
+                "pollination"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "metamorphosis"
+            },
+            {
+              "question_number": 5,
+              "description": "In the carbon cycle, animals give out ___ during respiration.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["oxygen", "carbon dioxide", "nitrogen", "hydrogen"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "carbon dioxide"
+            },
+            {
+              "question_number": 6,
+              "description": "The stage in a plant's life cycle where a seed begins to grow is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "pollination",
+                "germination",
+                "fertilisation",
+                "wilting"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_CYCLES"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "germination"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS2 — Systems",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Body systems, organs, plant pigments, blood vessels and the planets.",
+          "suiteKeywords": ["BECE", "Science", "Systems"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The body system responsible for breaking down food is the ___ system.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["nervous", "digestive", "respiratory", "skeletal"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "digestive"
+            },
+            {
+              "question_number": 2,
+              "description": "The organ that removes liquid waste from the body as urine is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["heart", "liver", "kidney", "lung"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "kidney"
+            },
+            {
+              "question_number": 3,
+              "description": "The framework of bones that supports the body is the ___ system.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["muscular", "skeletal", "nervous", "digestive"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "skeletal"
+            },
+            {
+              "question_number": 4,
+              "description": "![A plant cell](/v1/images/ges/plant_cell.svg)\n\nThe green pigment in plants that traps sunlight for photosynthesis is ___.",
+              "imageFile": {
+                "filename": "plant_cell.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/plant_cell.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["chlorophyll", "haemoglobin", "melanin", "starch"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "chlorophyll"
+            },
+            {
+              "question_number": 5,
+              "description": "Blood is carried away from the heart by ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["veins", "arteries", "nerves", "bones"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "arteries"
+            },
+            {
+              "question_number": 6,
+              "description": "The planet nearest to the Sun is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Earth", "Mercury", "Venus", "Mars"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Mercury"
+            },
+            {
+              "question_number": 7,
+              "description": "The natural satellite of the Earth is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Sun", "Moon", "Mars", "star"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_SYSTEMS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Moon"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS2 — Forces & Energy",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Friction, units of force, energy sources, conductors and light.",
+          "suiteKeywords": ["BECE", "Science", "Forces", "Energy"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The force that opposes motion between two surfaces in contact is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["gravity", "friction", "tension", "magnetism"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "friction"
+            },
+            {
+              "question_number": 2,
+              "description": "The unit used to measure force is the ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["joule", "newton", "watt", "volt"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "newton"
+            },
+            {
+              "question_number": 3,
+              "description": "Electricity generated from the energy of moving water is called ___ power.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["solar", "hydro", "wind", "nuclear"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "hydro"
+            },
+            {
+              "question_number": 4,
+              "description": "A material that allows electricity to pass through it easily is a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["insulator", "conductor", "resistor", "magnet"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "conductor"
+            },
+            {
+              "question_number": 5,
+              "description": "Light travels in ___ lines.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["curved", "straight", "zigzag", "circular"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "straight"
+            },
+            {
+              "question_number": 6,
+              "description": "![Reflection of light at a mirror](/v1/images/ges/light_reflection.svg)\n\nWhen light bounces off a smooth, shiny surface, it is said to be ___.",
+              "imageFile": {
+                "filename": "light_reflection.svg",
+                "mime": "image/svg+xml",
+                "ext": "svg",
+                "path": "/v1/images/ges/light_reflection.svg"
+              },
+              "hints": [],
+              "solution_steps": [],
+              "options": ["refracted", "reflected", "absorbed", "scattered"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_FORCES_AND_ENERGY"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "reflected"
+            }
+          ]
+        },
+        {
+          "suiteName": "Science JHS2 — Humans & the Environment",
+          "suiteType": "YEAR_TWO",
+          "suiteDescription": "Communicable diseases, immunisation, nutrition and the environment.",
+          "suiteKeywords": ["BECE", "Science", "Health", "Environment"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "A disease spread mainly through drinking contaminated water is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["malaria", "cholera", "measles", "asthma"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "cholera"
+            },
+            {
+              "question_number": 2,
+              "description": "The process of protecting a person against a disease by using vaccines is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "infection",
+                "immunisation",
+                "pollution",
+                "digestion"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "immunisation"
+            },
+            {
+              "question_number": 3,
+              "description": "Foods that give the body most of its energy are rich in ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["proteins", "carbohydrates", "vitamins", "water"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "carbohydrates"
+            },
+            {
+              "question_number": 4,
+              "description": "Cutting down forests without replacing the trees is called ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": [
+                "afforestation",
+                "deforestation",
+                "irrigation",
+                "pollination"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "deforestation"
+            },
+            {
+              "question_number": 5,
+              "description": "The three R's of waste management are Reduce, Reuse and ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["Remove", "Recycle", "Return", "Repeat"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_HUMANS_AND_THE_ENVIRONMENT"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_2",
+              "exam_year": 2023,
+              "correct_answer": "Recycle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
