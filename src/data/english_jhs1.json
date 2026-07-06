@@ -1,0 +1,519 @@
+{
+  "categoryName": "BECE",
+  "courses": [
+    {
+      "courseName": "English Language",
+      "is_mandatory": true,
+      "imageFile": {
+        "filename": "english_1.jpeg",
+        "mime": "image/jpeg",
+        "ext": "jpeg"
+      },
+      "suites": [
+        {
+          "suiteName": "English JHS1 — Parts of Speech",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Identifying nouns, pronouns, verbs, adjectives, adverbs, prepositions and conjunctions.",
+          "suiteKeywords": ["BECE", "English", "Grammar", "Parts of Speech"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "In the sentence \"Kofi is a clever boy\", which word is an adjective?",
+              "hints": [],
+              "solution_steps": [
+                "An adjective describes a noun. 'Clever' describes the noun 'boy'."
+              ],
+              "options": ["Kofi", "is", "clever", "boy"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "clever"
+            },
+            {
+              "question_number": 2,
+              "description": "Which of the following words is a pronoun?",
+              "hints": [],
+              "solution_steps": [
+                "A pronoun replaces a noun. 'She' stands in for a person."
+              ],
+              "options": ["table", "she", "run", "happy"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "she"
+            },
+            {
+              "question_number": 3,
+              "description": "A word that names a person, place, animal or thing is a ___.",
+              "hints": [],
+              "solution_steps": ["A noun is a naming word."],
+              "options": ["verb", "noun", "adjective", "adverb"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "noun"
+            },
+            {
+              "question_number": 4,
+              "description": "In \"The bird flew away\", the verb is ___.",
+              "hints": [],
+              "solution_steps": [
+                "A verb shows action. 'Flew' is the action word."
+              ],
+              "options": ["bird", "flew", "away", "the"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "flew"
+            },
+            {
+              "question_number": 5,
+              "description": "Which word is a conjunction?",
+              "hints": [],
+              "solution_steps": [
+                "A conjunction joins words or sentences. 'And' is a joining word."
+              ],
+              "options": ["and", "quickly", "blue", "dog"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "and"
+            },
+            {
+              "question_number": 6,
+              "description": "Choose the preposition in: \"The cat is under the table.\"",
+              "hints": [],
+              "solution_steps": [
+                "A preposition shows position. 'Under' shows where the cat is."
+              ],
+              "options": ["cat", "is", "under", "table"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "under"
+            },
+            {
+              "question_number": 7,
+              "description": "Which word is an adverb in \"She sang sweetly\"?",
+              "hints": [],
+              "solution_steps": [
+                "An adverb tells how an action is done. 'Sweetly' tells how she sang."
+              ],
+              "options": ["She", "sang", "sweetly", "song"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "sweetly"
+            },
+            {
+              "question_number": 8,
+              "description": "Which of the following is an interjection?",
+              "hints": [],
+              "solution_steps": [
+                "An interjection expresses sudden feeling, e.g. 'Hurray!'"
+              ],
+              "options": ["Hurray!", "table", "quickly", "under"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Hurray!"
+            }
+          ]
+        },
+        {
+          "suiteName": "English JHS1 — Synonyms & Antonyms",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Building vocabulary through words of similar and opposite meaning.",
+          "suiteKeywords": ["BECE", "English", "Vocabulary", "Synonyms"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The word closest in meaning (synonym) to \"big\" is ___.",
+              "hints": [],
+              "solution_steps": [
+                "A synonym means the same. 'Large' means the same as 'big'."
+              ],
+              "options": ["small", "large", "tall", "thin"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_VOCABULARY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "large"
+            },
+            {
+              "question_number": 2,
+              "description": "The opposite (antonym) of \"happy\" is ___.",
+              "hints": [],
+              "solution_steps": ["'Sad' is the opposite of 'happy'."],
+              "options": ["glad", "joyful", "sad", "merry"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_VOCABULARY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "sad"
+            },
+            {
+              "question_number": 3,
+              "description": "The synonym of \"begin\" is ___.",
+              "hints": [],
+              "solution_steps": ["'Start' means the same as 'begin'."],
+              "options": ["stop", "end", "start", "finish"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_VOCABULARY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "start"
+            },
+            {
+              "question_number": 4,
+              "description": "The antonym of \"cheap\" is ___.",
+              "hints": [],
+              "solution_steps": [
+                "'Expensive' (costly) is the opposite of 'cheap'."
+              ],
+              "options": ["low", "expensive", "small", "poor"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_VOCABULARY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "expensive"
+            },
+            {
+              "question_number": 5,
+              "description": "A young dog is called a ___.",
+              "hints": [],
+              "solution_steps": ["The young of a dog is a puppy."],
+              "options": ["kitten", "puppy", "calf", "cub"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_VOCABULARY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "puppy"
+            },
+            {
+              "question_number": 6,
+              "description": "A person who teaches in a school is a ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["doctor", "farmer", "teacher", "driver"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_VOCABULARY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "teacher"
+            }
+          ]
+        },
+        {
+          "suiteName": "English JHS1 — Tenses & Agreement",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Simple present and past tenses and basic subject-verb agreement.",
+          "suiteKeywords": ["BECE", "English", "Tense", "Agreement"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Choose the correct form: \"She ___ to church every Sunday.\"",
+              "hints": [],
+              "solution_steps": [
+                "A singular subject ('she') takes 'goes' in the present tense."
+              ],
+              "options": ["go", "goes", "going", "gone"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "goes"
+            },
+            {
+              "question_number": 2,
+              "description": "The past tense of \"eat\" is ___.",
+              "hints": [],
+              "solution_steps": [
+                "'Eat' is irregular; its past tense is 'ate'."
+              ],
+              "options": ["eated", "ate", "eaten", "eating"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "ate"
+            },
+            {
+              "question_number": 3,
+              "description": "\"They ___ playing football now.\"",
+              "hints": [],
+              "solution_steps": ["A plural subject ('they') takes 'are'."],
+              "options": ["is", "am", "are", "was"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "are"
+            },
+            {
+              "question_number": 4,
+              "description": "Fill in the blank: \"I ___ a student.\"",
+              "hints": [],
+              "solution_steps": ["The pronoun 'I' takes 'am'."],
+              "options": ["is", "am", "are", "be"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "am"
+            },
+            {
+              "question_number": 5,
+              "description": "Choose the correct verb: \"The dog ___ every night.\"",
+              "hints": [],
+              "solution_steps": [
+                "A singular subject ('the dog') takes 'barks' in the present tense."
+              ],
+              "options": ["bark", "barks", "barking", "barked"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "barks"
+            }
+          ]
+        },
+        {
+          "suiteName": "English JHS1 — Punctuation & Mechanics",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Capital letters, full stops, question marks and the apostrophe.",
+          "suiteKeywords": ["BECE", "English", "Punctuation"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "Which punctuation mark is used to end a question?",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["full stop", "comma", "question mark", "colon"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "question mark"
+            },
+            {
+              "question_number": 2,
+              "description": "Every sentence should begin with a ___ letter.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["small", "capital", "silent", "double"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "capital"
+            },
+            {
+              "question_number": 3,
+              "description": "Choose the correctly punctuated sentence.",
+              "hints": [],
+              "solution_steps": [
+                "It begins with a capital and ends with a question mark."
+              ],
+              "options": [
+                "where are you going",
+                "Where are you going?",
+                "where are you going.",
+                "Where are you going"
+              ],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "Where are you going?"
+            },
+            {
+              "question_number": 4,
+              "description": "Which punctuation mark is used to show ownership, as in 'Ama's book'?",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["comma", "apostrophe", "hyphen", "colon"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "apostrophe"
+            },
+            {
+              "question_number": 5,
+              "description": "Identify the correctly spelt word.",
+              "hints": [],
+              "solution_steps": [
+                "Rule: 'i' before 'e' except after 'c' — hence 'receive'."
+              ],
+              "options": ["recieve", "receive", "receeve", "receve"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "receive"
+            }
+          ]
+        },
+        {
+          "suiteName": "English JHS1 — Plurals, Articles & Word Forms",
+          "suiteType": "YEAR_ONE",
+          "suiteDescription": "Forming plurals, using a/an/the, gender nouns and collective nouns.",
+          "suiteKeywords": ["BECE", "English", "Plurals", "Articles"],
+          "questions": [
+            {
+              "question_number": 1,
+              "description": "The plural of \"child\" is ___.",
+              "hints": [],
+              "solution_steps": [
+                "'Child' is irregular; its plural is 'children'."
+              ],
+              "options": ["childs", "children", "childes", "child"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "children"
+            },
+            {
+              "question_number": 2,
+              "description": "The plural of \"box\" is ___.",
+              "hints": [],
+              "solution_steps": [
+                "Nouns ending in -x add '-es' to form the plural."
+              ],
+              "options": ["boxs", "boxes", "box", "boxies"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "boxes"
+            },
+            {
+              "question_number": 3,
+              "description": "Choose the correct article: \"I saw ___ elephant.\"",
+              "hints": [],
+              "solution_steps": [
+                "Use 'an' before a word beginning with a vowel sound."
+              ],
+              "options": ["a", "an", "some", "many"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "an"
+            },
+            {
+              "question_number": 4,
+              "description": "The plural of \"leaf\" is ___.",
+              "hints": [],
+              "solution_steps": [
+                "Nouns ending in -f often change to '-ves': leaf → leaves."
+              ],
+              "options": ["leafs", "leaves", "leafes", "leave"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "leaves"
+            },
+            {
+              "question_number": 5,
+              "description": "The feminine (female) form of \"king\" is ___.",
+              "hints": [],
+              "solution_steps": [],
+              "options": ["prince", "queen", "lady", "madam"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_VOCABULARY"],
+              "difficulty": "EASY",
+              "estimated_time_in_ms": 45000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "queen"
+            },
+            {
+              "question_number": 6,
+              "description": "The word \"quickly\" is which part of speech?",
+              "hints": [],
+              "solution_steps": [
+                "Words ending in -ly that describe verbs are usually adverbs."
+              ],
+              "options": ["noun", "verb", "adverb", "adjective"],
+              "type": "MULTIPLE_CHOICE",
+              "tags": ["TAG_GRAMMAR_USAGE"],
+              "difficulty": "MEDIUM",
+              "estimated_time_in_ms": 60000,
+              "class_level": "jhs_1",
+              "exam_year": 2023,
+              "correct_answer": "adverb"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
