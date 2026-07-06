@@ -23,10 +23,10 @@
               "solution_steps": ["'Neither' is singular, so it takes 'was'."],
               "options": ["were", "are", "was", "have"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "was"
             },
@@ -39,10 +39,10 @@
               ],
               "options": ["are you", "aren't you", "isn't it", "do you"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "aren't you"
             },
@@ -53,10 +53,10 @@
               "solution_steps": ["'Each' is singular and takes 'has'."],
               "options": ["have", "has", "are", "were"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "has"
             },
@@ -67,10 +67,10 @@
               "solution_steps": ["'Good' is irregular: good → better → best."],
               "options": ["gooder", "better", "best", "more good"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "better"
             },
@@ -88,10 +88,10 @@
                 "more beautiful"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "most beautiful"
             },
@@ -109,10 +109,10 @@
                 "He not like it."
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "He doesn't like it."
             },
@@ -125,10 +125,10 @@
               ],
               "options": ["I", "me", "mine", "myself"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "me"
             }
@@ -152,7 +152,7 @@
               "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "prefix"
             },
@@ -166,7 +166,7 @@
               "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "careless"
             },
@@ -180,7 +180,7 @@
               "tags": ["TAG_VOCABULARY"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "courageous"
             },
@@ -194,7 +194,7 @@
               "tags": ["TAG_VOCABULARY"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "modern"
             },
@@ -208,7 +208,7 @@
               "tags": ["TAG_VOCABULARY"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "pilot"
             },
@@ -224,7 +224,7 @@
               "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "flower"
             },
@@ -238,7 +238,7 @@
               "tags": ["TAG_VOCABULARY"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "pride"
             }
@@ -257,10 +257,10 @@
               "solution_steps": ["The past tense of 'write' is 'wrote'."],
               "options": ["write", "wrote", "written", "writing"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "wrote"
             },
@@ -271,10 +271,10 @@
               "solution_steps": ["The past participle of 'go' is 'gone'."],
               "options": ["went", "gone", "going", "goes"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "gone"
             },
@@ -287,10 +287,10 @@
               ],
               "options": ["is", "was", "were", "has been"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "was"
             },
@@ -306,10 +306,10 @@
                 "exclamatory"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "imperative"
             },
@@ -325,10 +325,10 @@
                 "exclamatory"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "interrogative"
             },
@@ -341,10 +341,10 @@
               ],
               "options": ["kicks", "was kicked", "kicked", "is kicking"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_GRAMMAR_USAGE"],
+              "tags": ["TAG_GRAMMAR_AND_USAGE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "was kicked"
             }
@@ -368,10 +368,10 @@
               "solution_steps": ["A simile compares using 'as' or 'like'."],
               "options": ["metaphor", "simile", "personification", "hyperbole"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_LITERATURE"],
+              "tags": ["TAG_GENERAL"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "simile"
             },
@@ -389,10 +389,10 @@
                 "onomatopoeia"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_LITERATURE"],
+              "tags": ["TAG_GENERAL"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "personification"
             },
@@ -405,10 +405,10 @@
               ],
               "options": ["simile", "metaphor", "idiom", "pun"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_LITERATURE"],
+              "tags": ["TAG_GENERAL"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "metaphor"
             },
@@ -419,10 +419,10 @@
               "solution_steps": [],
               "options": ["rhyme", "alliteration", "simile", "assonance"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_LITERATURE"],
+              "tags": ["TAG_GENERAL"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "alliteration"
             },
@@ -433,10 +433,10 @@
               "solution_steps": [],
               "options": ["onomatopoeia", "metaphor", "simile", "hyperbole"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_LITERATURE"],
+              "tags": ["TAG_GENERAL"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "onomatopoeia"
             }
@@ -455,10 +455,10 @@
               "solution_steps": [],
               "options": ["full stop", "comma", "colon", "apostrophe"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "tags": ["TAG_MECHANICS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "comma"
             },
@@ -476,10 +476,10 @@
                 "Kofi book's is new."
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "tags": ["TAG_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "Kofi's book is new."
             },
@@ -495,10 +495,10 @@
                 "a pause"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "tags": ["TAG_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "the exact words spoken"
             },
@@ -509,10 +509,10 @@
               "solution_steps": [],
               "options": ["definately", "definitely", "definitly", "definetly"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_PUNCTUATION_AND_MECHANICS"],
+              "tags": ["TAG_MECHANICS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "definitely"
             },
@@ -523,10 +523,10 @@
               "solution_steps": [],
               "options": ["novel", "fable", "poem", "drama"],
               "type": "MULTIPLE_CHOICE",
-              "tags": ["TAG_LITERATURE"],
+              "tags": ["TAG_GENERAL"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
-              "class_level": "jhs_2",
+              "class_level": "JHS_2",
               "exam_year": 2023,
               "correct_answer": "fable"
             }
