@@ -4,6 +4,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { AppModule } from '../../src/app.module';
 import { EmailProducer } from '../../src/modules/auth/services/email.producer';
 import { SignupProducer } from '../../src/modules/auth/services/signup.producer';
@@ -38,6 +40,7 @@ export interface TestApp {
   app: INestApplication;
   dataSource: DataSource;
   emailCapture: EmailCapture;
+  cacheManager: Cache;
 }
 
 export async function createTestApp(): Promise<TestApp> {
@@ -111,6 +114,7 @@ export async function createTestApp(): Promise<TestApp> {
   await app.init();
 
   const dataSource = moduleFixture.get<DataSource>(DataSource);
+  const cacheManager = moduleFixture.get<Cache>(CACHE_MANAGER);
 
-  return { app, dataSource, emailCapture };
+  return { app, dataSource, emailCapture, cacheManager };
 }

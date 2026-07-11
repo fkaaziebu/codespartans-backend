@@ -1,15 +1,17 @@
 import { INestApplication } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
+import { Cache } from 'cache-manager';
 import * as request from 'supertest';
 import { createTestApp, EmailCapture } from '../helpers/app.helper';
-import { truncateAll, seedGenpopOrg } from '../helpers/db.helper';
+import { truncateAll, seedGenpopOrg, flushCache } from '../helpers/db.helper';
 import { StudentService } from '../../src/modules/auth/services/student.service';
 
 describe('Student OAuth Consent (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let emailCapture: EmailCapture;
+  let cacheManager: Cache;
   let jwtService: JwtService;
   let studentService: StudentService;
 
@@ -20,7 +22,7 @@ describe('Student OAuth Consent (e2e)', () => {
   };
 
   beforeAll(async () => {
-    ({ app, dataSource, emailCapture } = await createTestApp());
+    ({ app, dataSource, emailCapture, cacheManager } = await createTestApp());
     jwtService = app.get<JwtService>(JwtService);
     studentService = app.get<StudentService>(StudentService);
   });
@@ -31,6 +33,7 @@ describe('Student OAuth Consent (e2e)', () => {
 
   beforeEach(async () => {
     await truncateAll(dataSource);
+    await flushCache(cacheManager);
     await seedGenpopOrg(dataSource);
     emailCapture.clear();
   });

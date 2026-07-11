@@ -1,16 +1,18 @@
 import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { Cache } from 'cache-manager';
 import { createTestApp, EmailCapture } from '../helpers/app.helper';
 import { gql } from '../helpers/gql.helper';
-import { truncateAll, seedGenpopOrg } from '../helpers/db.helper';
+import { truncateAll, seedGenpopOrg, flushCache } from '../helpers/db.helper';
 
 describe('Student Auth (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let emailCapture: EmailCapture;
+  let cacheManager: Cache;
 
   beforeAll(async () => {
-    ({ app, dataSource, emailCapture } = await createTestApp());
+    ({ app, dataSource, emailCapture, cacheManager } = await createTestApp());
   });
 
   afterAll(async () => {
@@ -19,6 +21,7 @@ describe('Student Auth (e2e)', () => {
 
   beforeEach(async () => {
     await truncateAll(dataSource);
+    await flushCache(cacheManager);
     await seedGenpopOrg(dataSource);
     emailCapture.clear();
   });

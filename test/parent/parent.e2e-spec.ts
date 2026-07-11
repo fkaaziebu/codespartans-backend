@@ -1,20 +1,22 @@
 import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { Cache } from 'cache-manager';
 import { Category } from '../../src/modules/inventory/entities/category.entity';
 import { Organization } from '../../src/modules/auth/entities/organization.entity';
 import { createTestApp, EmailCapture } from '../helpers/app.helper';
 import { gql } from '../helpers/gql.helper';
-import { truncateAll, seedGenpopOrg, seedTestCategory } from '../helpers/db.helper';
+import { truncateAll, seedGenpopOrg, seedTestCategory, flushCache } from '../helpers/db.helper';
 
 describe('Parent (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let emailCapture: EmailCapture;
+  let cacheManager: Cache;
   let genpopOrg: Organization;
   let testCategory: Category;
 
   beforeAll(async () => {
-    ({ app, dataSource, emailCapture } = await createTestApp());
+    ({ app, dataSource, emailCapture, cacheManager } = await createTestApp());
   });
 
   afterAll(async () => {
@@ -23,6 +25,7 @@ describe('Parent (e2e)', () => {
 
   beforeEach(async () => {
     await truncateAll(dataSource);
+    await flushCache(cacheManager);
     genpopOrg = await seedGenpopOrg(dataSource);
     testCategory = await seedTestCategory(dataSource, genpopOrg);
     emailCapture.clear();
@@ -321,22 +324,15 @@ describe('Parent (e2e)', () => {
       expect(newPin).not.toBe(oldPin);
 
       // Old PIN no longer works for child login
-      const verifyRes = await gql(app, `
-        mutation($input: VerifyChildUsernameInput!) {
-          verifyChildUsername(input: $input) { temp_token }
-        }
-      `, { input: { username } });
-      const tempToken = (verifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
-
       const oldPinLogin = await gql(
         app,
         `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-        { input: { temp_token: tempToken, pin: oldPin } },
+        { input: { username, pin: oldPin } },
       );
       expect(oldPinLogin.errors).toBeDefined();
     });
 
-    it('4.5 verifies child username and logs in with new PIN', async () => {
+    it('4.5 logs in with username and new PIN', async () => {
       await registerAndVerifyParent();
       const token = await loginParent(parentInput.email, parentInput.password);
       const setupRes = await gql(
@@ -347,21 +343,11 @@ describe('Parent (e2e)', () => {
       );
       const { username, pin } = (setupRes.data.setupParentAccount as Array<{ username: string; pin: string }>)[0];
 
-      // Verify username (public endpoint)
-      const verifyRes = await gql(app, `
-        mutation($input: VerifyChildUsernameInput!) {
-          verifyChildUsername(input: $input) { temp_token }
-        }
-      `, { input: { username } });
-      expect(verifyRes.errors).toBeUndefined();
-      const tempToken = (verifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
-      expect(tempToken).toBeDefined();
-
-      // Login as child
+      // Login as child (single-step: username + pin)
       const childLoginRes = await gql(
         app,
         `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-        { input: { temp_token: tempToken, pin } },
+        { input: { username, pin } },
       );
       expect(childLoginRes.errors).toBeUndefined();
       const childToken = (childLoginRes.data.loginChild as { token: string }).token;
@@ -384,17 +370,11 @@ describe('Parent (e2e)', () => {
       );
       const { username } = (setupRes.data.setupParentAccount as Array<{ username: string; pin: string }>)[0];
 
-      const verifyRes = await gql(app,
-        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
-        { input: { username } },
-      );
-      const tempToken = (verifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
-
       // First 4 wrong attempts: all fail but do not lock the account
       for (let i = 0; i < 4; i++) {
         const res = await gql(app,
           `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-          { input: { temp_token: tempToken, pin: '000000' } },
+          { input: { username, pin: '000000' } },
         );
         expect(res.errors).toBeDefined();
       }
@@ -402,14 +382,14 @@ describe('Parent (e2e)', () => {
       // 5th attempt triggers lockout
       const lockRes = await gql(app,
         `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-        { input: { temp_token: tempToken, pin: '000000' } },
+        { input: { username, pin: '000000' } },
       );
       expect(lockRes.errors).toBeDefined();
 
       // Subsequent attempt while locked is still rejected
       const retryRes = await gql(app,
         `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-        { input: { temp_token: tempToken, pin: '000000' } },
+        { input: { username, pin: '000000' } },
       );
       expect(retryRes.errors).toBeDefined();
     });
@@ -425,24 +405,18 @@ describe('Parent (e2e)', () => {
       );
       const { username } = (setupRes.data.setupParentAccount as Array<{ username: string; pin: string }>)[0];
 
-      const verifyRes = await gql(app,
-        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
-        { input: { username } },
-      );
-      const tempToken = (verifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
-
       // Lock the account with 5 wrong attempts
       for (let i = 0; i < 5; i++) {
         await gql(app,
           `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-          { input: { temp_token: tempToken, pin: '000000' } },
+          { input: { username, pin: '000000' } },
         );
       }
 
       // Request pin reset while locked
       const resetReqRes = await gql(app,
         `mutation($input: RequestChildPinResetInput!) { requestChildPinReset(input: $input) }`,
-        { input: { temp_token: tempToken } },
+        { input: { username } },
       );
       expect(resetReqRes.errors).toBeUndefined();
       expect(resetReqRes.data.requestChildPinReset).toBe(true);
@@ -466,17 +440,11 @@ describe('Parent (e2e)', () => {
       const listRes = await gql(app, `query { listChildren { edges { node { id } } } }`, undefined, token);
       const childId = (listRes.data.listChildren as { edges: Array<{ node: { id: string } }> }).edges[0].node.id;
 
-      const verifyRes = await gql(app,
-        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
-        { input: { username } },
-      );
-      const tempToken = (verifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
-
       // Lock the account with 5 wrong attempts
       for (let i = 0; i < 5; i++) {
         await gql(app,
           `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-          { input: { temp_token: tempToken, pin: '000000' } },
+          { input: { username, pin: '000000' } },
         );
       }
 
@@ -490,15 +458,9 @@ describe('Parent (e2e)', () => {
       const newPin = (resetRes.data.resetChildPin as { pin: string }).pin;
 
       // Child can login immediately with new PIN — no 5-minute wait required
-      const newVerifyRes = await gql(app,
-        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
-        { input: { username } },
-      );
-      const newTempToken = (newVerifyRes.data.verifyChildUsername as { temp_token: string }).temp_token;
-
       const loginRes = await gql(app,
         `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-        { input: { temp_token: newTempToken, pin: newPin } },
+        { input: { username, pin: newPin } },
       );
       expect(loginRes.errors).toBeUndefined();
       expect((loginRes.data.loginChild as { token: string }).token).toBeDefined();
@@ -631,20 +593,11 @@ describe('Parent (e2e)', () => {
         }>
       )[0];
 
-      // Login as child (two-step: verifyChildUsername → loginChild)
-      const verifyRes = await gql(
-        app,
-        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
-        { input: { username } },
-      );
-      const tempToken = (
-        verifyRes.data.verifyChildUsername as { temp_token: string }
-      ).temp_token;
-
+      // Login as child (single-step: username + pin)
       const childLoginRes = await gql(
         app,
         `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-        { input: { temp_token: tempToken, pin: originalPin } },
+        { input: { username, pin: originalPin } },
       );
       const oldChildToken = (
         childLoginRes.data.loginChild as { token: string }
@@ -672,19 +625,10 @@ describe('Parent (e2e)', () => {
       expect(oldRes.errors).toBeDefined();
 
       // Fresh child login with new PIN returns a working token
-      const verifyRes2 = await gql(
-        app,
-        `mutation($input: VerifyChildUsernameInput!) { verifyChildUsername(input: $input) { temp_token } }`,
-        { input: { username } },
-      );
-      const tempToken2 = (
-        verifyRes2.data.verifyChildUsername as { temp_token: string }
-      ).temp_token;
-
       const newChildLoginRes = await gql(
         app,
         `mutation($input: LoginChildInput!) { loginChild(input: $input) { token } }`,
-        { input: { temp_token: tempToken2, pin: newPin } },
+        { input: { username, pin: newPin } },
       );
       expect(newChildLoginRes.errors).toBeUndefined();
       const newChildToken = (
