@@ -6,5 +6,5 @@ export class RequestChildPinResetInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  temp_token: string;
+  username: string;
 }

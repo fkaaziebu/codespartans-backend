@@ -17,6 +17,7 @@ import { EmailService } from '../auth/services/email.service';
 import { SignupProducer } from '../auth/services/signup.producer';
 import { AccountDeletionModule } from '../auth/account-deletion.module';
 import { GqlThrottlerGuard } from 'src/helpers/guards';
+import { LoginAttemptService } from 'src/helpers';
 import { Child } from './entities/child.entity';
 import { Parent } from './entities/parent.entity';
 import { ParentResolver } from './resolvers/parent.resolver';
@@ -39,7 +40,7 @@ import { ParentService } from './services/parent.service';
     TypeOrmModule.forFeature([Parent, Child, Student, Organization, Cart, Category, Test, TestAssignment, TestSuite]),
     AccountDeletionModule,
   ],
-  providers: [ParentService, ParentResolver, JwtStrategy, EmailProducer, EmailConsumer, EmailService, SignupProducer, GqlThrottlerGuard],
+  providers: [ParentService, ParentResolver, JwtStrategy, EmailProducer, EmailConsumer, EmailService, SignupProducer, GqlThrottlerGuard, LoginAttemptService],
   exports: [TypeOrmModule],
 })
 export class ParentModule {}

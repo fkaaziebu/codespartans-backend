@@ -9,7 +9,6 @@ export { RegisterParentResponse } from './register-parent-response.type';
 export { SetupChildResult } from './setup-child-result.type';
 export { DayStreakResponse } from './day-streak-response.type';
 export { StreakResponse } from './streak-response.type';
-export { VerifyChildUsernameResponse } from './verify-child-username-response.type';
 export { MonthlyReportResponse } from './monthly-report-response.type';
 export { AlertAction } from './alert-action.type';
 export { AlertResponse } from './alert-response.type';

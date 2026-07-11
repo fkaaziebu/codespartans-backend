@@ -15,7 +15,7 @@ import { Cart } from '../../inventory/entities/cart.entity';
 import { Organization } from '../entities/organization.entity';
 import { Student } from '../entities/student.entity';
 import { Child } from '../../parent/entities/child.entity';
-import { HashHelper, PaginateHelper } from '../../../helpers';
+import { HashHelper, LoginAttemptService, PaginateHelper } from '../../../helpers';
 import { PaginationInput } from '../../../helpers/inputs';
 import { StudentLoginResponse } from '../types';
 import { AccountStatus } from '../types/account-deletion-response.type';
@@ -44,6 +44,7 @@ export class StudentService {
     private readonly signupProducer: SignupProducer,
     private readonly accountDeletionService: AccountDeletionService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly loginAttemptService: LoginAttemptService,
   ) {
     this.gracePeriodMs =
       this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
@@ -184,6 +185,12 @@ export class StudentService {
     );
   }
 
+  private readonly PWD_MAX_ATTEMPTS = 3;
+  private readonly PWD_LOCK_TTL_MS = 5 * 60 * 1_000; // 5 minutes
+  private readonly PWD_ATTEMPTS_TTL_MS = 30 * 60 * 1_000; // 30 minutes
+  private readonly PWD_LOCKED_MESSAGE =
+    'Too many failed attempts. Your account is locked for 5 minutes. Please try again later or contact support.';
+
   async loginStudent({
     email,
     password,
@@ -191,44 +198,82 @@ export class StudentService {
     email: string;
     password: string;
   }): Promise<StudentLoginResponse> {
-    // Validate credentials inside transaction, then restore outside to avoid deadlock
-    const student = await this.studentRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        const student = await transactionalEntityManager.findOne(Student, {
-          where: { email },
-          relations: ['organizations'],
-        });
+    const keyPrefix = 'student_login';
+    const lockoutConfig = {
+      maxAttempts: this.PWD_MAX_ATTEMPTS,
+      lockTtlMs: this.PWD_LOCK_TTL_MS,
+      attemptsTtlMs: this.PWD_ATTEMPTS_TTL_MS,
+    };
 
-        if (!student) {
-          throw new BadRequestException('Email or password is incorrect');
-        }
-
-        const isPasswordValid = await HashHelper.compare(
-          password,
-          student.password,
-        );
-
-        if (!isPasswordValid) {
-          throw new BadRequestException('Email or password is incorrect');
-        }
-
-        if (!student.is_account_validated) {
-          throw new BadRequestException(
-            'Account not verified. Please check your email for the verification code.',
-          );
-        }
-
-        if (student.is_deactivated) {
-          const elapsed =
-            Date.now() - new Date(student.deactivated_at).getTime();
-          if (elapsed >= this.gracePeriodMs) {
-            throw new BadRequestException('This account no longer exists.');
-          }
-        }
-
-        return student;
-      },
+    await this.loginAttemptService.assertNotLocked(
+      keyPrefix,
+      email,
+      this.PWD_LOCKED_MESSAGE,
     );
+    await this.loginAttemptService.resetStaleAttemptsIfMaxed(
+      keyPrefix,
+      email,
+      lockoutConfig,
+    );
+
+    // Validate credentials inside transaction, then restore outside to avoid deadlock
+    let student: Student;
+    try {
+      student = await this.studentRepository.manager.transaction(
+        async (transactionalEntityManager) => {
+          const student = await transactionalEntityManager.findOne(Student, {
+            where: { email },
+            relations: ['organizations'],
+          });
+
+          if (!student) {
+            throw new BadRequestException('Email or password is incorrect');
+          }
+
+          const isPasswordValid = await HashHelper.compare(
+            password,
+            student.password,
+          );
+
+          if (!isPasswordValid) {
+            throw new BadRequestException('Email or password is incorrect');
+          }
+
+          if (!student.is_account_validated) {
+            throw new BadRequestException(
+              'Account not verified. Please check your email for the verification code.',
+            );
+          }
+
+          if (student.is_deactivated) {
+            const elapsed =
+              Date.now() - new Date(student.deactivated_at).getTime();
+            if (elapsed >= this.gracePeriodMs) {
+              throw new BadRequestException('This account no longer exists.');
+            }
+          }
+
+          return student;
+        },
+      );
+    } catch (err) {
+      if (
+        err instanceof BadRequestException &&
+        err.message === 'Email or password is incorrect'
+      ) {
+        await this.loginAttemptService.recordFailure(
+          keyPrefix,
+          email,
+          lockoutConfig,
+          this.PWD_LOCKED_MESSAGE,
+          { default: 'Email or password is incorrect' },
+          'INVALID_CREDENTIALS',
+        );
+      }
+      throw err;
+    }
+
+    await this.loginAttemptService.clear(keyPrefix, email);
 
     if (student.is_deactivated) {
       const deletionScheduledFor = new Date(

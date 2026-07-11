@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import { Cache } from 'cache-manager';
 import { Organization } from '../../src/modules/auth/entities/organization.entity';
 import { Category } from '../../src/modules/inventory/entities/category.entity';
 import { HashHelper } from '../../src/helpers';
@@ -11,6 +12,13 @@ export async function truncateAll(dataSource: DataSource): Promise<void> {
       .query(`TRUNCATE "${entity.tableName}" CASCADE;`)
       .catch(() => {});
   }
+}
+
+// Login-attempt/lockout state (and other cached data like pw_changed/logged_out
+// timestamps) lives in Redis, not Postgres, so truncateAll alone leaves it behind
+// between test runs — flush it too, or fixed test emails can inherit stale lockouts.
+export async function flushCache(cacheManager: Cache): Promise<void> {
+  await cacheManager.clear();
 }
 
 export async function seedGenpopOrg(dataSource: DataSource): Promise<Organization> {

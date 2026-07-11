@@ -23,7 +23,6 @@ import { RequestChildPinResetInput } from '../inputs/request-child-pin-reset.inp
 import { LoginParentInput } from '../inputs/login-parent.input';
 import { RegisterParentInput } from '../inputs/register-parent.input';
 import { SetupParentAccountInput } from '../inputs/setup-parent-account.input';
-import { VerifyChildUsernameInput } from '../inputs/verify-child-username.input';
 import { VerifyParentInput } from '../inputs/verify-parent.input';
 import { ParentService } from '../services/parent.service';
 import {
@@ -39,7 +38,6 @@ import {
   SetupChildResult,
   DayStreakResponse,
   StreakResponse,
-  VerifyChildUsernameResponse,
 } from '../types';
 
 function extractMeta(req: any): RequestMetadata {
@@ -246,16 +244,9 @@ export class ParentResolver {
 
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @UseGuards(GqlThrottlerGuard)
-  @Mutation(() => VerifyChildUsernameResponse)
-  async verifyChildUsername(@Args('input') input: VerifyChildUsernameInput) {
-    return this.parentService.verifyChildUsername(input.username);
-  }
-
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
-  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => LoginChildResponse)
   async loginChild(@Args('input') input: LoginChildInput) {
-    return this.parentService.loginChild(input.temp_token, input.pin);
+    return this.parentService.loginChild(input.username, input.pin);
   }
 
   @Throttle({ default: { limit: 3, ttl: 300_000 } })
@@ -264,7 +255,7 @@ export class ParentResolver {
   async requestChildPinReset(
     @Args('input') input: RequestChildPinResetInput,
   ) {
-    return this.parentService.requestChildPinReset(input.temp_token);
+    return this.parentService.requestChildPinReset(input.username);
   }
 
   @UseGuards(GqlJwtAuthGuard)

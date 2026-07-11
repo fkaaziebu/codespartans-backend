@@ -27,6 +27,7 @@ import { EmailService } from './services/email.service';
 import { SignupProducer } from './services/signup.producer';
 import { StudentController } from './controllers/student.controller';
 import { AccountDeletionModule } from './account-deletion.module';
+import { LoginAttemptService } from '../../helpers';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { AccountDeletionModule } from './account-deletion.module';
     InstructorResolver,
     StudentResolver,
     OrganizationResolver,
+    LoginAttemptService,
   ],
   exports: [TypeOrmModule, EmailProducer, SignupProducer],
 })
