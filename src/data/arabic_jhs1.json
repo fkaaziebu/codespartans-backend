@@ -12,30 +12,18 @@
       "suites": [
         {
           "suiteName": "Arabic JHS1 — At-Tahiyyat (Greetings)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Greetings and courtesy expressions in Modern Standard Arabic.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Greetings"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Greetings"],
           "questions": [
             {
               "question_number": 1,
               "description": "نقول في الصباح: ___",
               "hints": [],
-              "solution_steps": [
-                "صباح الخير = Good morning."
-              ],
-              "options": [
-                "صباح الخير",
-                "مساء الخير",
-                "مع السلامة",
-                "شكرا"
-              ],
+              "solution_steps": ["صباح الخير = Good morning."],
+              "options": ["صباح الخير", "مساء الخير", "مع السلامة", "شكرا"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AT_TAHIYYAT"
-              ],
+              "tags": ["TAG_AT_TAHIYYAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -47,16 +35,9 @@
               "description": "«شكرا» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Thank you",
-                "Please",
-                "Sorry",
-                "Welcome"
-              ],
+              "options": ["Thank you", "Please", "Sorry", "Welcome"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AT_TAHIYYAT"
-              ],
+              "tags": ["TAG_AT_TAHIYYAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -67,19 +48,10 @@
               "question_number": 3,
               "description": "للوداع نقول ___",
               "hints": [],
-              "solution_steps": [
-                "مع السلامة = Goodbye."
-              ],
-              "options": [
-                "مع السلامة",
-                "صباح الخير",
-                "أهلا",
-                "نعم"
-              ],
+              "solution_steps": ["مع السلامة = Goodbye."],
+              "options": ["مع السلامة", "صباح الخير", "أهلا", "نعم"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AT_TAHIYYAT"
-              ],
+              "tags": ["TAG_AT_TAHIYYAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -91,16 +63,9 @@
               "description": "«من فضلك» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Please",
-                "Thank you",
-                "Yes",
-                "No"
-              ],
+              "options": ["Please", "Thank you", "Yes", "No"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AT_TAHIYYAT"
-              ],
+              "tags": ["TAG_AT_TAHIYYAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -111,19 +76,10 @@
               "question_number": 5,
               "description": "تحية الإسلام هي ___",
               "hints": [],
-              "solution_steps": [
-                "As-salamu alaykum = Peace be upon you."
-              ],
-              "options": [
-                "السلام عليكم",
-                "صباح النور",
-                "مع السلامة",
-                "شكرا"
-              ],
+              "solution_steps": ["As-salamu alaykum = Peace be upon you."],
+              "options": ["السلام عليكم", "صباح النور", "مع السلامة", "شكرا"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AT_TAHIYYAT"
-              ],
+              "tags": ["TAG_AT_TAHIYYAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -135,16 +91,9 @@
               "description": "الرد على «السلام عليكم» هو ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "وعليكم السلام",
-                "شكرا",
-                "نعم",
-                "لا"
-              ],
+              "options": ["وعليكم السلام", "شكرا", "نعم", "لا"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AT_TAHIYYAT"
-              ],
+              "tags": ["TAG_AT_TAHIYYAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -156,16 +105,9 @@
               "description": "«نعم» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Yes",
-                "No",
-                "Please",
-                "Thanks"
-              ],
+              "options": ["Yes", "No", "Please", "Thanks"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AT_TAHIYYAT"
-              ],
+              "tags": ["TAG_AT_TAHIYYAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -177,16 +119,9 @@
               "description": "«لا» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "No",
-                "Yes",
-                "Thanks",
-                "Hello"
-              ],
+              "options": ["No", "Yes", "Thanks", "Hello"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AT_TAHIYYAT"
-              ],
+              "tags": ["TAG_AT_TAHIYYAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -197,28 +132,18 @@
         },
         {
           "suiteName": "Arabic JHS1 — Al-Usra wal-Jism (Family & Body)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Family members and parts of the body.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Vocabulary"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Vocabulary"],
           "questions": [
             {
               "question_number": 1,
               "description": "«أب» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "father",
-                "mother",
-                "brother",
-                "uncle"
-              ],
+              "options": ["father", "mother", "brother", "uncle"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -230,16 +155,9 @@
               "description": "«أم» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "mother",
-                "father",
-                "sister",
-                "aunt"
-              ],
+              "options": ["mother", "father", "sister", "aunt"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -251,16 +169,9 @@
               "description": "«أخ» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "brother",
-                "sister",
-                "father",
-                "son"
-              ],
+              "options": ["brother", "sister", "father", "son"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -272,16 +183,9 @@
               "description": "«أخت» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sister",
-                "brother",
-                "mother",
-                "aunt"
-              ],
+              "options": ["sister", "brother", "mother", "aunt"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -293,16 +197,9 @@
               "description": "«رأس» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "head",
-                "hand",
-                "leg",
-                "eye"
-              ],
+              "options": ["head", "hand", "leg", "eye"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -314,16 +211,9 @@
               "description": "«يد» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "hand",
-                "leg",
-                "ear",
-                "nose"
-              ],
+              "options": ["hand", "leg", "ear", "nose"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -335,16 +225,9 @@
               "description": "«عين» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "eye",
-                "ear",
-                "mouth",
-                "nose"
-              ],
+              "options": ["eye", "ear", "mouth", "nose"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -356,16 +239,9 @@
               "description": "«رجل» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "leg",
-                "hand",
-                "head",
-                "ear"
-              ],
+              "options": ["leg", "hand", "head", "ear"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -376,28 +252,18 @@
         },
         {
           "suiteName": "Arabic JHS1 — Al-Hayawanat wal-Ashya' (Animals & Things)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Animals, water, the sun, home, school and God.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Vocabulary"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Vocabulary"],
           "questions": [
             {
               "question_number": 1,
               "description": "«كلب» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "dog",
-                "cat",
-                "goat",
-                "sheep"
-              ],
+              "options": ["dog", "cat", "goat", "sheep"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -409,16 +275,9 @@
               "description": "«قطة» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "cat",
-                "dog",
-                "cow",
-                "goat"
-              ],
+              "options": ["cat", "dog", "cow", "goat"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -430,16 +289,9 @@
               "description": "«ماء» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "water",
-                "fire",
-                "food",
-                "oil"
-              ],
+              "options": ["water", "fire", "food", "oil"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -451,16 +303,9 @@
               "description": "«شمس» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sun",
-                "moon",
-                "star",
-                "cloud"
-              ],
+              "options": ["sun", "moon", "star", "cloud"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -472,16 +317,9 @@
               "description": "«بيت» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "house",
-                "school",
-                "market",
-                "farm"
-              ],
+              "options": ["house", "school", "market", "farm"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -493,16 +331,9 @@
               "description": "«مدرسة» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "school",
-                "church",
-                "market",
-                "farm"
-              ],
+              "options": ["school", "church", "market", "farm"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -514,16 +345,9 @@
               "description": "«كتاب» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "book",
-                "pen",
-                "table",
-                "chair"
-              ],
+              "options": ["book", "pen", "table", "chair"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -535,16 +359,9 @@
               "description": "«الله» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "God",
-                "king",
-                "prophet",
-                "angel"
-              ],
+              "options": ["God", "king", "prophet", "angel"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -555,28 +372,18 @@
         },
         {
           "suiteName": "Arabic JHS1 — Al-Arqam (Numbers)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Numbers one to ten and Arabic numerals.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Numbers"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Numbers"],
           "questions": [
             {
               "question_number": 1,
               "description": "«واحد» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "one",
-                "two",
-                "three",
-                "ten"
-              ],
+              "options": ["one", "two", "three", "ten"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -588,16 +395,9 @@
               "description": "«اثنان» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "two",
-                "three",
-                "four",
-                "five"
-              ],
+              "options": ["two", "three", "four", "five"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -609,16 +409,9 @@
               "description": "«ثلاثة» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "three",
-                "four",
-                "five",
-                "six"
-              ],
+              "options": ["three", "four", "five", "six"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -630,16 +423,9 @@
               "description": "«خمسة» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "five",
-                "four",
-                "six",
-                "seven"
-              ],
+              "options": ["five", "four", "six", "seven"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -651,16 +437,9 @@
               "description": "«عشرة» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "ten",
-                "nine",
-                "eight",
-                "twelve"
-              ],
+              "options": ["ten", "nine", "eight", "twelve"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -672,16 +451,9 @@
               "description": "الرقم العربي «٥» هو ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "5",
-                "4",
-                "6",
-                "3"
-              ],
+              "options": ["5", "4", "6", "3"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -693,16 +465,9 @@
               "description": "The Arabic word for «seven» is ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "سبعة",
-                "ستة",
-                "ثمانية",
-                "تسعة"
-              ],
+              "options": ["سبعة", "ستة", "ثمانية", "تسعة"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -714,16 +479,9 @@
               "description": "الرقم العربي «١٠» هو ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "10",
-                "1",
-                "100",
-                "11"
-              ],
+              "options": ["10", "1", "100", "11"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -734,30 +492,18 @@
         },
         {
           "suiteName": "Arabic JHS1 — Al-Huruf wal-Asasiyyat (Letters & Basics)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "The alphabet, pronouns, the definite article and days.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Basics"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Basics"],
           "questions": [
             {
               "question_number": 1,
               "description": "أول حرف في الأبجدية العربية هو ___",
               "hints": [],
-              "solution_steps": [
-                "The first letter is Alif (أ)."
-              ],
-              "options": [
-                "أ",
-                "ب",
-                "ت",
-                "ي"
-              ],
+              "solution_steps": ["The first letter is Alif (أ)."],
+              "options": ["أ", "ب", "ت", "ي"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -769,16 +515,9 @@
               "description": "حرف «ب» ينطق ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "ba",
-                "alif",
-                "ta",
-                "mim"
-              ],
+              "options": ["ba", "alif", "ta", "mim"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -790,16 +529,9 @@
               "description": "«أنا» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "I",
-                "you",
-                "he",
-                "they"
-              ],
+              "options": ["I", "you", "he", "they"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -811,16 +543,9 @@
               "description": "«أنتَ» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "you",
-                "I",
-                "he",
-                "we"
-              ],
+              "options": ["you", "I", "he", "we"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -831,19 +556,10 @@
               "question_number": 5,
               "description": "أداة التعريف في العربية هي ___",
               "hints": [],
-              "solution_steps": [
-                "The definite article 'the' is ال (al-)."
-              ],
-              "options": [
-                "ال",
-                "في",
-                "من",
-                "على"
-              ],
+              "solution_steps": ["The definite article 'the' is ال (al-)."],
+              "options": ["ال", "في", "من", "على"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -855,16 +571,9 @@
               "description": "«هذا» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "this",
-                "that",
-                "here",
-                "there"
-              ],
+              "options": ["this", "that", "here", "there"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -875,19 +584,10 @@
               "question_number": 7,
               "description": "عدد أيام الأسبوع ___",
               "hints": [],
-              "solution_steps": [
-                "A week has seven (سبعة) days."
-              ],
-              "options": [
-                "سبعة",
-                "ستة",
-                "خمسة",
-                "ثمانية"
-              ],
+              "solution_steps": ["A week has seven (سبعة) days."],
+              "options": ["سبعة", "ستة", "خمسة", "ثمانية"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -899,16 +599,9 @@
               "description": "«يوم الجمعة» هو ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Friday",
-                "Sunday",
-                "Monday",
-                "Saturday"
-              ],
+              "options": ["Friday", "Sunday", "Monday", "Saturday"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ATH_THAQAFA"
-              ],
+              "tags": ["TAG_ATH_THAQAFA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",

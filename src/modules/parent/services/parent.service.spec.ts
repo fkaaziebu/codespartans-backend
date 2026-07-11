@@ -45,7 +45,7 @@ import { TimeEventType } from '../../simulation/entities/time_event.entity';
 import { TestAssignmentStatus } from '../../simulation/entities/test_assignment.entity';
 import { ClassLevel } from '../entities/child.entity';
 import { Gender } from '../entities/parent.entity';
-import { HashHelper } from '../../../helpers';
+import { HashHelper, LoginAttemptService } from '../../../helpers';
 import { AccountStatus } from '../../auth/types/account-deletion-response.type';
 import { AccountDeletionService } from '../../auth/services/account-deletion.service';
 import { EmailProducer } from '../../auth/services/email.producer';
@@ -131,6 +131,7 @@ describe('ParentService', () => {
       ],
       providers: [
         ParentService,
+        LoginAttemptService,
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: SignupProducer, useValue: mockSignupProducer },
         {
@@ -603,6 +604,104 @@ describe('ParentService', () => {
         expect.objectContaining({ email: parentInfo.email }),
       );
       expect(mockAccountDeletionService.restoreParent).not.toHaveBeenCalled();
+    });
+
+    it('locks account and throws ACCOUNT_LOCKED on the third wrong password', async () => {
+      await registerAndVerifyParent();
+
+      mockCacheManager.get.mockImplementation((key: string) => {
+        if (key.startsWith('parent_login_attempts:')) return Promise.resolve(2);
+        return Promise.resolve(null);
+      });
+
+      const error: any = await parentService
+        .loginParent({ email: parentInfo.email, password: 'wrongpassword' })
+        .catch((e) => e);
+
+      expect(error).toBeInstanceOf(UnauthorizedException);
+      expect(error.getResponse()).toMatchObject({
+        code: 'ACCOUNT_LOCKED',
+        locked_at: expect.any(String),
+      });
+      expect(error.getResponse().message).toContain('contact support');
+      expect(error.getResponse().message).toContain('5 minutes');
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        expect.stringContaining('parent_login_locked:'),
+        expect.any(String),
+        300_000,
+      );
+    });
+
+    it('throws ACCOUNT_LOCKED immediately when account is already locked', async () => {
+      await registerAndVerifyParent();
+
+      const lockedAt = '2025-01-01T00:00:00.000Z';
+      mockCacheManager.get.mockImplementation((key: string) => {
+        if (key.startsWith('parent_login_locked:')) return Promise.resolve(lockedAt);
+        return Promise.resolve(null);
+      });
+
+      const error: any = await parentService
+        .loginParent({ email: parentInfo.email, password: parentInfo.password })
+        .catch((e) => e);
+
+      expect(error).toBeInstanceOf(UnauthorizedException);
+      expect(error.getResponse()).toMatchObject({
+        code: 'ACCOUNT_LOCKED',
+        locked_at: lockedAt,
+      });
+    });
+
+    it('does not increment attempts when account is not verified', async () => {
+      await parentService.registerParent(parentInfo);
+
+      await expect(
+        parentService.loginParent({
+          email: parentInfo.email,
+          password: parentInfo.password,
+        }),
+      ).rejects.toThrow(BadRequestException);
+
+      expect(mockCacheManager.set).not.toHaveBeenCalledWith(
+        expect.stringContaining('parent_login_attempts:'),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+
+    it('does not increment attempts when account no longer exists', async () => {
+      await registerAndVerifyParent();
+      const ninetyOneDaysAgo = new Date(Date.now() - 91 * 24 * 60 * 60 * 1000);
+      await parentRepository.update(
+        { email: parentInfo.email },
+        { is_deactivated: true, deactivated_at: ninetyOneDaysAgo },
+      );
+
+      await expect(
+        parentService.loginParent({
+          email: parentInfo.email,
+          password: parentInfo.password,
+        }),
+      ).rejects.toThrow(BadRequestException);
+
+      expect(mockCacheManager.set).not.toHaveBeenCalledWith(
+        expect.stringContaining('parent_login_attempts:'),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+
+    it('clears the attempts counter after a successful login', async () => {
+      await registerAndVerifyParent();
+
+      await parentService.loginParent({
+        email: parentInfo.email,
+        password: parentInfo.password,
+      });
+
+      expect(mockCacheManager.del).toHaveBeenCalledWith(
+        expect.stringContaining('parent_login_attempts:'),
+      );
     });
   });
 
@@ -1226,51 +1325,30 @@ describe('ParentService', () => {
     });
   });
 
-  describe('verifyChildUsername', () => {
-    it('returns a temp_token for a known username', async () => {
-      const { child } = await setupParentWithChild();
-
-      const result = await parentService.verifyChildUsername(child.username);
-
-      expect(result.temp_token).toBeDefined();
-    });
-
-    it('throws NotFoundException for an unknown username', async () => {
-      await expect(
-        parentService.verifyChildUsername('unknown.user99'),
-      ).rejects.toThrow(new NotFoundException('Username not found'));
-    });
-  });
-
   describe('loginChild', () => {
     it('returns child with token and refresh_token after valid pin', async () => {
       const { child, results } = await setupParentWithChild();
       const rawPin = results[0].pin;
 
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
-
-      const response = await parentService.loginChild(temp_token, rawPin);
+      const response = await parentService.loginChild(child.username, rawPin);
 
       expect(response.token).toBeDefined();
       expect(response.refresh_token).toBeDefined();
     });
 
-    it('throws UnauthorizedException for an invalid temp_token', async () => {
+    it('throws UnauthorizedException for an unknown username', async () => {
       await expect(
-        parentService.loginChild('bad.token', '123456'),
-      ).rejects.toThrow(new UnauthorizedException('Invalid or expired token'));
+        parentService.loginChild('unknown.user99', '123456'),
+      ).rejects.toThrow(
+        new UnauthorizedException('Username or PIN is incorrect'),
+      );
     });
 
     it('throws UnauthorizedException with INVALID_PIN on the first wrong pin', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       const error: any = await parentService
-        .loginChild(temp_token, '000000')
+        .loginChild(child.username, '000000')
         .catch((e) => e);
       expect(error).toBeInstanceOf(UnauthorizedException);
       expect(error.getResponse()).toMatchObject({
@@ -1282,9 +1360,6 @@ describe('ParentService', () => {
 
     it('returns decreasing attempts message on subsequent wrong pins', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       // Simulate 1 prior failed attempt already recorded in Redis
       mockCacheManager.get.mockImplementation((key: string) => {
@@ -1293,7 +1368,7 @@ describe('ParentService', () => {
       });
 
       const error: any = await parentService
-        .loginChild(temp_token, '000000')
+        .loginChild(child.username, '000000')
         .catch((e) => e);
       expect(error).toBeInstanceOf(UnauthorizedException);
       expect(error.getResponse()).toMatchObject({
@@ -1305,9 +1380,6 @@ describe('ParentService', () => {
 
     it('warns of last chance on the fourth wrong pin', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       mockCacheManager.get.mockImplementation((key: string) => {
         if (key.startsWith('child_pin_attempts:')) return Promise.resolve(3);
@@ -1315,7 +1387,7 @@ describe('ParentService', () => {
       });
 
       const error: any = await parentService
-        .loginChild(temp_token, '000000')
+        .loginChild(child.username, '000000')
         .catch((e) => e);
       expect(error).toBeInstanceOf(UnauthorizedException);
       expect(error.getResponse()).toMatchObject({
@@ -1327,9 +1399,6 @@ describe('ParentService', () => {
 
     it('locks account and throws ACCOUNT_LOCKED on the fifth wrong pin', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       mockCacheManager.get.mockImplementation((key: string) => {
         if (key.startsWith('child_pin_attempts:')) return Promise.resolve(4);
@@ -1337,7 +1406,7 @@ describe('ParentService', () => {
       });
 
       const error: any = await parentService
-        .loginChild(temp_token, '000000')
+        .loginChild(child.username, '000000')
         .catch((e) => e);
       expect(error).toBeInstanceOf(UnauthorizedException);
       expect(error.getResponse()).toMatchObject({
@@ -1353,9 +1422,6 @@ describe('ParentService', () => {
 
     it('throws ACCOUNT_LOCKED immediately when account is already locked', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       const lockedAt = '2025-01-01T00:00:00.000Z';
       mockCacheManager.get.mockImplementation((key: string) => {
@@ -1364,7 +1430,7 @@ describe('ParentService', () => {
       });
 
       const error: any = await parentService
-        .loginChild(temp_token, '000000')
+        .loginChild(child.username, '000000')
         .catch((e) => e);
       expect(error).toBeInstanceOf(UnauthorizedException);
       expect(error.getResponse()).toMatchObject({
@@ -1376,9 +1442,6 @@ describe('ParentService', () => {
     it('resets expired attempt counter and allows login with correct pin', async () => {
       const { child, results } = await setupParentWithChild();
       const rawPin = results[0].pin;
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       // Lock key has expired (null) but attempts key still holds 5 from before
       mockCacheManager.get.mockImplementation((key: string) => {
@@ -1386,7 +1449,7 @@ describe('ParentService', () => {
         return Promise.resolve(null);
       });
 
-      const response = await parentService.loginChild(temp_token, rawPin);
+      const response = await parentService.loginChild(child.username, rawPin);
       expect(response.token).toBeDefined();
       expect(mockCacheManager.del).toHaveBeenCalledWith(
         expect.stringContaining('child_pin_attempts:'),
@@ -1395,9 +1458,6 @@ describe('ParentService', () => {
 
     it('throws UnauthorizedException when child student is pending deletion', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       // Deactivate the child's student
       await studentRepository.update(child.student.id, {
@@ -1406,7 +1466,7 @@ describe('ParentService', () => {
       });
 
       await expect(
-        parentService.loginChild(temp_token, '000000'),
+        parentService.loginChild(child.username, '000000'),
       ).rejects.toThrow(UnauthorizedException);
     });
   });
@@ -1414,9 +1474,6 @@ describe('ParentService', () => {
   describe('requestChildPinReset', () => {
     it('enqueues pin reset email and returns true when account is locked', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       mockCacheManager.get.mockImplementation((key: string) => {
         if (key.startsWith('child_pin_locked:'))
@@ -1424,7 +1481,7 @@ describe('ParentService', () => {
         return Promise.resolve(null);
       });
 
-      const result = await parentService.requestChildPinReset(temp_token);
+      const result = await parentService.requestChildPinReset(child.username);
 
       expect(result).toBe(true);
       expect(mockEmailProducer.sendChildPinResetRequestEmail).toHaveBeenCalledWith({
@@ -1434,21 +1491,18 @@ describe('ParentService', () => {
       });
     });
 
-    it('throws UnauthorizedException for an invalid temp_token', async () => {
+    it('throws NotFoundException for an unknown username', async () => {
       await expect(
-        parentService.requestChildPinReset('bad.token'),
-      ).rejects.toThrow(new UnauthorizedException('Invalid or expired token'));
+        parentService.requestChildPinReset('unknown.user99'),
+      ).rejects.toThrow(new NotFoundException('Child not found'));
     });
 
     it('throws BadRequestException when account is not locked', async () => {
       const { child } = await setupParentWithChild();
-      const { temp_token } = await parentService.verifyChildUsername(
-        child.username,
-      );
 
       // Default cache mock returns null — no active lock
       await expect(
-        parentService.requestChildPinReset(temp_token),
+        parentService.requestChildPinReset(child.username),
       ).rejects.toThrow(new BadRequestException('Account is not currently locked'));
     });
   });

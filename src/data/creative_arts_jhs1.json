@@ -12,28 +12,18 @@
       "suites": [
         {
           "suiteName": "Creative Arts JHS1 — Elements of Design",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Line, shape, form, texture, space and colour as the building blocks of art.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Elements"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Elements"],
           "questions": [
             {
               "question_number": 1,
               "description": "The basic elements of design include line, shape, colour and ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sound",
-                "texture",
-                "smell",
-                "taste"
-              ],
+              "options": ["sound", "texture", "smell", "taste"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -45,16 +35,9 @@
               "description": "A mark made by a moving point or dot is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "line",
-                "shape",
-                "colour",
-                "form"
-              ],
+              "options": ["line", "shape", "colour", "form"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -66,16 +49,9 @@
               "description": "An enclosed flat area such as a circle or square is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "line",
-                "shape",
-                "texture",
-                "space"
-              ],
+              "options": ["line", "shape", "texture", "space"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -87,16 +63,9 @@
               "description": "The way a surface feels or looks, whether rough or smooth, is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "line",
-                "shape",
-                "texture",
-                "colour"
-              ],
+              "options": ["line", "shape", "texture", "colour"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -108,16 +77,9 @@
               "description": "Which of the following is an element of design?",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "balance",
-                "colour",
-                "rhythm",
-                "harmony"
-              ],
+              "options": ["balance", "colour", "rhythm", "harmony"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -129,16 +91,9 @@
               "description": "A shape that has length, width and depth (three dimensions) is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "line",
-                "form",
-                "dot",
-                "point"
-              ],
+              "options": ["line", "form", "dot", "point"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -150,16 +105,9 @@
               "description": "The empty area around or between objects in a design is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "line",
-                "shape",
-                "space",
-                "texture"
-              ],
+              "options": ["line", "shape", "space", "texture"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -171,16 +119,9 @@
               "description": "A line that runs from side to side, left to right, is a ___ line.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "vertical",
-                "horizontal",
-                "curved",
-                "zigzag"
-              ],
+              "options": ["vertical", "horizontal", "curved", "zigzag"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -191,28 +132,18 @@
         },
         {
           "suiteName": "Creative Arts JHS1 — Colour",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Primary and secondary colours, colour mixing and warm and cool colours.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Colour"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Colour"],
           "questions": [
             {
               "question_number": 1,
               "description": "The three primary colours are red, blue and ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "green",
-                "yellow",
-                "orange",
-                "purple"
-              ],
+              "options": ["green", "yellow", "orange", "purple"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -224,16 +155,9 @@
               "description": "Mixing blue and yellow produces ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "green",
-                "orange",
-                "purple",
-                "brown"
-              ],
+              "options": ["green", "orange", "purple", "brown"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -245,16 +169,9 @@
               "description": "Mixing red and yellow produces ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "green",
-                "orange",
-                "purple",
-                "grey"
-              ],
+              "options": ["green", "orange", "purple", "grey"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -266,16 +183,9 @@
               "description": "Mixing red and blue produces ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "green",
-                "orange",
-                "purple",
-                "yellow"
-              ],
+              "options": ["green", "orange", "purple", "yellow"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -293,16 +203,9 @@
               },
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "primary",
-                "secondary",
-                "warm",
-                "cool"
-              ],
+              "options": ["primary", "secondary", "warm", "cool"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -314,16 +217,9 @@
               "description": "Red, orange and yellow are examples of ___ colours.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "warm",
-                "cool",
-                "neutral",
-                "dark"
-              ],
+              "options": ["warm", "cool", "neutral", "dark"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -335,16 +231,9 @@
               "description": "Blue, green and purple are examples of ___ colours.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "warm",
-                "cool",
-                "neutral",
-                "bright"
-              ],
+              "options": ["warm", "cool", "neutral", "bright"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -356,16 +245,9 @@
               "description": "The flat board used to mix and hold paint is a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "palette",
-                "hammer",
-                "needle",
-                "knife"
-              ],
+              "options": ["palette", "hammer", "needle", "knife"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -376,28 +258,18 @@
         },
         {
           "suiteName": "Creative Arts JHS1 — Visual Arts Media",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Basic art materials and simple art-making methods.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Media"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Media"],
           "questions": [
             {
               "question_number": 1,
               "description": "A quick, rough drawing done freely is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sculpture",
-                "sketch",
-                "song",
-                "dance"
-              ],
+              "options": ["sculpture", "sketch", "song", "dance"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -409,16 +281,9 @@
               "description": "Painting is usually done with a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "brush",
-                "hammer",
-                "spoon",
-                "needle"
-              ],
+              "options": ["brush", "hammer", "spoon", "needle"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -430,16 +295,9 @@
               "description": "Making a picture by sticking pieces of paper or materials onto a surface is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "collage",
-                "carving",
-                "singing",
-                "weaving"
-              ],
+              "options": ["collage", "carving", "singing", "weaving"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -451,16 +309,9 @@
               "description": "A three-dimensional artwork made by carving or modelling is a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sculpture",
-                "painting",
-                "sketch",
-                "poster"
-              ],
+              "options": ["sculpture", "painting", "sketch", "poster"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -472,16 +323,9 @@
               "description": "Clay is the main material used to make ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "pottery",
-                "kente",
-                "songs",
-                "paintings"
-              ],
+              "options": ["pottery", "kente", "songs", "paintings"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -493,16 +337,9 @@
               "description": "The main tool used for drawing lines is a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "pencil",
-                "spoon",
-                "cup",
-                "plate"
-              ],
+              "options": ["pencil", "spoon", "cup", "plate"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -514,16 +351,9 @@
               "description": "Paper, pencil, crayon and paint are examples of art ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "songs",
-                "materials",
-                "dances",
-                "games"
-              ],
+              "options": ["songs", "materials", "dances", "games"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -535,16 +365,9 @@
               "description": "Wax crayons are used mainly for ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "cooking",
-                "colouring",
-                "singing",
-                "weaving"
-              ],
+              "options": ["cooking", "colouring", "singing", "weaving"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -555,28 +378,18 @@
         },
         {
           "suiteName": "Creative Arts JHS1 — Ghanaian Art & Culture",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Kente, adinkra symbols, pottery, beads, basketry and wood carving.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Culture"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Culture"],
           "questions": [
             {
               "question_number": 1,
               "description": "Kente is a colourful Ghanaian cloth that is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "woven",
-                "painted",
-                "knitted",
-                "printed"
-              ],
+              "options": ["woven", "painted", "knitted", "printed"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -588,16 +401,9 @@
               "description": "Adinkra symbols are traditional Ghanaian ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "symbols",
-                "songs",
-                "dances",
-                "foods"
-              ],
+              "options": ["symbols", "songs", "dances", "foods"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -609,16 +415,9 @@
               "description": "Kente weaving is very popular among the Ewe and the ___ people.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Asante",
-                "Chinese",
-                "British",
-                "Arab"
-              ],
+              "options": ["Asante", "Chinese", "British", "Arab"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -630,16 +429,9 @@
               "description": "A traditional pot for storing water is made from ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "clay",
-                "glass",
-                "iron",
-                "plastic"
-              ],
+              "options": ["clay", "glass", "iron", "plastic"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -651,16 +443,9 @@
               "description": "Baskets are usually made by ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "weaving",
-                "painting",
-                "carving",
-                "singing"
-              ],
+              "options": ["weaving", "painting", "carving", "singing"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -672,16 +457,9 @@
               "description": "Beads are commonly strung together to make ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "necklaces",
-                "houses",
-                "roads",
-                "cars"
-              ],
+              "options": ["necklaces", "houses", "roads", "cars"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -693,16 +471,9 @@
               "description": "The Adinkra symbol 'Gye Nyame' means 'Except ___'.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "God",
-                "Man",
-                "Money",
-                "Time"
-              ],
+              "options": ["God", "Man", "Money", "Time"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -714,16 +485,9 @@
               "description": "A person who makes objects by cutting and shaping wood is a wood ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "carver",
-                "singer",
-                "dancer",
-                "farmer"
-              ],
+              "options": ["carver", "singer", "dancer", "farmer"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -734,28 +498,18 @@
         },
         {
           "suiteName": "Creative Arts JHS1 — Performing Arts",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Music, dance, drama and Ghanaian musical instruments.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Performing Arts"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Performing Arts"],
           "questions": [
             {
               "question_number": 1,
               "description": "Singing, dancing and drama are examples of ___ arts.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "performing",
-                "visual",
-                "graphic",
-                "written"
-              ],
+              "options": ["performing", "visual", "graphic", "written"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -767,16 +521,9 @@
               "description": "An instrument that is played by beating is a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "drum",
-                "flute",
-                "guitar",
-                "violin"
-              ],
+              "options": ["drum", "flute", "guitar", "violin"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -788,16 +535,9 @@
               "description": "Moving the body rhythmically to music is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "dancing",
-                "drawing",
-                "weaving",
-                "carving"
-              ],
+              "options": ["dancing", "drawing", "weaving", "carving"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -809,16 +549,9 @@
               "description": "A story acted out on stage by people is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "drama",
-                "painting",
-                "weaving",
-                "carving"
-              ],
+              "options": ["drama", "painting", "weaving", "carving"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -830,16 +563,9 @@
               "description": "The 'atumpan' is a Ghanaian ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "drum",
-                "flute",
-                "guitar",
-                "brush"
-              ],
+              "options": ["drum", "flute", "guitar", "brush"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -851,16 +577,9 @@
               "description": "A group of people singing together is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "choir",
-                "team",
-                "class",
-                "crowd"
-              ],
+              "options": ["choir", "team", "class", "crowd"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -872,16 +591,9 @@
               "description": "The 'seperewa' and 'gyil' are Ghanaian musical ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "instruments",
-                "foods",
-                "cloths",
-                "dances"
-              ],
+              "options": ["instruments", "foods", "cloths", "dances"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -893,16 +605,9 @@
               "description": "Clapping and drumming help to keep the ___ in music.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "colour",
-                "rhythm",
-                "shape",
-                "line"
-              ],
+              "options": ["colour", "rhythm", "shape", "line"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",

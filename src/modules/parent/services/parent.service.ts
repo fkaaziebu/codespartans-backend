@@ -13,7 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { HashHelper, PaginateHelper } from '../../../helpers';
+import { HashHelper, LoginAttemptService, PaginateHelper } from '../../../helpers';
 import { PaginationInput } from '../../../helpers/inputs';
 import { TimeEventType } from '../../simulation/entities/time_event.entity';
 import { TestStatusType } from '../../simulation/entities/test.entity';
@@ -46,7 +46,6 @@ import {
   LoginParentResponse,
   SetupChildResult,
   StreakResponse,
-  VerifyChildUsernameResponse,
 } from '../types';
 
 @Injectable()
@@ -70,6 +69,7 @@ export class ParentService {
     private readonly signupProducer: SignupProducer,
     private readonly accountDeletionService: AccountDeletionService,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    private readonly loginAttemptService: LoginAttemptService,
   ) {
     this.gracePeriodMs =
       this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
@@ -279,6 +279,12 @@ export class ParentService {
     );
   }
 
+  private readonly PWD_MAX_ATTEMPTS = 3;
+  private readonly PWD_LOCK_TTL_MS = 5 * 60 * 1_000; // 5 minutes
+  private readonly PWD_ATTEMPTS_TTL_MS = 30 * 60 * 1_000; // 30 minutes
+  private readonly PWD_LOCKED_MESSAGE =
+    'Too many failed attempts. Your account is locked for 5 minutes. Please try again later or contact support.';
+
   async loginParent({
     email,
     password,
@@ -286,47 +292,85 @@ export class ParentService {
     email: string;
     password: string;
   }): Promise<LoginParentResponse> {
-    // Validate credentials inside transaction, then restore outside to avoid write-lock deadlock
-    const foundParent = await this.parentRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        const record = await transactionalEntityManager.findOne(Parent, {
-          where: { email },
-        });
+    const keyPrefix = 'parent_login';
+    const lockoutConfig = {
+      maxAttempts: this.PWD_MAX_ATTEMPTS,
+      lockTtlMs: this.PWD_LOCK_TTL_MS,
+      attemptsTtlMs: this.PWD_ATTEMPTS_TTL_MS,
+    };
 
-        if (!record) {
-          throw new BadRequestException('Email or password is incorrect');
-        }
-
-        if (!record.password) {
-          throw new BadRequestException('Email or password is incorrect');
-        }
-
-        const isPasswordValid = await HashHelper.compare(
-          password,
-          record.password,
-        );
-
-        if (!isPasswordValid) {
-          throw new BadRequestException('Email or password is incorrect');
-        }
-
-        if (!record.is_account_validated) {
-          throw new BadRequestException(
-            'Account not verified. Please check your email for the verification code.',
-          );
-        }
-
-        if (record.is_deactivated) {
-          const elapsed =
-            Date.now() - new Date(record.deactivated_at).getTime();
-          if (elapsed >= this.gracePeriodMs) {
-            throw new BadRequestException('This account no longer exists.');
-          }
-        }
-
-        return record;
-      },
+    await this.loginAttemptService.assertNotLocked(
+      keyPrefix,
+      email,
+      this.PWD_LOCKED_MESSAGE,
     );
+    await this.loginAttemptService.resetStaleAttemptsIfMaxed(
+      keyPrefix,
+      email,
+      lockoutConfig,
+    );
+
+    // Validate credentials inside transaction, then restore outside to avoid write-lock deadlock
+    let foundParent: Parent;
+    try {
+      foundParent = await this.parentRepository.manager.transaction(
+        async (transactionalEntityManager) => {
+          const record = await transactionalEntityManager.findOne(Parent, {
+            where: { email },
+          });
+
+          if (!record) {
+            throw new BadRequestException('Email or password is incorrect');
+          }
+
+          if (!record.password) {
+            throw new BadRequestException('Email or password is incorrect');
+          }
+
+          const isPasswordValid = await HashHelper.compare(
+            password,
+            record.password,
+          );
+
+          if (!isPasswordValid) {
+            throw new BadRequestException('Email or password is incorrect');
+          }
+
+          if (!record.is_account_validated) {
+            throw new BadRequestException(
+              'Account not verified. Please check your email for the verification code.',
+            );
+          }
+
+          if (record.is_deactivated) {
+            const elapsed =
+              Date.now() - new Date(record.deactivated_at).getTime();
+            if (elapsed >= this.gracePeriodMs) {
+              throw new BadRequestException('This account no longer exists.');
+            }
+          }
+
+          return record;
+        },
+      );
+    } catch (err) {
+      if (
+        err instanceof BadRequestException &&
+        err.message === 'Email or password is incorrect'
+      ) {
+        await this.loginAttemptService.recordFailure(
+          keyPrefix,
+          email,
+          lockoutConfig,
+          this.PWD_LOCKED_MESSAGE,
+          { default: 'Email or password is incorrect' },
+          'INVALID_CREDENTIALS',
+        );
+      }
+      throw err;
+    }
+
+    await this.loginAttemptService.clear(keyPrefix, email);
 
     if (foundParent.is_deactivated) {
       const deletionScheduledFor = new Date(
@@ -1422,82 +1466,20 @@ export class ParentService {
     return result;
   }
 
-  async verifyChildUsername(
-    username: string,
-  ): Promise<VerifyChildUsernameResponse> {
-    const child = await this.childRepository.findOne({
-      where: { username },
-      relations: ['student'],
-    });
-
-    if (!child) {
-      throw new NotFoundException('Username not found');
-    }
-
-    if (child.student?.is_deactivated) {
-      throw new UnauthorizedException(
-        'This account is pending deletion. Contact your parent to cancel.',
-      );
-    }
-
-    const payload = {
-      id: child.id,
-      username: child.username,
-      role: 'CHILD' as const,
-      type: 'temp',
-    };
-
-    const temp_token = this.jwtService.sign(payload, { expiresIn: '5m' });
-
-    return { temp_token };
-  }
-
   private readonly PIN_MAX_ATTEMPTS = 5;
   private readonly PIN_LOCK_TTL_MS = 5 * 60 * 1_000; // 5 minutes
   private readonly PIN_ATTEMPTS_TTL_MS = 30 * 60 * 1_000; // 30 minutes
+  private readonly PIN_KEY_PREFIX = 'child_pin';
+  private readonly PIN_LOCKED_MESSAGE = 'Account locked for 5 minutes';
 
-  async loginChild(
-    temp_token: string,
-    pin: string,
-  ): Promise<LoginChildResponse> {
-    let payload: { id: string; username: string; role: string; type: string };
-
-    try {
-      payload = this.jwtService.verify(temp_token);
-    } catch {
-      throw new UnauthorizedException('Invalid or expired token');
-    }
-
-    if (payload.type !== 'temp' || payload.role !== 'CHILD') {
-      throw new UnauthorizedException('Invalid token type');
-    }
-
-    const childId = payload.id;
-    const attemptsKey = `child_pin_attempts:${childId}`;
-    const lockedKey = `child_pin_locked:${childId}`;
-
-    const lockedAt = await this.cacheManager.get<string>(lockedKey);
-    if (lockedAt) {
-      throw new UnauthorizedException({
-        message: 'Account locked for 5 minutes',
-        code: 'ACCOUNT_LOCKED',
-        locked_at: lockedAt,
-      });
-    }
-
-    const currentAttempts =
-      (await this.cacheManager.get<number>(attemptsKey)) ?? 0;
-    if (currentAttempts >= this.PIN_MAX_ATTEMPTS) {
-      await this.cacheManager.del(attemptsKey);
-    }
-
+  async loginChild(username: string, pin: string): Promise<LoginChildResponse> {
     const child = await this.childRepository.findOne({
-      where: { id: childId },
+      where: { username },
       relations: ['student.organizations'],
     });
 
     if (!child) {
-      throw new NotFoundException('Child not found');
+      throw new UnauthorizedException('Username or PIN is incorrect');
     }
 
     if (child.student?.is_deactivated) {
@@ -1506,38 +1488,44 @@ export class ParentService {
       );
     }
 
+    const childId = child.id;
+    const pinLockoutConfig = {
+      maxAttempts: this.PIN_MAX_ATTEMPTS,
+      lockTtlMs: this.PIN_LOCK_TTL_MS,
+      attemptsTtlMs: this.PIN_ATTEMPTS_TTL_MS,
+    };
+
+    await this.loginAttemptService.assertNotLocked(
+      this.PIN_KEY_PREFIX,
+      childId,
+      this.PIN_LOCKED_MESSAGE,
+    );
+    await this.loginAttemptService.resetStaleAttemptsIfMaxed(
+      this.PIN_KEY_PREFIX,
+      childId,
+      pinLockoutConfig,
+    );
+
     const isPinValid = await HashHelper.compare(pin, child.pin);
 
     if (!isPinValid) {
-      const attempts =
-        (await this.cacheManager.get<number>(attemptsKey) ?? 0) + 1;
-      await this.cacheManager.set(attemptsKey, attempts, this.PIN_ATTEMPTS_TTL_MS);
-
-      if (attempts >= this.PIN_MAX_ATTEMPTS) {
-        const timestamp = new Date().toISOString();
-        await this.cacheManager.set(lockedKey, timestamp, this.PIN_LOCK_TTL_MS);
-        throw new UnauthorizedException({
-          message: 'Account locked for 5 minutes',
-          code: 'ACCOUNT_LOCKED',
-          locked_at: timestamp,
-        });
-      }
-
-      const messages: Record<number, string> = {
-        1: 'Incorrect PIN, try again',
-        2: 'Incorrect PIN, you have 3 more attempts',
-        3: 'Incorrect PIN, you have 2 more attempts',
-        4: 'Incorrect PIN, you have 1 more attempt. Your account will be locked for 5 minutes if this fails',
-      };
-
-      throw new UnauthorizedException({
-        message: messages[attempts] ?? 'Incorrect PIN, try again',
-        code: 'INVALID_PIN',
-        attempts_remaining: this.PIN_MAX_ATTEMPTS - attempts,
-      });
+      await this.loginAttemptService.recordFailure(
+        this.PIN_KEY_PREFIX,
+        childId,
+        pinLockoutConfig,
+        this.PIN_LOCKED_MESSAGE,
+        {
+          1: 'Incorrect PIN, try again',
+          2: 'Incorrect PIN, you have 3 more attempts',
+          3: 'Incorrect PIN, you have 2 more attempts',
+          4: 'Incorrect PIN, you have 1 more attempt. Your account will be locked for 5 minutes if this fails',
+          default: 'Incorrect PIN, try again',
+        },
+        'INVALID_PIN',
+      );
     }
 
-    await this.cacheManager.del(attemptsKey);
+    await this.loginAttemptService.clear(this.PIN_KEY_PREFIX, childId);
 
     const tokenPayload = {
       id: child.student.id,
@@ -1553,32 +1541,20 @@ export class ParentService {
     return { ...child, token, refresh_token };
   }
 
-  async requestChildPinReset(temp_token: string): Promise<boolean> {
-    let payload: { id: string; username: string; role: string; type: string };
-
-    try {
-      payload = this.jwtService.verify(temp_token);
-    } catch {
-      throw new UnauthorizedException('Invalid or expired token');
-    }
-
-    if (payload.type !== 'temp' || payload.role !== 'CHILD') {
-      throw new UnauthorizedException('Invalid token type');
-    }
-
-    const lockedKey = `child_pin_locked:${payload.id}`;
-    const lockedAt = await this.cacheManager.get<string>(lockedKey);
-    if (!lockedAt) {
-      throw new BadRequestException('Account is not currently locked');
-    }
-
+  async requestChildPinReset(username: string): Promise<boolean> {
     const child = await this.childRepository.findOne({
-      where: { id: payload.id },
+      where: { username },
       relations: ['parent'],
     });
 
     if (!child) {
       throw new NotFoundException('Child not found');
+    }
+
+    const lockedKey = `${this.PIN_KEY_PREFIX}_locked:${child.id}`;
+    const lockedAt = await this.cacheManager.get<string>(lockedKey);
+    if (!lockedAt) {
+      throw new BadRequestException('Account is not currently locked');
     }
 
     await this.emailProducer.sendChildPinResetRequestEmail({

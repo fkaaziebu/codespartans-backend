@@ -12,28 +12,18 @@
       "suites": [
         {
           "suiteName": "Creative Arts JHS3 — Elements & Principles",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Value, radial balance, emphasis, unity, pattern and proportion.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Design"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Design"],
           "questions": [
             {
               "question_number": 1,
               "description": "The elements of design include line, shape, form, space, texture, value and ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "colour",
-                "balance",
-                "rhythm",
-                "harmony"
-              ],
+              "options": ["colour", "balance", "rhythm", "harmony"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -45,16 +35,9 @@
               "description": "The lightness or darkness of a colour or tone in art is called its ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "value",
-                "hue",
-                "texture",
-                "space"
-              ],
+              "options": ["value", "hue", "texture", "space"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ELEMENTS_OF_DESIGN"
-              ],
+              "tags": ["TAG_ELEMENTS_OF_DESIGN"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -66,16 +49,9 @@
               "description": "Balance in which elements spread out from a central point is called ___ balance.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "radial",
-                "symmetrical",
-                "horizontal",
-                "vertical"
-              ],
+              "options": ["radial", "symmetrical", "horizontal", "vertical"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PRINCIPLES_OF_DESIGN"
-              ],
+              "tags": ["TAG_PRINCIPLES_OF_DESIGN"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -94,9 +70,7 @@
                 "border"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PRINCIPLES_OF_DESIGN"
-              ],
+              "tags": ["TAG_PRINCIPLES_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -108,16 +82,9 @@
               "description": "The principle that gives a design a feeling of oneness and completeness is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "unity",
-                "chaos",
-                "contrast",
-                "space"
-              ],
+              "options": ["unity", "chaos", "contrast", "space"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PRINCIPLES_OF_DESIGN"
-              ],
+              "tags": ["TAG_PRINCIPLES_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -129,16 +96,9 @@
               "description": "Repeating a shape or motif at regular intervals creates a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "pattern",
-                "contrast",
-                "balance",
-                "space"
-              ],
+              "options": ["pattern", "contrast", "balance", "space"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PRINCIPLES_OF_DESIGN"
-              ],
+              "tags": ["TAG_PRINCIPLES_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -150,16 +110,9 @@
               "description": "Using elements of different sizes to show importance relates to ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "proportion",
-                "texture",
-                "colour",
-                "line"
-              ],
+              "options": ["proportion", "texture", "colour", "line"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PRINCIPLES_OF_DESIGN"
-              ],
+              "tags": ["TAG_PRINCIPLES_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -171,16 +124,9 @@
               "description": "Placing two very different colours side by side creates ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "contrast",
-                "harmony",
-                "unity",
-                "balance"
-              ],
+              "options": ["contrast", "harmony", "unity", "balance"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PRINCIPLES_OF_DESIGN"
-              ],
+              "tags": ["TAG_PRINCIPLES_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -191,12 +137,9 @@
         },
         {
           "suiteName": "Creative Arts JHS3 — Colour & Composition",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Complementary and analogous colours, colour schemes and composition.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Colour"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Colour"],
           "questions": [
             {
               "question_number": 1,
@@ -209,16 +152,9 @@
               },
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "complementary",
-                "primary",
-                "neutral",
-                "warm"
-              ],
+              "options": ["complementary", "primary", "neutral", "warm"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -236,16 +172,9 @@
               },
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "analogous",
-                "complementary",
-                "primary",
-                "neutral"
-              ],
+              "options": ["analogous", "complementary", "primary", "neutral"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -264,9 +193,7 @@
                 "neutral"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -278,16 +205,9 @@
               "description": "The colour wheel was developed mainly to show the relationship between ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "colours",
-                "shapes",
-                "lines",
-                "sounds"
-              ],
+              "options": ["colours", "shapes", "lines", "sounds"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_3",
@@ -299,16 +219,9 @@
               "description": "Mixing all three primary colours together in equal amounts tends to produce a ___ colour.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "brown",
-                "white",
-                "bright red",
-                "yellow"
-              ],
+              "options": ["brown", "white", "bright red", "yellow"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -320,16 +233,9 @@
               "description": "The brightness or dullness (intensity) of a colour is called its ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "saturation",
-                "value",
-                "line",
-                "space"
-              ],
+              "options": ["saturation", "value", "line", "space"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -341,16 +247,9 @@
               "description": "The empty space deliberately left around a subject in a picture is called ___ space.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "negative",
-                "full",
-                "coloured",
-                "heavy"
-              ],
+              "options": ["negative", "full", "coloured", "heavy"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COLOUR"
-              ],
+              "tags": ["TAG_COLOUR"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -362,16 +261,9 @@
               "description": "The pleasing arrangement of the parts of an artwork is called its ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "composition",
-                "texture",
-                "colour",
-                "material"
-              ],
+              "options": ["composition", "texture", "colour", "material"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PRINCIPLES_OF_DESIGN"
-              ],
+              "tags": ["TAG_PRINCIPLES_OF_DESIGN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -382,28 +274,18 @@
         },
         {
           "suiteName": "Creative Arts JHS3 — Visual Arts & Graphic Design",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Graphic design, abstract art, perspective, typography and exhibitions.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Design"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Design"],
           "questions": [
             {
               "question_number": 1,
               "description": "Designing logos, posters and advertisements is part of ___ design.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "graphic",
-                "interior",
-                "fashion",
-                "web"
-              ],
+              "options": ["graphic", "interior", "fashion", "web"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -415,16 +297,9 @@
               "description": "A style of art that does not show objects in a realistic way is called ___ art.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "abstract",
-                "realistic",
-                "portrait",
-                "still-life"
-              ],
+              "options": ["abstract", "realistic", "portrait", "still-life"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -436,16 +311,9 @@
               "description": "Drawing objects so that they appear to have depth and distance is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "perspective",
-                "shading",
-                "printing",
-                "weaving"
-              ],
+              "options": ["perspective", "shading", "printing", "weaving"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -457,16 +325,9 @@
               "description": "A rough first drawing that plans out a design is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sketch",
-                "print",
-                "frame",
-                "mould"
-              ],
+              "options": ["sketch", "print", "frame", "mould"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -478,16 +339,9 @@
               "description": "Printing many copies of one design using a carved block is called ___ printing.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "block",
-                "screen",
-                "digital",
-                "offset"
-              ],
+              "options": ["block", "screen", "digital", "offset"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -506,9 +360,7 @@
                 "biography"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -520,16 +372,9 @@
               "description": "Combining several cut images or materials into one artwork is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "collage",
-                "carving",
-                "weaving",
-                "firing"
-              ],
+              "options": ["collage", "carving", "weaving", "firing"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_3",
@@ -541,16 +386,9 @@
               "description": "A public display of finished artworks for people to appreciate is called an ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "exhibition",
-                "auction",
-                "argument",
-                "election"
-              ],
+              "options": ["exhibition", "auction", "argument", "election"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VISUAL_ARTS_MEDIA"
-              ],
+              "tags": ["TAG_VISUAL_ARTS_MEDIA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -561,28 +399,18 @@
         },
         {
           "suiteName": "Creative Arts JHS3 — Ghanaian Art & Appreciation",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Adinkra meanings, kente, art appreciation, crafts and casting.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Culture"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Culture"],
           "questions": [
             {
               "question_number": 1,
               "description": "The Adinkra symbol 'Dwennimmen' (ram's horns) symbolises strength and ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "humility",
-                "greed",
-                "anger",
-                "fear"
-              ],
+              "options": ["humility", "greed", "anger", "fear"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -594,16 +422,9 @@
               "description": "Kente cloth originated from the Ewe and the ___ people of Ghana.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Asante",
-                "Chinese",
-                "British",
-                "Arab"
-              ],
+              "options": ["Asante", "Chinese", "British", "Arab"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -615,16 +436,9 @@
               "description": "The process of judging the quality, meaning and beauty of an artwork is art ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "appreciation",
-                "destruction",
-                "selling",
-                "copying"
-              ],
+              "options": ["appreciation", "destruction", "selling", "copying"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -636,16 +450,9 @@
               "description": "Pottery, basketry and beadwork are all examples of Ghanaian ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "crafts",
-                "songs",
-                "dances",
-                "sports"
-              ],
+              "options": ["crafts", "songs", "dances", "sports"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -657,16 +464,9 @@
               "description": "Brass and bronze figures are traditionally produced using the ___ casting method.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "lost-wax",
-                "sand",
-                "water",
-                "paper"
-              ],
+              "options": ["lost-wax", "sand", "water", "paper"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -678,16 +478,9 @@
               "description": "The colours and symbols of kente cloth often communicate a ___ message.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "cultural",
-                "secret",
-                "foreign",
-                "random"
-              ],
+              "options": ["cultural", "secret", "foreign", "random"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -699,16 +492,9 @@
               "description": "Cloth printed with symbols using calabash stamps and dye is ___ cloth.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Adinkra",
-                "Kente",
-                "Batik",
-                "Denim"
-              ],
+              "options": ["Adinkra", "Kente", "Batik", "Denim"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -720,16 +506,9 @@
               "description": "The study of beauty and taste in appreciating art is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "aesthetics",
-                "economics",
-                "mathematics",
-                "politics"
-              ],
+              "options": ["aesthetics", "economics", "mathematics", "politics"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GHANAIAN_ART_AND_CULTURE"
-              ],
+              "tags": ["TAG_GHANAIAN_ART_AND_CULTURE"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -740,28 +519,18 @@
         },
         {
           "suiteName": "Creative Arts JHS3 — Performing Arts",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Dance, drama, voice, stage roles and ensemble types.",
-          "suiteKeywords": [
-            "BECE",
-            "Creative Arts",
-            "Performing Arts"
-          ],
+          "suiteKeywords": ["BECE", "Creative Arts", "Performing Arts"],
           "questions": [
             {
               "question_number": 1,
               "description": "A sequence of body movements performed to music is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "dance",
-                "drawing",
-                "weaving",
-                "carving"
-              ],
+              "options": ["dance", "drawing", "weaving", "carving"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_3",
@@ -773,16 +542,9 @@
               "description": "A written work meant to be performed by actors on stage is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "drama",
-                "poem",
-                "novel",
-                "essay"
-              ],
+              "options": ["drama", "poem", "novel", "essay"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -794,16 +556,9 @@
               "description": "The rise and fall of the voice in speech or singing is called ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "intonation",
-                "silence",
-                "volume only",
-                "texture"
-              ],
+              "options": ["intonation", "silence", "volume only", "texture"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -815,16 +570,9 @@
               "description": "The person who directs and coordinates a stage performance is the ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "director",
-                "audience",
-                "usher",
-                "vendor"
-              ],
+              "options": ["director", "audience", "usher", "vendor"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -836,16 +584,9 @@
               "description": "A song performed alone by one person is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "solo",
-                "duet",
-                "chorus",
-                "band"
-              ],
+              "options": ["solo", "duet", "chorus", "band"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_3",
@@ -857,16 +598,9 @@
               "description": "The costume, lighting and scenery used in a play form part of the ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "stage design",
-                "audience",
-                "ticket",
-                "script"
-              ],
+              "options": ["stage design", "audience", "ticket", "script"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -878,16 +612,9 @@
               "description": "When two people sing together, the performance is called a ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "duet",
-                "solo",
-                "chorus",
-                "band"
-              ],
+              "options": ["duet", "solo", "chorus", "band"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -899,16 +626,9 @@
               "description": "Poetry that is performed aloud with rhythm and expression is called ___ poetry.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "spoken word",
-                "silent",
-                "written only",
-                "printed"
-              ],
+              "options": ["spoken word", "silent", "written only", "printed"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_PERFORMING_ARTS"
-              ],
+              "tags": ["TAG_PERFORMING_ARTS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",

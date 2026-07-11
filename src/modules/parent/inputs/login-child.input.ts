@@ -6,7 +6,7 @@ export class LoginChildInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  temp_token: string;
+  username: string;
 
   @Field()
   @IsNotEmpty()

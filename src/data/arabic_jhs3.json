@@ -12,30 +12,18 @@
       "suites": [
         {
           "suiteName": "Arabic JHS3 — Al-Mufradat wal-Addad (Vocabulary & Opposites)",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Opposites and abstract vocabulary.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Vocabulary"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Vocabulary"],
           "questions": [
             {
               "question_number": 1,
               "description": "ضد كلمة «كبير» (big) هو ___",
               "hints": [],
-              "solution_steps": [
-                "كبير (big) ↔ صغير (small)."
-              ],
-              "options": [
-                "صغير",
-                "طويل",
-                "جميل",
-                "جديد"
-              ],
+              "solution_steps": ["كبير (big) ↔ صغير (small)."],
+              "options": ["صغير", "طويل", "جميل", "جديد"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -46,19 +34,10 @@
               "question_number": 2,
               "description": "ضد كلمة «جميل» (beautiful) هو ___",
               "hints": [],
-              "solution_steps": [
-                "جميل (beautiful) ↔ قبيح (ugly)."
-              ],
-              "options": [
-                "قبيح",
-                "كبير",
-                "صغير",
-                "جديد"
-              ],
+              "solution_steps": ["جميل (beautiful) ↔ قبيح (ugly)."],
+              "options": ["قبيح", "كبير", "صغير", "جديد"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -69,19 +48,10 @@
               "question_number": 3,
               "description": "ضد كلمة «جديد» (new) هو ___",
               "hints": [],
-              "solution_steps": [
-                "جديد (new) ↔ قديم (old)."
-              ],
-              "options": [
-                "قديم",
-                "كبير",
-                "صغير",
-                "طويل"
-              ],
+              "solution_steps": ["جديد (new) ↔ قديم (old)."],
+              "options": ["قديم", "كبير", "صغير", "طويل"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -92,19 +62,10 @@
               "question_number": 4,
               "description": "ضد كلمة «نهار» (day) هو ___",
               "hints": [],
-              "solution_steps": [
-                "نهار (day) ↔ ليل (night)."
-              ],
-              "options": [
-                "ليل",
-                "صباح",
-                "مساء",
-                "يوم"
-              ],
+              "solution_steps": ["نهار (day) ↔ ليل (night)."],
+              "options": ["ليل", "صباح", "مساء", "يوم"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -116,16 +77,9 @@
               "description": "«حب» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "love",
-                "hate",
-                "fear",
-                "anger"
-              ],
+              "options": ["love", "hate", "fear", "anger"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -137,16 +91,9 @@
               "description": "«علم» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "knowledge",
-                "wealth",
-                "health",
-                "land"
-              ],
+              "options": ["knowledge", "wealth", "health", "land"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -158,16 +105,9 @@
               "description": "«سعادة» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "happiness",
-                "sadness",
-                "anger",
-                "fear"
-              ],
+              "options": ["happiness", "sadness", "anger", "fear"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -178,19 +118,10 @@
               "question_number": 8,
               "description": "ضد كلمة «غني» (rich) هو ___",
               "hints": [],
-              "solution_steps": [
-                "غني (rich) ↔ فقير (poor)."
-              ],
-              "options": [
-                "فقير",
-                "كبير",
-                "قوي",
-                "طويل"
-              ],
+              "solution_steps": ["غني (rich) ↔ فقير (poor)."],
+              "options": ["فقير", "كبير", "قوي", "طويل"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -201,12 +132,9 @@
         },
         {
           "suiteName": "Arabic JHS3 — Al-Qawa'id (Advanced Grammar)",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Sentence types, the dual, the plural, prepositions and pronouns.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Grammar"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Grammar"],
           "questions": [
             {
               "question_number": 1,
@@ -215,16 +143,9 @@
               "solution_steps": [
                 "A sentence beginning with a noun is a nominal sentence (جملة اسمية)."
               ],
-              "options": [
-                "اسمية",
-                "فعلية",
-                "استفهامية",
-                "أمرية"
-              ],
+              "options": ["اسمية", "فعلية", "استفهامية", "أمرية"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -236,16 +157,9 @@
               "description": "الجملة التي تبدأ بفعل تُسمى جملة ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "فعلية",
-                "اسمية",
-                "استفهامية",
-                "أمرية"
-              ],
+              "options": ["فعلية", "اسمية", "استفهامية", "أمرية"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -256,19 +170,10 @@
               "question_number": 3,
               "description": "المثنى من كلمة «كتاب» (two books) هو ___",
               "hints": [],
-              "solution_steps": [
-                "The dual of كتاب is كتابان."
-              ],
-              "options": [
-                "كتابان",
-                "كتب",
-                "كتاب",
-                "كاتب"
-              ],
+              "solution_steps": ["The dual of كتاب is كتابان."],
+              "options": ["كتابان", "كتب", "كتاب", "كاتب"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -280,16 +185,9 @@
               "description": "جمع كلمة «كتاب» (books) هو ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "كتب",
-                "كتابان",
-                "كاتب",
-                "مكتبة"
-              ],
+              "options": ["كتب", "كتابان", "كاتب", "مكتبة"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -301,16 +199,9 @@
               "description": "«أنتِ» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "you (feminine)",
-                "you (masculine)",
-                "he",
-                "she"
-              ],
+              "options": ["you (feminine)", "you (masculine)", "he", "she"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -321,19 +212,10 @@
               "question_number": 6,
               "description": "من حروف الجر «في» و«من» و ___",
               "hints": [],
-              "solution_steps": [
-                "على (on) is a preposition."
-              ],
-              "options": [
-                "على",
-                "كتاب",
-                "ذهب",
-                "هو"
-              ],
+              "solution_steps": ["على (on) is a preposition."],
+              "options": ["على", "كتاب", "ذهب", "هو"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -344,19 +226,10 @@
               "question_number": 7,
               "description": "الفعل «كَتَبَ» في الزمن ___",
               "hints": [],
-              "solution_steps": [
-                "كَتَبَ (he wrote) is past tense."
-              ],
-              "options": [
-                "الماضي",
-                "المضارع",
-                "الأمر",
-                "المستقبل"
-              ],
+              "solution_steps": ["كَتَبَ (he wrote) is past tense."],
+              "options": ["الماضي", "المضارع", "الأمر", "المستقبل"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -367,19 +240,10 @@
               "question_number": 8,
               "description": "الفعل «يَكْتُبُ» في الزمن ___",
               "hints": [],
-              "solution_steps": [
-                "يَكْتُبُ (he writes) is present tense."
-              ],
-              "options": [
-                "المضارع",
-                "الماضي",
-                "الأمر",
-                "المصدر"
-              ],
+              "solution_steps": ["يَكْتُبُ (he writes) is present tense."],
+              "options": ["المضارع", "الماضي", "الأمر", "المصدر"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -390,28 +254,18 @@
         },
         {
           "suiteName": "Arabic JHS3 — Al-Af'al wal-Azmina (Verbs & Tenses)",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Past, present and imperative verbs across persons.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Verbs"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Verbs"],
           "questions": [
             {
               "question_number": 1,
               "description": "«ذَهَبَ» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "he went",
-                "he goes",
-                "he will go",
-                "go"
-              ],
+              "options": ["he went", "he goes", "he will go", "go"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -423,16 +277,9 @@
               "description": "«يَذْهَبُ» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "he goes",
-                "he went",
-                "he will go",
-                "going"
-              ],
+              "options": ["he goes", "he went", "he will go", "going"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -444,16 +291,9 @@
               "description": "«أكَلَ» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "he ate",
-                "he eats",
-                "he will eat",
-                "food"
-              ],
+              "options": ["he ate", "he eats", "he will eat", "food"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -465,16 +305,9 @@
               "description": "فعل الأمر «اُكْتُبْ» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "write!",
-                "he wrote",
-                "he writes",
-                "writing"
-              ],
+              "options": ["write!", "he wrote", "he writes", "writing"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -486,16 +319,9 @@
               "description": "«أنا أكتب» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "I write",
-                "he writes",
-                "we write",
-                "you write"
-              ],
+              "options": ["I write", "he writes", "we write", "you write"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -507,16 +333,9 @@
               "description": "«نحن نلعب» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "we play",
-                "they play",
-                "you play",
-                "I play"
-              ],
+              "options": ["we play", "they play", "you play", "I play"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -528,16 +347,9 @@
               "description": "«هم يدرسون» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "they study",
-                "we study",
-                "he studies",
-                "you study"
-              ],
+              "options": ["they study", "we study", "he studies", "you study"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -549,16 +361,9 @@
               "description": "الماضي من «يَشْرَبُ» (drinks) هو ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "شَرِبَ",
-                "يشرب",
-                "اشرب",
-                "شارب"
-              ],
+              "options": ["شَرِبَ", "يشرب", "اشرب", "شارب"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_QAWAID"
-              ],
+              "tags": ["TAG_AL_QAWAID"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -569,28 +374,18 @@
         },
         {
           "suiteName": "Arabic JHS3 — Al-Arqam wal-Waqt (Numbers & Time)",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "Tens and hundreds, telling the time, and asking age.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Numbers"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Numbers"],
           "questions": [
             {
               "question_number": 1,
               "description": "«ثلاثون» يعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "thirty",
-                "thirteen",
-                "three",
-                "thirty-three"
-              ],
+              "options": ["thirty", "thirteen", "three", "thirty-three"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -602,16 +397,9 @@
               "description": "«مئة» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "one hundred",
-                "one thousand",
-                "ten",
-                "twenty"
-              ],
+              "options": ["one hundred", "one thousand", "ten", "twenty"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -623,16 +411,9 @@
               "description": "«ألف» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "one thousand",
-                "one hundred",
-                "ten",
-                "one million"
-              ],
+              "options": ["one thousand", "one hundred", "ten", "one million"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -644,16 +425,9 @@
               "description": "«٥٠» بالعربية هو ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "خمسون",
-                "خمسة",
-                "خمسمئة",
-                "خمس عشرة"
-              ],
+              "options": ["خمسون", "خمسة", "خمسمئة", "خمس عشرة"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -672,9 +446,7 @@
                 "It is 3 years"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -685,19 +457,10 @@
               "question_number": 6,
               "description": "نصف العدد «عشرين» (half of 20) هو ___",
               "hints": [],
-              "solution_steps": [
-                "Half of 20 is 10 (عشرة)."
-              ],
-              "options": [
-                "عشرة",
-                "خمسة",
-                "خمسة عشر",
-                "عشرون"
-              ],
+              "solution_steps": ["Half of 20 is 10 (عشرة)."],
+              "options": ["عشرة", "خمسة", "خمسة عشر", "عشرون"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -709,16 +472,9 @@
               "description": "«كم عمرك؟» تسأل عن ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "your age",
-                "your name",
-                "the time",
-                "the day"
-              ],
+              "options": ["your age", "your name", "the time", "the day"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -730,16 +486,9 @@
               "description": "الرقم العربي «٩» هو ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "9",
-                "6",
-                "8",
-                "7"
-              ],
+              "options": ["9", "6", "8", "7"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_ARQAM"
-              ],
+              "tags": ["TAG_AL_ARQAM"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -750,30 +499,18 @@
         },
         {
           "suiteName": "Arabic JHS3 — Ath-Thaqafa wal-Qira'a (Culture & Comprehension)",
+          "suiteType": "YEAR_THREE",
           "suiteDescription": "The Qur'an, reading and writing, the library and festivals.",
-          "suiteKeywords": [
-            "BECE",
-            "Arabic",
-            "Culture"
-          ],
+          "suiteKeywords": ["BECE", "Arabic", "Culture"],
           "questions": [
             {
               "question_number": 1,
               "description": "القرآن الكريم نزل باللغة ___",
               "hints": [],
-              "solution_steps": [
-                "The Qur'an was revealed in Arabic."
-              ],
-              "options": [
-                "العربية",
-                "الإنجليزية",
-                "العبرية",
-                "الفارسية"
-              ],
+              "solution_steps": ["The Qur'an was revealed in Arabic."],
+              "options": ["العربية", "الإنجليزية", "العبرية", "الفارسية"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ATH_THAQAFA"
-              ],
+              "tags": ["TAG_ATH_THAQAFA"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -784,19 +521,10 @@
               "question_number": 2,
               "description": "أول كلمة نزلت في القرآن هي «___»",
               "hints": [],
-              "solution_steps": [
-                "The first revealed word was 'Iqra' (Read)."
-              ],
-              "options": [
-                "اقرأ",
-                "اكتب",
-                "قل",
-                "صلِّ"
-              ],
+              "solution_steps": ["The first revealed word was 'Iqra' (Read)."],
+              "options": ["اقرأ", "اكتب", "قل", "صلِّ"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ATH_THAQAFA"
-              ],
+              "tags": ["TAG_ATH_THAQAFA"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -808,16 +536,9 @@
               "description": "«اقرأ» تعني ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "read",
-                "write",
-                "say",
-                "listen"
-              ],
+              "options": ["read", "write", "say", "listen"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -828,19 +549,10 @@
               "question_number": 4,
               "description": "الشخص الذي يكتب يُسمى ___",
               "hints": [],
-              "solution_steps": [
-                "كاتب = a writer."
-              ],
-              "options": [
-                "كاتب",
-                "قارئ",
-                "معلم",
-                "طالب"
-              ],
+              "solution_steps": ["كاتب = a writer."],
+              "options": ["كاتب", "قارئ", "معلم", "طالب"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -852,16 +564,9 @@
               "description": "الشخص الذي يقرأ يُسمى ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "قارئ",
-                "كاتب",
-                "معلم",
-                "طالب"
-              ],
+              "options": ["قارئ", "كاتب", "معلم", "طالب"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -872,19 +577,10 @@
               "question_number": 6,
               "description": "«مكتبة» هي المكان الذي فيه ___",
               "hints": [],
-              "solution_steps": [
-                "A مكتبة (library) is full of books (كتب)."
-              ],
-              "options": [
-                "كتب",
-                "طعام",
-                "ماء",
-                "سيارات"
-              ],
+              "solution_steps": ["A مكتبة (library) is full of books (كتب)."],
+              "options": ["كتب", "طعام", "ماء", "سيارات"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_AL_MUFRADAT"
-              ],
+              "tags": ["TAG_AL_MUFRADAT"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_3",
@@ -895,19 +591,10 @@
               "question_number": 7,
               "description": "عيد المسلمين بعد شهر رمضان هو عيد ___",
               "hints": [],
-              "solution_steps": [
-                "Eid al-Fitr follows the month of Ramadan."
-              ],
-              "options": [
-                "الفطر",
-                "الأضحى",
-                "الميلاد",
-                "النور"
-              ],
+              "solution_steps": ["Eid al-Fitr follows the month of Ramadan."],
+              "options": ["الفطر", "الأضحى", "الميلاد", "النور"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ATH_THAQAFA"
-              ],
+              "tags": ["TAG_ATH_THAQAFA"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_3",
@@ -919,16 +606,9 @@
               "description": "تعلّم القراءة والكتابة بالعربية مهم لفهم ___",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "القرآن",
-                "التلفاز",
-                "الكرة",
-                "السوق"
-              ],
+              "options": ["القرآن", "التلفاز", "الكرة", "السوق"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_ATH_THAQAFA"
-              ],
+              "tags": ["TAG_ATH_THAQAFA"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_3",

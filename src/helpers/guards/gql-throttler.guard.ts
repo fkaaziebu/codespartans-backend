@@ -1,6 +1,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerLimitDetail } from '@nestjs/throttler';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class GqlThrottlerGuard extends ThrottlerGuard {
@@ -9,5 +10,15 @@ export class GqlThrottlerGuard extends ThrottlerGuard {
     const req = ctx.getContext().req;
     const res = ctx.getContext().res;
     return { req, res };
+  }
+
+  protected async throwThrottlingException(
+    _context: ExecutionContext,
+    _throttlerLimitDetail: ThrottlerLimitDetail,
+  ): Promise<void> {
+    throw new GraphQLError(
+      'Too many requests. Please wait a moment and try again.',
+      { extensions: { code: 'TOO_MANY_REQUESTS' } },
+    );
   }
 }

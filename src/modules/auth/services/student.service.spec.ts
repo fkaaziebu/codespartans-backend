@@ -16,7 +16,7 @@ import {
   Organization,
   Student,
 } from '../../../database/entities';
-import { HashHelper } from '../../../helpers';
+import { HashHelper, LoginAttemptService } from '../../../helpers';
 import { LoginBodyDto } from '../dto/login-body.dto';
 import { ClassLevel } from '../../parent/entities/child.entity';
 import { AccountStatus } from '../types/account-deletion-response.type';
@@ -90,6 +90,7 @@ describe('StudentService', () => {
       ],
       providers: [
         StudentService,
+        LoginAttemptService,
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: SignupProducer, useValue: mockSignupProducer },
         { provide: AccountDeletionService, useValue: mockAccountDeletionService },
@@ -319,6 +320,96 @@ describe('StudentService', () => {
         expect.objectContaining({ email: studentInfo.email }),
       );
       expect(mockAccountDeletionService.restoreStudent).not.toHaveBeenCalled();
+    });
+
+    it('locks account and throws ACCOUNT_LOCKED on the third wrong password', async () => {
+      await registerAndValidateStudent();
+
+      mockCacheManager.get.mockImplementation((key: string) => {
+        if (key.startsWith('student_login_attempts:')) return Promise.resolve(2);
+        return Promise.resolve(null);
+      });
+
+      const error: any = await studentService
+        .loginStudent({ email: studentInfo.email, password: 'wrongpassword' })
+        .catch((e) => e);
+
+      expect(error).toBeInstanceOf(UnauthorizedException);
+      expect(error.getResponse()).toMatchObject({
+        code: 'ACCOUNT_LOCKED',
+        locked_at: expect.any(String),
+      });
+      expect(error.getResponse().message).toContain('contact support');
+      expect(error.getResponse().message).toContain('5 minutes');
+      expect(mockCacheManager.set).toHaveBeenCalledWith(
+        expect.stringContaining('student_login_locked:'),
+        expect.any(String),
+        300_000,
+      );
+    });
+
+    it('throws ACCOUNT_LOCKED immediately when account is already locked', async () => {
+      await registerAndValidateStudent();
+
+      const lockedAt = '2025-01-01T00:00:00.000Z';
+      mockCacheManager.get.mockImplementation((key: string) => {
+        if (key.startsWith('student_login_locked:')) return Promise.resolve(lockedAt);
+        return Promise.resolve(null);
+      });
+
+      const error: any = await studentService
+        .loginStudent(studentInfo)
+        .catch((e) => e);
+
+      expect(error).toBeInstanceOf(UnauthorizedException);
+      expect(error.getResponse()).toMatchObject({
+        code: 'ACCOUNT_LOCKED',
+        locked_at: lockedAt,
+      });
+    });
+
+    it('does not increment attempts when account is not verified', async () => {
+      await seedGenpopOrganization();
+      await studentService.registerStudent(studentInfo);
+
+      await expect(
+        studentService.loginStudent(studentInfo),
+      ).rejects.toThrow(BadRequestException);
+
+      expect(mockCacheManager.set).not.toHaveBeenCalledWith(
+        expect.stringContaining('student_login_attempts:'),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+
+    it('does not increment attempts when account no longer exists', async () => {
+      await registerAndValidateStudent();
+      const ninetyOneDaysAgo = new Date(Date.now() - 91 * 24 * 60 * 60 * 1000);
+      await studentRepository.update(
+        { email: studentInfo.email },
+        { is_deactivated: true, deactivated_at: ninetyOneDaysAgo },
+      );
+
+      await expect(
+        studentService.loginStudent(studentInfo),
+      ).rejects.toThrow(BadRequestException);
+
+      expect(mockCacheManager.set).not.toHaveBeenCalledWith(
+        expect.stringContaining('student_login_attempts:'),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+
+    it('clears the attempts counter after a successful login', async () => {
+      await registerAndValidateStudent();
+
+      await studentService.loginStudent(studentInfo);
+
+      expect(mockCacheManager.del).toHaveBeenCalledWith(
+        expect.stringContaining('student_login_attempts:'),
+      );
     });
   });
 

@@ -12,28 +12,18 @@
       "suites": [
         {
           "suiteName": "Français JHS2 — Vocabulaire élargi",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Days, months, food and professions.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Vocabulaire"
-          ],
+          "suiteKeywords": ["BECE", "French", "Vocabulaire"],
           "questions": [
             {
               "question_number": 1,
               "description": "« lundi » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Monday",
-                "Sunday",
-                "Friday",
-                "Tuesday"
-              ],
+              "options": ["Monday", "Sunday", "Friday", "Tuesday"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -44,19 +34,10 @@
               "question_number": 2,
               "description": "Le premier mois de l'année est ___.",
               "hints": [],
-              "solution_steps": [
-                "janvier = January, the first month."
-              ],
-              "options": [
-                "janvier",
-                "février",
-                "mars",
-                "décembre"
-              ],
+              "solution_steps": ["janvier = January, the first month."],
+              "options": ["janvier", "février", "mars", "décembre"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -68,16 +49,9 @@
               "description": "« un professeur » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "a teacher",
-                "a doctor",
-                "a driver",
-                "a farmer"
-              ],
+              "options": ["a teacher", "a doctor", "a driver", "a farmer"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -89,16 +63,9 @@
               "description": "« un médecin » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "a doctor",
-                "a nurse",
-                "a teacher",
-                "a cook"
-              ],
+              "options": ["a doctor", "a nurse", "a teacher", "a cook"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -110,16 +77,9 @@
               "description": "« le pain » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "the bread",
-                "the water",
-                "the rice",
-                "the meat"
-              ],
+              "options": ["the bread", "the water", "the rice", "the meat"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -131,16 +91,9 @@
               "description": "« l'eau » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "water",
-                "milk",
-                "juice",
-                "wine"
-              ],
+              "options": ["water", "milk", "juice", "wine"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -152,16 +105,9 @@
               "description": "« aujourd'hui » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "today",
-                "yesterday",
-                "tomorrow",
-                "now"
-              ],
+              "options": ["today", "yesterday", "tomorrow", "now"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -172,19 +118,10 @@
               "question_number": 8,
               "description": "La semaine a ___ jours.",
               "hints": [],
-              "solution_steps": [
-                "A week has 7 (sept) days."
-              ],
-              "options": [
-                "cinq",
-                "six",
-                "sept",
-                "huit"
-              ],
+              "solution_steps": ["A week has 7 (sept) days."],
+              "options": ["cinq", "six", "sept", "huit"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -195,30 +132,18 @@
         },
         {
           "suiteName": "Français JHS2 — Adjectifs & possessifs",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Adjective agreement and possessive adjectives.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Grammaire"
-          ],
+          "suiteKeywords": ["BECE", "French", "Grammaire"],
           "questions": [
             {
               "question_number": 1,
               "description": "L'adjectif s'accorde en genre et en ___ avec le nom.",
               "hints": [],
-              "solution_steps": [
-                "Adjectives agree in gender and number."
-              ],
-              "options": [
-                "nombre",
-                "couleur",
-                "temps",
-                "verbe"
-              ],
+              "solution_steps": ["Adjectives agree in gender and number."],
+              "options": ["nombre", "couleur", "temps", "verbe"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -230,16 +155,9 @@
               "description": "Le féminin de « petit » est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "petit",
-                "petite",
-                "petits",
-                "petites"
-              ],
+              "options": ["petit", "petite", "petits", "petites"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -258,9 +176,7 @@
                 "qualificatifs"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -272,16 +188,9 @@
               "description": "« ___ livre » (my book — masculin).",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "mon",
-                "ma",
-                "mes",
-                "ton"
-              ],
+              "options": ["mon", "ma", "mes", "ton"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -293,16 +202,9 @@
               "description": "« ___ maison » (my house — féminin).",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "mon",
-                "ma",
-                "mes",
-                "ton"
-              ],
+              "options": ["mon", "ma", "mes", "ton"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -314,16 +216,9 @@
               "description": "Le pluriel de « mon stylo » est « ___ stylos ».",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "mon",
-                "ma",
-                "mes",
-                "ton"
-              ],
+              "options": ["mon", "ma", "mes", "ton"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -335,16 +230,9 @@
               "description": "Le féminin de « grand » est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "grande",
-                "grands",
-                "grandes",
-                "grand"
-              ],
+              "options": ["grande", "grands", "grandes", "grand"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -358,16 +246,9 @@
               "solution_steps": [
                 "« son ami » — son is used before a vowel sound."
               ],
-              "options": [
-                "son",
-                "sa",
-                "ses",
-                "leur"
-              ],
+              "options": ["son", "sa", "ses", "leur"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_2",
@@ -378,28 +259,18 @@
         },
         {
           "suiteName": "Français JHS2 — Conjugaison (présent)",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Present tense of more verbs including -ir verbs and faire.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Conjugaison"
-          ],
+          "suiteKeywords": ["BECE", "French", "Conjugaison"],
           "questions": [
             {
               "question_number": 1,
               "description": "« Nous ___ à l'école. » (aller)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "allons",
-                "allez",
-                "vont",
-                "va"
-              ],
+              "options": ["allons", "allez", "vont", "va"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -411,16 +282,9 @@
               "description": "« Vous ___ le français. » (parler)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "parlez",
-                "parlons",
-                "parle",
-                "parlent"
-              ],
+              "options": ["parlez", "parlons", "parle", "parlent"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -432,16 +296,9 @@
               "description": "« Je ___ mes devoirs. » (finir)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "finis",
-                "finit",
-                "finissons",
-                "finissent"
-              ],
+              "options": ["finis", "finit", "finissons", "finissent"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -453,16 +310,9 @@
               "description": "« Elle ___ à Accra. » (habiter)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "habite",
-                "habites",
-                "habitons",
-                "habitent"
-              ],
+              "options": ["habite", "habites", "habitons", "habitent"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -474,16 +324,9 @@
               "description": "« Ils ___ au football. » (jouer)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "joue",
-                "joues",
-                "jouons",
-                "jouent"
-              ],
+              "options": ["joue", "joues", "jouons", "jouent"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -495,16 +338,9 @@
               "description": "« Tu ___ du lait. » (boire)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "bois",
-                "boit",
-                "buvons",
-                "boivent"
-              ],
+              "options": ["bois", "boit", "buvons", "boivent"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_2",
@@ -515,19 +351,10 @@
               "question_number": 7,
               "description": "« J'___ faim. » (avoir)",
               "hints": [],
-              "solution_steps": [
-                "« J'ai faim » = I am hungry."
-              ],
-              "options": [
-                "ai",
-                "as",
-                "a",
-                "ont"
-              ],
+              "solution_steps": ["« J'ai faim » = I am hungry."],
+              "options": ["ai", "as", "a", "ont"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -541,16 +368,9 @@
               "solution_steps": [
                 "Weather uses faire: « Il fait beau » = The weather is nice."
               ],
-              "options": [
-                "fais",
-                "fait",
-                "faisons",
-                "font"
-              ],
+              "options": ["fais", "fait", "faisons", "font"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "HARD",
               "estimated_time_in_ms": 75000,
               "class_level": "jhs_2",
@@ -561,30 +381,18 @@
         },
         {
           "suiteName": "Français JHS2 — Négation & questions",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "The ne...pas negation and question words.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Grammaire"
-          ],
+          "suiteKeywords": ["BECE", "French", "Grammaire"],
           "questions": [
             {
               "question_number": 1,
               "description": "Pour dire « I do not speak », on écrit « Je ___ parle pas ».",
               "hints": [],
-              "solution_steps": [
-                "Negation frame: ne ... pas."
-              ],
-              "options": [
-                "ne",
-                "pas",
-                "non",
-                "plus"
-              ],
+              "solution_steps": ["Negation frame: ne ... pas."],
+              "options": ["ne", "pas", "non", "plus"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NEGATION_ET_QUESTIONS"
-              ],
+              "tags": ["TAG_NEGATION_ET_QUESTIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -596,16 +404,9 @@
               "description": "La négation se forme avec « ne ... ___ ».",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "pas",
-                "oui",
-                "non",
-                "bien"
-              ],
+              "options": ["pas", "oui", "non", "bien"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NEGATION_ET_QUESTIONS"
-              ],
+              "tags": ["TAG_NEGATION_ET_QUESTIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -617,16 +418,9 @@
               "description": "« Est-ce que tu parles français ? » est une ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "question",
-                "réponse",
-                "négation",
-                "salutation"
-              ],
+              "options": ["question", "réponse", "négation", "salutation"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NEGATION_ET_QUESTIONS"
-              ],
+              "tags": ["TAG_NEGATION_ET_QUESTIONS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -638,16 +432,9 @@
               "description": "Pour demander « where », on utilise ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "où",
-                "qui",
-                "quand",
-                "quoi"
-              ],
+              "options": ["où", "qui", "quand", "quoi"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NEGATION_ET_QUESTIONS"
-              ],
+              "tags": ["TAG_NEGATION_ET_QUESTIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -659,16 +446,9 @@
               "description": "Pour demander « when », on utilise ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "où",
-                "qui",
-                "quand",
-                "comment"
-              ],
+              "options": ["où", "qui", "quand", "comment"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NEGATION_ET_QUESTIONS"
-              ],
+              "tags": ["TAG_NEGATION_ET_QUESTIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -680,16 +460,9 @@
               "description": "Pour demander « who », on utilise ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "qui",
-                "où",
-                "quand",
-                "quoi"
-              ],
+              "options": ["qui", "où", "quand", "quoi"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NEGATION_ET_QUESTIONS"
-              ],
+              "tags": ["TAG_NEGATION_ET_QUESTIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -701,16 +474,9 @@
               "description": "« Je n'ai ___ de livre. »",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "pas",
-                "oui",
-                "très",
-                "bien"
-              ],
+              "options": ["pas", "oui", "très", "bien"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NEGATION_ET_QUESTIONS"
-              ],
+              "tags": ["TAG_NEGATION_ET_QUESTIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -722,16 +488,9 @@
               "description": "« Comment » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "how",
-                "where",
-                "when",
-                "who"
-              ],
+              "options": ["how", "where", "when", "who"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NEGATION_ET_QUESTIONS"
-              ],
+              "tags": ["TAG_NEGATION_ET_QUESTIONS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -742,28 +501,18 @@
         },
         {
           "suiteName": "Français JHS2 — Nombres, temps & compréhension",
+          "suiteType": "YEAR_TWO",
           "suiteDescription": "Larger numbers, telling age and time, and parts of the day.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Nombres"
-          ],
+          "suiteKeywords": ["BECE", "French", "Nombres"],
           "questions": [
             {
               "question_number": 1,
               "description": "« vingt » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "twenty",
-                "twelve",
-                "two",
-                "ten"
-              ],
+              "options": ["twenty", "twelve", "two", "ten"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -775,16 +524,9 @@
               "description": "« Il est ___ heures » (3:00).",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "trois",
-                "treize",
-                "trente",
-                "troisième"
-              ],
+              "options": ["trois", "treize", "trente", "troisième"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -796,16 +538,9 @@
               "description": "« Quel âge as-tu ? » demande ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "your age",
-                "your name",
-                "the time",
-                "the day"
-              ],
+              "options": ["your age", "your name", "the time", "the day"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COMPREHENSION"
-              ],
+              "tags": ["TAG_COMPREHENSION"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -824,9 +559,7 @@
                 "I am twelfth"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_COMPREHENSION"
-              ],
+              "tags": ["TAG_COMPREHENSION"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -845,9 +578,7 @@
                 "the noon"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_2",
@@ -859,16 +590,9 @@
               "description": "« demain » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "tomorrow",
-                "today",
-                "yesterday",
-                "now"
-              ],
+              "options": ["tomorrow", "today", "yesterday", "now"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -880,16 +604,9 @@
               "description": "« trente » en chiffre est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "13",
-                "30",
-                "3",
-                "33"
-              ],
+              "options": ["13", "30", "3", "33"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",
@@ -900,19 +617,10 @@
               "question_number": 8,
               "description": "« quinze » + « cinq » = ___.",
               "hints": [],
-              "solution_steps": [
-                "15 + 5 = 20 (vingt)."
-              ],
-              "options": [
-                "dix",
-                "vingt",
-                "vingt-cinq",
-                "dix-huit"
-              ],
+              "solution_steps": ["15 + 5 = 20 (vingt)."],
+              "options": ["dix", "vingt", "vingt-cinq", "dix-huit"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_2",

@@ -12,12 +12,9 @@
       "suites": [
         {
           "suiteName": "Français JHS1 — Salutations & Expressions",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Greetings, courtesy expressions and introducing oneself.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Salutations"
-          ],
+          "suiteKeywords": ["BECE", "French", "Salutations"],
           "questions": [
             {
               "question_number": 1,
@@ -26,16 +23,9 @@
               "solution_steps": [
                 "« Bonsoir » = Good evening (said in the evening)."
               ],
-              "options": [
-                "le matin",
-                "le soir",
-                "à midi",
-                "jamais"
-              ],
+              "options": ["le matin", "le soir", "à midi", "jamais"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_SALUTATIONS_ET_EXPRESSIONS"
-              ],
+              "tags": ["TAG_SALUTATIONS_ET_EXPRESSIONS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -46,19 +36,10 @@
               "question_number": 2,
               "description": "Pour dire « goodbye », on dit ___.",
               "hints": [],
-              "solution_steps": [
-                "« Au revoir » = Goodbye."
-              ],
-              "options": [
-                "Bonjour",
-                "Au revoir",
-                "Merci",
-                "Oui"
-              ],
+              "solution_steps": ["« Au revoir » = Goodbye."],
+              "options": ["Bonjour", "Au revoir", "Merci", "Oui"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_SALUTATIONS_ET_EXPRESSIONS"
-              ],
+              "tags": ["TAG_SALUTATIONS_ET_EXPRESSIONS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -69,19 +50,10 @@
               "question_number": 3,
               "description": "Pour remercier quelqu'un, on dit ___.",
               "hints": [],
-              "solution_steps": [
-                "« Merci » = Thank you."
-              ],
-              "options": [
-                "Merci",
-                "Pardon",
-                "Salut",
-                "Non"
-              ],
+              "solution_steps": ["« Merci » = Thank you."],
+              "options": ["Merci", "Pardon", "Salut", "Non"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_SALUTATIONS_ET_EXPRESSIONS"
-              ],
+              "tags": ["TAG_SALUTATIONS_ET_EXPRESSIONS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -93,16 +65,9 @@
               "description": "« S'il vous plaît » veut dire ___ (en anglais).",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Please",
-                "Thank you",
-                "Sorry",
-                "Hello"
-              ],
+              "options": ["Please", "Thank you", "Sorry", "Hello"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_SALUTATIONS_ET_EXPRESSIONS"
-              ],
+              "tags": ["TAG_SALUTATIONS_ET_EXPRESSIONS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -113,19 +78,10 @@
               "question_number": 5,
               "description": "Pour se présenter : « Je ___ Ama. »",
               "hints": [],
-              "solution_steps": [
-                "« Je m'appelle Ama » = My name is Ama."
-              ],
-              "options": [
-                "m'appelle",
-                "mange",
-                "vais",
-                "parle"
-              ],
+              "solution_steps": ["« Je m'appelle Ama » = My name is Ama."],
+              "options": ["m'appelle", "mange", "vais", "parle"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_SALUTATIONS_ET_EXPRESSIONS"
-              ],
+              "tags": ["TAG_SALUTATIONS_ET_EXPRESSIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -139,16 +95,9 @@
               "solution_steps": [
                 "« De rien » = You're welcome (reply to thanks)."
               ],
-              "options": [
-                "Merci",
-                "Bonjour",
-                "Non",
-                "Pardon"
-              ],
+              "options": ["Merci", "Bonjour", "Non", "Pardon"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_SALUTATIONS_ET_EXPRESSIONS"
-              ],
+              "tags": ["TAG_SALUTATIONS_ET_EXPRESSIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -159,19 +108,10 @@
               "question_number": 7,
               "description": "Entre amis, on dit ___ pour saluer.",
               "hints": [],
-              "solution_steps": [
-                "« Salut » = Hi (informal)."
-              ],
-              "options": [
-                "Salut",
-                "Adieu",
-                "Pardon",
-                "Bonsoir"
-              ],
+              "solution_steps": ["« Salut » = Hi (informal)."],
+              "options": ["Salut", "Adieu", "Pardon", "Bonsoir"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_SALUTATIONS_ET_EXPRESSIONS"
-              ],
+              "tags": ["TAG_SALUTATIONS_ET_EXPRESSIONS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -183,16 +123,9 @@
               "description": "« Comment t'appelles-tu ? » demande ___ (en anglais).",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "your name",
-                "your age",
-                "your school",
-                "your house"
-              ],
+              "options": ["your name", "your age", "your school", "your house"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_SALUTATIONS_ET_EXPRESSIONS"
-              ],
+              "tags": ["TAG_SALUTATIONS_ET_EXPRESSIONS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -203,28 +136,18 @@
         },
         {
           "suiteName": "Français JHS1 — La famille & l'école",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Vocabulary for family members and common school objects.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Vocabulaire"
-          ],
+          "suiteKeywords": ["BECE", "French", "Vocabulaire"],
           "questions": [
             {
               "question_number": 1,
               "description": "« le père » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "the father",
-                "the mother",
-                "the boy",
-                "the friend"
-              ],
+              "options": ["the father", "the mother", "the boy", "the friend"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -236,16 +159,9 @@
               "description": "« la mère » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "the mother",
-                "the sister",
-                "the aunt",
-                "the girl"
-              ],
+              "options": ["the mother", "the sister", "the aunt", "the girl"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -257,16 +173,9 @@
               "description": "« le frère » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "the brother",
-                "the sister",
-                "the father",
-                "the son"
-              ],
+              "options": ["the brother", "the sister", "the father", "the son"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -285,9 +194,7 @@
                 "the aunt"
               ],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -299,16 +206,9 @@
               "description": "Le mot français pour « school » est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "l'école",
-                "la maison",
-                "la voiture",
-                "le marché"
-              ],
+              "options": ["l'école", "la maison", "la voiture", "le marché"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -320,16 +220,9 @@
               "description": "Le mot français pour « book » est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "le livre",
-                "le stylo",
-                "la table",
-                "la porte"
-              ],
+              "options": ["le livre", "le stylo", "la table", "la porte"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -341,16 +234,9 @@
               "description": "« le stylo » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "the pen",
-                "the book",
-                "the bag",
-                "the chair"
-              ],
+              "options": ["the pen", "the book", "the bag", "the chair"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -362,16 +248,9 @@
               "description": "« la maison » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "the house",
-                "the school",
-                "the car",
-                "the market"
-              ],
+              "options": ["the house", "the school", "the car", "the market"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -382,28 +261,18 @@
         },
         {
           "suiteName": "Français JHS1 — Couleurs, animaux & nombres",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Colours, animals and numbers one to ten.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Vocabulaire"
-          ],
+          "suiteKeywords": ["BECE", "French", "Vocabulaire"],
           "questions": [
             {
               "question_number": 1,
               "description": "« rouge » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "red",
-                "blue",
-                "green",
-                "black"
-              ],
+              "options": ["red", "blue", "green", "black"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -415,16 +284,9 @@
               "description": "« bleu » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "blue",
-                "red",
-                "white",
-                "yellow"
-              ],
+              "options": ["blue", "red", "white", "yellow"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -436,16 +298,9 @@
               "description": "« un chat » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "a cat",
-                "a dog",
-                "a bird",
-                "a goat"
-              ],
+              "options": ["a cat", "a dog", "a bird", "a goat"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -457,16 +312,9 @@
               "description": "« un chien » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "a dog",
-                "a cat",
-                "a cow",
-                "a sheep"
-              ],
+              "options": ["a dog", "a cat", "a cow", "a sheep"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -478,16 +326,9 @@
               "description": "Le nombre « cinq » en chiffre est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "3",
-                "4",
-                "5",
-                "6"
-              ],
+              "options": ["3", "4", "5", "6"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -499,16 +340,9 @@
               "description": "« dix » veut dire ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "ten",
-                "two",
-                "six",
-                "nine"
-              ],
+              "options": ["ten", "two", "six", "nine"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -520,16 +354,9 @@
               "description": "Le nombre 3 s'écrit ___ en français.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "deux",
-                "trois",
-                "quatre",
-                "cinq"
-              ],
+              "options": ["deux", "trois", "quatre", "cinq"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -540,19 +367,10 @@
               "question_number": 8,
               "description": "« sept » + « trois » = ___.",
               "hints": [],
-              "solution_steps": [
-                "7 + 3 = 10 (dix)."
-              ],
-              "options": [
-                "huit",
-                "neuf",
-                "dix",
-                "onze"
-              ],
+              "solution_steps": ["7 + 3 = 10 (dix)."],
+              "options": ["huit", "neuf", "dix", "onze"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NOMBRES_ET_TEMPS"
-              ],
+              "tags": ["TAG_NOMBRES_ET_TEMPS"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -563,28 +381,18 @@
         },
         {
           "suiteName": "Français JHS1 — Les articles & le genre",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Definite and indefinite articles and grammatical gender.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Grammaire"
-          ],
+          "suiteKeywords": ["BECE", "French", "Grammaire"],
           "questions": [
             {
               "question_number": 1,
               "description": "L'article défini masculin singulier est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "le",
-                "la",
-                "les",
-                "un"
-              ],
+              "options": ["le", "la", "les", "un"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -596,16 +404,9 @@
               "description": "L'article défini féminin singulier est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "le",
-                "la",
-                "les",
-                "une"
-              ],
+              "options": ["le", "la", "les", "une"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -617,16 +418,9 @@
               "description": "Le pluriel de « le livre » est « ___ livres ».",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "le",
-                "la",
-                "les",
-                "un"
-              ],
+              "options": ["le", "la", "les", "un"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -638,16 +432,9 @@
               "description": "« un » et « une » sont des articles ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "définis",
-                "indéfinis",
-                "pluriels",
-                "négatifs"
-              ],
+              "options": ["définis", "indéfinis", "pluriels", "négatifs"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -658,19 +445,10 @@
               "question_number": 5,
               "description": "On écrit « ___ école » (mot féminin commençant par une voyelle).",
               "hints": [],
-              "solution_steps": [
-                "Before a vowel, le/la becomes l' → l'école."
-              ],
-              "options": [
-                "le",
-                "la",
-                "l'",
-                "les"
-              ],
+              "solution_steps": ["Before a vowel, le/la becomes l' → l'école."],
+              "options": ["le", "la", "l'", "les"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -682,16 +460,9 @@
               "description": "Le pluriel de « une maison » est « ___ maisons ».",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "un",
-                "une",
-                "des",
-                "le"
-              ],
+              "options": ["un", "une", "des", "le"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -703,16 +474,9 @@
               "description": "« ___ chat est noir. » (article défini masculin)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Le",
-                "La",
-                "Les",
-                "Une"
-              ],
+              "options": ["Le", "La", "Les", "Une"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -724,16 +488,9 @@
               "description": "Le mot « fille » est de genre ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "masculin",
-                "féminin",
-                "pluriel",
-                "neutre"
-              ],
+              "options": ["masculin", "féminin", "pluriel", "neutre"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GRAMMAIRE"
-              ],
+              "tags": ["TAG_GRAMMAIRE"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -744,30 +501,18 @@
         },
         {
           "suiteName": "Français JHS1 — Conjugaison (présent)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Present tense of être, avoir, aller and common -er verbs.",
-          "suiteKeywords": [
-            "BECE",
-            "French",
-            "Conjugaison"
-          ],
+          "suiteKeywords": ["BECE", "French", "Conjugaison"],
           "questions": [
             {
               "question_number": 1,
               "description": "« Je ___ un élève. » (être)",
               "hints": [],
-              "solution_steps": [
-                "être: je suis = I am."
-              ],
-              "options": [
-                "suis",
-                "es",
-                "est",
-                "sont"
-              ],
+              "solution_steps": ["être: je suis = I am."],
+              "options": ["suis", "es", "est", "sont"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -778,19 +523,10 @@
               "question_number": 2,
               "description": "« Tu ___ un livre. » (avoir)",
               "hints": [],
-              "solution_steps": [
-                "avoir: tu as = you have."
-              ],
-              "options": [
-                "ai",
-                "as",
-                "a",
-                "ont"
-              ],
+              "solution_steps": ["avoir: tu as = you have."],
+              "options": ["ai", "as", "a", "ont"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -801,19 +537,10 @@
               "question_number": 3,
               "description": "« Il ___ à l'école. » (aller)",
               "hints": [],
-              "solution_steps": [
-                "aller: il va = he goes."
-              ],
-              "options": [
-                "vais",
-                "vas",
-                "va",
-                "vont"
-              ],
+              "solution_steps": ["aller: il va = he goes."],
+              "options": ["vais", "vas", "va", "vont"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -825,16 +552,9 @@
               "description": "« Nous ___ français. » (parler)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "parle",
-                "parles",
-                "parlons",
-                "parlent"
-              ],
+              "options": ["parle", "parles", "parlons", "parlent"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -846,16 +566,9 @@
               "description": "« Elle ___ une pomme. » (manger)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "mange",
-                "manges",
-                "mangeons",
-                "mangent"
-              ],
+              "options": ["mange", "manges", "mangeons", "mangent"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -867,16 +580,9 @@
               "description": "« Vous ___ contents. » (être)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "suis",
-                "es",
-                "êtes",
-                "sont"
-              ],
+              "options": ["suis", "es", "êtes", "sont"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -888,16 +594,9 @@
               "description": "« Ils ___ des amis. » (avoir)",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "ai",
-                "as",
-                "avons",
-                "ont"
-              ],
+              "options": ["ai", "as", "avons", "ont"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_CONJUGAISON"
-              ],
+              "tags": ["TAG_CONJUGAISON"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -909,16 +608,9 @@
               "description": "Le contraire de « oui » est ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "non",
-                "oui",
-                "si",
-                "pas"
-              ],
+              "options": ["non", "oui", "si", "pas"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_VOCABULAIRE"
-              ],
+              "tags": ["TAG_VOCABULAIRE"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",

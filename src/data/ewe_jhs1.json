@@ -12,30 +12,18 @@
       "suites": [
         {
           "suiteName": "Eʋe JHS1 — Gbedoname (Greetings)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Greetings and courtesy expressions. Grounded in the Ewe Language Guide (Bureau of Ghana Languages).",
-          "suiteKeywords": [
-            "BECE",
-            "Ewe",
-            "Greetings"
-          ],
+          "suiteKeywords": ["BECE", "Ewe", "Greetings"],
           "questions": [
             {
               "question_number": 1,
               "description": "Ne ŋdi ke la, míedona gbe be ___.",
               "hints": [],
-              "solution_steps": [
-                "Ŋdi = Good morning."
-              ],
-              "options": [
-                "Ŋdi",
-                "Ŋdɔ",
-                "Fiẽ",
-                "Dɔ agbe"
-              ],
+              "solution_steps": ["Ŋdi = Good morning."],
+              "options": ["Ŋdi", "Ŋdɔ", "Fiẽ", "Dɔ agbe"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GBEDONAME"
-              ],
+              "tags": ["TAG_GBEDONAME"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -46,19 +34,10 @@
               "question_number": 2,
               "description": "Ne ame aɖe va aƒe me la, míegblɔna be ___.",
               "hints": [],
-              "solution_steps": [
-                "Woezɔ = Welcome."
-              ],
-              "options": [
-                "Woezɔ",
-                "Hede nyuie",
-                "Akpe",
-                "Agoo"
-              ],
+              "solution_steps": ["Woezɔ = Welcome."],
+              "options": ["Woezɔ", "Hede nyuie", "Akpe", "Agoo"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GBEDONAME"
-              ],
+              "tags": ["TAG_GBEDONAME"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -70,16 +49,9 @@
               "description": "« Akpe » fia nu ka le Eŋlisigbe me?",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Thank you",
-                "Please",
-                "Sorry",
-                "Welcome"
-              ],
+              "options": ["Thank you", "Please", "Sorry", "Welcome"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GBEDONAME"
-              ],
+              "tags": ["TAG_GBEDONAME"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -90,19 +62,10 @@
               "question_number": 4,
               "description": "Ne èle dzodzoge la, ègblɔna be ___.",
               "hints": [],
-              "solution_steps": [
-                "Hede nyuie = Go well / Goodbye."
-              ],
-              "options": [
-                "Hede nyuie",
-                "Ŋdi",
-                "Woezɔ",
-                "Agoo"
-              ],
+              "solution_steps": ["Hede nyuie = Go well / Goodbye."],
+              "options": ["Hede nyuie", "Ŋdi", "Woezɔ", "Agoo"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GBEDONAME"
-              ],
+              "tags": ["TAG_GBEDONAME"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -114,16 +77,9 @@
               "description": "« Meɖe kuku » fia ___ le Eŋlisigbe me.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Please",
-                "Thank you",
-                "Yes",
-                "No"
-              ],
+              "options": ["Please", "Thank you", "Yes", "No"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GBEDONAME"
-              ],
+              "tags": ["TAG_GBEDONAME"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -137,16 +93,9 @@
               "solution_steps": [
                 "Agoo is a call for attention; the reply is Amee."
               ],
-              "options": [
-                "Agoo",
-                "Amee",
-                "Akpe",
-                "Yoo"
-              ],
+              "options": ["Agoo", "Amee", "Akpe", "Yoo"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GBEDONAME"
-              ],
+              "tags": ["TAG_GBEDONAME"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -157,19 +106,10 @@
               "question_number": 7,
               "description": "Gbe si míedona le fiẽ me la nye ___.",
               "hints": [],
-              "solution_steps": [
-                "Fiẽ = Good evening."
-              ],
-              "options": [
-                "Fiẽ",
-                "Ŋdi",
-                "Ŋdɔ",
-                "Woezɔ"
-              ],
+              "solution_steps": ["Fiẽ = Good evening."],
+              "options": ["Fiẽ", "Ŋdi", "Ŋdɔ", "Woezɔ"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GBEDONAME"
-              ],
+              "tags": ["TAG_GBEDONAME"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -180,19 +120,10 @@
               "question_number": 8,
               "description": "« Ŋdɔ » fia gbedoname na ɣeyiɣi kae?",
               "hints": [],
-              "solution_steps": [
-                "Ŋdɔ = Good afternoon."
-              ],
-              "options": [
-                "afternoon",
-                "morning",
-                "evening",
-                "night"
-              ],
+              "solution_steps": ["Ŋdɔ = Good afternoon."],
+              "options": ["afternoon", "morning", "evening", "night"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_GBEDONAME"
-              ],
+              "tags": ["TAG_GBEDONAME"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -203,28 +134,18 @@
         },
         {
           "suiteName": "Eʋe JHS1 — Ƒome kple Ŋutilã (Family & Body)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Family members and parts of the body.",
-          "suiteKeywords": [
-            "BECE",
-            "Ewe",
-            "Nyagbewo"
-          ],
+          "suiteKeywords": ["BECE", "Ewe", "Nyagbewo"],
           "questions": [
             {
               "question_number": 1,
               "description": "Le Eʋegbe me, « fofo » (tɔ) fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "father",
-                "mother",
-                "brother",
-                "uncle"
-              ],
+              "options": ["father", "mother", "brother", "uncle"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -236,16 +157,9 @@
               "description": "« Dada » (nɔ) fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "mother",
-                "father",
-                "sister",
-                "aunt"
-              ],
+              "options": ["mother", "father", "sister", "aunt"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -257,16 +171,9 @@
               "description": "« Nɔvi » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sibling",
-                "friend",
-                "stranger",
-                "child"
-              ],
+              "options": ["sibling", "friend", "stranger", "child"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -278,16 +185,9 @@
               "description": "« Ta » nye ŋutilã ƒe akpa aɖe. Efia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "head",
-                "hand",
-                "leg",
-                "eye"
-              ],
+              "options": ["head", "hand", "leg", "eye"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -299,16 +199,9 @@
               "description": "« Asi » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "hand",
-                "leg",
-                "ear",
-                "nose"
-              ],
+              "options": ["hand", "leg", "ear", "nose"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -320,16 +213,9 @@
               "description": "« Ŋku » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "eye",
-                "ear",
-                "mouth",
-                "nose"
-              ],
+              "options": ["eye", "ear", "mouth", "nose"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -341,16 +227,9 @@
               "description": "« Afɔ » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "leg",
-                "hand",
-                "head",
-                "ear"
-              ],
+              "options": ["leg", "hand", "head", "ear"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -362,16 +241,9 @@
               "description": "« Nu » (as a body part) fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "mouth",
-                "nose",
-                "ear",
-                "eye"
-              ],
+              "options": ["mouth", "nose", "ear", "eye"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -382,28 +254,18 @@
         },
         {
           "suiteName": "Eʋe JHS1 — Lãwo kple Dzɔdzɔme (Animals & Nature)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Animals, water, fire, the sun, food and God.",
-          "suiteKeywords": [
-            "BECE",
-            "Ewe",
-            "Nyagbewo"
-          ],
+          "suiteKeywords": ["BECE", "Ewe", "Nyagbewo"],
           "questions": [
             {
               "question_number": 1,
               "description": "« Avu » nye lã si fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "dog",
-                "cat",
-                "goat",
-                "sheep"
-              ],
+              "options": ["dog", "cat", "goat", "sheep"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -415,16 +277,9 @@
               "description": "« Koklo » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "fowl",
-                "dog",
-                "cat",
-                "cow"
-              ],
+              "options": ["fowl", "dog", "cat", "cow"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -436,16 +291,9 @@
               "description": "« Gbɔ̃ » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "goat",
-                "sheep",
-                "cow",
-                "dog"
-              ],
+              "options": ["goat", "sheep", "cow", "dog"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -457,16 +305,9 @@
               "description": "« Tsi » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "water",
-                "fire",
-                "food",
-                "oil"
-              ],
+              "options": ["water", "fire", "food", "oil"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -478,16 +319,9 @@
               "description": "« Dzo » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "fire",
-                "water",
-                "wind",
-                "rain"
-              ],
+              "options": ["fire", "water", "wind", "rain"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -499,16 +333,9 @@
               "description": "« Ɣe » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "sun",
-                "moon",
-                "star",
-                "cloud"
-              ],
+              "options": ["sun", "moon", "star", "cloud"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -520,16 +347,9 @@
               "description": "« Nuɖuɖu » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "food",
-                "water",
-                "house",
-                "book"
-              ],
+              "options": ["food", "water", "house", "book"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -541,16 +361,9 @@
               "description": "« Mawu » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "God",
-                "king",
-                "chief",
-                "elder"
-              ],
+              "options": ["God", "king", "chief", "elder"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -561,28 +374,18 @@
         },
         {
           "suiteName": "Eʋe JHS1 — Xexlẽdzesiwo (Numbers)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "Cardinal numbers one to ten and beyond.",
-          "suiteKeywords": [
-            "BECE",
-            "Ewe",
-            "Numbers"
-          ],
+          "suiteKeywords": ["BECE", "Ewe", "Numbers"],
           "questions": [
             {
               "question_number": 1,
               "description": "« ɖeka » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "one",
-                "two",
-                "three",
-                "ten"
-              ],
+              "options": ["one", "two", "three", "ten"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_XEXLEDZESIWO"
-              ],
+              "tags": ["TAG_XEXLEDZESIWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -594,16 +397,9 @@
               "description": "« eve » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "two",
-                "three",
-                "four",
-                "five"
-              ],
+              "options": ["two", "three", "four", "five"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_XEXLEDZESIWO"
-              ],
+              "tags": ["TAG_XEXLEDZESIWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -615,16 +411,9 @@
               "description": "« etɔ̃ » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "three",
-                "four",
-                "five",
-                "six"
-              ],
+              "options": ["three", "four", "five", "six"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_XEXLEDZESIWO"
-              ],
+              "tags": ["TAG_XEXLEDZESIWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -636,16 +425,9 @@
               "description": "« atɔ̃ » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "five",
-                "four",
-                "six",
-                "seven"
-              ],
+              "options": ["five", "four", "six", "seven"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_XEXLEDZESIWO"
-              ],
+              "tags": ["TAG_XEXLEDZESIWO"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -657,16 +439,9 @@
               "description": "« ewo » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "ten",
-                "nine",
-                "eight",
-                "twelve"
-              ],
+              "options": ["ten", "nine", "eight", "twelve"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_XEXLEDZESIWO"
-              ],
+              "tags": ["TAG_XEXLEDZESIWO"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -678,16 +453,9 @@
               "description": "The Ewe word for « four » is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "ene",
-                "atɔ̃",
-                "ade",
-                "adre"
-              ],
+              "options": ["ene", "atɔ̃", "ade", "adre"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_XEXLEDZESIWO"
-              ],
+              "tags": ["TAG_XEXLEDZESIWO"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -699,16 +467,9 @@
               "description": "The Ewe word for « seven » is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "ade",
-                "adre",
-                "enyi",
-                "asiekɛ"
-              ],
+              "options": ["ade", "adre", "enyi", "asiekɛ"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_XEXLEDZESIWO"
-              ],
+              "tags": ["TAG_XEXLEDZESIWO"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -720,16 +481,9 @@
               "description": "The Ewe word for « one hundred » is ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "alafa",
-                "akpe",
-                "ewo",
-                "asiekɛ"
-              ],
+              "options": ["alafa", "akpe", "ewo", "asiekɛ"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_XEXLEDZESIWO"
-              ],
+              "tags": ["TAG_XEXLEDZESIWO"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -740,30 +494,18 @@
         },
         {
           "suiteName": "Eʋe JHS1 — Eʋe Dekɔnu kple Nunya (Culture & Basics)",
+          "suiteType": "YEAR_ONE",
           "suiteDescription": "The Ewe festival, region, chief, home and basic pronouns.",
-          "suiteKeywords": [
-            "BECE",
-            "Ewe",
-            "Dekɔnu"
-          ],
+          "suiteKeywords": ["BECE", "Ewe", "Dekɔnu"],
           "questions": [
             {
               "question_number": 1,
               "description": "Azã gã si Eʋeawo (Anlo) ɖuna la nye ___.",
               "hints": [],
-              "solution_steps": [
-                "Hogbetsotso is the great Anlo-Ewe festival."
-              ],
-              "options": [
-                "Hogbetsotso",
-                "Homowo",
-                "Odwira",
-                "Aboakyer"
-              ],
+              "solution_steps": ["Hogbetsotso is the great Anlo-Ewe festival."],
+              "options": ["Hogbetsotso", "Homowo", "Odwira", "Aboakyer"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_EVE_DEKONU"
-              ],
+              "tags": ["TAG_EVE_DEKONU"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -775,16 +517,9 @@
               "description": "Eʋeawo teƒe le Ghana nye ___ Region.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Volta",
-                "Ashanti",
-                "Greater Accra",
-                "Northern"
-              ],
+              "options": ["Volta", "Ashanti", "Greater Accra", "Northern"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_EVE_DEKONU"
-              ],
+              "tags": ["TAG_EVE_DEKONU"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -795,19 +530,10 @@
               "question_number": 3,
               "description": "Eʋeawo yɔa woƒe fia be ___.",
               "hints": [],
-              "solution_steps": [
-                "An Ewe chief is addressed as Togbe/Togbui."
-              ],
-              "options": [
-                "Togbe",
-                "Nana",
-                "Mantse",
-                "Naa"
-              ],
+              "solution_steps": ["An Ewe chief is addressed as Togbe/Togbui."],
+              "options": ["Togbe", "Nana", "Mantse", "Naa"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_EVE_DEKONU"
-              ],
+              "tags": ["TAG_EVE_DEKONU"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -819,16 +545,9 @@
               "description": "« Aƒe » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "home",
-                "school",
-                "market",
-                "farm"
-              ],
+              "options": ["home", "school", "market", "farm"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -840,16 +559,9 @@
               "description": "« Suku » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "school",
-                "church",
-                "market",
-                "farm"
-              ],
+              "options": ["school", "church", "market", "farm"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_NYAGBEWO"
-              ],
+              "tags": ["TAG_NYAGBEWO"],
               "difficulty": "EASY",
               "estimated_time_in_ms": 45000,
               "class_level": "jhs_1",
@@ -861,16 +573,9 @@
               "description": "Le Eʋegbe me, « me » nye ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "I",
-                "you",
-                "he",
-                "they"
-              ],
+              "options": ["I", "you", "he", "they"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_KASASIN"
-              ],
+              "tags": ["TAG_KASASIN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -882,16 +587,9 @@
               "description": "« Wò » fia ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "you",
-                "I",
-                "he",
-                "we"
-              ],
+              "options": ["you", "I", "he", "we"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_KASASIN"
-              ],
+              "tags": ["TAG_KASASIN"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
@@ -903,16 +601,9 @@
               "description": "Eʋegbe wodona le Ghana, Togo kple ___.",
               "hints": [],
               "solution_steps": [],
-              "options": [
-                "Benin",
-                "Mali",
-                "Niger",
-                "Chad"
-              ],
+              "options": ["Benin", "Mali", "Niger", "Chad"],
               "type": "MULTIPLE_CHOICE",
-              "tags": [
-                "TAG_EVE_DEKONU"
-              ],
+              "tags": ["TAG_EVE_DEKONU"],
               "difficulty": "MEDIUM",
               "estimated_time_in_ms": 60000,
               "class_level": "jhs_1",
