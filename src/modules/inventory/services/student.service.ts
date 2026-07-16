@@ -161,12 +161,14 @@ export class StudentService {
       where: {
         id,
       },
-      relations: ['subscribed_courses'],
+      relations: ['subscribed_courses', 'subscribed_categories'],
     });
 
     if (!student) {
       throw new NotFoundException('Student not found');
     }
+
+    const categoryId = student.subscribed_categories?.[0]?.id;
 
     const courses = await this.courseRepository.find({
       where: {
@@ -192,17 +194,29 @@ export class StudentService {
         Boolean(student.subscribed_courses.find((crs) => crs.id === c.id)),
     );
 
-    return withVersion.map((course) => ({
-      ...course,
-      is_subscribed: Boolean(
-        student.subscribed_courses.find((crs) => crs.id === course.id),
-      ),
-      total_questions: course.approved_version.questions.length,
-      estimated_duration: course.approved_version.questions.reduce(
-        (acc, question) => acc + question.estimated_time_in_ms,
-        0,
-      ),
-    }));
+    return withVersion.map((course) => {
+      const test_suites = categoryId
+        ? course.approved_version.test_suites.filter(
+            (suite) => suite.categoryId === categoryId,
+          )
+        : course.approved_version.test_suites;
+
+      return {
+        ...course,
+        approved_version: {
+          ...course.approved_version,
+          test_suites,
+        },
+        is_subscribed: Boolean(
+          student.subscribed_courses.find((crs) => crs.id === course.id),
+        ),
+        total_questions: course.approved_version.questions.length,
+        estimated_duration: course.approved_version.questions.reduce(
+          (acc, question) => acc + question.estimated_time_in_ms,
+          0,
+        ),
+      };
+    });
   }
 
   async listCartCourses({ id }: { id: string }): Promise<Course[]> {
