@@ -27,6 +27,7 @@ export enum SuiteType {
   YEAR_THREE = 'YEAR_THREE',
   MIXED = 'MIXED',
   PAST_QUESTIONS = 'PAST_QUESTIONS',
+  // deprecated: will be removed later
   CLASS = 'CLASS',
   TOPIC = 'TOPIC',
 }
@@ -79,6 +80,9 @@ export class TestSuite {
   @Field(() => [Question], { nullable: true })
   @OneToMany(() => Question, (question) => question.test_suite)
   questions: Question[];
+
+  @Column({ nullable: true })
+  categoryId: string;
 
   @ManyToOne(() => Version, (course) => course.test_suites)
   course_version: Version;

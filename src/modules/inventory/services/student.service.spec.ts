@@ -338,6 +338,44 @@ describe('StudentService', () => {
         studentService.listOrganizationCourses({ id: '00000000-0000-0000-0000-000000000000' }),
       ).rejects.toThrow(new NotFoundException('Student not found'));
     });
+
+    it('filters test suites by the category the student is subscribed to', async () => {
+      const { student, course, category } = await setupData();
+      student.subscribed_courses = [course];
+      student.subscribed_categories = [category];
+      await studentRepository.save(student);
+
+      const otherCategory = new Category();
+      otherCategory.avatar_url = 'https://example.com/cat2.jpg';
+      otherCategory.name = 'Other Category';
+      otherCategory.organization = category.organization;
+      await categoryRepository.save(otherCategory);
+
+      const matchingSuite = new TestSuite();
+      matchingSuite.title = 'Matching Suite';
+      matchingSuite.description = 'Desc';
+      matchingSuite.keywords = [];
+      matchingSuite.categoryId = category.id;
+      matchingSuite.course_version = course.approved_version;
+      await testSuiteRepository.save(matchingSuite);
+
+      const otherSuite = new TestSuite();
+      otherSuite.title = 'Other Suite';
+      otherSuite.description = 'Desc';
+      otherSuite.keywords = [];
+      otherSuite.categoryId = otherCategory.id;
+      otherSuite.course_version = course.approved_version;
+      await testSuiteRepository.save(otherSuite);
+
+      const result = await studentService.listOrganizationCourses({
+        id: student.id,
+      });
+
+      const suiteTitles = result[0].approved_version.test_suites.map(
+        (s) => s.title,
+      );
+      expect(suiteTitles).toEqual(['Matching Suite']);
+    });
   });
 
   describe('listOrganizationCoursesPaginated', () => {
