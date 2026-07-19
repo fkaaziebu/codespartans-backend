@@ -1,8 +1,9 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Job } from 'bullmq';
 import { Repository } from 'typeorm';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { SubscriptionPlan } from '../entities/subscription-plan.entity';
 import { PaymentService } from './payment.service';
 
@@ -15,12 +16,13 @@ const TRIAL_PLAN_KEY: Record<string, string> = {
 @Processor('signup-queue')
 @Injectable()
 export class SignupConsumer extends WorkerHost {
-  private readonly logger = new Logger(SignupConsumer.name);
+  private readonly log = this.loggerRegistry.getLogger('demo');
 
   constructor(
     @InjectRepository(SubscriptionPlan)
     private readonly planRepo: Repository<SubscriptionPlan>,
     private readonly paymentService: PaymentService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {
     super();
   }
@@ -32,7 +34,7 @@ export class SignupConsumer extends WorkerHost {
 
         const planKey = TRIAL_PLAN_KEY[role];
         if (!planKey) {
-          this.logger.warn(`Unknown role "${role}" for free trial. Skipping.`);
+          this.log.warn({ role }, 'demo.signup.unknown_role');
           return;
         }
 
@@ -40,14 +42,12 @@ export class SignupConsumer extends WorkerHost {
           where: { plan_key: planKey, is_active: true },
         });
         if (!freePlan) {
-          this.logger.warn(
-            `No active plan found for key "${planKey}". Skipping for ${email}`,
-          );
+          this.log.warn({ planKey }, 'demo.signup.no_active_plan');
           return;
         }
 
         await this.paymentService.activateFreeTrial(email, freePlan, role, []);
-        this.logger.log(`Free trial provisioned for ${email} [${role}]`);
+        this.log.info({ role }, 'demo.signup.free_trial_provisioned');
         break;
       }
     }

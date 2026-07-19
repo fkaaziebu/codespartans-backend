@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Admin as AdminTypeClass } from 'src/modules/auth/entities/admin.entity';
 import { Instructor as InstructorTypeClass } from 'src/modules/auth/entities/instructor.entity';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { Repository } from 'typeorm';
 import { Admin } from '../entities/admin.entity';
 import { Instructor } from '../entities/instructor.entity';
@@ -17,11 +18,14 @@ import { SignupProducer } from './signup.producer';
 
 @Injectable()
 export class OrganizationService {
+  private readonly log = this.loggerRegistry.getLogger('auth');
+
   constructor(
     @InjectRepository(Organization)
     private organizationRepository: Repository<Organization>,
     private jwtService: JwtService,
     private readonly signupProducer: SignupProducer,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async registerOrganization({
@@ -43,6 +47,9 @@ export class OrganizationService {
         );
 
         if (existingOrganization) {
+          this.log.warn(
+            'auth.organization.register.duplicate_email',
+          );
           throw new Error('Organization with this email already exists');
         }
 
@@ -54,6 +61,11 @@ export class OrganizationService {
         await transactionalEntityManager.save(Organization, organization);
 
         await this.signupProducer.enqueueFreeTrial({ email, role: 'ORGANIZATION' });
+
+        this.log.info(
+          { organizationId: organization.id },
+          'auth.organization.registered',
+        );
 
         return { message: 'Organization registered successfully' };
       },
@@ -172,6 +184,7 @@ export class OrganizationService {
         );
 
         if (!organization) {
+          this.log.warn('auth.organization.login.not_found');
           throw new BadRequestException('Email or password is incorrect');
         }
 
@@ -181,6 +194,10 @@ export class OrganizationService {
         );
 
         if (!isPasswordValid) {
+          this.log.warn(
+            { organizationId: organization.id },
+            'auth.organization.login.invalid_password',
+          );
           throw new BadRequestException('Email or password is incorrect');
         }
 
@@ -193,6 +210,11 @@ export class OrganizationService {
         };
 
         const access_token = this.jwtService.sign(payload);
+
+        this.log.info(
+          { organizationId: organization.id },
+          'auth.organization.login.success',
+        );
 
         return {
           ...organization,

@@ -16,6 +16,7 @@ import { Category } from '../../inventory/entities/category.entity';
 import { ILike, Repository } from 'typeorm';
 import { SchoolStudent } from '../entities/school-student.entity';
 import { AddSchoolStudentInput } from '../inputs/add-school-student.input';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import {
   EnrollStudentResult,
   LoginSchoolStudentResponse,
@@ -23,6 +24,8 @@ import {
 
 @Injectable()
 export class SchoolService {
+  private readonly log = this.loggerRegistry.getLogger('school');
+
   constructor(
     @InjectRepository(SchoolStudent)
     private readonly schoolStudentRepo: Repository<SchoolStudent>,
@@ -36,6 +39,7 @@ export class SchoolService {
     private readonly cartRepo: Repository<Cart>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async addSchoolStudent(
@@ -92,6 +96,11 @@ export class SchoolService {
 
       await em.save(SchoolStudent, schoolStudent);
 
+      this.log.info(
+        { organizationId: orgId, studentId: student.id },
+        'school.student.enrolled',
+      );
+
       return { message: 'Student enrolled successfully', pin: rawPin };
     });
   }
@@ -100,6 +109,11 @@ export class SchoolService {
     orgId: string,
     students: AddSchoolStudentInput[],
   ): Promise<EnrollStudentResult[]> {
+    this.log.info(
+      { organizationId: orgId, studentCount: students.length },
+      'school.bulk_enroll.start',
+    );
+
     return this.orgRepo.manager.transaction(async (em) => {
       const org = await em.findOne(Organization, {
         where: { id: orgId },
@@ -155,6 +169,11 @@ export class SchoolService {
 
         results.push({ full_name: input.full_name, username, pin: rawPin });
       }
+
+      this.log.info(
+        { organizationId: orgId, enrolledCount: results.length },
+        'school.bulk_enroll.completed',
+      );
 
       return results;
     });

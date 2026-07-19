@@ -26,6 +26,7 @@ import {
 } from '../../inventory/entities/course.entity';
 import { ClassLevel } from '../../parent/entities/child.entity';
 import { HashHelper } from '../../../helpers';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { SchoolService } from './school.service';
 
 describe('SchoolService', () => {
@@ -71,7 +72,22 @@ describe('SchoolService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      providers: [SchoolService],
+      providers: [
+        SchoolService,
+        {
+          provide: ModuleLoggerRegistry,
+          useValue: {
+            getLogger: jest.fn().mockReturnValue({
+              info: jest.fn(),
+              warn: jest.fn(),
+              error: jest.fn(),
+              debug: jest.fn(),
+              trace: jest.fn(),
+              fatal: jest.fn(),
+            }),
+          },
+        },
+      ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);

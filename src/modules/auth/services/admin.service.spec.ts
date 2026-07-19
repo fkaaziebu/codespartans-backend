@@ -6,6 +6,7 @@ import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Admin, entities, Organization } from '../../../database/entities';
 import { HashHelper } from '../../../helpers';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { AdminService } from './admin.service';
 
 describe('AdminService', () => {
@@ -45,7 +46,22 @@ describe('AdminService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      providers: [AdminService],
+      providers: [
+        AdminService,
+        {
+          provide: ModuleLoggerRegistry,
+          useValue: {
+            getLogger: jest.fn().mockReturnValue({
+              info: jest.fn(),
+              warn: jest.fn(),
+              error: jest.fn(),
+              debug: jest.fn(),
+              trace: jest.fn(),
+              fatal: jest.fn(),
+            }),
+          },
+        },
+      ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);

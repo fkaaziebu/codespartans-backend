@@ -1,14 +1,35 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { EmailService } from './email.service';
 
 @Processor('email-queue')
 export class EmailConsumer extends WorkerHost {
-  constructor(private readonly emailService: EmailService) {
+  private readonly log = this.loggerRegistry.getLogger('auth');
+
+  constructor(
+    private readonly emailService: EmailService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
+  ) {
     super();
   }
 
   async process(job: Job) {
+    // job.data always carries an email and often a live reset/OTP/validation
+    // code, so only the job name is ever logged here (SEC-001).
+    try {
+      await this.dispatch(job);
+      this.log.info({ job: job.name }, 'auth.email.sent');
+    } catch (err) {
+      this.log.error(
+        { job: job.name, err: (err as Error).message },
+        'auth.email.send_failed',
+      );
+      throw err;
+    }
+  }
+
+  private async dispatch(job: Job) {
     switch (job.name) {
       case 'send-password-reset': {
         const { email, name, resetCode } = job.data;

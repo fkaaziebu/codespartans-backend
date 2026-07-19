@@ -3,7 +3,6 @@ import {
   ConflictException,
   Inject,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -12,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { HashHelper } from '../../../helpers';
 import { Organization } from '../../auth/entities/organization.entity';
 import { Student } from '../../auth/entities/student.entity';
@@ -41,7 +41,7 @@ const ONE_HOUR_MS = 60 * 60 * 1000;
 
 @Injectable()
 export class DemoService {
-  private readonly logger = new Logger(DemoService.name);
+  private readonly log = this.loggerRegistry.getLogger('demo');
 
   constructor(
     @InjectRepository(SchoolDemo)
@@ -71,6 +71,7 @@ export class DemoService {
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async bookSchoolFreeDemo(input: BookSchoolFreeDemoInput) {
@@ -103,6 +104,11 @@ export class DemoService {
       email: input.email,
       whatsapp_number: input.whatsapp_number,
     });
+
+    this.log.info(
+      { demoId: demo.id, school_name: input.school_name },
+      'demo.school.booked',
+    );
 
     return {
       message:
@@ -263,6 +269,11 @@ export class DemoService {
     };
 
     const access_token = this.jwtService.sign(payload);
+
+    this.log.info(
+      { organizationId: org.id, demoId: demo.id },
+      'demo.school.activated',
+    );
 
     return {
       access_token,

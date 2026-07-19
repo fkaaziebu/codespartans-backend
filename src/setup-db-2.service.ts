@@ -1,9 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import { ModuleLoggerRegistry } from './modules/logging/services/module-logger.registry';
 import { Admin } from './modules/auth/entities/admin.entity';
 import { Instructor } from './modules/auth/entities/instructor.entity';
 import { Organization } from './modules/auth/entities/organization.entity';
@@ -37,7 +38,7 @@ import datas, { plans } from './data/setup';
 
 @Injectable()
 export class SetupDbService implements OnModuleInit {
-  private readonly logger = new Logger(SetupDbService.name);
+  private readonly log = this.loggerRegistry.getLogger('system');
 
   constructor(
     @InjectRepository(Organization)
@@ -63,10 +64,11 @@ export class SetupDbService implements OnModuleInit {
     @InjectRepository(SubscriptionPlan)
     private planRepository: Repository<SubscriptionPlan>,
     private configService: ConfigService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async onModuleInit() {
-    this.logger.log('Running database setup on startup...');
+    this.log.info({}, 'system.db_setup.start');
     await this.setupDatabase();
   }
 
@@ -209,9 +211,12 @@ export class SetupDbService implements OnModuleInit {
       }
 
       await this.setupSubscriptionPlans();
-      this.logger.log('Database setup complete.');
+      this.log.info({}, 'system.db_setup.complete');
     } catch (err) {
-      this.logger.error('Database setup failed', err);
+      this.log.error(
+        { err: (err as Error).message },
+        'system.db_setup.failed',
+      );
     }
   }
 

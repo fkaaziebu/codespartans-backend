@@ -5,14 +5,18 @@ import { Repository } from 'typeorm';
 import { Admin } from '../entities/admin.entity';
 import { Organization } from '../entities/organization.entity';
 import { HashHelper } from '../../../helpers';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { AdminLoginResponse } from '../types';
 
 @Injectable()
 export class AdminService {
+  private readonly log = this.loggerRegistry.getLogger('auth');
+
   constructor(
     @InjectRepository(Admin)
     private adminRepository: Repository<Admin>,
     private jwtService: JwtService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async loginAdmin({
@@ -50,6 +54,8 @@ export class AdminService {
         };
 
         const access_token = this.jwtService.sign(payload);
+
+        this.log.info({ adminId: admin.id }, 'auth.admin.login.success');
 
         return {
           ...admin,

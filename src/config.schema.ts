@@ -27,4 +27,7 @@ export const configValidationSchema = Joi.object({
   DELETION_CACHE_TTL_DAYS: Joi.number().integer().min(1).default(30),
   PAYMENT_RETENTION_YEARS: Joi.number().integer().min(1).required(),
   ADMIN_EMAIL: Joi.string().email().required(),
+  LOG_LEVEL: Joi.string().default('info'),
+  LOG_DIR: Joi.string().default('logs'),
+  LOG_RETENTION_HOT_DAYS: Joi.number().integer().min(1).default(7),
 });

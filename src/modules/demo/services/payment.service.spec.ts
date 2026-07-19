@@ -15,6 +15,7 @@ import {
 import { SubscriptionStatus } from '../entities/organization-subscription.entity';
 import { PlanInterval } from '../entities/subscription-plan.entity';
 import { HashHelper } from '../../../helpers';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { PaymentService } from './payment.service';
 
 describe('PaymentService — trial-to-paid upgrade', () => {
@@ -27,6 +28,17 @@ describe('PaymentService — trial-to-paid upgrade', () => {
   let planRepository: Repository<SubscriptionPlan>;
   let studentSubscriptionRepository: Repository<StudentSubscription>;
   let orgSubscriptionRepository: Repository<OrgSubscription>;
+
+  const mockLoggerRegistry = {
+    getLogger: jest.fn().mockReturnValue({
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      debug: jest.fn(),
+      trace: jest.fn(),
+      fatal: jest.fn(),
+    }),
+  };
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -47,7 +59,10 @@ describe('PaymentService — trial-to-paid upgrade', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      providers: [PaymentService],
+      providers: [
+        PaymentService,
+        { provide: ModuleLoggerRegistry, useValue: mockLoggerRegistry },
+      ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);

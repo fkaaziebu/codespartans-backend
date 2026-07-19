@@ -25,6 +25,7 @@ import { SignupProducer } from './signup.producer';
 import { LoginBodyDto } from '../dto/login-body.dto';
 import { AccountDeletionService } from './account-deletion.service';
 import { RequestMetadata } from '../entities/deletion-audit-log.entity';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 
 const FIVE_MIN_MS = 5 * 60 * 1000;
 
@@ -32,6 +33,7 @@ const FIVE_MIN_MS = 5 * 60 * 1000;
 export class StudentService {
   private readonly gracePeriodMs: number;
   private readonly refreshTokenTtlMs: number;
+  private readonly log = this.loggerRegistry.getLogger('auth');
 
   constructor(
     @InjectRepository(Student)
@@ -45,6 +47,7 @@ export class StudentService {
     private readonly accountDeletionService: AccountDeletionService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly loginAttemptService: LoginAttemptService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {
     this.gracePeriodMs =
       this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
@@ -141,6 +144,7 @@ export class StudentService {
         );
 
         if (existingStudent) {
+          this.log.warn('auth.student.register.duplicate_email');
           throw new Error('Student with this email already exists');
         }
 
@@ -179,6 +183,8 @@ export class StudentService {
           name,
           validationCode,
         });
+
+        this.log.info({ studentId: student.id }, 'auth.student.registered');
 
         return { message: 'Student registered successfully' };
       },
@@ -300,6 +306,11 @@ export class StudentService {
         otp,
       });
 
+      this.log.info(
+        { studentId: student.id },
+        'auth.student.login.pending_deletion',
+      );
+
       return {
         ...student,
         token: pendingToken,
@@ -323,6 +334,8 @@ export class StudentService {
         expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
       },
     );
+
+    this.log.info({ studentId: student.id }, 'auth.student.login.success');
 
     return {
       ...student,
@@ -390,6 +403,11 @@ export class StudentService {
       },
     );
 
+    this.log.info(
+      { studentId: student.id },
+      'auth.student.deletion_cancelled',
+    );
+
     return {
       ...student,
       token,
@@ -428,6 +446,11 @@ export class StudentService {
         await transactionalEntityManager.save(Student, student);
 
         await this.signupProducer.enqueueFreeTrial({ email, role: 'STUDENT' });
+
+        this.log.info(
+          { studentId: student.id },
+          'auth.student.account_validated',
+        );
 
         return { message: 'Account verified successfully' };
       },
@@ -613,6 +636,9 @@ export class StudentService {
       Math.floor(Date.now() / 1000).toString(),
       this.refreshTokenTtlMs,
     );
+
+    this.log.info({ studentId }, 'auth.student.password_reset');
+
     return result;
   }
 
@@ -658,6 +684,9 @@ export class StudentService {
       Math.floor(Date.now() / 1000).toString(),
       this.refreshTokenTtlMs,
     );
+
+    this.log.info({ studentId }, 'auth.student.password_changed');
+
     return result;
   }
 
@@ -701,6 +730,9 @@ export class StudentService {
       Math.floor(Date.now() / 1000).toString(),
       this.refreshTokenTtlMs,
     );
+
+    this.log.info({ studentId }, 'auth.student.pin_changed');
+
     return result;
   }
 
@@ -784,6 +816,11 @@ export class StudentService {
         otp,
       });
 
+      this.log.info(
+        { studentId: user.id },
+        'auth.student.google_login.pending_deletion',
+      );
+
       return {
         redirectUrl: `${studentUrl}/oauth/redirect?token=${pendingToken}&organizationId=${user.organizations.at(0).id}&isSetupCompleted=${Boolean(user.is_setup_completed)}&accountStatus=${AccountStatus.PENDING_DELETION}&deletionScheduledFor=${deletionScheduledFor}`,
       };
@@ -796,6 +833,11 @@ export class StudentService {
       {
         expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h`,
       },
+    );
+
+    this.log.info(
+      { studentId: user.id },
+      'auth.student.google_login.success',
     );
 
     return {
@@ -823,6 +865,7 @@ export class StudentService {
         });
 
         if (existingUser) {
+          this.log.warn('auth.student.google_signup.duplicate_email');
           throw new BadRequestException('Email already exist');
         }
 
@@ -877,6 +920,11 @@ export class StudentService {
           email: savedUser.email,
           role: 'STUDENT',
         };
+
+        this.log.info(
+          { studentId: savedUser.id, organizationId: organization.id },
+          'auth.student.google_signup.registered',
+        );
 
         return payload;
       },

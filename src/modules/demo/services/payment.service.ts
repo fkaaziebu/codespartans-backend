@@ -13,6 +13,7 @@ import { Child } from '../../parent/entities/child.entity';
 import { Parent } from '../../parent/entities/parent.entity';
 import { ParentSubscription } from '../../parent/entities/parent-subscription.entity';
 import { Between, In, Repository } from 'typeorm';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import {
   OrgSubscription,
   SubscriptionStatus,
@@ -23,6 +24,7 @@ import { SubscriptionPlan } from '../entities/subscription-plan.entity';
 @Injectable()
 export class PaymentService {
   private readonly paystackBaseUrl = 'https://api.paystack.co';
+  private readonly log = this.loggerRegistry.getLogger('demo');
 
   constructor(
     @InjectRepository(SubscriptionPlan)
@@ -42,6 +44,7 @@ export class PaymentService {
     @InjectRepository(Student)
     private readonly studentRepo: Repository<Student>,
     private readonly configService: ConfigService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async listPlans(): Promise<SubscriptionPlan[]> {
@@ -330,17 +333,38 @@ export class PaymentService {
   }
 
   async handleWebhookEvent(event: string, data: any): Promise<void> {
+    const { reference } = data ?? {};
+    this.log.info({ event, reference }, 'payment.webhook.received');
+
     if (event !== 'charge.success') return;
 
-    const { reference, metadata, status } = data;
-    if (status !== 'success') return;
+    const { metadata, status } = data;
+    if (status !== 'success') {
+      this.log.debug(
+        { reference, status },
+        'payment.webhook.ignored_non_success_status',
+      );
+      return;
+    }
 
     const { org_id, parent_id, student_id, plan_id, children_ids } =
       metadata ?? {};
-    if (!plan_id || (!org_id && !parent_id && !student_id)) return;
+    if (!plan_id || (!org_id && !parent_id && !student_id)) {
+      this.log.warn(
+        { reference, metadata },
+        'payment.webhook.missing_metadata',
+      );
+      return;
+    }
 
     const plan = await this.planRepo.findOne({ where: { id: plan_id } });
-    if (!plan) return;
+    if (!plan) {
+      this.log.warn(
+        { reference, plan_id },
+        'payment.webhook.plan_not_found',
+      );
+      return;
+    }
 
     const startedAt = new Date();
     const expiresAt = new Date(startedAt);
@@ -350,12 +374,21 @@ export class PaymentService {
       const student = await this.studentRepo.findOne({
         where: { id: student_id },
       });
-      if (!student) return;
+      if (!student) {
+        this.log.warn(
+          { reference, student_id },
+          'payment.webhook.student_not_found',
+        );
+        return;
+      }
 
       const existing = await this.studentSubscriptionRepo.findOne({
         where: { paystack_reference: reference },
       });
-      if (existing) return;
+      if (existing) {
+        this.log.debug({ reference }, 'payment.webhook.duplicate_reference');
+        return;
+      }
 
       await this.studentSubscriptionRepo.save(
         this.studentSubscriptionRepo.create({
@@ -367,16 +400,29 @@ export class PaymentService {
           expires_at: expiresAt,
         }),
       );
+      this.log.info(
+        { reference, student_id, plan_id },
+        'payment.webhook.student_subscription_activated',
+      );
     } else if (parent_id) {
       const parent = await this.parentRepo.findOne({
         where: { id: parent_id },
       });
-      if (!parent) return;
+      if (!parent) {
+        this.log.warn(
+          { reference, parent_id },
+          'payment.webhook.parent_not_found',
+        );
+        return;
+      }
 
       const existing = await this.parentSubscriptionRepo.findOne({
         where: { paystack_reference: reference },
       });
-      if (existing) return;
+      if (existing) {
+        this.log.debug({ reference }, 'payment.webhook.duplicate_reference');
+        return;
+      }
 
       let coveredChildren: Child[] = [];
       if (children_ids) {
@@ -399,14 +445,27 @@ export class PaymentService {
           children: coveredChildren,
         }),
       );
+      this.log.info(
+        { reference, parent_id, plan_id },
+        'payment.webhook.parent_subscription_activated',
+      );
     } else {
       const org = await this.orgRepo.findOne({ where: { id: org_id } });
-      if (!org) return;
+      if (!org) {
+        this.log.warn(
+          { reference, org_id },
+          'payment.webhook.organization_not_found',
+        );
+        return;
+      }
 
       const existing = await this.orgSubscriptionRepo.findOne({
         where: { paystack_reference: reference },
       });
-      if (existing) return;
+      if (existing) {
+        this.log.debug({ reference }, 'payment.webhook.duplicate_reference');
+        return;
+      }
 
       await this.orgSubscriptionRepo.save(
         this.orgSubscriptionRepo.create({
@@ -417,6 +476,10 @@ export class PaymentService {
           started_at: startedAt,
           expires_at: expiresAt,
         }),
+      );
+      this.log.info(
+        { reference, org_id, plan_id },
+        'payment.webhook.organization_subscription_activated',
       );
     }
   }

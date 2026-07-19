@@ -50,6 +50,7 @@ import { AccountStatus } from '../../auth/types/account-deletion-response.type';
 import { AccountDeletionService } from '../../auth/services/account-deletion.service';
 import { EmailProducer } from '../../auth/services/email.producer';
 import { SignupProducer } from '../../auth/services/signup.producer';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { ParentService } from './parent.service';
 
 const GENPOP_EMAIL = 'genpop@codespartans.com';
@@ -98,6 +99,17 @@ describe('ParentService', () => {
     del: jest.fn().mockResolvedValue(undefined),
   };
 
+  const mockLoggerRegistry = {
+    getLogger: jest.fn().mockReturnValue({
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      debug: jest.fn(),
+      trace: jest.fn(),
+      fatal: jest.fn(),
+    }),
+  };
+
   beforeAll(async () => {
     process.env.GENPOP_EMAIL = GENPOP_EMAIL;
 
@@ -139,6 +151,7 @@ describe('ParentService', () => {
           useValue: mockAccountDeletionService,
         },
         { provide: CACHE_MANAGER, useValue: mockCacheManager },
+        { provide: ModuleLoggerRegistry, useValue: mockLoggerRegistry },
       ],
     }).compile();
 
