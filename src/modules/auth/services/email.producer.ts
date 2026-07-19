@@ -1,17 +1,30 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 
 @Injectable()
 export class EmailProducer {
-  constructor(@InjectQueue('email-queue') private readonly emailQueue: Queue) {}
+  private readonly log = this.loggerRegistry.getLogger('auth');
+
+  constructor(
+    @InjectQueue('email-queue') private readonly emailQueue: Queue,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
+  ) {}
+
+  private async enqueue(jobName: string, data: Record<string, unknown>) {
+    await this.emailQueue.add(jobName, data);
+    // Never log `data` here — every payload shape in this file carries an
+    // email and often a live reset/OTP/validation code (SEC-001).
+    this.log.info({ job: jobName }, 'auth.email.enqueued');
+  }
 
   async sendPasswordResetEmail(data: {
     email: string;
     name: string;
     resetCode: string;
   }) {
-    await this.emailQueue.add('send-password-reset', data);
+    await this.enqueue('send-password-reset', data);
   }
 
   async sendParentPasswordResetEmail(data: {
@@ -19,7 +32,7 @@ export class EmailProducer {
     name: string;
     resetCode: string;
   }) {
-    await this.emailQueue.add('send-parent-password-reset', data);
+    await this.enqueue('send-parent-password-reset', data);
   }
 
   async sendAccountValidationEmail(data: {
@@ -27,7 +40,7 @@ export class EmailProducer {
     name: string;
     validationCode: string;
   }) {
-    await this.emailQueue.add('send-account-validation', data);
+    await this.enqueue('send-account-validation', data);
   }
 
   async sendDemoInvitationEmail(data: {
@@ -35,7 +48,7 @@ export class EmailProducer {
     name: string;
     school_name: string;
   }) {
-    await this.emailQueue.add('send-demo-invitation', data);
+    await this.enqueue('send-demo-invitation', data);
   }
 
   async sendDemoAdminNotificationEmail(data: {
@@ -46,7 +59,7 @@ export class EmailProducer {
     email: string;
     whatsapp_number: string;
   }) {
-    await this.emailQueue.add('send-demo-admin-notification', data);
+    await this.enqueue('send-demo-admin-notification', data);
   }
 
   async sendParentDemoInvitationEmail(data: {
@@ -55,7 +68,7 @@ export class EmailProducer {
     target_exams: string[];
     registrationUrl: string;
   }) {
-    await this.emailQueue.add('send-parent-demo-invitation', data);
+    await this.enqueue('send-parent-demo-invitation', data);
   }
 
   async sendStudentDemoInvitationEmail(data: {
@@ -64,7 +77,7 @@ export class EmailProducer {
     target_exam: string;
     registrationUrl: string;
   }) {
-    await this.emailQueue.add('send-student-demo-invitation', data);
+    await this.enqueue('send-student-demo-invitation', data);
   }
 
   async sendLeadAdminNotificationEmail(data: {
@@ -74,7 +87,7 @@ export class EmailProducer {
     target_exams_display: string;
     registrationUrl: string;
   }) {
-    await this.emailQueue.add('send-lead-admin-notification', data);
+    await this.enqueue('send-lead-admin-notification', data);
   }
 
   async sendAccountDeletionNotice(data: {
@@ -84,7 +97,7 @@ export class EmailProducer {
     userType: 'student' | 'parent';
     childCount?: number;
   }) {
-    await this.emailQueue.add('send-account-deletion-notice', data);
+    await this.enqueue('send-account-deletion-notice', data);
   }
 
   async sendChildDeletionNotice(data: {
@@ -93,15 +106,15 @@ export class EmailProducer {
     childName: string;
     gracePeriodEnd: string;
   }) {
-    await this.emailQueue.add('send-child-deletion-notice', data);
+    await this.enqueue('send-child-deletion-notice', data);
   }
 
   async sendAccountRestoredNotice(data: { email: string; name: string }) {
-    await this.emailQueue.add('send-account-restored-notice', data);
+    await this.enqueue('send-account-restored-notice', data);
   }
 
   async sendAccountPurgedConfirmation(data: { email: string; name: string }) {
-    await this.emailQueue.add('send-account-purged-confirmation', data);
+    await this.enqueue('send-account-purged-confirmation', data);
   }
 
   async sendPurgeFailureAlert(data: {
@@ -109,14 +122,14 @@ export class EmailProducer {
     accountId: string;
     errorMessage: string;
   }) {
-    await this.emailQueue.add('send-purge-failure-alert', data);
+    await this.enqueue('send-purge-failure-alert', data);
   }
 
   async sendParentAccountAlreadyExistsEmail(data: {
     email: string;
     name: string;
   }) {
-    await this.emailQueue.add('send-parent-account-already-exists', data);
+    await this.enqueue('send-parent-account-already-exists', data);
   }
 
   async sendCancellationOtpEmail(data: {
@@ -124,7 +137,7 @@ export class EmailProducer {
     name: string;
     otp: string;
   }) {
-    await this.emailQueue.add('send-cancellation-otp', data);
+    await this.enqueue('send-cancellation-otp', data);
   }
 
   async sendChildPinResetRequestEmail(data: {
@@ -132,6 +145,6 @@ export class EmailProducer {
     parentName: string;
     childName: string;
   }) {
-    await this.emailQueue.add('send-child-pin-reset-request', data);
+    await this.enqueue('send-child-pin-reset-request', data);
   }
 }

@@ -32,6 +32,7 @@ import {
   VersionStatusType,
 } from '../../review/entities/version.entity';
 import { HashHelper } from '../../../helpers';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { OrganizationService } from './organization.service';
 
 describe('OrganizationService', () => {
@@ -78,7 +79,22 @@ describe('OrganizationService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      providers: [OrganizationService],
+      providers: [
+        OrganizationService,
+        {
+          provide: ModuleLoggerRegistry,
+          useValue: {
+            getLogger: jest.fn().mockReturnValue({
+              info: jest.fn(),
+              warn: jest.fn(),
+              error: jest.fn(),
+              debug: jest.fn(),
+              trace: jest.fn(),
+              fatal: jest.fn(),
+            }),
+          },
+        },
+      ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);

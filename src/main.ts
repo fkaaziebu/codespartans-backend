@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
+import { Logger } from 'nestjs-pino';
 import { Client } from 'pg';
 import { AppModule } from './app.module';
 
@@ -37,7 +38,11 @@ async function bootstrap() {
   // Create test database
   await createDatabase(process.env.DB_NAME_TEST);
 
-  const app = await NestFactory.create(AppModule, { rawBody: true });
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true,
+    bufferLogs: true,
+  });
+  app.useLogger(app.get(Logger));
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.getHttpAdapter().getInstance().set('trust proxy', 1);

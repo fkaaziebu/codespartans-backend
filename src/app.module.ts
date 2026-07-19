@@ -10,6 +10,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DemoModule } from './modules/demo/demo.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { LoggingModule } from './modules/logging/logging.module';
 import { MediaModule } from './modules/media/media.module';
 import { ParentModule } from './modules/parent/parent.module';
 import { ReviewModule } from './modules/review/review.module';
@@ -59,6 +60,7 @@ import { LoggingRedactionPlugin } from './plugins';
       throttlers: [{ name: 'default', ttl: minutes(1), limit: 10 }],
     }),
     DatabaseModule,
+    LoggingModule,
     AuthModule,
     DemoModule,
     ReviewModule,

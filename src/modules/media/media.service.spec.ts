@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { entities, Image } from '../../database/entities';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { MediaService } from './media.service';
 
 describe('MediaService', () => {
@@ -11,6 +12,17 @@ describe('MediaService', () => {
   let dataSource: DataSource;
   let mediaService: MediaService;
   let imageRepository: Repository<Image>;
+
+  const mockLoggerRegistry = {
+    getLogger: jest.fn().mockReturnValue({
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      debug: jest.fn(),
+      trace: jest.fn(),
+      fatal: jest.fn(),
+    }),
+  };
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -31,7 +43,10 @@ describe('MediaService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      providers: [MediaService],
+      providers: [
+        MediaService,
+        { provide: ModuleLoggerRegistry, useValue: mockLoggerRegistry },
+      ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);

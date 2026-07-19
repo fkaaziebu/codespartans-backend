@@ -26,6 +26,7 @@ import {
 import { VersionStatusType } from '../../review/entities/version.entity';
 import { HashHelper } from '../../../helpers';
 import { CourseInfoInput, QuestionInput } from '../inputs';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { InstructorService } from './instructor.service';
 
 describe('InstructorService', () => {
@@ -69,7 +70,22 @@ describe('InstructorService', () => {
         }),
         TypeOrmModule.forFeature(entities),
       ],
-      providers: [InstructorService],
+      providers: [
+        InstructorService,
+        {
+          provide: ModuleLoggerRegistry,
+          useValue: {
+            getLogger: jest.fn().mockReturnValue({
+              info: jest.fn(),
+              warn: jest.fn(),
+              error: jest.fn(),
+              debug: jest.fn(),
+              trace: jest.fn(),
+              fatal: jest.fn(),
+            }),
+          },
+        },
+      ],
     }).compile();
 
     dataSource = module.get<DataSource>(DataSource);

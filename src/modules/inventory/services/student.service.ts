@@ -7,6 +7,7 @@ import {
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { Cart as CartTypeClass } from '../entities/cart.entity';
 import { Checkout as CheckoutTypeClass } from '../entities/checkout.entity';
 import { Student as StudentTypeClass } from '../../auth/entities/student.entity';
@@ -53,6 +54,8 @@ const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class StudentService {
+  private readonly log = this.loggerRegistry.getLogger('inventory');
+
   constructor(
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
@@ -67,6 +70,7 @@ export class StudentService {
     @InjectRepository(TestSuite)
     private testSuiteRepository: Repository<TestSuite>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async getOrganizationCourse({
@@ -410,6 +414,11 @@ export class StudentService {
     checkoutFromCart?: boolean;
     autoApproveSubscription: boolean;
   }): Promise<CheckoutTypeClass> {
+    this.log.info(
+      { studentId: id, courseId, checkoutFromCart, autoApproveSubscription },
+      'inventory.checkout.start',
+    );
+
     return await this.studentRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const student = await transactionalEntityManager.findOne(Student, {
@@ -423,6 +432,7 @@ export class StudentService {
         });
 
         if (!student) {
+          this.log.warn({ studentId: id }, 'inventory.checkout.student_not_found');
           throw new Error('Student not found');
         }
 
@@ -548,7 +558,19 @@ export class StudentService {
         checkout.student = student;
         checkout.courses = courseToSubscribeTo;
         checkout.categories = categories;
-        return await transactionalEntityManager.save(checkout);
+        const savedCheckout = await transactionalEntityManager.save(checkout);
+
+        this.log.info(
+          {
+            studentId: id,
+            checkoutId: savedCheckout.id,
+            courseCount: courseToSubscribeTo.length,
+            categoryCount: categories.length,
+          },
+          'inventory.checkout.completed',
+        );
+
+        return savedCheckout;
       },
     );
   }

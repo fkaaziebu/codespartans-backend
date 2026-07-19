@@ -30,6 +30,7 @@ import {
 import { SubscriptionStatus } from '../entities/organization-subscription.entity';
 import { HashHelper } from '../../../helpers';
 import { EmailProducer } from '../../auth/services/email.producer';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { PaymentService } from './payment.service';
 import { DemoService } from './demo.service';
 
@@ -63,6 +64,17 @@ describe('DemoService', () => {
     listParentSubscriptions: jest.fn().mockResolvedValue([]),
     getStudentSubscription: jest.fn().mockResolvedValue(null),
     listStudentSubscriptions: jest.fn().mockResolvedValue([]),
+  };
+
+  const mockLoggerRegistry = {
+    getLogger: jest.fn().mockReturnValue({
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      debug: jest.fn(),
+      trace: jest.fn(),
+      fatal: jest.fn(),
+    }),
   };
 
   beforeAll(async () => {
@@ -99,6 +111,7 @@ describe('DemoService', () => {
         DemoService,
         { provide: EmailProducer, useValue: mockEmailProducer },
         { provide: PaymentService, useValue: mockPaymentService },
+        { provide: ModuleLoggerRegistry, useValue: mockLoggerRegistry },
         {
           provide: CACHE_MANAGER,
           useValue: { get: jest.fn().mockResolvedValue(null), set: jest.fn().mockResolvedValue(undefined), del: jest.fn().mockResolvedValue(undefined) },

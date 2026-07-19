@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Inject,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -11,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import Anthropic from '@anthropic-ai/sdk';
 import { Cache } from 'cache-manager';
 import { Repository } from 'typeorm';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { Student } from '../../auth/entities/student.entity';
 import { Test, TestStatusType } from '../entities/test.entity';
 import { TimeEventType } from '../entities/time_event.entity';
@@ -21,7 +21,7 @@ import {
 
 @Injectable()
 export class InsightService {
-  private readonly logger = new Logger(InsightService.name);
+  private readonly log = this.loggerRegistry.getLogger('simulation');
   private readonly anthropic: Anthropic;
 
   constructor(
@@ -31,6 +31,7 @@ export class InsightService {
     private testRepository: Repository<Test>,
     private configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {
     this.anthropic = new Anthropic({
       apiKey: this.configService.get<string>('ANTHROPIC_API_KEY'),
@@ -51,7 +52,10 @@ export class InsightService {
     const cacheKey = `weekly-insight:${student.id}:${weekStart.toISOString()}`;
     const cached = await this.cacheManager.get<WeeklyInsight>(cacheKey);
     if (cached) {
-      this.logger.log(`Cache hit for weekly insight: student=${student.id}`);
+      this.log.info(
+        { studentId: student.id },
+        'simulation.weekly_insight.cache_hit',
+      );
       return cached;
     }
 
@@ -148,11 +152,15 @@ Respond with only a raw JSON object — no markdown, no code fences, no extra ke
       const ttl = this.msUntilNextMonday(now);
       await this.cacheManager.set(cacheKey, result, ttl);
 
-      this.logger.log(`Generated weekly insight for ${id}`);
+      this.log.info(
+        { studentId: id },
+        'simulation.weekly_insight.generated',
+      );
       return result;
     } catch (err) {
-      this.logger.error(
-        `Failed to generate weekly insight for ${id}: ${(err as Error).message}`,
+      this.log.error(
+        { studentId: id, err: (err as Error).message },
+        'simulation.weekly_insight.generation_failed',
       );
       throw new BadRequestException('Failed to generate weekly insight');
     }

@@ -18,4 +18,7 @@ export class SuiteInput {
 
   @Field(() => [QuestionInput!]!)
   questions: QuestionInput[];
+
+  @Field({ nullable: true })
+  categoryId?: string;
 }

@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +6,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { Cache } from 'cache-manager';
 import { createHash } from 'crypto';
 import { Repository } from 'typeorm';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { SubmittedAnswer } from '../entities/sumitted_answer.entity';
 import { SemanticCacheService } from './semantic-cache.service';
 
@@ -13,7 +14,7 @@ const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class MarkAnswerService {
-  private readonly logger = new Logger(MarkAnswerService.name);
+  private readonly log = this.loggerRegistry.getLogger('simulation');
   private readonly anthropic: Anthropic;
 
   constructor(
@@ -22,6 +23,7 @@ export class MarkAnswerService {
     private configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private semanticCacheService: SemanticCacheService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {
     this.anthropic = new Anthropic({
       apiKey: this.configService.get<string>('ANTHROPIC_API_KEY'),
@@ -35,7 +37,10 @@ export class MarkAnswerService {
     });
 
     if (!submittedAnswer) {
-      this.logger.warn(`SubmittedAnswer ${submittedAnswerId} not found`);
+      this.log.warn(
+        { submittedAnswerId },
+        'simulation.mark_answer.submitted_answer_not_found',
+      );
       return submittedAnswer;
     }
 
@@ -51,8 +56,9 @@ export class MarkAnswerService {
 
     const cached = await this.cacheManager.get<boolean>(cacheKey);
     if (cached !== null && cached !== undefined) {
-      this.logger.log(
-        `L1 cache hit for answer ${submittedAnswerId}: is_correct=${cached}`,
+      this.log.info(
+        { submittedAnswerId, isCorrect: cached },
+        'simulation.mark_answer.l1_cache_hit',
       );
       submittedAnswer.is_correct = cached;
       submittedAnswer.is_marked = true;
@@ -76,8 +82,9 @@ export class MarkAnswerService {
       );
 
       if (semanticResult !== null) {
-        this.logger.log(
-          `L2 semantic cache hit for answer ${submittedAnswerId}: is_correct=${semanticResult}`,
+        this.log.info(
+          { submittedAnswerId, isCorrect: semanticResult },
+          'simulation.mark_answer.l2_cache_hit',
         );
         await this.cacheManager.set(cacheKey, semanticResult, THIRTY_DAYS_MS);
         submittedAnswer.is_correct = semanticResult;
@@ -85,8 +92,9 @@ export class MarkAnswerService {
         return this.submittedAnswerRepository.save(submittedAnswer);
       }
     } catch (embErr) {
-      this.logger.warn(
-        `Semantic cache lookup failed, falling back to LLM: ${(embErr as Error).message}`,
+      this.log.warn(
+        { submittedAnswerId, err: (embErr as Error).message },
+        'simulation.mark_answer.semantic_lookup_failed',
       );
       embedding = null;
     }
@@ -128,8 +136,9 @@ Respond with only a raw JSON object using exactly this shape — no markdown, no
         this.semanticCacheService
           .store(question.id, queryText, embedding, is_correct)
           .catch((storeErr) =>
-            this.logger.warn(
-              `Failed to store semantic cache entry: ${(storeErr as Error).message}`,
+            this.log.warn(
+              { questionId: question.id, err: (storeErr as Error).message },
+              'simulation.mark_answer.semantic_store_failed',
             ),
           );
       }
@@ -140,14 +149,16 @@ Respond with only a raw JSON object using exactly this shape — no markdown, no
       const final_result =
         await this.submittedAnswerRepository.save(submittedAnswer);
 
-      this.logger.log(
-        `Marked answer ${submittedAnswerId}: is_correct=${is_correct}`,
+      this.log.info(
+        { submittedAnswerId, isCorrect: is_correct },
+        'simulation.mark_answer.l3_llm_marked',
       );
 
       return final_result;
     } catch (err) {
-      this.logger.error(
-        `Failed to mark answer ${submittedAnswerId}: ${(err as Error).message}`,
+      this.log.error(
+        { submittedAnswerId, err: (err as Error).message },
+        'simulation.mark_answer.llm_marking_failed',
       );
       // Leave is_marked=false so the student can see it is still pending
       return submittedAnswer;

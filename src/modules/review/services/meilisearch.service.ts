@@ -1,18 +1,20 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from 'src/modules/inventory/entities/course.entity';
 import { Repository } from 'typeorm';
 import { Meilisearch } from 'meilisearch';
 import { ConfigService } from '@nestjs/config';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 
 @Injectable()
 export class MeilisearchService {
-  private readonly logger = new Logger(MeilisearchService.name);
+  private readonly log = this.loggerRegistry.getLogger('review');
   client: Meilisearch = null;
   constructor(
     @InjectRepository(Course)
     private courseRepository: Repository<Course>,
     private configService: ConfigService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {
     this.client = new Meilisearch({
       host: configService.get<string>('MEILI_URL'),
@@ -38,7 +40,10 @@ export class MeilisearchService {
 
         // Meilisearch create index if not exist
         const response = await index.addDocuments(courses);
-        this.logger.log(`MEILISEARCH: ${response}`);
+        this.log.info(
+          { courseCount: courses.length, taskUid: response.taskUid },
+          'review.meilisearch.documents_updated',
+        );
       },
     );
   }

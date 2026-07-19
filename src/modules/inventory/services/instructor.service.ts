@@ -11,12 +11,16 @@ import { Version } from '../../review/entities/version.entity';
 import { Course as CourseTypeClass } from '../entities/course.entity';
 import { Version as VersionTypeClass } from '../../review/entities/version.entity';
 import { CourseInfoInput, QuestionInput } from '../inputs';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 
 @Injectable()
 export class InstructorService {
+  private readonly log = this.loggerRegistry.getLogger('inventory');
+
   constructor(
     @InjectRepository(Instructor)
     private instructorRepository: Repository<Instructor>,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async createCourse({
@@ -70,7 +74,14 @@ export class InstructorService {
         newCourse.instructor = instructor;
         newCourse.organization = organization;
 
-        return await transactionalEntityManager.save(newCourse);
+        const saved = await transactionalEntityManager.save(newCourse);
+
+        this.log.info(
+          { instructorId: id, organizationId, courseId: saved.id },
+          'inventory.course.created',
+        );
+
+        return saved;
       },
     );
   }
@@ -115,7 +126,14 @@ export class InstructorService {
         newVersion.version_number = course.versions.length + 1;
         newVersion.course = course;
 
-        return await transactionalEntityManager.save(newVersion);
+        const saved = await transactionalEntityManager.save(newVersion);
+
+        this.log.info(
+          { instructorId: id, courseId, versionId: saved.id },
+          'inventory.course_version.added',
+        );
+
+        return saved;
       },
     );
   }
@@ -203,6 +221,16 @@ export class InstructorService {
         const saved_questions =
           await transactionalEntityManager.save(new_questions);
 
+        this.log.info(
+          {
+            instructorId: id,
+            versionId,
+            suiteId: new_suite.id,
+            questionCount: saved_questions.length,
+          },
+          'inventory.suite.questions_added',
+        );
+
         return { ...courseVersion, questions: saved_questions };
       },
     );
@@ -269,7 +297,14 @@ export class InstructorService {
         questionToUpdate.tags = question.tags || questionToUpdate.tags;
         questionToUpdate.type = question.type || questionToUpdate.type;
 
-        return await transactionalEntityManager.save(questionToUpdate);
+        const saved = await transactionalEntityManager.save(questionToUpdate);
+
+        this.log.info(
+          { instructorId: id, questionId },
+          'inventory.question.updated',
+        );
+
+        return saved;
       },
     );
   }
@@ -317,7 +352,18 @@ export class InstructorService {
         reviewRequest.course_version = courseVersion;
         reviewRequest.organization = courseVersion.course.organization;
 
-        return await transactionalEntityManager.save(reviewRequest);
+        const saved = await transactionalEntityManager.save(reviewRequest);
+
+        this.log.info(
+          {
+            instructorId: id,
+            versionId,
+            organizationId: courseVersion.course.organization.id,
+          },
+          'inventory.course_version.review_requested',
+        );
+
+        return saved;
       },
     );
   }

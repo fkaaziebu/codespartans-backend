@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { SemanticCache } from '../entities/semantic_cache.entity';
 
 // pgvector uses package.json exports which require node16/bundler moduleResolution.
@@ -19,13 +20,14 @@ type EmbeddingPipeline = (
 
 @Injectable()
 export class SemanticCacheService {
-  private readonly logger = new Logger(SemanticCacheService.name);
+  private readonly log = this.loggerRegistry.getLogger('simulation');
   private pipe: EmbeddingPipeline | null = null;
 
   constructor(
     @InjectRepository(SemanticCache)
     private readonly semanticCacheRepo: Repository<SemanticCache>,
     private readonly dataSource: DataSource,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async embed(text: string): Promise<number[]> {
@@ -62,8 +64,9 @@ export class SemanticCacheService {
 
     if (rows.length === 0) return null;
 
-    this.logger.log(
-      `Semantic cache hit (similarity=${Number(rows[0].similarity).toFixed(4)}) for question ${questionId}`,
+    this.log.info(
+      { questionId, similarity: Number(rows[0].similarity.toFixed(4)) },
+      'simulation.semantic_cache.hit',
     );
     return rows[0].is_correct;
   }
@@ -88,12 +91,17 @@ export class SemanticCacheService {
       [questionId, queryText, vectorSql, isCorrect, now, expiresAt],
     );
 
-    this.logger.debug(`Stored semantic cache entry for question ${questionId}`);
+    this.log.debug({ questionId }, 'simulation.semantic_cache.stored');
   }
 
   async purgeExpired(): Promise<void> {
-    await this.dataSource.query(
-      `DELETE FROM semantic_caches WHERE expires_at < NOW()`,
+    const deleted: unknown[] = await this.dataSource.query(
+      `DELETE FROM semantic_caches WHERE expires_at < NOW() RETURNING id`,
+    );
+
+    this.log.info(
+      { deletedCount: deleted.length },
+      'simulation.semantic_cache.purged_expired',
     );
   }
 }

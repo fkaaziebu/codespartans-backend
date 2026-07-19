@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -45,6 +41,7 @@ import { EndTestProducer } from './end-test.producer';
 import { InsightService } from './insight.service';
 import { MarkAnswerProducer } from './mark-answer.producer';
 import { MarkAnswerService } from './mark-answer.service';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { StudentService } from './student.service';
 
 describe('StudentService', () => {
@@ -124,6 +121,19 @@ describe('StudentService', () => {
             get: jest.fn().mockResolvedValue(null),
             set: jest.fn().mockResolvedValue(undefined),
             del: jest.fn().mockResolvedValue(undefined),
+          },
+        },
+        {
+          provide: ModuleLoggerRegistry,
+          useValue: {
+            getLogger: jest.fn().mockReturnValue({
+              info: jest.fn(),
+              warn: jest.fn(),
+              error: jest.fn(),
+              debug: jest.fn(),
+              trace: jest.fn(),
+              fatal: jest.fn(),
+            }),
           },
         },
       ],
@@ -311,13 +321,16 @@ describe('StudentService', () => {
       );
     });
 
-    it('throws ConflictException if student already has an ongoing test', async () => {
+    it('throws an ONGOING_TEST GraphQLError if student already has an ongoing test', async () => {
       const { suite, student } = await setupData();
       await startTest(suite.id, student.id);
 
-      await expect(startTest(suite.id, student.id)).rejects.toThrow(
-        new ConflictException('You already have an ongoing test'),
-      );
+      const secondStart = startTest(suite.id, student.id);
+
+      await expect(secondStart).rejects.toThrow(GraphQLError);
+      await expect(secondStart).rejects.toMatchObject({
+        extensions: { code: 'ONGOING_TEST' },
+      });
     });
 
     it('throws NotFoundException if student does not have access to the suite', async () => {
@@ -957,6 +970,50 @@ describe('StudentService', () => {
           assignmentId: '00000000-0000-0000-0000-000000000000',
         }),
       ).rejects.toThrow(new NotFoundException('Child profile not found'));
+    });
+
+    it('throws an ONGOING_TEST GraphQLError if student already has an ongoing test', async () => {
+      const { suite, student } = await setupData();
+
+      const parent = new Parent();
+      parent.first_name = 'Test';
+      parent.last_name = 'Parent';
+      parent.email = 'parent2@test.com';
+      parent.password = await HashHelper.encrypt('password');
+      parent.whatsapp_number = '+1234567891';
+      parent.gender = Gender.Male;
+      parent.is_account_validated = true;
+      parent.is_setup_completed = true;
+      await parentRepository.save(parent);
+
+      const child = new Child();
+      child.full_name = 'Test Child';
+      child.class_level = ClassLevel.JHS1;
+      child.target_exam = suite.id;
+      child.username = 'test.child100';
+      child.pin = await HashHelper.encrypt('123456');
+      child.parent = parent;
+      child.student = student;
+      await childRepository.save(child);
+
+      const assignment = new TestAssignment();
+      assignment.parent = parent;
+      assignment.child = child;
+      assignment.test_suite = suite;
+      assignment.status = TestAssignmentStatus.PENDING;
+      await testAssignmentRepository.save(assignment);
+
+      await startTest(suite.id, student.id);
+
+      const secondStart = studentService.startAssignedTest({
+        id: student.id,
+        assignmentId: assignment.id,
+      });
+
+      await expect(secondStart).rejects.toThrow(GraphQLError);
+      await expect(secondStart).rejects.toMatchObject({
+        extensions: { code: 'ONGOING_TEST' },
+      });
     });
   });
 });

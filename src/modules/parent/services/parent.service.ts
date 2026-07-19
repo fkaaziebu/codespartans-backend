@@ -38,6 +38,7 @@ import { AccountDeletionService } from '../../auth/services/account-deletion.ser
 import { RequestMetadata } from '../../auth/entities/deletion-audit-log.entity';
 import { Child, ClassLevel } from '../entities/child.entity';
 import { Gender, Parent } from '../entities/parent.entity';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 
 import {
   ActivityConnection,
@@ -52,6 +53,7 @@ import {
 export class ParentService {
   private readonly gracePeriodMs: number;
   private readonly refreshTokenTtlMs: number;
+  private readonly log = this.loggerRegistry.getLogger('parent');
   constructor(
     @InjectRepository(Parent)
     private parentRepository: Repository<Parent>,
@@ -70,6 +72,7 @@ export class ParentService {
     private readonly accountDeletionService: AccountDeletionService,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     private readonly loginAttemptService: LoginAttemptService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {
     this.gracePeriodMs =
       this.configService.get<number>('ACCOUNT_DELETION_GRACE_DAYS') *
@@ -103,6 +106,10 @@ export class ParentService {
         });
 
         if (existing) {
+          this.log.warn(
+            { parentId: existing.id },
+            'parent.register.duplicate_email',
+          );
           await this.emailProducer.sendParentAccountAlreadyExistsEmail({
             email,
             name: `${existing.first_name} ${existing.last_name}`,
@@ -134,6 +141,8 @@ export class ParentService {
           name: `${first_name} ${last_name}`,
           validationCode,
         });
+
+        this.log.info({ parentId: parent.id }, 'parent.registered');
 
         return {
           message: 'Registration successful. Please verify your email.',
@@ -415,6 +424,8 @@ export class ParentService {
       { ...payload, type: 'refresh' },
       { expiresIn: `${this.configService.get<number>('REFRESH_TOKEN_TTL_HOURS') ?? 24}h` },
     );
+
+    this.log.info({ parentId: foundParent.id }, 'parent.login.success');
 
     return { ...foundParent, token, refresh_token };
   }

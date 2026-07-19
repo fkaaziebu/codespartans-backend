@@ -1,15 +1,14 @@
 import {
   BadRequestException,
-  ConflictException,
   Inject,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cache } from 'cache-manager';
 import { In, Repository } from 'typeorm';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 import { Student } from '../../auth/entities/student.entity';
 import { Course } from '../../inventory/entities/course.entity';
 import { Question, QuestionType } from '../../review/entities/question.entity';
@@ -34,7 +33,7 @@ import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class StudentService {
-  private readonly logger = new Logger(StudentService.name);
+  private readonly log = this.loggerRegistry.getLogger('simulation');
 
   constructor(
     @InjectRepository(Student)
@@ -46,6 +45,7 @@ export class StudentService {
     private markAnswerService: MarkAnswerService,
     private insightService: InsightService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async startTest({
@@ -94,7 +94,9 @@ export class StudentService {
         });
 
         if (on_going_tests.length) {
-          throw new ConflictException('You already have an ongoing test');
+          throw new GraphQLError('You already have an ongoing test', {
+            extensions: { code: 'ONGOING_TEST' },
+          });
         }
 
         const new_test = new Test();
@@ -123,8 +125,9 @@ export class StudentService {
         scheduledStudentId = student.id;
         scheduledEndTime = endTime;
 
-        this.logger.log(
-          `Test ${new_test.id} started for student ${student.id}`,
+        this.log.info(
+          { testId: new_test.id, studentId: student.id },
+          'simulation.test.started',
         );
 
         return new_test;
@@ -175,8 +178,9 @@ export class StudentService {
           student.tests[0],
         );
 
-        this.logger.log(
-          `Test ${updated_test.id} paused for student ${student.id}`,
+        this.log.info(
+          { testId: updated_test.id, studentId: student.id },
+          'simulation.test.paused',
         );
         return updated_test;
       },
@@ -239,8 +243,9 @@ export class StudentService {
         scheduledStudentId = student.id;
         scheduledEndTime = endTime;
 
-        this.logger.log(
-          `Test ${updated_test.id} resumed for student ${student.id}`,
+        this.log.info(
+          { testId: updated_test.id, studentId: student.id },
+          'simulation.test.resumed',
         );
 
         return updated_test;
@@ -307,8 +312,9 @@ export class StudentService {
           isQueueTriggered &&
           student.tests[0].status === TestStatusType.PAUSED
         ) {
-          this.logger.log(
-            `Skipping end-test job for test ${testId}: test is currently PAUSED`,
+          this.log.info(
+            { testId },
+            'simulation.end_test.skipped_paused',
           );
           return student.tests[0];
         }
@@ -341,7 +347,7 @@ export class StudentService {
           );
         }
 
-        this.logger.log(`Test ${testId} ended for student ${studentId}`);
+        this.log.info({ testId, studentId }, 'simulation.test.ended');
 
         // Invalidate stale weekly insight so next call regenerates with fresh data
         await this.insightService.invalidateForStudent(studentId);
@@ -762,7 +768,9 @@ export class StudentService {
         });
 
         if (on_going_tests.length) {
-          throw new ConflictException('You already have an ongoing test');
+          throw new GraphQLError('You already have an ongoing test', {
+            extensions: { code: 'ONGOING_TEST' },
+          });
         }
 
         const new_test = new Test();
@@ -795,8 +803,9 @@ export class StudentService {
         scheduledStudentId = student.id;
         scheduledEndTime = endTime;
 
-        this.logger.log(
-          `Assigned test ${new_test.id} started for student ${student.id}`,
+        this.log.info(
+          { testId: new_test.id, studentId: student.id },
+          'simulation.assigned_test.started',
         );
 
         return new_test;

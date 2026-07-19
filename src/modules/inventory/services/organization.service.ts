@@ -21,9 +21,12 @@ import {
   SuiteInput,
 } from '../inputs';
 import { StatsResponse } from '../types';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 
 @Injectable()
 export class OrganizationService {
+  private readonly log = this.loggerRegistry.getLogger('inventory');
+
   constructor(
     @InjectRepository(Organization)
     private organizationRepository: Repository<Organization>,
@@ -31,6 +34,7 @@ export class OrganizationService {
     private courseRepository: Repository<Course>,
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
   ) {}
 
   async listInstructorsPaginated({
@@ -364,7 +368,17 @@ export class OrganizationService {
 
         courseVersion.assigned_admin = admin;
         courseVersion.status = VersionStatusType.IN_PROGRESS;
-        return await transactionalEntityManager.save(Version, courseVersion);
+        const saved = await transactionalEntityManager.save(
+          Version,
+          courseVersion,
+        );
+
+        this.log.info(
+          { organizationId: id, versionId, adminId },
+          'inventory.course_version.assigned_for_review',
+        );
+
+        return saved;
       },
     );
   }
@@ -393,7 +407,17 @@ export class OrganizationService {
         category.avatar_url = categoryInfo.avatar_url;
         category.name = categoryInfo.name;
         category.organization = organization;
-        return await transactionalEntityManager.save(Category, category);
+        const saved = await transactionalEntityManager.save(
+          Category,
+          category,
+        );
+
+        this.log.info(
+          { organizationId: id, categoryId: saved.id },
+          'inventory.category.created',
+        );
+
+        return saved;
       },
     );
   }
@@ -438,7 +462,21 @@ export class OrganizationService {
         }
 
         category.courses = courses;
-        return await transactionalEntityManager.save(Category, category);
+        const saved = await transactionalEntityManager.save(
+          Category,
+          category,
+        );
+
+        this.log.info(
+          {
+            organizationId: id,
+            categoryId,
+            courseCount: courses.length,
+          },
+          'inventory.category.courses_added',
+        );
+
+        return saved;
       },
     );
   }
@@ -487,6 +525,11 @@ export class OrganizationService {
 
         category.courses = [...(category.courses || []), newCourse];
         await transactionalEntityManager.save(Category, category);
+
+        this.log.info(
+          { organizationId: id, categoryId, courseId: newCourse.id },
+          'inventory.category_course.created',
+        );
 
         return newCourse;
       },
@@ -546,6 +589,7 @@ export class OrganizationService {
           newSuite.description = suiteInput.suiteDescription;
           newSuite.keywords = suiteInput.suiteKeywords;
           newSuite.suite_type = suiteInput.suiteType;
+          newSuite.categoryId = suiteInput.categoryId;
           newSuite.course_version = courseVersion;
           await transactionalEntityManager.save(newSuite);
 
@@ -573,6 +617,15 @@ export class OrganizationService {
             await transactionalEntityManager.save(newQuestions);
           createdSuites.push({ ...newSuite, questions: savedQuestions });
         }
+
+        this.log.info(
+          {
+            organizationId: id,
+            courseId,
+            suiteCount: createdSuites.length,
+          },
+          'inventory.course.suites_added',
+        );
 
         return createdSuites;
       },
@@ -605,6 +658,12 @@ export class OrganizationService {
         category.date_of_exams = dateOfExams;
         category.exam_duration_days = examDurationDays;
         await transactionalEntityManager.save(Category, category);
+
+        this.log.info(
+          { organizationId: id, categoryId },
+          'inventory.category.countdown_updated',
+        );
+
         return true;
       },
     );

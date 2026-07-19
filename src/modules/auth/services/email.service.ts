@@ -5,12 +5,17 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import * as handlebars from 'handlebars';
 import * as nodemailer from 'nodemailer';
+import { ModuleLoggerRegistry } from 'src/modules/logging/services/module-logger.registry';
 
 @Injectable()
 export class EmailService {
+  private readonly log = this.loggerRegistry.getLogger('auth');
   private transporter: nodemailer.Transporter;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private readonly loggerRegistry: ModuleLoggerRegistry,
+  ) {
     // this.createTestAccount();
     if (this.configService.get<string>('STAGE') === 'prod') {
       this.transporter = nodemailer.createTransport({
@@ -22,11 +27,14 @@ export class EmailService {
       });
 
       // Verify the connection configuration
-      this.transporter.verify((error, success) => {
+      this.transporter.verify((error) => {
         if (error) {
-          console.error('Email transporter verification failed:', error);
+          this.log.error(
+            { err: error.message },
+            'auth.email.transporter_verification_failed',
+          );
         } else {
-          console.log('Email transporter is ready to take messages', success);
+          this.log.info({}, 'auth.email.transporter_ready');
         }
       });
     } else {
@@ -74,7 +82,10 @@ export class EmailService {
     try {
       await this.sendMail(to, 'Reset Your Password', '', html);
     } catch (error) {
-      console.error('Failed to send parent password reset email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.parent_password_reset_failed',
+      );
       throw new Error('Failed to send parent password reset email');
     }
   }
@@ -102,7 +113,10 @@ export class EmailService {
         mailOptions.html,
       );
     } catch (error) {
-      console.error('Failed to send password reset email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.password_reset_failed',
+      );
       throw new Error('Failed to send password reset email');
     }
   }
@@ -120,7 +134,10 @@ export class EmailService {
     try {
       await this.sendMail(to, 'Verify Your Account', '', html);
     } catch (error) {
-      console.error('Failed to send account validation email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.account_validation_failed',
+      );
       throw new Error('Failed to send account validation email');
     }
   }
@@ -138,9 +155,9 @@ export class EmailService {
     try {
       await this.sendMail(to, 'You already have an account', '', html);
     } catch (error) {
-      console.error(
-        'Failed to send parent account already exists email:',
-        error,
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.parent_account_already_exists_failed',
       );
       throw new Error('Failed to send parent account already exists email');
     }
@@ -159,7 +176,10 @@ export class EmailService {
     try {
       await this.sendMail(to, 'Your Free Demo Access – Codespartans', '', html);
     } catch (error) {
-      console.error('Failed to send demo invitation email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.demo_invitation_failed',
+      );
       throw new Error('Failed to send demo invitation email');
     }
   }
@@ -190,7 +210,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send demo admin notification email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.demo_admin_notification_failed',
+      );
       throw new Error('Failed to send demo admin notification email');
     }
   }
@@ -212,7 +235,10 @@ export class EmailService {
     try {
       await this.sendMail(to, 'Get started for free – Codespartans', '', html);
     } catch (error) {
-      console.error('Failed to send parent demo invitation email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.parent_demo_invitation_failed',
+      );
       throw new Error('Failed to send parent demo invitation email');
     }
   }
@@ -232,7 +258,10 @@ export class EmailService {
     try {
       await this.sendMail(to, 'Get started for free – Codespartans', '', html);
     } catch (error) {
-      console.error('Failed to send student demo invitation email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.student_demo_invitation_failed',
+      );
       throw new Error('Failed to send student demo invitation email');
     }
   }
@@ -261,7 +290,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send lead admin notification email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.lead_admin_notification_failed',
+      );
       throw new Error('Failed to send lead admin notification email');
     }
   }
@@ -298,7 +330,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send account deletion notice email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.account_deletion_notice_failed',
+      );
       throw new Error('Failed to send account deletion notice email');
     }
   }
@@ -323,7 +358,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send child deletion notice email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.child_deletion_notice_failed',
+      );
       throw new Error('Failed to send child deletion notice email');
     }
   }
@@ -339,7 +377,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send account restored email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.account_restored_failed',
+      );
       throw new Error('Failed to send account restored email');
     }
   }
@@ -364,7 +405,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send account purged confirmation email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.account_purged_confirmation_failed',
+      );
       throw new Error('Failed to send account purged confirmation email');
     }
   }
@@ -387,7 +431,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send child PIN reset request email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.child_pin_reset_request_failed',
+      );
       throw new Error('Failed to send child PIN reset request email');
     }
   }
@@ -407,7 +454,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send cancellation OTP email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.cancellation_otp_failed',
+      );
       throw new Error('Failed to send cancellation OTP email');
     }
   }
@@ -433,7 +483,10 @@ export class EmailService {
         html,
       );
     } catch (error) {
-      console.error('Failed to send purge failure alert email:', error);
+      this.log.error(
+        { jobId, err: (error as Error).message },
+        'auth.email.purge_failure_alert_failed',
+      );
     }
   }
 
@@ -448,7 +501,10 @@ export class EmailService {
       // Check if the email is deliverable
       return data.deliverability === 'DELIVERABLE';
     } catch (error) {
-      console.error('Error validating email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.validation_failed',
+      );
       return false;
     }
   }
@@ -467,11 +523,17 @@ export class EmailService {
         text,
         html,
       });
-      console.log('Activation email sent: %s', info.messageId);
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      this.log.info({ messageId: info.messageId }, 'auth.email.sent');
+      const previewUrl = nodemailer.getTestMessageUrl(info);
+      if (previewUrl) {
+        this.log.debug({ previewUrl }, 'auth.email.preview_url');
+      }
       return info;
     } catch (error) {
-      console.error('Error sending activation email:', error);
+      this.log.error(
+        { err: (error as Error).message },
+        'auth.email.send_failed',
+      );
       throw error;
     }
   }
