@@ -6,7 +6,11 @@ import pino from 'pino';
 // default `import` would silently resolve to `undefined` at runtime under
 // this project's tsconfig (no `esModuleInterop`) — use `require()` instead.
 import buildRollingFileStream = require('pino-roll');
-import pretty from 'pino-pretty';
+// pino-pretty is a devDependency (dev-console-only convenience, never used
+// in prod) — a static top-level import would compile to an unconditional
+// `require()` that crashes prod images where devDependencies aren't
+// installed. Lazily required only inside the `!isProd` branch below.
+import type PinoPretty from 'pino-pretty';
 
 export const PINO_ROOT_LOGGER = 'PINO_ROOT_LOGGER';
 
@@ -45,6 +49,8 @@ const REDACT_PATHS = [
 
         const streams = [{ stream: fileStream, level }];
         if (!isProd) {
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
+          const pretty = require('pino-pretty') as typeof PinoPretty;
           streams.push({
             stream: pretty({ colorize: true, singleLine: true }),
             level,
