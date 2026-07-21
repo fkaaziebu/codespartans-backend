@@ -42,9 +42,12 @@ const REDACT_PATHS = [
         const level = configService.get<string>('LOG_LEVEL') || 'info';
 
         const fileStream = await buildRollingFileStream({
-          file: join(logDir, 'app'),
+          file: join(logDir, 'examforge-app'),
           frequency: 'daily',
+          dateFormat: 'yyyy-MM-dd',
           mkdir: true,
+          limit: { count: 15 },
+          extension: '.log',
         });
 
         const streams = [{ stream: fileStream, level }];
@@ -63,6 +66,7 @@ const REDACT_PATHS = [
             redact: { paths: REDACT_PATHS, censor: '[REDACTED]' },
             formatters: { level: (label: string) => ({ level: label }) },
             timestamp: pino.stdTimeFunctions.isoTime,
+            base: { app: 'examforge', env: process.env.NODE_ENV || 'production' },
           },
           pino.multistream(streams),
         );
